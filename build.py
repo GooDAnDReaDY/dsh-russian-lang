@@ -155,7 +155,11 @@ window.__ModuleLoader__.load({
       ctx.effect(() => scope.subscribe(tryBoot), 'dsh-russian-lang: boot')
       tryBoot()
 
-      ctx.effect(() => runtime.subscribe(syncLang), 'dsh-russian-lang: html-lang')
+      // Подписчик регистрируется синхронно, до первого publish() в tryBoot
+      // ниже - иначе ctx.effect откладывает выполнение, и boot-publish
+      // происходит до того, как syncLang слушатель зарегистрирован.
+      const unsubscribeLang = runtime.subscribe(syncLang)
+      ctx.effect(() => unsubscribeLang, 'dsh-russian-lang: html-lang')
       syncLang()
     }
 
