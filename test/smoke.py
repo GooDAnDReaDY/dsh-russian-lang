@@ -53,7 +53,8 @@ def main():
     profile = tempfile.mkdtemp(prefix='dsh-smoke-')
     chrome = subprocess.Popen([
         CHROME, '--headless=new', '--remote-debugging-port=' + str(PORT),
-        '--ignore-certificate-errors', '--no-first-run', '--no-default-browser-check',
+        '--remote-allow-origins=*', '--ignore-certificate-errors',
+        '--no-first-run', '--no-default-browser-check',
         '--user-data-dir=' + profile, '--window-size=1440,900', 'about:blank',
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
@@ -69,10 +70,9 @@ def main():
             time.sleep(0.4)
         if not tabs:
             raise SystemExit('chrome devtools not up')
+        tab_url = f'http://127.0.0.1:{PORT}/json/new?{urllib.parse.quote(DEFAULT_URL, safe="")}'
         # nosemgrep: dynamic-urllib-use-detected — loopback CDP, no remote scheme.
-        tab = json.load(urllib.request.urlopen(
-            f'http://127.0.0.1:{PORT}/json/new?{urllib.parse.quote(DEFAULT_URL, safe="")}',
-            data=b'', method='PUT'))
+        tab = json.load(urllib.request.urlopen(urllib.request.Request(tab_url, method='PUT')))
         import websocket  # type: ignore
         ws = websocket.create_connection(tab['webSocketDebuggerUrl'])
         ws.settimeout(10)
@@ -145,21 +145,26 @@ def main():
             ok = real_click(send, ru_click)
             step('ru-clicked', ok)
             time.sleep(1.5)
-            step('after-ru', run(send, '''
+            after_ru = run(send, '''
                 return {
-                  lang: document.documentElement.lang,
                   has_ru: document.body.innerText.indexOf('\\u041d\\u043e\\u0432\\u0430\\u044f \\u0441\\u0435\\u0441\\u0441\\u0438\\u044f') >= 0,
                 };
-            '''))
+            ''')
+            step('after-ru', after_ru)
+            if not after_ru['has_ru']:
+                raise SystemExit('Russian UI did not switch on click')
 
-            run(send, 'location.reload();')
-            time.sleep(9)
-            step('after-reload', run(send, '''
+            # Reload to confirm the choice survives a fresh boot.
+            send('Page.reload')
+            time.sleep(10)
+            after = run(send, '''
                 return {
-                  lang: document.documentElement.lang,
                   has_ru: document.body.innerText.indexOf('\\u041d\\u043e\\u0432\\u0430\\u044f \\u0441\\u0435\\u0441\\u0441\\u0438\\u044f') >= 0,
                 };
-            '''))
+            ''')
+            step('after-reload', after)
+            if not after['has_ru']:
+                raise SystemExit('Russian UI did not survive reload')
         finally:
             ws.close()
     finally:
