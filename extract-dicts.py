@@ -23,6 +23,9 @@
     register(NS, "en", en)                       пофазовая форма, идентификатор
     register(NS, "en", { ... })                  пофазовая форма, литерал
     register(NS, { en: { ...en, ...extra.en } }) объединение через spread
+
+    Identifier (NS) resolves through the surrounding `NS = "ns"`-style assignment
+    in either single or double quotes; both quoting styles are recognised.
     for ([locale, dict] of pairs) register(NS, locale, dict)   цикл по парам
 """
 import glob
@@ -34,8 +37,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SKIP = ('dsh-russian-lang',)         # свой же плагин переводить не надо
 
-ASSIGN_STR = re.compile(r'([A-Za-z_$][\w$]*)\s*=\s*"([^"\\]{2,60})"')
-PAIR = re.compile(r'(?:"([^"]+)"|([A-Za-z_$][\w$.-]*))\s*:\s*"((?:[^"\\]|\\.)*)"')
+ASSIGN_STR = re.compile(r"""([A-Za-z_$][\w$]*)\s*=\s*(?:"((?:[^"\\]|\\.){2,60})"|'((?:[^'\\]|\\.){2,60})')""")
+PAIR = re.compile(r'''(?:"([^"]+)"|'([^']+)'|([A-Za-z_$][\w$.-]*))\s*:\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)')''')
 REF_PAIR = re.compile(r'"([^"]+)"\s*:\s*([A-Za-z_$][\w$]*)\["([^"]+)"\]')
 
 
@@ -84,13 +87,14 @@ def parse_dict(text, src=None):
             if value is not None:
                 out[m.group(1)] = value
     for m in PAIR.finditer(text or ''):
-        key = m.group(1) or m.group(2)
+        key = m.group(1) or m.group(2) or m.group(3)
         if key in ('zh', 'en'):
             continue
+        val = m.group(4) or m.group(5)
         try:
-            out[key] = json.loads('"' + m.group(3) + '"')
+            out[key] = json.loads('"' + val + '"')
         except Exception:
-            out[key] = m.group(3)
+            out[key] = val
     return out
 
 
@@ -121,7 +125,11 @@ def harvest(paths):
         if any(s in path for s in SKIP):
             continue
         src = open(path, encoding='utf-8', errors='ignore').read()
-        names = {m.group(1): m.group(2) for m in ASSIGN_STR.finditer(src)}
+        names = {}
+        for m in ASSIGN_STR.finditer(src):
+            val = m.group(2) or m.group(3)
+            if val:
+                names[m.group(1)] = val
 
         for m in re.finditer(r'locale\.register\(\s*(?:"([^"]+)"|([A-Za-z_$][\w$]*))\s*,\s*', src):
             ns = m.group(1) or names.get(m.group(2) or '')

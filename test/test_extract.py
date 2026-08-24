@@ -30,6 +30,13 @@ ctx.locale.register("chrome", { zh, en });
 ctx.locale.register("common", { zh, en });
 '''
 
+BUNDLE_SINGLE_QUOTES = r'''
+const NS = 'plugin';
+const en = { "k": "K" };
+const zh = { "k": "\u4E2D" };
+ctx.locale.register(NS, { zh, en });
+'''
+
 BUNDLE_ZH_ONLY = r'''
 ctx.locale.register("zh-only", { zh: { "k": "\u4E2D\u6587" } });
 '''
@@ -40,6 +47,7 @@ ctx.locale.register("zh-only", { zh: { "k": "\u4E2D\u6587" } });
 PKG_DIRS = [
     ('@deepseek-ai/test-a', BUNDLE_OK),
     ('@deepseek-ai/test-b', BUNDLE_ZH_ONLY),
+    ('@deepseek-ai/test-c', BUNDLE_SINGLE_QUOTES),
 ]
 
 with tempfile.TemporaryDirectory() as td:
@@ -69,9 +77,10 @@ with tempfile.TemporaryDirectory() as td:
     # the same — see issue #4 follow-up).
     en = {ns: v for ns, v in en.items() if v}
     namespaces = sorted(en.keys())
-    assert namespaces == ['chrome', 'common'], namespaces
+    assert namespaces == ['chrome', 'common', 'plugin'], namespaces
     assert en['chrome'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['chrome']
     assert en['common'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['common']
+    assert en['plugin'] == {'k': 'K'}, en['plugin']
     # check-coverage: with no ru dir, the coverage report flags everything as
     # missing and exits non-zero. That is the intended failure path — verify it.
     proc2 = subprocess.run(
