@@ -26,7 +26,7 @@ REPO = os.path.dirname(HERE)
 REGISTRY = os.path.join(REPO, 'mt-registry.json')
 REVIEW = os.path.join(REPO, 'upstream', 'review-queue.md')
 
-MODEL = os.environ.get('MT_MODEL', 'inclusionai/ling-3.0-flash:free')
+MODEL = os.environ.get('MT_MODEL', 'deepseek/deepseek-chat')
 BASE_URL = os.environ.get('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1')
 
 
@@ -99,6 +99,8 @@ def apply_mt(pending, api_key):
                 'at': time.strftime('%Y-%m-%dT%H:%M:%S'),
             }
             changed += 1
+            # Записываем после каждого ключа: при прерывании прогресс не теряется.
+            json.dump(registry, open(REGISTRY, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
             print('  %s.%s = %s' % (ns, key, ru))
             time.sleep(0.4)
     json.dump(registry, open(REGISTRY, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
