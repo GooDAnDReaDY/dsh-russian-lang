@@ -36,6 +36,12 @@ if os.path.exists(mt_path):
 
 payload = json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True)
 
+# Частотный словарь для фикса раскладки (tools/ru-freq.json). Скачивается
+# вручную (см. README) и встраивается в бандл для детектора.
+freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
+freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
+freq_json = json.dumps(freq_words, ensure_ascii=False)
+
 client = r'''// dsh-russian-lang — браузерная половина. ФАЙЛ СГЕНЕРИРОВАН, правьте ru/*.json
 // и ru-plugins/*.json и запускайте build.py.
 //
@@ -379,13 +385,134 @@ window.__ModuleLoader__.load({
         if (typoObserver) typoObserver.disconnect()
       }, 'dsh-russian-lang: typography')
       syncTypo()
+
+      // 7. Фикс раскладки (russian-lang.layout): подсказка-конвертер.
+      // Пользователь печатает в неверной раскладке (yjdsq gjvfu -> новый вопрос).
+      // Показываем плашку с превью, клик заменяет текст; тихой замены нет.
+      const LAYOUT_LAT_TO_CYR = {
+        'q':'й','w':'ц','e':'у','r':'к','t':'е','y':'н','u':'г','i':'ш','o':'щ','p':'з','[':'х',']':'ъ',
+        'a':'ф','s':'ы','d':'в','f':'а','g':'п','h':'р','j':'о','k':'л','l':'д',';':'ж','\'':'э',
+        'z':'я','x':'ч','c':'с','v':'м','b':'и','n':'т','m':'ь',',':'б','.':'ю','/':'.',
+        '`':'ё'
+      }
+      const LAYOUT_CYR_TO_LAT = {}
+      for (const k in LAYOUT_LAT_TO_CYR) LAYOUT_CYR_TO_LAT[LAYOUT_LAT_TO_CYR[k]] = k
+      const FREQ = new Set(%s)
+
+      const isLatin = (ch) => /[a-z]/.test(ch)
+      const isCyrillic = (ch) => /[\u0430-\u044f\u0451]/.test(ch)
+      const translit = (word, map) => {
+        let out = ''
+        for (const ch of word.toLowerCase()) out += map[ch] !== undefined ? map[ch] : ch
+        return out
+      }
+      const ruWordFraction = (text) => {
+        // доля слов текста, присутствующих в частотном словаре
+        const words = text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)
+        if (!words.length) return 0
+        const hit = words.filter((w) => FREQ.has(w)).length
+        return hit / words.length
+      }
+      const layoutFixCandidate = (value, direction) => {
+        // direction: 'lat2cyr' | 'cyr2lat'. Возвращает {converted} если подозрительно.
+        if (direction === 'lat2cyr') {
+          const converted = translit(value, LAYOUT_LAT_TO_CYR)
+          if (!/[а-яё]{2}/.test(converted)) return null
+          if (ruWordFraction(converted) < 0.7) return null
+          return { converted }
+        } else {
+          // cyr2lat только для команды в инпуте (/...)
+          const converted = translit(value, LAYOUT_CYR_TO_LAT)
+          if (!converted.startsWith('/')) return null
+          return { converted }
+        }
+      }
+
+      // Отвечаем на real input: input / input_event, слушаем на document.
+      // Читаем value у поля, где курсор (textarea/input), не трогая contenteditable.
+      let layoutHintEl = null
+      const layoutCurrentInput = () => {
+        const el = document.activeElement
+        if (el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && el.type === 'text'))) return el
+        return null
+      }
+      const layoutDismiss = () => {
+        if (layoutHintEl) { layoutHintEl.remove(); layoutHintEl = null }
+      }
+      const layoutShowHint = (inputEl, converted, direction) => {
+        layoutDismiss()
+        layoutHintEl = document.createElement('div')
+        layoutHintEl.dataset.russianLangLayout = '1'
+        Object.assign(layoutHintEl.style, {
+          position: 'fixed', zIndex: '99999', background: '#fff', color: '#000',
+          border: '1px solid #888', borderRadius: '8px', padding: '6px 10px',
+          fontSize: '13px', boxShadow: '0 2px 8px rgba(0,0,0,.2)', cursor: 'pointer'
+        })
+        const label = direction === 'cyr2lat' ? 'Команда, не та раскладка' : 'Не та раскладка'
+        layoutHintEl.textContent = label + ': ' + converted
+        layoutHintEl.addEventListener('mousedown', (ev) => {
+          ev.preventDefault()
+          inputEl.value = converted
+          inputEl.dispatchEvent(new Event('input', { bubbles: true }))
+          layoutDismiss()
+        })
+        document.body.appendChild(layoutHintEl)
+        // позиция над инпутом
+        const r = inputEl.getBoundingClientRect()
+        layoutHintEl.style.left = (r.left + 8) + 'px'
+        layoutHintEl.style.bottom = (window.innerHeight - r.top + 6) + 'px'
+      }
+      const layoutOnInput = () => {
+        try {
+          if (runtime.getLocale().active !== 'ru') { layoutDismiss(); return }
+          const el = layoutCurrentInput()
+          if (!el) { layoutDismiss(); return }
+          const value = el.value || ''
+          if (value.trim().length < 4) { layoutDismiss(); return }
+          // lat2cyr: если есть латиница и почти нет кириллицы
+          const latCount = (value.match(/[a-z]/g) || []).length
+          const cyrCount = (value.match(/[\u0430-\u044f\u0451]/g) || []).length
+          if (latCount > cyrCount && cyrCount === 0) {
+            const c = layoutFixCandidate(value, 'lat2cyr')
+            if (c) { layoutShowHint(el, c.converted, 'ru'); return }
+          }
+          // cyr2lat: если всё кириллица и начинается с /
+          if (cyrCount > 0 && latCount === 0 && value.trim().startsWith('/')) {
+            const c = layoutFixCandidate(value, 'cyr2lat')
+            if (c) { layoutShowHint(el, c.converted, 'cmd'); return }
+          }
+          layoutDismiss()
+        } catch (err) { /* ignore */ }
+      }
+      const unsubscribeLayout = runtime.subscribe(layoutOnInput)
+      document.addEventListener('input', layoutOnInput, true)
+      document.addEventListener('keydown', (ev) => {
+        // Alt+л (Latin 'l' код) ручной конверт текущего инпута
+        if (ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.key.toLowerCase() === 'l') {
+          const el = layoutCurrentInput()
+          if (el) {
+            const value = el.value || ''
+            const c = layoutFixCandidate(value, 'lat2cyr') || layoutFixCandidate(value, 'cyr2lat')
+            if (c) {
+              ev.preventDefault()
+              el.value = c.converted
+              el.dispatchEvent(new Event('input', { bubbles: true }))
+            }
+          }
+        }
+      }, true)
+      ctx.effect(() => {
+        unsubscribeLayout()
+        document.removeEventListener('input', layoutOnInput, true)
+        layoutDismiss()
+      }, 'dsh-russian-lang: layout')
     }
 
     module.exports = { apply, inject: ['locale', 'connection', 'remote', 'settingsScope'] }
     return module.exports
   },
 })
-''' % payload
+''' % (payload, freq_json)
 
 open(os.path.join(HERE, 'lib', 'client.js'), 'w', encoding='utf-8').write(client)
 print('namespace-ов: %d, ключей: %d -> lib/client.js'
