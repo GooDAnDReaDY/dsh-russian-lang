@@ -1,0 +1,11 @@
+[Unit]
+Description=dsh-russian-lang: upstream dictionary drift check
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=__REPO__
+ExecStart=/usr/bin/python3 tools/upstream_check.py
+TimeoutStartSec=1800
+# Прокси-окружение машины добавьте строками Environment= ниже,
+# чтобы npm ходил в сеть так же, как из интерактивной сессии.
