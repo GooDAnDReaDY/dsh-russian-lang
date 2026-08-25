@@ -179,14 +179,29 @@ def main():
             if not after_ru['has_ru']:
                 raise SystemExit('Russian UI did not switch on click')
 
-            # Reload to confirm the choice survives a fresh boot.
+            # Reload to confirm the choice survives a fresh boot. Slow profiles
+            # (many bundles) need longer than a fixed sleep, and the loader
+            # race can show its banner again mid-boot - poll, refresh once
+            # more if the banner shows up, and only then judge.
             send('Page.reload')
-            time.sleep(10)
-            after = run(send, '''
-                return {
-                  has_ru: document.body.innerText.indexOf('\\u041d\\u043e\\u0432\\u0430\\u044f \\u0441\\u0435\\u0441\\u0441\\u0438\\u044f') >= 0,
-                };
-            ''')
+            deadline = time.time() + 60
+            after = {'has_ru': False}
+            while time.time() < deadline:
+                time.sleep(2)
+                state = run(send, '''
+                    const t = document.body ? document.body.innerText : '';
+                    return {
+                      ready: document.readyState === 'complete' && t.length > 50,
+                      has_ru: t.indexOf('\\u041d\\u043e\\u0432\\u0430\\u044f \\u0441\\u0435\\u0441\\u0441\\u0438\\u044f') >= 0,
+                      banner: t.indexOf('Failed to load plugins') >= 0
+                    };
+                ''')
+                after = state
+                if state.get('banner'):
+                    send('Page.reload')
+                    continue
+                if state.get('ready') and state.get('has_ru'):
+                    break
             step('after-reload', after)
             if not after['has_ru']:
                 raise SystemExit('Russian UI did not survive reload')
