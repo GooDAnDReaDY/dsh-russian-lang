@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.8 (2026-08-25)
+
+- `fix(plugin)`: complete the self-ru exclusion list. 0.1.7 missed
+  `dsh-gitea`, `dsh-key-rotation` and `dsh-vision-bridge`, which also
+  register their own ru locale; the loader still failed with «locale
+  namespace X already has locale ru». All 14 self-ru namespaces are now
+  excluded at build time; bundle 41→38 namespaces / 1878→1761 strings.
+
 ## 0.1.7 (2026-08-25)
 
 - `fix(plugin)`: skip namespaces that plugins already localize to ru. 0.1.6
