@@ -29,12 +29,22 @@ def step(label, value):
 
 
 def run(send, expression):
-    out = send('Runtime.evaluate', {
-        'expression': '(async () => { ' + expression + ' })()',
-        'awaitPromise': True,
-        'returnByValue': True,
-        'timeout': 40000,
-    })
+    # ponytail: CDP races the page's own redirects on boot ("Execution context
+    # was destroyed", -32000); retry a few times before giving up.
+    import time
+    for attempt in range(6):
+        try:
+            out = send('Runtime.evaluate', {
+                'expression': '(async () => { ' + expression + ' })()',
+                'awaitPromise': True,
+                'returnByValue': True,
+                'timeout': 40000,
+            })
+            break
+        except SystemExit as err:
+            if 'Execution context was destroyed' not in str(err) or attempt == 5:
+                raise
+            time.sleep(1)
     if out.get('exceptionDetails'):
         raise SystemExit(json.dumps(out['exceptionDetails'])[:600])
     return out['result']['value']
@@ -98,7 +108,22 @@ def main():
                 }
                 return 'up';
             ''')
-            import time
+
+            # Cold-boot race in a neighbour plugin can show "Failed to load
+            # plugins"; a refresh reliably recovers, so retry once like a user.
+            banner = run(send, '''
+                return document.body.innerText.includes('Failed to load plugins');
+            ''')
+            if banner:
+                send('Page.reload')
+                run(send, '''
+                    const started = Date.now();
+                    while (Date.now() - started < 40000) {
+                      if (document.readyState === 'complete' && document.body && document.body.innerText.length > 50) break;
+                      await new Promise(r => setTimeout(r, 400));
+                    }
+                    return 'up';
+                ''')
             time.sleep(1.5)
 
             step('boot', run(send, 'return { lang: document.documentElement.lang, sample: document.body.innerText.replace(/\\\\s+/g, " ").slice(0, 100) };'))
