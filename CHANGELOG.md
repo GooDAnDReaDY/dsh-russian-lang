@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.4 (2026-08-25)
+
+- `feat(client): browser spellcheck on text fields`. While Russian is active,
+  textareas and text/search inputs get `spellcheck=true` + `lang=ru-RU`;
+  monospace fields (code, commands) are excluded, originals restored on
+  language switch. (#24)
+- `feat(client): plural forms for bare count keys`. The translate wrapper now
+  resolves `X.one` / `X.few` / `X.many` for keys called as `t('X', {n})`
+  without the core's `.one/.other` suffix; dictionaries gain correct forms for
+  the context-doctor counters and workspace search hint. (#17)
+- `feat(client): Russian typography pass`. Idempotent text-node post-processor:
+  guillemets, em dash, non-breaking spaces after short function words;
+  optional ё restoration (`russian-lang.typography.yo`, default off). Code,
+  links and inputs are never touched. (#19)
+- `chore(check)`: `X.few` / `X.many` are treated as intentional when the bare
+  base key exists in en. (#17)
+
 ## 0.1.3 (2026-08-25)
 
 - `feat(client): Russian plural forms (few/many)`. Wraps `runtime.translate` to
