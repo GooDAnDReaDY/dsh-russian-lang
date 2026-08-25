@@ -20,8 +20,12 @@
  },
  "job": {
   "count.idle.one": "{count} фоновая задача",
+  "count.idle.few": "{count} фоновые задачи",
+  "count.idle.many": "{count} фоновых задач",
   "count.idle.other": "{count} фоновых задач",
   "count.live.one": "{count} фоновая задача выполняется",
+  "count.live.few": "{count} фоновые задачи выполняется",
+  "count.live.many": "{count} фоновых задач выполняется",
   "count.live.other": "{count} фоновых задач выполняется",
   "duration.hours": "{hours} ч {minutes} мин",
   "duration.minutes": "{minutes} мин {seconds} с",
