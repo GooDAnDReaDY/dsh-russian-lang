@@ -61,6 +61,29 @@ window.__ModuleLoader__.load({
         }, 'dsh-russian-lang: ' + ns)
       }
 
+      // 1b. Плюрализация: ядро выбирает .one/.other по n===1, русскому нужны
+      // few/many. Обёртываем translate: при active=ru и ключе X.one/X.other с
+      // числовым параметром подставляем правильную форму из X.few/X.many.
+      const pluralRules = new Intl.PluralRules('ru')
+      const origTranslate = runtime.translate.bind(runtime)
+      runtime.translate = function (ns, key, params) {
+        const m = /^(.*)[.](one|other)$/.exec(key)
+        if (m && runtime.getLocale().active === 'ru' && params) {
+          const n = params.n ?? params.count
+          if (typeof n === 'number') {
+            const form = pluralRules.select(n)
+            if (form === 'few' || form === 'many') {
+              const pluralKey = m[1] + '.' + form
+              const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
+              if (template !== undefined) {
+                return template.replace(/\{(\w+)\}/g, (match, name) => name in params ? String(params[name]) : match)
+              }
+            }
+          }
+        }
+        return origTranslate(ns, key, params)
+      }
+
       // 2. <html lang>: в таблице DOCUMENT_LANGUAGE ядра нет "ru", без нас там
       // окажется undefined после переключения.
       const syncLang = () => {
