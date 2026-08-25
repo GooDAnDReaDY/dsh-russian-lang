@@ -25,6 +25,7 @@ SELF_RU = {
     'dsh-spendmeter', 'task-board', 'settings.commandcode', 'pin',
     'dsh-context', 'context-doctor', 'settings.ollama-cloud', 'plugin-store',
     'usageStats', 'usageDashboard', 'dsh-messenger-gateway',
+    'dsh-gitea', 'dsh-key-rotation', 'dsh-vision-bridge',
 }
 merged = {}
 sources = (sorted(glob.glob(os.path.join(HERE, 'ru', '*.json')))
