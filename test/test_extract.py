@@ -99,4 +99,16 @@ with tempfile.TemporaryDirectory() as td:
     )
     assert 'chrome' in proc3.stdout
     assert 'btn.cancel' in proc3.stdout
+    # A ru translation that drops a {placeholder} must be flagged as a broken
+    # translation (the parameter substitution would fail at runtime).
+    with open(os.path.join(cwd, 'ru', 'chrome.json'), 'w', encoding='utf-8') as f:
+        json.dump({'chrome': {'btn.count': 'сессий'}}, f, ensure_ascii=False)
+    with open(os.path.join(cwd, 'core-en.json'), 'w', encoding='utf-8') as f:
+        json.dump({'chrome': {'btn.count': 'сессий: {n}'}}, f, ensure_ascii=False)
+    proc4 = subprocess.run(
+        [sys.executable, os.path.join(cwd, 'check-coverage.py')],
+        cwd=cwd, capture_output=True, text=True,
+    )
+    assert 'ПОТЕРЯН PH' in proc4.stdout
+    assert 'btn.count' in proc4.stdout
     print('extract-dicts and check-coverage OK')
