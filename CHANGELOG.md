@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.5 (2026-08-25)
+
+- `feat(tools): nightly upstream drift check`. `tools/upstream_check.py`
+  installs the latest `@deepseek-ai/dsh`, harvests the en locale surface,
+  diffs against a committed snapshot and opens/updates a `chore(upstream):`
+  Gitea issue on drift. Installed as a daily cron job. (#18)
+- `feat(tools): MT-fallback with review queue`. `tools/mt_fallback.py` fills
+  untranslated keys via a cheap OpenRouter model into `mt-registry.json`;
+  `build.py` merges those strings as ordinary keys (manual ru translation
+  wins) and `--review` writes `upstream/review-queue.md`. (#22)
+- `feat(tools): top-100 plugin coverage report`. `tools/top100.py` scans a
+  profile's node_modules, harvests plugin locale surfaces and writes
+  `docs/top.md`. (#21)
+- `feat(client): wrong-layout input hint and Alt+L converter`. Detects latin
+  typed instead of Cyrillic (bundled 8k Russian frequency list), shows a
+  hint bar; click replaces. Cyrillic→Latin only for slash-command input.
+  Alt+L converts the current input in place. (#25)
+
 ## 0.1.4 (2026-08-25)
 
 - `feat(client): browser spellcheck on text fields`. While Russian is active,
