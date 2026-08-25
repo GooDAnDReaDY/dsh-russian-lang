@@ -61,12 +61,25 @@ window.__ModuleLoader__.load({
         }, 'dsh-russian-lang: ' + ns)
       }
 
-      // 1b. Плюрализация: ядро выбирает .one/.other по n===1, русскому нужны
-      // few/many. Обёртываем translate: при active=ru и ключе X.one/X.other с
-      // числовым параметром подставляем правильную форму из X.few/X.many.
+      // 1b. Пользовательские переопределения + плюрализация.
+      // Overrides: пользовательский слой поверх словарей (russian-lang.overrides).
+      // Plural: ядро выбирает .one/.other по n===1, русскому нужны few/many.
       const pluralRules = new Intl.PluralRules('ru')
       const origTranslate = runtime.translate.bind(runtime)
+      const getOverrides = () => {
+        try {
+          const value = scope.getSnapshot().value
+          return value && value.overrides ? value.overrides : {}
+        } catch (err) { return {} }
+      }
+      const fill = (template, params) => template.replace(/\{(\w+)\}/g, (match, name) => name in params ? String(params[name]) : match)
       runtime.translate = function (ns, key, params) {
+        // 1. Пользовательский override — самый верхний слой.
+        const overrides = getOverrides()
+        if (overrides[key] !== undefined) {
+          return params ? fill(overrides[key], params) : overrides[key]
+        }
+        // 2. Плюрализация для русского.
         const m = /^(.*)[.](one|other)$/.exec(key)
         if (m && runtime.getLocale().active === 'ru' && params) {
           const n = params.n ?? params.count
@@ -76,7 +89,7 @@ window.__ModuleLoader__.load({
               const pluralKey = m[1] + '.' + form
               const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
               if (template !== undefined) {
-                return template.replace(/\{(\w+)\}/g, (match, name) => name in params ? String(params[name]) : match)
+                return fill(template, params)
               }
             }
           }
