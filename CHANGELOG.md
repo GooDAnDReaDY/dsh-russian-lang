@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.3 (2026-08-25)
+
+- `feat(client): Russian plural forms (few/many)`. Wraps `runtime.translate` to
+  resolve Russian plural forms (one/few/many) for keys ending in `.one`/`.other`,
+  and adds `few`/`many` keys for all 7 plural pairs in the core.
+- `feat(client): user-defined translation overrides`. New `russian-lang.overrides`
+  settings namespace (`{ key: wording }`) applied as the top layer in translate.
+- `feat(check): flag lost placeholders`. `check-coverage.py` fails on ru
+  translations that drop or add `{placeholders}`; `X.few`/`X.many` are treated as
+  intentional Russian plural forms.
+- `feat(client): use ru-RU as the document locale`. `<html lang>` is now `ru-RU`
+  (BCP 47); `Intl.PluralRules('ru-RU')`.
+
 ## 0.1.2 (2026-08-23)
 
 - `fix(client): register html-lang subscriber synchronously`. The previous
