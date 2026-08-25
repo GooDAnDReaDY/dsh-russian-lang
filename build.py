@@ -18,18 +18,30 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # mt-registry.json — MT-fallback (tools/mt_fallback.py): ключи без ручного
 #               перевода, переведённые машинно. Ручной ru-перевод приоритетен;
 #               в бандл попадает только строка, разметка остаётся служебной.
+# SELF_RU — namespace'ы, которые сами плагины уже регистрируют как "ru".
+# Регистрация ru повторно падает в загрузчике ("already has locale ru"), поэтому
+# их не перекрываем вовсе.
+SELF_RU = {
+    'dsh-spendmeter', 'task-board', 'settings.commandcode', 'pin',
+    'dsh-context', 'context-doctor', 'settings.ollama-cloud', 'plugin-store',
+    'usageStats', 'usageDashboard', 'dsh-messenger-gateway',
+}
 merged = {}
 sources = (sorted(glob.glob(os.path.join(HERE, 'ru', '*.json')))
            + sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json'))))
 for path in sources:
     part = json.load(open(path, encoding='utf-8'))
     for ns, entries in part.items():
+        if ns in SELF_RU:
+            continue
         merged.setdefault(ns, {}).update(entries)
 
 mt_path = os.path.join(HERE, 'mt-registry.json')
 if os.path.exists(mt_path):
     mt = json.load(open(mt_path, encoding='utf-8'))
     for ns, entries in mt.items():
+        if ns in SELF_RU:
+            continue
         for key, rec in entries.items():
             if key not in merged.get(ns, {}):
                 merged.setdefault(ns, {})[key] = rec.get('ru', '')
