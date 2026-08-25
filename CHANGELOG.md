@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.7 (2026-08-25)
+
+- `fix(plugin)`: skip namespaces that plugins already localize to ru. 0.1.6
+  added ru for namespaces the plugins themselves register as ru
+  (dsh-messenger-gateway, dsh-spendmeter, task-board, settings.commandcode,
+  pin, dsh-context, context-doctor, settings.ollama-cloud, plugin-store,
+  usageStats, usageDashboard), which made the loader fail with
+  «locale namespace X already has locale ru». Excluded at build time; bundle
+  shrinks 52→41 namespaces / 2795→1878 strings.
+
 ## 0.1.6 (2026-08-25)
 
 - `feat(tools): translate top plugins via MT`. `tools/mt_fallback.py` fills
