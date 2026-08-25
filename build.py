@@ -64,7 +64,7 @@ window.__ModuleLoader__.load({
       // 1b. Пользовательские переопределения + плюрализация.
       // Overrides: пользовательский слой поверх словарей (russian-lang.overrides).
       // Plural: ядро выбирает .one/.other по n===1, русскому нужны few/many.
-      const pluralRules = new Intl.PluralRules('ru')
+      const pluralRules = new Intl.PluralRules('ru-RU')
       const origTranslate = runtime.translate.bind(runtime)
       const getOverrides = () => {
         try {
@@ -103,7 +103,7 @@ window.__ModuleLoader__.load({
         try {
           if (typeof document !== 'undefined' && document.documentElement
               && runtime.getLocale().active === 'ru') {
-            document.documentElement.lang = 'ru'
+            document.documentElement.lang = 'ru-RU'
           }
         } catch (err) { /* ignore */ }
       }
