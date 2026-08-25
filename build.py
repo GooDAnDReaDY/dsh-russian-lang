@@ -15,6 +15,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 #               только чтобы видеть, что чьё. Чужой namespace зарегистрировать
 #               безопасно: если плагин не установлен, словарь просто не
 #               запрашивается.
+# mt-registry.json — MT-fallback (tools/mt_fallback.py): ключи без ручного
+#               перевода, переведённые машинно. Ручной ru-перевод приоритетен;
+#               в бандл попадает только строка, разметка остаётся служебной.
 merged = {}
 sources = (sorted(glob.glob(os.path.join(HERE, 'ru', '*.json')))
            + sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json'))))
@@ -22,6 +25,14 @@ for path in sources:
     part = json.load(open(path, encoding='utf-8'))
     for ns, entries in part.items():
         merged.setdefault(ns, {}).update(entries)
+
+mt_path = os.path.join(HERE, 'mt-registry.json')
+if os.path.exists(mt_path):
+    mt = json.load(open(mt_path, encoding='utf-8'))
+    for ns, entries in mt.items():
+        for key, rec in entries.items():
+            if key not in merged.get(ns, {}):
+                merged.setdefault(ns, {})[key] = rec.get('ru', '')
 
 payload = json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True)
 
