@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert'
 
-const rules = new Intl.PluralRules('ru')
+const rules = new Intl.PluralRules('ru-RU')
 
 function form(n) {
   return rules.select(n)
