@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.1.6 (2026-08-25)
+
+- `feat(tools): translate top plugins via MT`. `tools/mt_fallback.py` fills
+  untranslated plugin keys through OpenRouter (deepseek/deepseek-chat) into
+  `mt-registry.json`, now written incrementally so long runs survive
+  interruption. 1086 keys across 16 plugin namespaces added; bundle grows
+  39→52 namespaces / 1709→2795 strings. Full manual-review queue in
+  `upstream/review-queue.md`; a manual translation in `ru-plugins/*.json`
+  always wins over the machine one. (#3)
+- `feat(tools): domain dictionary for wrong-layout detector`. New
+  `tools/merge_freq.py` merges DSH vocabulary from the plugin's own
+  translations into the layout-fix frequency list (8000→9181 words), so the
+  detector recognises terms like «рабочая сессия». (#6)
+- `test(smoke): probe feature surfaces`. Smoke reports runtime presence of
+  the language/spellcheck/typography surfaces as probes. (#5)
+- `fix(plugin)`: two placeholder bugs in context-doctor (`cd.updated` lost
+  `{when}`, `cd.suggestions` had a stray `{n}`); surfaced once the plugin
+  baseline `plugins-en.json` was committed.
+
 ## 0.1.5 (2026-08-25)
 
 - `feat(tools): nightly upstream drift check`. `tools/upstream_check.py`
