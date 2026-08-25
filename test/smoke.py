@@ -179,6 +179,17 @@ def main():
             if not after_ru['has_ru']:
                 raise SystemExit('Russian UI did not switch on click')
 
+            # Feature probes (report-only; DOM timing can be flaky mid-render).
+            # Deterministic logic for these lives in test_layout.mjs /
+            # test_typography.mjs; here we just surface runtime presence.
+            feats = run(send, '''
+                const lang = document.documentElement && document.documentElement.getAttribute('lang');
+                const spell = document.querySelectorAll('textarea, input[type=text]').length;
+                const quotes = (document.body.innerText.match(/\\u00AB/g) || []).length;
+                return { lang: lang || null, textInputs: spell, guillemets: quotes };
+            ''')
+            step('features', feats)
+
             # Reload to confirm the choice survives a fresh boot. Slow profiles
             # (many bundles) need longer than a fixed sleep, and the loader
             # race can show its banner again mid-boot - poll, refresh once
