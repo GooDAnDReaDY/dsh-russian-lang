@@ -80,13 +80,24 @@ window.__ModuleLoader__.load({
           return params ? fill(overrides[key], params) : overrides[key]
         }
         // 2. Плюрализация для русского.
-        const m = /^(.*)[.](one|other)$/.exec(key)
-        if (m && runtime.getLocale().active === 'ru' && params) {
+        if (runtime.getLocale().active === 'ru' && params) {
           const n = params.n ?? params.count
           if (typeof n === 'number') {
             const form = pluralRules.select(n)
-            if (form === 'few' || form === 'many') {
-              const pluralKey = m[1] + '.' + form
+            const m = /^(.*)[.](one|other)$/.exec(key)
+            if (m) {
+              // Ядро выбирает .one/.other по n===1; русскому нужны few/many.
+              if (form === 'few' || form === 'many') {
+                const pluralKey = m[1] + '.' + form
+                const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
+                if (template !== undefined) {
+                  return fill(template, params)
+                }
+              }
+            } else if (form !== 'other' && !/[.](one|other|few|many)$/.test(key)) {
+              // Счётный ключ без суффикса: t('X', {n}). Если словарь даёт формы
+              // X.one / X.few / X.many - берём подходящую, иначе как раньше.
+              const pluralKey = key + '.' + form
               const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
               if (template !== undefined) {
                 return fill(template, params)

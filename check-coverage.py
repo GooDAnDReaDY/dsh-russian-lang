@@ -60,9 +60,12 @@ def compare(title, en, ru):
             if k in en.get(ns, {}):
                 continue
             # X.few / X.many — осознанные ру-формы множественного числа, валидны,
-            # если в en есть базовый X.one / X.other.
+            # если в en есть базовый X (любая форма: голый счётный ключ или
+            # X.one / X.other).
             base = _ru_plural(k)
-            if base and (base + '.one' in en.get(ns, {}) or base + '.other' in en.get(ns, {})):
+            if base and (base in en.get(ns, {})
+                         or base + '.one' in en.get(ns, {})
+                         or base + '.other' in en.get(ns, {})):
                 continue
             extra.append(k)
         if extra:
