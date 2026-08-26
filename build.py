@@ -689,7 +689,7 @@ window.__ModuleLoader__.load({
     return module.exports
   },
 })
-''' % (payload, freq_json, yo_json, card_json)
+''' % (payload, card_json, yo_json, freq_json)
 
 open(os.path.join(HERE, 'lib', 'client.js'), 'w', encoding='utf-8').write(client)
 print('namespace-ов: %d, ключей: %d -> lib/client.js'
