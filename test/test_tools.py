@@ -86,12 +86,14 @@ src_double = "const NS = \"dsh-gitea\";\nctx.locale.register(NS, { en, ru });"
 src_single = "let NS = 'dsh-spendmeter'\nlocale.register(NS, { en, ru })"
 src_literal = 'ctx.locale.register("dsh-market", "ru", dict)'
 src_none = "register('other', { en })"
+src_shorthand = "register('other2', { en, ru })"
 check(srs.self_ru_ns(src_double) == {'dsh-gitea'}, 'self_ru_scan: двойные кавычки')
 check(srs.self_ru_ns(src_single) == {'dsh-spendmeter'}, 'self_ru_scan: одинарные кавычки')
 check('dsh-market' in srs.self_ru_ns(src_literal), 'self_ru_scan: register(ns,"ru",..)')
-# Сканер консервативен: register(ns, {...}) ловится всегда (перестраховка -
-# лучше исключить лишний ns, чем уронить чужой плагин).
-check(srs.self_ru_ns(src_none) == {'other'}, 'self_ru_scan: любой register(ns,{..}) ловится')
+# register(ns,{en}) без ru — НЕ self-ru
+check(srs.self_ru_ns(src_none) == set(), 'self_ru_scan: {en} без ru не ловится')
+# register(ns,{en,ru}) shorthand с ru — ловится
+check(srs.self_ru_ns(src_shorthand) == {'other2'}, 'self_ru_scan: {en,ru} shorthand ловится')
 
 # ---------- merge_freq ----------
 mf = load('merge_freq', os.path.join(TOOLS, 'merge_freq.py'))
