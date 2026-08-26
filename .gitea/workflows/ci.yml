@@ -1,0 +1,30 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Node-тесты (словари/плюраль/типографика/раскладка)
+        run: node --test test/test_plural.mjs test/test_fill.mjs test/test_count_plural.mjs test/test_typography.mjs test/test_layout.mjs
+      - name: Тесты инструментов
+        run: python3 test/test_tools.py
+      - name: Сборка бандла + синтаксис
+        run: |
+          python3 build.py
+          node --check lib/client.js
+      - name: Coverage gate
+        run: python3 check-coverage.py
+      - name: Обезличенность исходников (словари переводов исключены — там чужие примеры)
+        run: |
+          ! grep -rniP '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' README.md lib/ tools/*.py tools/systemd/

@@ -31,8 +31,12 @@ _mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_mod)
 harvest = _mod.harvest
 
-CRED = '/mnt/external/Project/DEV/.gitea-agent-credentials.json'
-GITEA_BASE = 'http://192.168.1.111:3005/api/v1/repos/goodandready/dsh-russian-lang'
+# Конфигурация алерта — через окружение (обезличенность: никаких наших
+# путей/хостов в коде). Без переменных алерт отключён, отчёт всё равно пишется.
+CRED = os.environ.get('GITEA_CREDENTIALS', '')
+GITEA_BASE = os.environ.get(
+    'GITEA_API_BASE',
+    'http://localhost:3000/api/v1/repos/goodandready/dsh-russian-lang')
 ISSUE_PREFIX = 'chore(upstream):'
 SNAPSHOT = os.path.join(REPO, 'upstream', 'core-en.json')
 REPORT = os.path.join(REPO, 'upstream', 'report.md')
@@ -120,6 +124,8 @@ def report_md(version, added, removed, untranslated):
 
 
 def gitea(method, path, data=None):
+    if not CRED or not os.path.exists(CRED):
+        raise RuntimeError('GITEA_CREDENTIALS не задан — алерт отключён')
     token = json.load(open(CRED))['agents']['opencode']['token']
     body = json.dumps(data, ensure_ascii=False).encode('utf-8') if data is not None else None
     r = urllib.request.Request(GITEA_BASE + path, data=body, method=method)
@@ -131,7 +137,11 @@ def gitea(method, path, data=None):
 
 
 def alert(version, text, has_drift):
-    open_issues = gitea('GET', '/issues?state=open&limit=50&q=upstream')
+    try:
+        open_issues = gitea('GET', '/issues?state=open&limit=50&q=upstream')
+    except RuntimeError as err:
+        print('алерт пропущен: %s' % err)
+        return
     mine = [i for i in open_issues if i['title'].startswith(ISSUE_PREFIX)]
     if not has_drift:
         for i in mine:

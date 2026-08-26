@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.1.9 (2026-08-25)
+
+- `feat(tools)`: placeholder validation in MT apply. `mt_fallback.py --apply`
+  retries translations whose `{placeholders}` diverge from the en original and
+  drops persistent mismatches instead of shipping raw `{...}` into the UI.
+  Provider is injectable for tests. (#45)
+- `feat(tools): self-ru namespace autodetection`. New
+  `tools/self_ru_scan.py <profile>` writes `self-ru.json`; build.py prefers it
+  over the hardcoded list, so new self-localizing plugins stop crashing the
+  loader. (#45)
+- `feat(tools): freq_refresh`. `tools/freq_refresh.py` downloads a fresh
+  Russian frequency list and re-merges DSH domain words in one command. (#45)
+- `test: full coverage for the tooling`. mt_fallback (PH rejection, retry,
+  incremental registry), merge_freq (word extraction, stop-list),
+  self_ru_scan (quote styles), freq_refresh (filter), upstream_check
+  (diff/report). (#45)
+- `ci: Gitea Actions workflow` — node tests, tool tests, build+syntax,
+  coverage gate and a de-identification grep on every PR. (#45)
+- `fix(tools)`: upstream_check/systemd installer no longer hardcode machine
+  paths — configuration moved to environment variables.
+
 ## 0.1.8 (2026-08-25)
 
 - `fix(plugin)`: complete the self-ru exclusion list. 0.1.7 missed

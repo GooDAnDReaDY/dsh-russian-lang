@@ -17,6 +17,7 @@ import argparse
 import glob
 import json
 import os
+import re
 import sys
 import time
 import urllib.request
@@ -80,31 +81,56 @@ def mt_call(en_text, api_key, model):
         return json.load(resp)['choices'][0]['message']['content'].strip()
 
 
-def apply_mt(pending, api_key):
+def ph_set(text):
+    """Множество {placeholders} в строке."""
+    return set(re.findall(r'\{(\w+)\}', text or ''))
+
+
+def ph_ok(en_text, ru_text):
+    """True, если набор плейсхолдеров ru совпадает с en."""
+    return ph_set(en_text) == ph_set(ru_text)
+
+
+def apply_mt(pending, api_key, call=None):
+    """Переводит pending и пишет реестр. `call(en_text)` подменяется в тестах."""
+    if call is None:
+        def call(en_text):
+            return mt_call(en_text, api_key, MODEL)
     registry = json.load(open(REGISTRY, encoding='utf-8')) if os.path.exists(REGISTRY) else {}
     en = en_dict()
-    changed = errors = 0
+    changed = errors = rejected = 0
     for ns, keys in sorted(pending.items()):
         for key in keys:
             if key in registry.get(ns, {}):
                 continue
-            try:
-                ru = mt_call(en[ns][key], api_key, MODEL)
-            except Exception as err:
-                errors += 1
-                print('  ERROR %s.%s: %s' % (ns, key, err))
+            en_text = en[ns][key]
+            # До 3 попыток: MT любит добавлять плейсхолдеры вслепую (#42).
+            accepted = None
+            for attempt in range(3):
+                try:
+                    ru = call(en_text)
+                except Exception as err:
+                    errors += 1
+                    print('  ERROR %s.%s: %s' % (ns, key, err))
+                    break
+                if ph_ok(en_text, ru):
+                    accepted = ru
+                    break
+                rejected += 1
+                print('  PH-MISMATCH %s.%s (попытка %d): %s' % (ns, key, attempt + 1, ru))
+            if accepted is None:
                 continue
             registry.setdefault(ns, {})[key] = {
-                'ru': ru, 'en': en[ns][key], 'model': MODEL,
+                'ru': accepted, 'en': en_text, 'model': MODEL,
                 'at': time.strftime('%Y-%m-%dT%H:%M:%S'),
             }
             changed += 1
             # Записываем после каждого ключа: при прерывании прогресс не теряется.
             json.dump(registry, open(REGISTRY, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-            print('  %s.%s = %s' % (ns, key, ru))
+            print('  %s.%s = %s' % (ns, key, accepted))
             time.sleep(0.4)
     json.dump(registry, open(REGISTRY, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-    print('MT: +%d переводов, ошибок %d' % (changed, errors))
+    print('MT: +%d переводов, ошибок %d, отброшено по PH %d' % (changed, errors, rejected))
     return changed
 
 
