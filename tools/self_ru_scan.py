@@ -45,8 +45,8 @@ def _object_body(src, open_brace):
 
 
 def _has_ru(obj):
-    """Объект локали действительно содержит ru-ключ (не только zh/en)."""
-    return re.search(r'\bru\s*:', obj) is not None
+    """Объект локали содержит ru — как ключ (ru: {...}) или shorthand (ru)."""
+    return re.search(r'\bru\s*(?::|\s*[,}])', obj) is not None
 
 
 def self_ru_ns(src):

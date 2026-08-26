@@ -1,3 +1,8 @@
 [
- "dsh-spendmeter"
+ "dsh-gitea",
+ "dsh-kanban",
+ "dsh-key-rotation",
+ "dsh-messenger-gateway",
+ "dsh-spendmeter",
+ "dsh-vision-bridge"
 ]
