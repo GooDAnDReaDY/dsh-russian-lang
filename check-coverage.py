@@ -46,11 +46,14 @@ def _ru_plural(ru_key):
     return m.group(1) if m else None
 
 
-def compare(title, en, ru):
+def compare(title, en, ru, extra=None):
+    """extra — дополнительные покрытия (MT-реестр): ключ считается переведённым,
+    если есть в ru ИЛИ в extra."""
     missing = stale = bad = 0
     print('=== %s ===' % title)
     for ns in sorted(en):
-        absent = [k for k in en[ns] if k not in ru.get(ns, {})]
+        absent = [k for k in en[ns]
+                  if k not in ru.get(ns, {}) and k not in (extra or {}).get(ns, {})]
         if absent:
             missing += len(absent)
             print('  НЕТ ПЕРЕВОДА  %-26s %3d: %s' % (ns, len(absent), ', '.join(absent[:8])))
@@ -177,14 +180,27 @@ def runtime_coverage():
     return pct
 
 
+def strip_self_ru(en):
+    """Убрать namespace'ы, которые плагины локализуют сами (self-ru.json).
+    Их перевод не наша ответственность и не «непереведённое»."""
+    self_ru = set(load_file('self-ru.json')) if os.path.exists(
+        os.path.join(HERE, 'self-ru.json')) else set()
+    return {ns: e for ns, e in en.items() if ns not in self_ru}
+
+
 if __name__ == '__main__':
     en_all = {}
     for name in ('core-en.json', 'plugins-en.json'):
         part = load_file(name)
         for ns, entries in part.items():
             en_all.setdefault(ns, {}).update(entries)
-    left = compare('ЯДРО', load_file('core-en.json'), load_dir('ru'))
-    left += compare('ПЛАГИНЫ', load_file('plugins-en.json'), load_dir('ru-plugins'))
+    mt_all = {}
+    for ns, entries in load_file('mt-registry.json').items():
+        mt_all[ns] = {k: (r.get('ru', '') if isinstance(r, dict) else r)
+                      for k, r in entries.items()}
+    left = compare('ЯДРО', load_file('core-en.json'), load_dir('ru'), mt_all)
+    left += compare('ПЛАГИНЫ', strip_self_ru(load_file('plugins-en.json')),
+                    strip_self_ru(load_dir('ru-plugins')), mt_all)
     left += check_mt_registry(en_all)
     runtime_coverage()
     sys.exit(0 if left == 0 else 1)

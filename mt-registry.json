@@ -2220,6 +2220,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Удовлетворены зависимости"
   },
+  "checkPeerSatisfiedEmpty": {
+   "at": "2026-08-26T18:14:05",
+   "en": "No satisfied dependency entries",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет удовлетворяющих записей зависимостей"
+  },
   "checkPeerWarning": {
    "at": "2026-08-26T14:44:23",
    "en": "Dependency warnings",
@@ -2525,6 +2531,18 @@
    "en": "above declared upper bound",
    "model": "deepseek/deepseek-chat",
    "ru": "выше объявленной верхней границы"
+  },
+  "peerWarnOptional": {
+   "at": "2026-08-26T18:14:08",
+   "en": "optional peer",
+   "model": "deepseek/deepseek-chat",
+   "ru": "необязательный участник"
+  },
+  "presetApplied": {
+   "at": "2026-08-26T18:14:10",
+   "en": "Applied — restart to apply",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Применено — перезапустите, чтобы применить"
   },
   "presetApply": {
    "at": "2026-08-26T14:44:40",
@@ -2934,6 +2952,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Не удалось восстановить:"
   },
+  "snapRestored": {
+   "at": "2026-08-26T18:14:12",
+   "en": "Restored — restart to apply",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановлено — перезапустите для применения"
+  },
   "snapRestoring": {
    "at": "2026-08-26T14:46:07",
    "en": "Restoring…",
@@ -3017,6 +3041,12 @@
    "en": "is now off — it stopped working right away",
    "model": "deepseek/deepseek-chat",
    "ru": "теперь выключено — перестало работать сразу"
+  },
+  "toastToggledOn": {
+   "at": "2026-08-26T00:00:00",
+   "en": "is now on",
+   "model": "manual",
+   "ru": "включён"
   }
  },
  "dsh-messenger-gateway": {
@@ -3175,6 +3205,12 @@
    "en": "task_done/error from web sessions (not msgw-*)",
    "model": "deepseek/deepseek-chat",
    "ru": "ошибка из веб-сессий (не msgw-*)"
+  },
+  "notifyHome": {
+   "at": "2026-08-26T18:14:21",
+   "en": "Notify home name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Уведомить имя дома"
   },
   "pairing": {
    "at": "2026-08-26T14:46:40",
