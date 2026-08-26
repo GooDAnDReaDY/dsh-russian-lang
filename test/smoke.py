@@ -19,7 +19,7 @@ import subprocess
 import tempfile
 import urllib.request
 
-DEFAULT_URL = os.environ.get('DSH_URL', 'https://192.168.1.111:3082')
+DEFAULT_URL = os.environ['DSH_URL']  # обязательный параметр: адрес проверяемого контура
 CHROME = os.environ.get('CHROME', '/usr/bin/google-chrome')
 PORT = int(os.environ.get('DSH_CDP_PORT', '9333'))
 
