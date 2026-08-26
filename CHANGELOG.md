@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.10 (2026-08-25)
+
+- `feat(client)`: settings card. New «Русская локализация» card in
+  Настройки → Плагины → Настройки плагинов: switch Russian on/off (goes
+  through the runtime, no syncFlag fight), typography toggle, ё toggle,
+  overrides count. Collapsed by default; form gated on the snapshot status;
+  rl- prefixed styles on theme variables.
+- `feat(build)`: corpus-derived ё dictionary. build.py generates е→ё pairs
+  from the bundled frequency corpus (144 pairs + 22 curated); ambiguous
+  «все» is blacklisted. typography.yo stays default-off.
+- `feat(tools): term_check.py` — en→ru terminology consistency report across
+  all namespaces (27 contextual divergences documented).
+- `chore(dict)`: plugin dictionaries refreshed from the production profile
+  (plugins-en.json 16 ns / 1815 keys); MT filled 102 new dsh-market keys,
+  25 bad drafts rejected by the new placeholder validation.
+
 ## 0.1.9 (2026-08-25)
 
 - `feat(tools)`: placeholder validation in MT apply. `mt_fallback.py --apply`
