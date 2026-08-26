@@ -57,11 +57,40 @@ if os.path.exists(mt_path):
 
 payload = json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True)
 
-# Частотный словарь для фикса раскладки (tools/ru-freq.json). Скачивается
-# вручную (см. README) и встраивается в бандл для детектора.
+# Частотный словарь для фикса раскладки (tools/ru-freq.json). Обновляется
+# tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
 freq_json = json.dumps(freq_words, ensure_ascii=False)
+
+# ё-пары для типографики: слова с ё из частотного корпуса дают безопасные
+# пары «еще -> ещё» (корпусное написание). Неоднозначные («все» может быть
+# и «всё») — в чёрном списке. yo по умолчанию выключен.
+YO_BLACKLIST = {'все'}
+yo_pairs = []
+seen_yo = set()
+for w in freq_words:
+    if 'ё' in w and w not in YO_BLACKLIST:
+        e = w.replace('ё', 'е')
+        if e != w and (e, w) not in seen_yo:
+            seen_yo.add((e, w))
+            yo_pairs.append([e, w])
+yo_json = json.dumps(yo_pairs, ensure_ascii=False)
+print('ё-пар из корпуса: %d' % len(yo_pairs))
+
+# Подписи карточки настроек (namespace russian-lang — наш собственный).
+card_ru = {
+    'cardTitle': 'Русская локализация',
+    'cardSub': 'Язык интерфейса, типографика, раскладка',
+    'enabled': 'Русский язык включён',
+    'typography': 'Типографика вывода',
+    'yo': 'Буква ё',
+    'overridesCount': 'Своих переопределений',
+    'statusLoading': 'Настройки загружаются…',
+    'statusUnavailable': 'Настройки недоступны на этом хосте',
+    'hint': 'Машинные переводы помечены в очереди выверки; ручная правка словарей приоритетна.',
+}
+card_json = json.dumps(card_ru, ensure_ascii=False)
 
 client = r'''// dsh-russian-lang — браузерная половина. ФАЙЛ СГЕНЕРИРОВАН, правьте ru/*.json
 // и ru-plugins/*.json и запускайте build.py.
@@ -79,9 +108,14 @@ window.__ModuleLoader__.load({
   id: '@goodandready/dsh-russian-lang',
   factory: (require) => {
     var module = { exports: {} }
+    var React = null
+    try { React = require('react') } catch (e) { /* карточка настроек необязательна */ }
 
     /** namespace -> { ключ: перевод } */
     const RU = %s
+
+    // Подписи собственной карточки настроек (namespace russian-lang).
+    RU['russian-lang'] = %s
 
     const SETTINGS_NS_NAME = 'russian-lang'
 
@@ -328,7 +362,7 @@ window.__ModuleLoader__.load({
       const typoNbsp = (text) => text.replace(/(^|[\s(\[\u00AB])([а-яё]{1,2})(\s+)/g, (match, lead, word) => (
         TYPO_SHORT.has(word) ? lead + word + '\u00A0' : match
       ))
-      const TYPO_YO = [
+      const TYPO_YO_CURATED = [
         [/еще/g, 'ещё'], [/Еще/g, 'Ещё'], [/ЕЩЕ/g, 'ЕЩЁ'],
         [/\bее\b/g, 'её'], [/\bЕе\b/g, 'Её'],
         [/\bчерный\b/g, 'чёрный'], [/\bчерная\b/g, 'чёрная'], [/\bчерные\b/g, 'чёрные'],
@@ -339,6 +373,13 @@ window.__ModuleLoader__.load({
         [/\bведет\b/g, 'ведёт'], [/\bнесет\b/g, 'несёт'], [/\bживет\b/g, 'живёт'],
         [/\bпривел\b/g, 'привёл'], [/\bшел\b/g, 'шёл']
       ]
+      // Корпусные ё-пары из freq-словаря (безопасные написания), генерируются build.py.
+      const TYPO_YO_FREQ = %s
+      const TYPO_YO = TYPO_YO_CURATED.concat(
+        TYPO_YO_FREQ
+          .filter((p) => p[0].length >= 3 && p[0] !== p[1])
+          .map((p) => [new RegExp('\\b' + p[0] + '\\b', 'g'), p[1]])
+      )
       const typoYo = (text) => {
         for (const pair of TYPO_YO) text = text.replace(pair[0], pair[1])
         return text
@@ -527,13 +568,128 @@ window.__ModuleLoader__.load({
         document.removeEventListener('input', layoutOnInput, true)
         layoutDismiss()
       }, 'dsh-russian-lang: layout')
+
+      // 8. Карточка настроек («Настройки → Плагины → Настройки плагинов»).
+      // Ключ слота равен пространству настроек; карточка свёрнута по умолчанию;
+      // форма активна только при статусе ready снимка.
+      if (!ctx.slots || !React) return
+      const toggleRu = (wantRu) => {
+        try {
+          if (runtime.getLocale().active === wantRu) return
+          if (native) runtime.setLocale(wantRu ? 'ru' : 'en')
+          else runtime.publish(wantRu ? 'ru' : 'en', true)
+        } catch (err) { console.warn('dsh-russian-lang: toggle failed', err) }
+      }
+      ctx.slots.register({
+        name: 'settings.plugin.item',
+        key: SETTINGS_NS_NAME,
+        locale: SETTINGS_NS_NAME,
+        inject: () => ({ scope, runtime, toggleRu }),
+      }, SettingsCard)
+    }
+
+    // Карточка настроек: React-компонент вне apply (замыкание не нужно —
+    // зависимости приходят через props.inject).
+    function SettingsCard(props) {
+      const src = typeof props.inject === 'function'
+        ? (props.inject() || {})
+        : (props.inject || {})
+      const scope = src.scope
+      const runtime = src.runtime
+      const toggleRu = src.toggleRu
+      const t = typeof props.t === 'function' ? props.t : ((k) => k)
+
+      const [open, setOpen] = React.useState(false)
+      const [snap, setSnap] = React.useState(
+        () => (scope && scope.getSnapshot ? scope.getSnapshot() : { status: 'loading', value: {} }))
+      React.useEffect(() => {
+        if (!scope || !scope.subscribe) return undefined
+        const un = scope.subscribe(() => setSnap(scope.getSnapshot()))
+        setSnap(scope.getSnapshot())
+        return un
+      }, [])
+
+      const status = snap.status || 'loading'
+      const value = snap.value || {}
+      const typography = value.typography || {}
+      const overridesCount = Object.keys(value.overrides || {}).length
+
+      const ruActive = (() => {
+        try { return runtime.getLocale().active === 'ru' } catch (err) { return false }
+      })()
+
+      const setTypo = (patch) => {
+        const next = Object.assign({}, typography, patch)
+        try { scope.set('typography', next) } catch (err) { /* ignore */ }
+      }
+      const onEnabled = (ev) => { if (toggleRu) toggleRu(ev.target.checked) }
+
+      const row = (label, control) =>
+        React.createElement('div', { className: 'rl-field' },
+          React.createElement('span', { className: 'rl-label' }, label), control)
+
+      const checkbox = (checked, onChange, disabled) =>
+        React.createElement('input', {
+          type: 'checkbox', checked: !!checked, disabled: !!disabled,
+          className: 'rl-check', onChange: (ev) => onChange(ev),
+        })
+
+      const statusLine = status === 'ready'
+        ? ''
+        : (status === 'unavailable' ? t('statusUnavailable') : t('statusLoading'))
+      const disabled = status !== 'ready'
+
+      return React.createElement('div', { className: 'rl-card' },
+        React.createElement('button', {
+          type: 'button',
+          className: 'rl-head',
+          'aria-expanded': String(open),
+          onClick: () => setOpen(!open),
+        },
+          React.createElement('span', { style: { flex: '1' } },
+            React.createElement('div', { className: 'rl-title' }, t('cardTitle')),
+            React.createElement('div', { className: 'rl-sub' },
+              statusLine || t('cardSub'))),
+          React.createElement('span', { className: 'rl-chev' }, open ? '▾' : '▸')),
+        open && React.createElement('div', { className: 'rl-body' },
+          row(t('enabled'), checkbox(ruActive, onEnabled, false)),
+          row(t('typography'), checkbox(typography.enabled !== false && ruActive,
+            (ev) => setTypo({ enabled: ev.target.checked }), !ruActive)),
+          row(t('yo'), checkbox(typography.yo === true,
+            (ev) => setTypo({ yo: ev.target.checked }), !ruActive)),
+          React.createElement('div', { className: 'rl-note' },
+            t('overridesCount') + ': ' + overridesCount),
+          React.createElement('div', { className: 'rl-foot' }))
+      )
+    }
+
+    // Стили карточки: префикс rl-, только переменные темы.
+    const RL_CSS = [
+      '.rl-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:12px;list-style:none}',
+      '.rl-head{appearance:none;width:100%%;font:inherit;color:inherit;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:12px;display:flex;align-items:center;gap:12px;padding:14px 16px}',
+      '.rl-title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600;line-height:1.4}',
+      '.rl-sub{color:var(--dsw-alias-label-secondary);font-size:13px}',
+      '.rl-chev{color:var(--dsw-alias-label-secondary)}',
+      '.rl-body{border-top:1px solid var(--dsw-alias-border-l2);margin:0 16px;padding-bottom:8px}',
+      '.rl-field{display:flex;flex-direction:column;gap:6px;padding:12px 0}',
+      '.rl-label{color:var(--dsw-alias-label-primary);font-size:13px}',
+      '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary)}',
+      '.rl-note{color:var(--dsw-alias-label-secondary);font-size:12px;padding:8px 0 4px}',
+      '.rl-foot{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0 4px}',
+    ].join('\n')
+    if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {
+      const tag = document.createElement('style')
+      tag.dataset.plugin = '@goodandready/dsh-russian-lang'
+      tag.dataset.pluginCss = 'rl-card'
+      tag.textContent = RL_CSS
+      document.head.appendChild(tag)
     }
 
     module.exports = { apply, inject: ['locale', 'connection', 'remote', 'settingsScope'] }
     return module.exports
   },
 })
-''' % (payload, freq_json)
+''' % (payload, freq_json, yo_json, card_json)
 
 open(os.path.join(HERE, 'lib', 'client.js'), 'w', encoding='utf-8').write(client)
 print('namespace-ов: %d, ключей: %d -> lib/client.js'
