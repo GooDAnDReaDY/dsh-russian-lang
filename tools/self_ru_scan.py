@@ -16,23 +16,62 @@ import os
 import re
 
 # register(NS, { ... }) / register('ns', { ... }) / register(ns, 'ru', ...)
-REG_CALL = re.compile(r'register\(\s*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][\w$]*))\s*,\s*(?:\{|["\']ru["\'])')
-ASSIGN = re.compile(r'(?:^|[\s,;({])(?:const\s+|let\s+|var\s+)?%s\s*=\s*["\']([^"\']+)["\']' % r'([A-Za-z_$][\w$]*)')
+REG_OBJ = re.compile(r'register\(\s*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][\w$]*))\s*,\s*\{')
+REG_RU = re.compile(r'register\(\s*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][\w$]*))\s*,\s*["\']ru["\']\s*,')
+
+
+def _object_body(src, open_brace):
+    """Сбалансированный объект, начиная с '{'."""
+    depth, i, in_str, quote, esc = 0, open_brace, False, '', False
+    while i < len(src):
+        c = src[i]
+        if in_str:
+            if esc:
+                esc = False
+            elif c == '\\':
+                esc = True
+            elif c == quote:
+                in_str = False
+        elif c in '"\'`':
+            in_str, quote = True, c
+        elif c == '{':
+            depth += 1
+        elif c == '}':
+            depth -= 1
+            if depth == 0:
+                return src[open_brace:i + 1]
+        i += 1
+    return None
+
+
+def _has_ru(obj):
+    """Объект локали действительно содержит ru-ключ (не только zh/en)."""
+    return re.search(r'\bru\s*:', obj) is not None
 
 
 def self_ru_ns(src):
     """Namespace'ы, которые этот client.js регистрирует как ru."""
     nss = set()
-    for m in REG_CALL.finditer(src):
+    # register(ns, "ru", ...) — безусловно
+    for m in REG_RU.finditer(src):
         ns = m.group(1) or m.group(2)
         if ns:
             nss.add(ns)
             continue
-        ident = m.group(3)
-        if not ident:
+        a = re.search(r'%s\s*=\s*["\']([^"\']+)["\']' % re.escape(m.group(3)), src)
+        if a:
+            nss.add(a.group(1))
+    # register(NS, { ... }) — только если в объекте есть ru
+    for m in REG_OBJ.finditer(src):
+        brace = src.index('{', m.end() - 1)
+        body = _object_body(src, brace)
+        if not body or not _has_ru(body):
             continue
-        # const NS = 'dsh-x' / NS = "dsh-x" — любая форма присваивания рядом
-        a = re.search(r'%s\s*=\s*["\']([^"\']+)["\']' % re.escape(ident), src)
+        ns = m.group(1) or m.group(2)
+        if ns:
+            nss.add(ns)
+            continue
+        a = re.search(r'%s\s*=\s*["\']([^"\']+)["\']' % re.escape(m.group(3)), src)
         if a:
             nss.add(a.group(1))
     return nss

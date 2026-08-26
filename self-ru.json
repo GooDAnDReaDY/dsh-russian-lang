@@ -1,16 +1,3 @@
 [
- "context-doctor",
- "dsh-context",
- "dsh-gitea",
- "dsh-key-rotation",
- "dsh-messenger-gateway",
- "dsh-spendmeter",
- "dsh-vision-bridge",
- "pin",
- "plugin-store",
- "settings.commandcode",
- "settings.ollama-cloud",
- "task-board",
- "usageDashboard",
- "usageStats"
+ "dsh-spendmeter"
 ]
