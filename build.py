@@ -20,13 +20,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 #               в бандл попадает только строка, разметка остаётся служебной.
 # SELF_RU — namespace'ы, которые сами плагины уже регистрируют как "ru".
 # Регистрация ru повторно падает в загрузчике ("already has locale ru"), поэтому
-# их не перекрываем вовсе.
-SELF_RU = {
+# их не перекрываем вовсе. Список генерируется tools/self_ru_scan.py
+# (<профиль>/node_modules) в self-ru.json и коммитится.
+SELF_RU_FALLBACK = {
     'dsh-spendmeter', 'task-board', 'settings.commandcode', 'pin',
     'dsh-context', 'context-doctor', 'settings.ollama-cloud', 'plugin-store',
     'usageStats', 'usageDashboard', 'dsh-messenger-gateway',
     'dsh-gitea', 'dsh-key-rotation', 'dsh-vision-bridge',
 }
+self_ru_path = os.path.join(HERE, 'self-ru.json')
+if os.path.exists(self_ru_path):
+    SELF_RU = set(json.load(open(self_ru_path, encoding='utf-8')))
+else:
+    print('ПРЕДУПРЕЖДЕНИЕ: self-ru.json нет, используется резервный список '
+          '(обновите: python3 tools/self_ru_scan.py <профиль>/node_modules --out self-ru.json)')
+    SELF_RU = SELF_RU_FALLBACK
 merged = {}
 sources = (sorted(glob.glob(os.path.join(HERE, 'ru', '*.json')))
            + sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json'))))
