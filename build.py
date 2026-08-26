@@ -685,7 +685,7 @@ window.__ModuleLoader__.load({
       document.head.appendChild(tag)
     }
 
-    module.exports = { apply, inject: ['locale', 'connection', 'remote', 'settingsScope'] }
+    module.exports = { apply, inject: ['locale', 'connection', 'remote', 'settingsScope', 'slots'] }
     return module.exports
   },
 })
