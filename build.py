@@ -89,6 +89,7 @@ card_ru = {
     'statusLoading': 'Настройки загружаются…',
     'statusUnavailable': 'Настройки недоступны на этом хосте',
     'hint': 'Машинные переводы помечены в очереди выверки; ручная правка словарей приоритетна.',
+    'altL': 'Alt+L — конвертировать раскладку текущего поля',
 }
 card_json = json.dumps(card_ru, ensure_ascii=False)
 
@@ -659,6 +660,7 @@ window.__ModuleLoader__.load({
             (ev) => setTypo({ yo: ev.target.checked }), !ruActive)),
           React.createElement('div', { className: 'rl-note' },
             t('overridesCount') + ': ' + overridesCount),
+          React.createElement('div', { className: 'rl-hint' }, t('altL')),
           React.createElement('div', { className: 'rl-foot' }))
       )
     }
@@ -675,6 +677,7 @@ window.__ModuleLoader__.load({
       '.rl-label{color:var(--dsw-alias-label-primary);font-size:13px}',
       '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary)}',
       '.rl-note{color:var(--dsw-alias-label-secondary);font-size:12px;padding:8px 0 4px}',
+      '.rl-hint{color:var(--dsw-alias-label-secondary);font-size:12px;padding:4px 0 8px}',
       '.rl-foot{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0 4px}',
     ].join('\n')
     if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {

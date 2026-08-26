@@ -12,9 +12,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
+      # setup-python не используется: офлайн-раннер не достаёт из кэша python 3.12.
+      # Тесты инструментов — чистый stdlib, хватает системного python3 act-образа.
       - name: Node-тесты (словари/плюраль/типографика/раскладка)
         run: node --test test/test_plural.mjs test/test_fill.mjs test/test_count_plural.mjs test/test_typography.mjs test/test_layout.mjs
       - name: Репро загрузки бандла (mock ctx)
@@ -27,6 +26,8 @@ jobs:
           node --check lib/client.js
       - name: Coverage gate
         run: python3 check-coverage.py
+      - name: Терминология (предупреждение, не блокер)
+        run: python3 tools/term_check.py || true
       - name: Обезличенность исходников (словари переводов исключены — там чужие примеры)
         run: |
           ! grep -rniP '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' README.md lib/ tools/*.py tools/systemd/ test/
