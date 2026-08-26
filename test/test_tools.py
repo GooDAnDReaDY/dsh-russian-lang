@@ -2,6 +2,7 @@
 """Тесты инструментов: mt_fallback, merge_freq, self_ru_scan, freq_refresh,
 upstream_check (diff/report). Запуск: python3 test/test_tools.py
 Требований к сети и профилю нет — только фикстуры."""
+import collections
 import importlib.util
 import json
 import os
@@ -117,6 +118,17 @@ check(untranslated.get('ns') == ['b2', 'c'], 'diff: непереведённые
 
 rep = uc.report_md('9.9.9', added, removed, untranslated)
 check('Новых ключей: **2**' in rep and 'удалённых: **2**' in rep, 'report_md: счётчики')
+
+# ---------- term_check ----------
+tc = load('term_check', os.path.join(TOOLS, 'term_check.py'))
+en_fix = {'ns1': {'save': 'Save'}, 'ns2': {'submit': 'Save'}}
+ru_fix = {'ns1': {'save': 'Сохранить'}, 'ns2': {'submit': 'Отправить'}}
+idx = collections.defaultdict(list)
+for ns, entries in en_fix.items():
+    for key, en_text in entries.items():
+        idx[en_text.strip()].append((ns, key, ru_fix[ns][key]))
+variants = {en_text: len({r for _, _, r in uses}) for en_text, uses in idx.items()}
+check(variants['Save'] == 2, 'term_check: одно en — два разных ru ловится')
 
 # ---------- итог ----------
 print()

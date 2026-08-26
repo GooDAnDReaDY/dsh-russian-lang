@@ -7,7 +7,13 @@
 The screenshots are taken against a live staging harness with the plugin
 installed via npm. Run from the repo root: `python3 test/screenshots.py`.
 """
-import base64, json, os, subprocess, tempfile, time, urllib.request
+import base64
+import json
+import os
+import subprocess
+import tempfile
+import time
+import urllib.request
 
 import websocket  # type: ignore
 

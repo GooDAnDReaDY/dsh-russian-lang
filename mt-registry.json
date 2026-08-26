@@ -2154,11 +2154,83 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Агент в настоящее время работает — дождитесь завершения (или отмените его) перед обновлением. Обновления заменяют файлы плагина на месте, поэтому работающий агент может завершиться с ошибкой или смешать версии в процессе выполнения."
   },
+  "aiFixDetect": {
+   "at": "2026-08-26T14:43:51",
+   "en": "Step 1 — identify yourself first. Before touching anything, determine whether the process you are running in IS the DeepSeek Harness instance this profile belongs to (i.e. this diagnosed composition is the one you are running in right now). Check whether the cwd / $DSH_HOME / command line points at this profile, or whether you are running inside a deepseek-harness process. If you cannot tell, assume the answer is \"yes\" (the safe choice).",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Шаг 1 — сначала определитесь. Прежде чем что-либо трогать, убедитесь, что процесс, в котором вы работаете, ЭТОТ экземпляр DeepSeek Harness, к которому относится данный профиль (то есть текущая диагностируемая композиция — это та, в которой вы сейчас находитесь). Проверьте, указывает ли текущий каталог / $DSH_HOME / командная строка на этот профиль или работает ли процесс внутри deepseek-harness. Если не можете определить, считайте, что ответ «да» (безопасный выбор)."
+  },
+  "aiFixIfSelf": {
+   "at": "2026-08-26T14:44:06",
+   "en": "If YES — you are this harness: never change the live composition, the harness or core packages in place (don't edit cordis.patch.yml, don't reorder/enable/disable bundles, don't install/remove/upgrade a plugin, don't reinstall deps, don't upgrade/restart dsh). Three steps: 1) read-only analysis only, change nothing; 2) produce apply.sh/.bat (this fix's changes) and rollback.sh/.bat (fully reverts it); both are idempotent — apply snapshots only when none exists yet and never overwrites an existing snapshot (an existing one means apply already ran, so roll back or confirm before re-running), while rollback restores from that snapshot, so a half-run apply can still be rolled back and repeated rollback is safe; 3) have me run apply in an external terminal and paste the stdout/stderr back to you. State the reason and wait for my confirmation at each step — never run these yourself.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Если ДА — вы являетесь этим инструментом: никогда не изменяйте текущую конфигурацию, инструмент или основные пакеты на месте (не редактируйте cordis.patch.yml, не меняйте порядок/включайте/отключайте пакеты, не устанавливайте/удаляйте/обновляйте плагины, не переустанавливайте зависимости, не обновляйте/перезапускайте dsh). Три шага: 1) только анализ в режиме чтения, ничего не изменяйте; 2) создайте apply.sh/.bat (изменения для этого исправления) и rollback.sh/.bat (полностью отменяет его); оба идемпотентны — apply создает снимки только если их еще нет и никогда не перезаписывает существующий снимок (если он существует, значит apply уже выполнялся, так что откатитесь или подтвердите перед повторным запуском), а rollback восстанавливает из этого снимка, так что частично выполненный apply все еще можно откатить, а повторный rollback безопасен; 3) дайте мне запустить apply во внешнем терминале и вставьте stdout/stderr обратно вам. Укажите причину и ждите моего подтверждения на каждом шаге — никогда не запускайте это самостоятельно."
+  },
   "brokenBundleBanner": {
    "at": "2026-08-25T19:10:45",
    "en": "These plugins now have a client bundle that will not parse; the page may come up blank after a refresh — rolling back is recommended:",
    "model": "deepseek/deepseek-chat",
    "ru": "Эти плагины теперь имеют клиентский пакет, который не будет обрабатываться; страница может отображаться пустой после обновления — рекомендуется выполнить откат:"
+  },
+  "catInfo": {
+   "at": "2026-08-26T14:44:07",
+   "en": "Info",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Информация"
+  },
+  "catRisk": {
+   "at": "2026-08-26T14:44:09",
+   "en": "Risk",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Риск"
+  },
+  "catWarn": {
+   "at": "2026-08-26T14:44:10",
+   "en": "Warning",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предупреждение"
+  },
+  "checkPeerInfoTier": {
+   "at": "2026-08-26T14:44:12",
+   "en": "Dependency info",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Информация о зависимостях"
+  },
+  "checkPeerInfoTierEmpty": {
+   "at": "2026-08-26T14:44:13",
+   "en": "No informational dependency entries",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет записей информационных зависимостей"
+  },
+  "checkPeerRisk": {
+   "at": "2026-08-26T14:44:14",
+   "en": "Dependency risks",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Риски зависимостей"
+  },
+  "checkPeerRiskEmpty": {
+   "at": "2026-08-26T14:44:16",
+   "en": "No risk-level dependency mismatches",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет несоответствий уровней риска зависимостей"
+  },
+  "checkPeerSatisfied": {
+   "at": "2026-08-26T14:44:17",
+   "en": "Satisfied dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удовлетворены зависимости"
+  },
+  "checkPeerWarning": {
+   "at": "2026-08-26T14:44:23",
+   "en": "Dependency warnings",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предупреждения о зависимостях"
+  },
+  "checkPeerWarningEmpty": {
+   "at": "2026-08-26T14:44:25",
+   "en": "No warning-level dependency mismatches",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет несоответствий зависимостей на уровне предупреждений"
   },
   "compatRiskBanner": {
    "at": "2026-08-25T19:10:54",
@@ -2430,11 +2502,209 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Задачи"
   },
+  "peerInfoUnverified": {
+   "at": "2026-08-26T14:44:26",
+   "en": "unverified",
+   "model": "deepseek/deepseek-chat",
+   "ru": "непроверенный"
+  },
+  "peerRiskAboveMax": {
+   "at": "2026-08-26T14:44:28",
+   "en": "above explicit maximum",
+   "model": "deepseek/deepseek-chat",
+   "ru": "выше явного максимума"
+  },
+  "peerRiskBelowMin": {
+   "at": "2026-08-26T14:44:30",
+   "en": "below declared minimum",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ниже заявленного минимума"
+  },
+  "peerWarnAboveMax": {
+   "at": "2026-08-26T14:44:31",
+   "en": "above declared upper bound",
+   "model": "deepseek/deepseek-chat",
+   "ru": "выше объявленной верхней границы"
+  },
+  "presetApply": {
+   "at": "2026-08-26T14:44:40",
+   "en": "Apply",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Применить"
+  },
+  "presetBundleCount": {
+   "at": "2026-08-26T14:44:41",
+   "en": "{0} bundles",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{0} наборов"
+  },
+  "presetDelete": {
+   "at": "2026-08-26T14:44:42",
+   "en": "Delete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить"
+  },
+  "presetDeleted": {
+   "at": "2026-08-26T14:44:44",
+   "en": "Preset deleted",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресет удалён"
+  },
+  "presetDisable": {
+   "at": "2026-08-26T14:44:45",
+   "en": "disable {0} plugins",
+   "model": "deepseek/deepseek-chat",
+   "ru": "отключить плагины {0}"
+  },
+  "presetEmpty": {
+   "at": "2026-08-26T14:44:46",
+   "en": "No presets saved yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет сохранённых пресетов"
+  },
+  "presetEnable": {
+   "at": "2026-08-26T14:44:48",
+   "en": "enable {0} plugins",
+   "model": "deepseek/deepseek-chat",
+   "ru": "включить плагины {0}"
+  },
+  "presetFail": {
+   "at": "2026-08-26T14:44:50",
+   "en": "Preset operation failed: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось выполнить предустановленную операцию:"
+  },
+  "presetHint": {
+   "at": "2026-08-26T14:44:53",
+   "en": "Save the current bundle order and disabled list as a preset and switch anytime; applying runs a trial-start check and creates a snapshot first.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохраните текущий порядок пакетов и список отключенных как пресет и переключайтесь в любое время; применение запускает проверку перед началом пробного периода и сначала создает снимок."
+  },
+  "presetListFail": {
+   "at": "2026-08-26T14:44:55",
+   "en": "Failed to load presets: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось загрузить пресеты:"
+  },
+  "presetName": {
+   "at": "2026-08-26T14:44:57",
+   "en": "Preset name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Название пресета"
+  },
+  "presetNameEmpty": {
+   "at": "2026-08-26T14:44:58",
+   "en": "Enter a preset name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Введите имя предустановки"
+  },
+  "presetNoop": {
+   "at": "2026-08-26T14:44:59",
+   "en": "no changes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нет изменений"
+  },
+  "presetPreview": {
+   "at": "2026-08-26T14:45:01",
+   "en": "Preview",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предпросмотр"
+  },
+  "presetPreviewFail": {
+   "at": "2026-08-26T14:45:02",
+   "en": "Preview failed: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось выполнить предварительный просмотр:"
+  },
+  "presetPreviewTitle": {
+   "at": "2026-08-26T14:45:04",
+   "en": "Applying this preset will:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Применение этого пресета приведёт к:"
+  },
+  "presetReorder": {
+   "at": "2026-08-26T14:45:06",
+   "en": "reorder {0} bundles",
+   "model": "deepseek/deepseek-chat",
+   "ru": "переупорядочить {0} наборы"
+  },
+  "presetSave": {
+   "at": "2026-08-26T14:45:07",
+   "en": "Save current state",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить текущее состояние"
+  },
+  "presetSaved": {
+   "at": "2026-08-26T14:45:08",
+   "en": "Preset saved",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресет сохранён"
+  },
+  "presetSaving": {
+   "at": "2026-08-26T14:45:11",
+   "en": "Saving…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранение…"
+  },
+  "presetSection": {
+   "at": "2026-08-26T14:45:12",
+   "en": "Plugin presets",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресеты плагинов"
+  },
+  "reconciledNote": {
+   "at": "2026-08-26T14:45:15",
+   "en": "Removed, but pnpm reported an error while finishing up (usually a locked file). The profile is already reconciled — no retry needed.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалено, но pnpm сообщил об ошибке при завершении (обычно это заблокированный файл). Профиль уже согласован — повторная попытка не требуется."
+  },
+  "repoLink": {
+   "at": "2026-08-26T14:45:16",
+   "en": "View the repository on GitHub",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Посмотреть репозиторий на GitHub"
+  },
   "restartHintSupervised": {
    "at": "2026-08-25T19:12:46",
    "en": "This process is {0}'s own service process, so restarts belong to it — restarting from here would kill the takeover process along with the cgroup and the service would not come back. Use systemctl restart &lt;your unit&gt;. If your unit can survive a self-restart (KillMode=process), turn Allow restart on in this plugin's configuration.",
    "model": "deepseek/deepseek-chat",
    "ru": "Этот процесс является собственным сервисным процессом {0}, поэтому перезапуски относятся к нему — перезапуск отсюда завершит процесс передачи вместе с cgroup, и сервис не восстановится. Используйте systemctl restart &lt;ваш юнит&gt;. Если ваш юнит может пережить самостоятельный перезапуск (KillMode=process), включите параметр \"Разрешить перезапуск\" в настройках этого плагина."
+  },
+  "restore": {
+   "at": "2026-08-26T14:45:17",
+   "en": "Restore",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановить"
+  },
+  "restoreBootError": {
+   "at": "2026-08-26T14:45:19",
+   "en": "Still cannot boot after the restore:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удается загрузиться после восстановления:"
+  },
+  "restoreContinue": {
+   "at": "2026-08-26T14:45:21",
+   "en": "Continue update",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Продолжить обновление"
+  },
+  "restoreFail": {
+   "at": "2026-08-26T14:45:23",
+   "en": "Restore failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось восстановить"
+  },
+  "restoreHint": {
+   "at": "2026-08-26T14:45:26",
+   "en": "This will uninstall the local version, reinstall the catalog version, and keep update checks. This cannot be undone — please confirm again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Это удалит локальную версию, переустановит версию из каталога и сохранит проверку обновлений. Это действие нельзя отменить — подтвердите ещё раз."
+  },
+  "restoreNoCatalog": {
+   "at": "2026-08-26T14:45:28",
+   "en": "This plugin is not in the curated catalog, so it cannot be restored. Uninstall the local copy, or keep developing it locally.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот плагин отсутствует в курируемом каталоге, поэтому его нельзя восстановить. Удалите локальную копию или продолжайте разрабатывать её локально."
   },
   "restoreUnportable": {
    "at": "2026-08-25T19:12:49",
@@ -2556,6 +2826,126 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Эта операция оставила одно имя плагина, определенное в двух слоях; после перезапуска загрузится только один:"
   },
+  "snapCreate": {
+   "at": "2026-08-26T14:45:33",
+   "en": "Create snapshot",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создать снимок"
+  },
+  "snapCreateFail": {
+   "at": "2026-08-26T14:45:34",
+   "en": "Failed to create snapshot: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось создать снимок:"
+  },
+  "snapCreated": {
+   "at": "2026-08-26T14:45:36",
+   "en": "Snapshot created",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Снимок создан"
+  },
+  "snapCreating": {
+   "at": "2026-08-26T14:45:37",
+   "en": "Creating…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создание…"
+  },
+  "snapDelete": {
+   "at": "2026-08-26T14:45:40",
+   "en": "Delete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить"
+  },
+  "snapDeleteConfirm": {
+   "at": "2026-08-26T14:45:41",
+   "en": "Confirm delete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердить удаление"
+  },
+  "snapDeleteConfirmText": {
+   "at": "2026-08-26T14:45:43",
+   "en": "This snapshot cannot be recovered after deletion.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот снимок нельзя будет восстановить после удаления."
+  },
+  "snapDeleteFail": {
+   "at": "2026-08-26T14:45:45",
+   "en": "Failed to delete snapshot: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось удалить снимок:"
+  },
+  "snapDeleted": {
+   "at": "2026-08-26T14:45:46",
+   "en": "Snapshot deleted",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Снимок удалён"
+  },
+  "snapDeleting": {
+   "at": "2026-08-26T14:45:47",
+   "en": "Deleting…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удаление…"
+  },
+  "snapEmpty": {
+   "at": "2026-08-26T14:45:49",
+   "en": "No snapshots yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Снимков пока нет"
+  },
+  "snapFiles": {
+   "at": "2026-08-26T14:45:50",
+   "en": "files",
+   "model": "deepseek/deepseek-chat",
+   "ru": "файлы"
+  },
+  "snapHint": {
+   "at": "2026-08-26T14:45:53",
+   "en": "Snapshots are taken automatically before applying changes; you can also create one manually and roll back anytime.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Снимки создаются автоматически перед применением изменений; вы также можете создать их вручную и откатиться в любой момент."
+  },
+  "snapListFail": {
+   "at": "2026-08-26T14:45:54",
+   "en": "Failed to load snapshots: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось загрузить снимки:"
+  },
+  "snapRestore": {
+   "at": "2026-08-26T14:45:55",
+   "en": "Restore",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановить"
+  },
+  "snapRestoreConfirm": {
+   "at": "2026-08-26T14:45:57",
+   "en": "Confirm restore",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердите восстановление"
+  },
+  "snapRestoreConfirmText": {
+   "at": "2026-08-26T14:45:59",
+   "en": "Restoring overwrites the current profile package.json and configuration from the snapshot; this cannot be undone (create a fresh snapshot first if unsure).",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановление перезаписывает текущий package.json профиля и конфигурацию из снимка; это действие нельзя отменить (создайте новый снимок, если не уверены)."
+  },
+  "snapRestoreFail": {
+   "at": "2026-08-26T14:46:01",
+   "en": "Failed to restore: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось восстановить:"
+  },
+  "snapRestoring": {
+   "at": "2026-08-26T14:46:07",
+   "en": "Restoring…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановление…"
+  },
+  "snapSection": {
+   "at": "2026-08-26T14:46:09",
+   "en": "Snapshots & Rollback",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Снимки & Откат"
+  },
   "sortDownloads": {
    "at": "2026-08-25T19:13:25",
    "en": "npm downloads (30d)",
@@ -2579,6 +2969,54 @@
    "en": "Advanced",
    "model": "deepseek/deepseek-chat",
    "ru": "Дополнительно"
+  },
+  "themeExitFullscreen": {
+   "at": "2026-08-26T14:46:11",
+   "en": "Exit full screen",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выйти из полноэкранного режима"
+  },
+  "themeFullscreen": {
+   "at": "2026-08-26T14:46:12",
+   "en": "Browse full screen",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Просмотр в полноэкранном режиме"
+  },
+  "themePreview": {
+   "at": "2026-08-26T14:46:13",
+   "en": "Preview",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предпросмотр"
+  },
+  "themePreviewCount": {
+   "at": "2026-08-26T14:46:15",
+   "en": "{0} previews",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{0} предпросмотры"
+  },
+  "themePreviewLoading": {
+   "at": "2026-08-26T14:46:16",
+   "en": "Finding preview…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Поиск предварительного просмотра…"
+  },
+  "themePreviewMissing": {
+   "at": "2026-08-26T14:46:18",
+   "en": "Preview unavailable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предпросмотр недоступен"
+  },
+  "themeResultCount": {
+   "at": "2026-08-26T14:46:20",
+   "en": "{0} themes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{0} темы"
+  },
+  "toastToggledOff": {
+   "at": "2026-08-26T14:46:24",
+   "en": "is now off — it stopped working right away",
+   "model": "deepseek/deepseek-chat",
+   "ru": "теперь выключено — перестало работать сразу"
   }
  },
  "dsh-messenger-gateway": {
@@ -2635,6 +3073,18 @@
    "en": "Enable Telegram",
    "model": "deepseek/deepseek-chat",
    "ru": "Включить Telegram"
+  },
+  "groupMention": {
+   "at": "2026-08-26T14:46:31",
+   "en": "Groups require @mention / reply / command",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Группы требуют @упоминания / ответа / команды"
+  },
+  "groupsEnable": {
+   "at": "2026-08-26T14:46:32",
+   "en": "Respond in groups",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отвечайте в группах"
   },
   "hideAdvanced": {
    "at": "2026-08-25T19:13:51",
@@ -2714,6 +3164,48 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Пусто = значение по умолчанию DSH"
   },
+  "notifyBridge": {
+   "at": "2026-08-26T14:46:33",
+   "en": "Notify → Telegram home",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Уведомить → Домашний Telegram"
+  },
+  "notifyBridgeHint": {
+   "at": "2026-08-26T14:46:35",
+   "en": "task_done/error from web sessions (not msgw-*)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ошибка из веб-сессий (не msgw-*)"
+  },
+  "pairing": {
+   "at": "2026-08-26T14:46:40",
+   "en": "Pairing requests",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запросы на сопряжение"
+  },
+  "pairingApprove": {
+   "at": "2026-08-26T14:46:41",
+   "en": "Approve",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Одобрить"
+  },
+  "pairingEmpty": {
+   "at": "2026-08-26T14:46:43",
+   "en": "No pending codes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет ожидающих кодов"
+  },
+  "pairingRefresh": {
+   "at": "2026-08-26T14:46:44",
+   "en": "Refresh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить"
+  },
+  "pairingReject": {
+   "at": "2026-08-26T14:46:45",
+   "en": "Reject",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отклонить"
+  },
   "photoOnly": {
    "at": "2026-08-25T19:14:16",
    "en": "Photo without caption",
@@ -2744,6 +3236,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "таймаут опроса {pollTimeoutSeconds} секунд"
   },
+  "progressEnable": {
+   "at": "2026-08-26T14:46:47",
+   "en": "Progress message (thinking → delete → final)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сообщение о прогрессе (размышление → удаление → завершение)"
+  },
   "provider": {
    "at": "2026-08-25T19:14:23",
    "en": "Provider",
@@ -2756,6 +3254,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Пусто = DSH по умолчанию"
   },
+  "reactionsEnable": {
+   "at": "2026-08-26T14:46:48",
+   "en": "React while processing (👀)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Реагируйте во время обработки (👀)"
+  },
   "save": {
    "at": "2026-08-25T19:14:26",
    "en": "Save",
@@ -2767,6 +3271,24 @@
    "en": "Saving…",
    "model": "deepseek/deepseek-chat",
    "ru": "Сохранение…"
+  },
+  "sessionScope": {
+   "at": "2026-08-26T14:46:50",
+   "en": "Group session scope",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Область групповой сессии"
+  },
+  "sessionScopeChat": {
+   "at": "2026-08-26T14:46:53",
+   "en": "Shared per chat/topic",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доступно для общего использования в чате/теме"
+  },
+  "sessionScopeUser": {
+   "at": "2026-08-26T14:46:54",
+   "en": "Per user (recommended)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "На пользователя (рекомендуется)"
   },
   "showAdvanced": {
    "at": "2026-08-25T19:14:29",
@@ -2804,6 +3326,24 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Шлюз мессенджера"
   },
+  "transport": {
+   "at": "2026-08-26T14:46:55",
+   "en": "Transport",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Транспорт"
+  },
+  "transportPoll": {
+   "at": "2026-08-26T14:46:57",
+   "en": "Long poll (getUpdates)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Длинный опрос (getUpdates)"
+  },
+  "transportWebhook": {
+   "at": "2026-08-26T14:46:58",
+   "en": "Webhook",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вебхук"
+  },
   "tts": {
    "at": "2026-08-25T19:14:37",
    "en": "Voice replies",
@@ -2827,6 +3367,54 @@
    "en": "Agent turn timeout (sec)",
    "model": "deepseek/deepseek-chat",
    "ru": "Таймаут хода агента (сек)"
+  },
+  "voiceMode": {
+   "at": "2026-08-26T14:47:00",
+   "en": "Voice replies mode",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Режим голосовых ответов"
+  },
+  "voiceModeAlways": {
+   "at": "2026-08-26T14:47:05",
+   "en": "Always try TTS",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Всегда попробуйте TTS"
+  },
+  "voiceModeMirror": {
+   "at": "2026-08-26T14:47:06",
+   "en": "Mirror inbound voice",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Зеркалировать входящий голос"
+  },
+  "voiceModeOff": {
+   "at": "2026-08-26T14:47:09",
+   "en": "Off (unless /voice on)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выкл (кроме случая /voice on)"
+  },
+  "webhookSecret": {
+   "at": "2026-08-26T14:47:11",
+   "en": "Webhook secret (write-only)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Секрет вебхука (только запись)"
+  },
+  "webhookSecretHint": {
+   "at": "2026-08-26T14:47:13",
+   "en": "Leave empty to keep current",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оставьте пустым, чтобы сохранить текущее"
+  },
+  "webhookUrl": {
+   "at": "2026-08-26T14:47:14",
+   "en": "Public webhook URL",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Публичный URL вебхука"
+  },
+  "webhookUrlHint": {
+   "at": "2026-08-26T14:47:16",
+   "en": "Full HTTPS URL Telegram will POST to",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Полный HTTPS-URL, на который Telegram будет отправлять POST-запросы"
   }
  },
  "dsh-spendmeter": {
@@ -4084,6 +4672,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Базовый URL"
   },
+  "bench": {
+   "at": "2026-08-26T14:47:17",
+   "en": "Bench",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Скамья"
+  },
   "channels": {
    "at": "2026-08-25T19:21:09",
    "en": "Channels",
@@ -4143,6 +4737,12 @@
    "en": "Failed to load/save",
    "model": "deepseek/deepseek-chat",
    "ru": "Не удалось загрузить/сохранить"
+  },
+  "filterProviders": {
+   "at": "2026-08-26T14:47:18",
+   "en": "Filter providers…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать поставщиков…"
   },
   "keyHidden": {
    "at": "2026-08-25T19:21:26",
@@ -4209,6 +4809,18 @@
    "en": "No vision models in the catalog (input: [text, image]) — add one in Settings → Models.",
    "model": "deepseek/deepseek-chat",
    "ru": "В каталоге нет моделей для анализа изображений (ввод: [текст, изображение]) — добавьте их в Настройки → Модели."
+  },
+  "presetCloud": {
+   "at": "2026-08-26T14:47:20",
+   "en": "Preset: Cloud",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресет: Облако"
+  },
+  "presetLocal": {
+   "at": "2026-08-26T14:47:21",
+   "en": "Preset: Local",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресет: Локальный"
   },
   "protocol": {
    "at": "2026-08-25T19:21:45",
