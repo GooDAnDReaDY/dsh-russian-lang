@@ -17,7 +17,7 @@ import urllib.request
 
 import websocket  # type: ignore
 
-URL = os.environ.get('DSH_URL', 'https://192.168.1.111:3082')
+URL = os.environ['DSH_URL']  # обязательный параметр: адрес проверяемого контура
 CHROME = os.environ.get('CHROME', '/usr/bin/google-chrome')
 PORT = int(os.environ.get('DSH_CDP_PORT', '9335'))
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs', 'media')
@@ -42,10 +42,17 @@ def capture(ws, ident, path):
 
 
 def run(ws, ident, expression):
-    return send(ws, ident, 'Runtime.evaluate', {
-        'expression': '(async () => { ' + expression + ' })()',
-        'awaitPromise': True, 'returnByValue': True, 'timeout': 40000,
-    })['result']['value']
+    # Навигация (клик по «Новая сессия») уничтожает контекст — ретраим.
+    for attempt in range(5):
+        try:
+            return send(ws, ident, 'Runtime.evaluate', {
+                'expression': '(async () => { ' + expression + ' })()',
+                'awaitPromise': True, 'returnByValue': True, 'timeout': 40000,
+            })['result']['value']
+        except SystemExit as err:
+            if 'context was destroyed' not in str(err) or attempt == 4:
+                raise
+            time.sleep(1)
 
 
 def click(ws, ident, expression):
@@ -128,18 +135,53 @@ def main():
             send(ws, ident, 'Input.dispatchKeyEvent', {'type': 'keyDown', 'key': 'Escape', 'code': 'Escape', 'windowsVirtualKeyCode': 27})
             send(ws, ident, 'Input.dispatchKeyEvent', {'type': 'keyUp', 'key': 'Escape', 'code': 'Escape', 'windowsVirtualKeyCode': 27})
             time.sleep(0.5)
-            capture(ws, ident, os.path.join(OUT_DIR, 'ui-russian.png'))
-
-            # 2. Open settings so the language selector is visible alongside other rows.
+            # Чистый экран: открываем новую сессию, чтобы приватный контекст
+            # существующих диалогов не попал в кадр каталога.
             click(ws, ident, '''
                 const btns = [...document.querySelectorAll('button')];
-                const b = btns.find(x => /settings/i.test(x.getAttribute('aria-label') || ''))
-                  || btns.find(x => ['Settings', '\\u041d\\u0430\\u0441\\u0442\\u0440\\u043e\\u0439\\u043a\\u0438'].includes((x.textContent || '').trim()));
+                const b = btns.find(x => (x.textContent || '').trim() === '\\u041d\\u043e\\u0432\\u0430\\u044f \\u0441\\u0435\\u0441\\u0441\\u0438\\u044f');
                 if (!b) return null;
                 const r = b.getBoundingClientRect();
                 return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
             ''')
-            time.sleep(1.5)
+            time.sleep(2)
+            capture(ws, ident, os.path.join(OUT_DIR, 'ui-russian.png'))
+
+            # 2. Open settings so the language selector is visible alongside other rows.
+            for _ in range(3):
+                click(ws, ident, '''
+                    const btns = [...document.querySelectorAll('button')];
+                    const b = btns.find(x => /settings/i.test(x.getAttribute('aria-label') || ''))
+                      || btns.find(x => ['Settings', '\\u041d\\u0430\\u0441\\u0442\\u0440\\u043e\\u0439\\u043a\\u0438'].includes((x.textContent || '').trim()));
+                    if (!b) return null;
+                    const r = b.getBoundingClientRect();
+                    return { x: r.x + r.width / 2, y: r.y + r.height / 2 };
+                ''')
+                time.sleep(1.5)
+                opened = run(ws, ident, '''
+                    const t = document.body.innerText;
+                    return ['Language', '\\u042f\\u0437\\u044b\\u043a'].some(x => t.indexOf(x) >= 0);
+                ''')
+                if opened:
+                    break
+            dbg = run(ws, ident, '''
+                const t = document.body.innerText;
+                return { hasLangRow: ['Language', '\\u042f\\u0437\\u044b\\u043a'].some(x => t.indexOf(x) >= 0),
+                         sample: t.replace(/\\s+/g, ' ').slice(0, 150) };
+            ''')
+            print('debug before capture:', json.dumps(dbg, ensure_ascii=False))
+            # Ждём живую страницу: после Escape соединение могло мигнуть.
+            for _ in range(6):
+                alive = run(ws, ident, '''
+                    const t = document.body ? document.body.innerText : '';
+                    return t.length > 50 && t.indexOf('127.0.0.1') < 0 &&
+                           t.indexOf('не позволяет установить соединение') < 0;
+                ''')
+                if alive:
+                    break
+                time.sleep(3)
+                run(ws, ident, 'location.reload(); return 1;')
+                time.sleep(4)
             capture(ws, ident, os.path.join(OUT_DIR, 'language-selector.png'))
         finally:
             ws.close()

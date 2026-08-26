@@ -17,6 +17,8 @@ jobs:
           python-version: '3.12'
       - name: Node-тесты (словари/плюраль/типографика/раскладка)
         run: node --test test/test_plural.mjs test/test_fill.mjs test/test_count_plural.mjs test/test_typography.mjs test/test_layout.mjs
+      - name: Репро загрузки бандла (mock ctx)
+        run: node test/_repro.cjs
       - name: Тесты инструментов
         run: python3 test/test_tools.py
       - name: Сборка бандла + синтаксис
@@ -27,4 +29,4 @@ jobs:
         run: python3 check-coverage.py
       - name: Обезличенность исходников (словари переводов исключены — там чужие примеры)
         run: |
-          ! grep -rniP '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' README.md lib/ tools/*.py tools/systemd/
+          ! grep -rniP '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' README.md lib/ tools/*.py tools/systemd/ test/

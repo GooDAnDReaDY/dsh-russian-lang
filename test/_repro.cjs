@@ -1,7 +1,8 @@
-// Локальный репро v3: в корне репо
+// Локальный репро: грузит собранный бандл с mock-ctx и проверяет apply().
+// Запуск: node test/_repro.cjs (после python3 build.py)
 const fs = require('fs')
 const path = require('path')
-const bundle = fs.readFileSync('/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang/lib/client.js', 'utf8')
+const bundle = fs.readFileSync(path.join(__dirname, '..', 'lib', 'client.js'), 'utf8')
 
 global.window = { __ModuleLoader__: { load(def) { global.__DEF__ = def } } }
 global.document = {
