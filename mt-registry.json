@@ -412,7 +412,7 @@
    "at": "2026-08-25T18:58:05",
    "en": "Saved as a new session",
    "model": "deepseek/deepseek-chat",
-   "ru": "Сохранено как новая сессия {session}"
+   "ru": "Сохранено как новая сессия"
   },
   "sideChatSend": {
    "at": "2026-08-25T18:58:07",
@@ -2170,7 +2170,7 @@
    "at": "2026-08-25T19:10:55",
    "en": "Confirm install",
    "model": "deepseek/deepseek-chat",
-   "ru": "Подтвердите установку {placeholder}"
+   "ru": "Подтвердить установку"
   },
   "conflictBody": {
    "at": "2026-08-25T19:10:58",
@@ -2200,7 +2200,7 @@
    "at": "2026-08-25T19:11:08",
    "en": null,
    "model": "deepseek/deepseek-chat",
-   "ru": "Создать {count}"
+   "ru": "Оставить этот"
   },
   "conflictOutcomeInstall": {
    "at": "2026-08-25T19:11:09",
@@ -2248,7 +2248,7 @@
    "at": "2026-08-25T19:11:23",
    "en": "Switch to this one",
    "model": "deepseek/deepseek-chat",
-   "ru": "Переключиться на этот {placeholder}"
+   "ru": "Переключиться на этот"
   },
   "conflictSwapNote": {
    "at": "2026-08-25T19:11:25",
@@ -2314,7 +2314,7 @@
    "at": "2026-08-25T19:11:44",
    "en": "Cannot install · details",
    "model": "deepseek/deepseek-chat",
-   "ru": "Невозможно установить · {details}"
+   "ru": "Невозможно установить · подробности"
   },
   "opClear": {
    "at": "2026-08-25T19:11:47",
@@ -2362,7 +2362,7 @@
    "at": "2026-08-25T19:11:59",
    "en": "Installing",
    "model": "deepseek/deepseek-chat",
-   "ru": "Установка {placeholder}"
+   "ru": "Установка"
   },
   "opKind_install": {
    "at": "2026-08-25T19:12:00",
@@ -2374,7 +2374,7 @@
    "at": "2026-08-25T19:12:02",
    "en": "Uninstall",
    "model": "deepseek/deepseek-chat",
-   "ru": "Удалить {placeholder}"
+   "ru": "Удалить"
   },
   "opKind_update": {
    "at": "2026-08-25T19:12:05",
@@ -2398,7 +2398,7 @@
    "at": "2026-08-25T19:12:11",
    "en": "need you",
    "model": "deepseek/deepseek-chat",
-   "ru": "нужен {placeholder}"
+   "ru": "нужен вам"
   },
   "opQueued": {
    "at": "2026-08-25T19:12:14",
@@ -2446,7 +2446,7 @@
    "at": "2026-08-25T19:12:51",
    "en": "Roll back",
    "model": "deepseek/deepseek-chat",
-   "ru": "Откатить {placeholder}"
+   "ru": "Откатить"
   },
   "rollingBack": {
    "at": "2026-08-25T19:12:52",
@@ -2500,7 +2500,7 @@
    "at": "2026-08-25T19:13:04",
    "en": "Switch to",
    "model": "deepseek/deepseek-chat",
-   "ru": "Переключиться на {placeholder}"
+   "ru": "Переключиться на"
   },
   "setChannelSwitchHint": {
    "at": "2026-08-25T19:13:07",
@@ -2548,7 +2548,7 @@
    "at": "2026-08-25T19:13:21",
    "en": null,
    "model": "deepseek/deepseek-chat",
-   "ru": "Создать {count} новых {count, plural, one {чат} few {чата} many {чатов}}"
+   "ru": "Актуально, обновление не требуется"
   },
   "shadowNameBanner": {
    "at": "2026-08-25T19:13:23",
@@ -3616,7 +3616,7 @@
    "at": "2026-08-25T19:18:36",
    "en": "+ Add account",
    "model": "deepseek/deepseek-chat",
-   "ru": "+ Добавить {account}"
+   "ru": "+ Добавить аккаунт"
   },
   "cardIntro": {
    "at": "2026-08-25T19:18:37",
@@ -3694,7 +3694,7 @@
    "at": "2026-08-25T19:19:05",
    "en": "Remove slot",
    "model": "deepseek/deepseek-chat",
-   "ru": "Удалить слот {slot}"
+   "ru": "Удалить слот"
   },
   "save": {
    "at": "2026-08-25T19:19:06",
@@ -3718,7 +3718,7 @@
    "at": "2026-08-25T19:19:11",
    "en": "Stored as",
    "model": "deepseek/deepseek-chat",
-   "ru": "Хранится как {placeholder}"
+   "ru": "Хранится как"
   },
   "submitCode": {
    "at": "2026-08-25T19:19:12",
@@ -3754,7 +3754,7 @@
    "at": "2026-08-25T19:19:21",
    "en": "Verify account",
    "model": "deepseek/deepseek-chat",
-   "ru": "Подтвердите {account}"
+   "ru": "Подтвердить аккаунт"
   },
   "verifyLink": {
    "at": "2026-08-25T19:19:23",
@@ -3780,13 +3780,13 @@
    "at": "2026-08-25T19:19:29",
    "en": "Add provider",
    "model": "deepseek/deepseek-chat",
-   "ru": "Добавить {provider}"
+   "ru": "Добавить провайдера"
   },
   "announce": {
    "at": "2026-08-25T19:19:30",
    "en": "Announce approvals",
    "model": "deepseek/deepseek-chat",
-   "ru": "Объявить одобрения {placeholders}"
+   "ru": "Объявлять одобрения"
   },
   "announceHint": {
    "at": "2026-08-25T19:19:33",
@@ -3822,7 +3822,7 @@
    "at": "2026-08-25T19:19:42",
    "en": "Fall silent when you speak",
    "model": "deepseek/deepseek-chat",
-   "ru": "Замолкают, когда вы говорите {placeholder}"
+   "ru": "Замолкать, когда вы говорите"
   },
   "bargeInHint": {
    "at": "2026-08-25T19:19:44",
@@ -3918,7 +3918,7 @@
    "at": "2026-08-25T19:20:16",
    "en": "Set in environment",
    "model": "deepseek/deepseek-chat",
-   "ru": "Установлено в окружении {environment}"
+   "ru": "Задано в окружении"
   },
   "general": {
    "at": "2026-08-25T19:20:18",
@@ -4354,7 +4354,7 @@
    "at": "2026-08-25T19:22:35",
    "en": "Add your own provider",
    "model": "deepseek/deepseek-chat",
-   "ru": "Добавьте своего провайдера {provider}"
+   "ru": "Добавить своего провайдера"
   },
   "addProvider": {
    "at": "2026-08-25T19:22:37",
@@ -4636,7 +4636,7 @@
    "at": "2026-08-25T19:24:11",
    "en": "Pause that ends a phrase, ms",
    "model": "deepseek/deepseek-chat",
-   "ru": "Пауза, завершающая фразу, {ms}"
+   "ru": "Пауза, завершающая фразу, мс"
   },
   "pressKey": {
    "at": "2026-08-25T19:24:13",
@@ -4690,7 +4690,7 @@
    "at": "2026-08-25T19:24:28",
    "en": "Sending to the agent in",
    "model": "deepseek/deepseek-chat",
-   "ru": "Отправка агенту в {placeholder}"
+   "ru": "Отправка агенту через"
   },
   "siliconflowHint": {
    "at": "2026-08-25T19:24:30",
@@ -4726,7 +4726,7 @@
    "at": "2026-08-25T19:24:38",
    "en": "Undo window, ms",
    "model": "deepseek/deepseek-chat",
-   "ru": "Отменить окно, {ms}"
+   "ru": "Окно отмены, мс"
   },
   "up": {
    "at": "2026-08-25T19:24:40",
@@ -4738,7 +4738,7 @@
    "at": "2026-08-25T19:24:42",
    "en": "Autostart the local whisper",
    "model": "deepseek/deepseek-chat",
-   "ru": "Автозапуск локального {whisper}"
+   "ru": "Автозапуск локального whisper"
   },
   "whisperBin": {
    "at": "2026-08-25T19:24:44",
@@ -4756,7 +4756,7 @@
    "at": "2026-08-25T19:24:47",
    "en": "Local whisper: endpoint",
    "model": "deepseek/deepseek-chat",
-   "ru": "Локальный шепот: {endpoint}"
+   "ru": "Локальный whisper: адрес"
   },
   "whisperEndpointHint": {
    "at": "2026-08-25T19:24:49",
