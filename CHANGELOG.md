@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.13 (2026-08-26)
+
+- `feat(dict)`: translate dsh-spend (namespace `usageStats`, 129 keys) — now
+  shipped in the bundle; self-ru scanner no longer misfires on `{zh,en}`-only
+  registrations. (#55)
+- `feat(build/CI)`: test/_repro.cjs exits non-zero on a broken bundle; MT
+  registry placeholder gate + honest runtime coverage metric (100%). (#55)
+- `fix(ci)`: offline runner — dropped setup-python, added term_check warning
+  step. (#55)
+- `fix(tools)`: upstream_check no longer pushes directly to main (commits to
+  `upstream/snapshot` for a PR instead). (#55)
+- `feat(client)`: settings card now shows the Alt+L layout-convert hint. (#55)
+- `chore(ops)`: weekly `freq_refresh` cron added.
+
 ## 0.1.10 (2026-08-25)
 
 - `feat(client)`: settings card. New «Русская локализация» card in
