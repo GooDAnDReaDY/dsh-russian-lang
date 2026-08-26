@@ -158,19 +158,31 @@ def alert(version, text, has_drift):
         print('issue #%d создан' % i['number'])
 
 
-def git_commit_push():
-    if subprocess.run(['git', 'status', '--porcelain'], cwd=REPO, capture_output=True).stdout.strip():
-        subprocess.run(['git', 'add', 'upstream'], cwd=REPO, check=False)
-        r = subprocess.run(['git', 'status', '--porcelain'], cwd=REPO, capture_output=True, text=True)
-        if not r.stdout.strip():
-            return 'чисто'
-        c = subprocess.run(['git', 'commit', '-m', 'chore(upstream): refresh snapshot + report'],
-                           cwd=REPO, capture_output=True, text=True)
-        if c.returncode != 0:
-            return 'commit failed: %s' % c.stderr.strip()[:200]
-        p = subprocess.run(['git', 'push', 'origin', 'HEAD:main'], cwd=REPO, capture_output=True, text=True)
-        return 'закоммичено' if p.returncode == 0 else 'push failed: %s' % p.stderr.strip()[:200]
-    return 'без изменений'
+def git_commit_local():
+    """Коммитит снапшот и отчёт в локальную ветку БЕЗ пуша в main.
+
+    main защищён (прямой push запрещён), поэтому авто-пуш HEAD:main —
+    обход правил. Коммитим локально, пуши в отдельную ветку upstream/snapshot
+    и печатаем подсказку: изменения надо влить через PR (или вручную).
+    """
+    if not subprocess.run(['git', 'status', '--porcelain'], cwd=REPO,
+                          capture_output=True).stdout.strip():
+        return 'без изменений'
+    subprocess.run(['git', 'add', 'upstream'], cwd=REPO, check=False)
+    r = subprocess.run(['git', 'status', '--porcelain'], cwd=REPO,
+                       capture_output=True, text=True)
+    if not r.stdout.strip():
+        return 'чисто'
+    c = subprocess.run(['git', 'commit', '-m', 'chore(upstream): refresh snapshot + report'],
+                       cwd=REPO, capture_output=True, text=True)
+    if c.returncode != 0:
+        return 'commit failed: %s' % c.stderr.strip()[:200]
+    # пуш в отдельную ветку (не main) — её можно влить PR'ом
+    p = subprocess.run(['git', 'push', 'origin', 'HEAD:upstream/snapshot'],
+                       cwd=REPO, capture_output=True, text=True)
+    if p.returncode != 0:
+        return 'закоммичено локально, push в upstream/snapshot не удался: %s' % p.stderr.strip()[:160]
+    return 'закоммичено и запушено в upstream/snapshot (влить PR)'
 
 
 def main():
@@ -189,7 +201,7 @@ def main():
     if first_run:
         print('первый запуск: снапшот принят за базу, алерт не нужен')
     json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-    print('снапшот:', git_commit_push())
+    print('снапшот:', git_commit_local())
 
     try:
         alert(version, text, has_drift)

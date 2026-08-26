@@ -96,7 +96,95 @@ def compare(title, en, ru):
     return missing + bad
 
 
+def check_mt_registry(en):
+    """PH-целостность mt-registry.json против en-оригиналов.
+
+    MT-переводы мёржутся в бандл как обычные строки (build.py), поэтому битый
+    плейсхолдер в реестре уйдёт в UI сырым {..}. Сверяем каждый ключ с en.
+    Namespace'ы из self-ru.json не отгружаются (их переводят сами плагины) —
+    пропускаем.
+    """
+    self_ru = set(load_file('self-ru.json')) if os.path.exists(
+        os.path.join(HERE, 'self-ru.json')) else set()
+    bad = 0
+    mt = load_file('mt-registry.json')
+    if not mt:
+        return 0
+    print('=== MT-РЕЕСТР ===')
+    for ns, entries in sorted(mt.items()):
+        if ns in self_ru:
+            continue
+        for key, rec in entries.items():
+            en_text = en.get(ns, {}).get(key)
+            if not isinstance(en_text, str):
+                continue
+            ru_text = rec.get('ru', '') if isinstance(rec, dict) else rec
+            lost = placeholders(en_text) - placeholders(ru_text)
+            extra = placeholders(ru_text) - placeholders(en_text)
+            if lost or extra:
+                bad += 1
+                print('  MT PH %-26s %-24s ru {%s} (en {%s})'
+                      % (ns, key,
+                         ', '.join(sorted(lost | extra)),
+                         ', '.join(sorted(placeholders(en_text)))))
+    print('  MT плохих PH: %d' % bad)
+    print()
+    return bad
+
+
+def runtime_coverage():
+    """Эффективное runtime-покрытие: сколько ключей реально переведено в UI.
+
+    self-ru namespace'ы не отгружаются (их переводят сами плагины) — их ключи
+    не считаем «непереведёнными». MT-реестр отгружается в бандл как обычные
+    строки — считаем его за покрытие. Метрика честная: не занижает и не врёт.
+    """
+    self_ru = set(load_file('self-ru.json')) if os.path.exists(
+        os.path.join(HERE, 'self-ru.json')) else set()
+    mt = load_file('mt-registry.json')
+
+    # эффективный en: без self-ru
+    en_eff = {}
+    for name in ('core-en.json', 'plugins-en.json'):
+        for ns, entries in load_file(name).items():
+            if ns in self_ru:
+                continue
+            en_eff.setdefault(ns, {}).update(entries)
+
+    # эффективный ru: ручные словари + отгружаемые MT-строки
+    ru_eff = load_dir('ru')
+    ru_eff.update(load_dir('ru-plugins'))
+    for ns, entries in (mt or {}).items():
+        if ns in self_ru:
+            continue
+        for key, rec in entries.items():
+            val = rec.get('ru', '') if isinstance(rec, dict) else rec
+            if key not in ru_eff.get(ns, {}):
+                ru_eff.setdefault(ns, {})[key] = val
+
+    total = sum(len(v) for v in en_eff.values())
+    done = sum(1 for ns, entries in en_eff.items()
+               for k in entries if k in ru_eff.get(ns, {}))
+    manual = sum(len(v) for v in load_dir('ru-plugins').values()) \
+        + sum(len(v) for v in load_dir('ru').values())
+    mt_done = sum(1 for ns, entries in (mt or {}).items()
+                  if ns not in self_ru for k in entries)
+    pct = (100.0 * done / total) if total else 100.0
+    print('=== ЭФФЕКТИВНОЕ ПОКРЫТИЕ (runtime) ===')
+    print('  ключей в UI: %d | переведено: %d (ручных %d + MT %d) | покрытие: %.1f%%'
+          % (total, done, manual, mt_done, pct))
+    print()
+    return pct
+
+
 if __name__ == '__main__':
+    en_all = {}
+    for name in ('core-en.json', 'plugins-en.json'):
+        part = load_file(name)
+        for ns, entries in part.items():
+            en_all.setdefault(ns, {}).update(entries)
     left = compare('ЯДРО', load_file('core-en.json'), load_dir('ru'))
     left += compare('ПЛАГИНЫ', load_file('plugins-en.json'), load_dir('ru-plugins'))
+    left += check_mt_registry(en_all)
+    runtime_coverage()
     sys.exit(0 if left == 0 else 1)
