@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.16 (2026-08-27)
+
+- `feat(client)`: RU/EN layout indicator near the chat input; click converts
+  the current text (Alt+L behaviour). (#66)
+- `feat(client)`: layout fixer learns from accepted corrections — a
+  per-session local dictionary reduces false positives. (#67)
+- `feat(host)`: optional Russian agent system prompt
+  (`russian-lang.agentPrompt`), exposed in the settings card. (#68)
+- `feat(tools)`: auto-fill new plugin keys into the MT queue
+  (`tools/mt_autofill.py`, daily cron). (#69)
+- `fix(client)`: settings card uses the core chevron icon (with fallback).
+- `fix(mt)`: corrected 39 placeholder mismatches in shipped translations.
+- `ci`: build npm `.tgz` artifact for the isolated test server.
+
 ## 0.1.15 (2026-08-26)
 
 - `fix(client)`: settings-card checkboxes update instantly. Typography and ё
