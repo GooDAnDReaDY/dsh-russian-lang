@@ -472,11 +472,19 @@ window.__ModuleLoader__.load({
         return out
       }
       const ruWordFraction = (text) => {
-        // доля слов текста, присутствующих в частотном словаре
+        // доля слов текста, присутствующих в частотном словаре или локальном
         const words = text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)
         if (!words.length) return 0
-        const hit = words.filter((w) => FREQ.has(w)).length
+        const hit = words.filter((w) => FREQ.has(w) || localDict.has(w)).length
         return hit / words.length
+      }
+      // Локальный словарь обучения (#67): слова, которые пользователь принял
+      // через «Исправить». Живёт в памяти сессии, в настройки/бандл не пишется.
+      const localDict = new Set()
+      const learnWords = (text) => {
+        for (const w of text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)) {
+          if (w.length >= 3) localDict.add(w)
+        }
       }
       const layoutFixCandidate = (value, direction) => {
         // direction: 'lat2cyr' | 'cyr2lat'. Возвращает {converted} если подозрительно.
@@ -519,6 +527,7 @@ window.__ModuleLoader__.load({
           ev.preventDefault()
           inputEl.value = converted
           inputEl.dispatchEvent(new Event('input', { bubbles: true }))
+          learnWords(converted) // #67: запомнить принятые слова
           layoutDismiss()
         })
         document.body.appendChild(layoutHintEl)
@@ -527,11 +536,50 @@ window.__ModuleLoader__.load({
         layoutHintEl.style.left = (r.left + 8) + 'px'
         layoutHintEl.style.bottom = (window.innerHeight - r.top + 6) + 'px'
       }
+
+      // #66: индикатор активной раскладки у чат-инпута. Определяем по последнему
+      // введённому символу (кириллица → RU, латиница → EN); клик — Alt+L-конверт.
+      let layoutBadgeEl = null
+      const layoutBadge = (el) => {
+        const value = el.value || ''
+        const last = value.trim().slice(-1)
+        const isCyr = /[\u0430-\u044f\u0451]/.test(last)
+        const isLat = /[a-z]/i.test(last)
+        const label = isCyr ? 'RU' : (isLat ? 'EN' : '')
+        if (!label) { layoutBadgeHide(); return }
+        if (!layoutBadgeEl) {
+          layoutBadgeEl = document.createElement('button')
+          layoutBadgeEl.type = 'button'
+          layoutBadgeEl.dataset.russianLangLayoutBadge = '1'
+          Object.assign(layoutBadgeEl.style, {
+            position: 'fixed', zIndex: '99998', background: 'var(--dsw-alias-bg-layer-3, #fff)',
+            color: 'var(--dsw-alias-label-secondary, #666)', border: '1px solid var(--dsw-alias-border-l2, #888)',
+            borderRadius: '6px', padding: '1px 6px', fontSize: '11px', cursor: 'pointer',
+            fontFamily: 'monospace', lineHeight: '1.4',
+          })
+          layoutBadgeEl.title = 'Раскладка — клик: конвертировать (Alt+L)'
+          layoutBadgeEl.addEventListener('mousedown', (ev) => {
+            ev.preventDefault()
+            const v = el.value || ''
+            const c = layoutFixCandidate(v, 'lat2cyr') || layoutFixCandidate(v, 'cyr2lat')
+            if (c) { el.value = c.converted; el.dispatchEvent(new Event('input', { bubbles: true })) }
+          })
+          document.body.appendChild(layoutBadgeEl)
+        }
+        layoutBadgeEl.textContent = label
+        const r = el.getBoundingClientRect()
+        layoutBadgeEl.style.left = (r.right - 24) + 'px'
+        layoutBadgeEl.style.top = (r.top - 20) + 'px'
+      }
+      const layoutBadgeHide = () => {
+        if (layoutBadgeEl) { layoutBadgeEl.remove(); layoutBadgeEl = null }
+      }
       const layoutOnInput = () => {
         try {
-          if (runtime.getLocale().active !== 'ru') { layoutDismiss(); return }
+          if (runtime.getLocale().active !== 'ru') { layoutDismiss(); layoutBadgeHide(); return }
           const el = layoutCurrentInput()
-          if (!el) { layoutDismiss(); return }
+          if (!el) { layoutDismiss(); layoutBadgeHide(); return }
+          layoutBadge(el) // #66: метка раскладки
           const value = el.value || ''
           if (value.trim().length < 4) { layoutDismiss(); return }
           // lat2cyr: если есть латиница и почти нет кириллицы
@@ -562,6 +610,7 @@ window.__ModuleLoader__.load({
               ev.preventDefault()
               el.value = c.converted
               el.dispatchEvent(new Event('input', { bubbles: true }))
+              learnWords(c.converted) // #67
             }
           }
         }
@@ -570,6 +619,7 @@ window.__ModuleLoader__.load({
         unsubscribeLayout()
         document.removeEventListener('input', layoutOnInput, true)
         layoutDismiss()
+        layoutBadgeHide()
       }, 'dsh-russian-lang: layout')
 
       // 8. Карточка настроек («Настройки → Плагины → Настройки плагинов»).
