@@ -132,6 +132,14 @@ for ns, entries in en_fix.items():
 variants = {en_text: len({r for _, _, r in uses}) for en_text, uses in idx.items()}
 check(variants['Save'] == 2, 'term_check: одно en — два разных ru ловится')
 
+# ---------- mt_autofill ----------
+ma = load('mt_autofill', os.path.join(TOOLS, 'mt_autofill.py'))
+prev_fix = {'nsA': {'old': 'x'}}
+curr_fix = {'nsA': {'old': 'x', 'new1': 'y', 'new2': 'z'}}
+added_fix = ma.new_keys(prev_fix, curr_fix)
+check(added_fix == {'nsA': ['new1', 'new2']}, 'mt_autofill: новые ключи')
+check(ma.new_keys({'nsA': {'a': '1'}}, {'nsA': {'a': '1'}}) == {}, 'mt_autofill: без новых пусто')
+
 # ---------- итог ----------
 print()
 if FAILS:
