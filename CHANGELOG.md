@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.15 (2026-08-26)
+
+- `fix(client)`: settings-card checkboxes update instantly. Typography and ё
+  toggles were controlled by async host state, so React reverted every click;
+  now they use optimistic local state and sync from the host afterwards. The
+  Russian switch reacts to locale changes.
+- `feat(client)`: descriptive captions for «Типографика вывода» and
+  «Буква ё» in the settings card.
+
 ## 0.1.13 (2026-08-26)
 
 - `feat(dict)`: translate dsh-spend (namespace `usageStats`, 129 keys) — now
