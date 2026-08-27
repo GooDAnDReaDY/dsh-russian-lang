@@ -84,7 +84,9 @@ card_ru = {
     'cardSub': 'Язык интерфейса, типографика, раскладка',
     'enabled': 'Русский язык включён',
     'typography': 'Типографика вывода',
+    'typographyDesc': 'Исправляет типографику в тексте ответов: кавычки-«ёлочки», тире вместо дефисов, неразрывные пробелы после коротких предлогов. Код и ссылки не трогаются.',
     'yo': 'Буква ё',
+    'yoDesc': 'Восстанавливать «ё» в частых словах (ещё, чёрный, идёт и др.), написанных через «е». Неоднозначные слова (например «все/всё») не трогаются.',
     'overridesCount': 'Своих переопределений',
     'statusLoading': 'Настройки загружаются…',
     'statusUnavailable': 'Настройки недоступны на этом хосте',
@@ -603,31 +605,49 @@ window.__ModuleLoader__.load({
       const [open, setOpen] = React.useState(false)
       const [snap, setSnap] = React.useState(
         () => (scope && scope.getSnapshot ? scope.getSnapshot() : { status: 'loading', value: {} }))
+      const [ruActive, setRuActive] = React.useState(
+        () => { try { return runtime.getLocale().active === 'ru' } catch (e) { return false } })
+      // Оптимистичное состояние типографики: галочка переключается сразу,
+      // а host-подтверждение (scope.subscribe) лишь синхронизирует его позже.
+      const [typo, setTypoState] = React.useState(() =>
+        (snap.value && snap.value.typography) || {})
+
       React.useEffect(() => {
         if (!scope || !scope.subscribe) return undefined
-        const un = scope.subscribe(() => setSnap(scope.getSnapshot()))
+        const un = scope.subscribe(() => {
+          const s = scope.getSnapshot()
+          setSnap(s)
+          if (s.value && s.value.typography) setTypoState(s.value.typography)
+        })
         setSnap(scope.getSnapshot())
         return un
+      }, [])
+      React.useEffect(() => {
+        try {
+          const un = runtime.subscribe(() => {
+            try { setRuActive(runtime.getLocale().active === 'ru') } catch (e) { /* ignore */ }
+          })
+          return un
+        } catch (e) { return undefined }
       }, [])
 
       const status = snap.status || 'loading'
       const value = snap.value || {}
-      const typography = value.typography || {}
+      const typography = typo
       const overridesCount = Object.keys(value.overrides || {}).length
 
-      const ruActive = (() => {
-        try { return runtime.getLocale().active === 'ru' } catch (err) { return false }
-      })()
-
       const setTypo = (patch) => {
-        const next = Object.assign({}, typography, patch)
+        const next = Object.assign({}, typo, patch)
+        setTypoState(next) // мгновенно
         try { scope.set('typography', next) } catch (err) { /* ignore */ }
       }
       const onEnabled = (ev) => { if (toggleRu) toggleRu(ev.target.checked) }
 
-      const row = (label, control) =>
+      const row = (label, control, desc) =>
         React.createElement('div', { className: 'rl-field' },
-          React.createElement('span', { className: 'rl-label' }, label), control)
+          React.createElement('span', { className: 'rl-label' }, label),
+          control,
+          desc ? React.createElement('div', { className: 'rl-desc' }, desc) : null)
 
       const checkbox = (checked, onChange, disabled) =>
         React.createElement('input', {
@@ -653,11 +673,11 @@ window.__ModuleLoader__.load({
               statusLine || t('cardSub'))),
           React.createElement('span', { className: 'rl-chev' }, open ? '▾' : '▸')),
         open && React.createElement('div', { className: 'rl-body' },
-          row(t('enabled'), checkbox(ruActive, onEnabled, false)),
+          row(t('enabled'), checkbox(ruActive, onEnabled, false), null),
           row(t('typography'), checkbox(typography.enabled !== false && ruActive,
-            (ev) => setTypo({ enabled: ev.target.checked }), !ruActive)),
+            (ev) => setTypo({ enabled: ev.target.checked }), !ruActive), t('typographyDesc')),
           row(t('yo'), checkbox(typography.yo === true,
-            (ev) => setTypo({ yo: ev.target.checked }), !ruActive)),
+            (ev) => setTypo({ yo: ev.target.checked }), !ruActive), t('yoDesc')),
           React.createElement('div', { className: 'rl-note' },
             t('overridesCount') + ': ' + overridesCount),
           React.createElement('div', { className: 'rl-hint' }, t('altL')),
@@ -675,6 +695,7 @@ window.__ModuleLoader__.load({
       '.rl-body{border-top:1px solid var(--dsw-alias-border-l2);margin:0 16px;padding-bottom:8px}',
       '.rl-field{display:flex;flex-direction:column;gap:6px;padding:12px 0}',
       '.rl-label{color:var(--dsw-alias-label-primary);font-size:13px}',
+      '.rl-desc{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:1.4}',
       '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary)}',
       '.rl-note{color:var(--dsw-alias-label-secondary);font-size:12px;padding:8px 0 4px}',
       '.rl-hint{color:var(--dsw-alias-label-secondary);font-size:12px;padding:4px 0 8px}',
