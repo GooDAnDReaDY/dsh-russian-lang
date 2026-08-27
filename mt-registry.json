@@ -672,7 +672,7 @@
    "at": "2026-08-25T18:59:31",
    "en": "Resident context audit",
    "model": "deepseek/deepseek-chat",
-   "ru": "Аудит контекста {resident}"
+   "ru": "Аудит контекста"
   },
   "cd.tokens": {
    "at": "2026-08-25T18:59:33",
@@ -696,7 +696,7 @@
    "at": "2026-08-25T18:59:42",
    "en": "Resident total",
    "model": "deepseek/deepseek-chat",
-   "ru": "Общее количество жителей {count}"
+   "ru": "Общее количество"
   }
  },
  "dsh-context": {
@@ -1040,7 +1040,7 @@
    "at": "2026-08-25T19:01:38",
    "en": "State Snapshot",
    "model": "deepseek/deepseek-chat",
-   "ru": "Снимок состояния {placeholder}"
+   "ru": "Снимок состояния"
   },
   "gran.step": {
    "at": "2026-08-25T19:01:40",
@@ -1064,7 +1064,7 @@
    "at": "2026-08-25T19:01:44",
    "en": "Inject",
    "model": "deepseek/deepseek-chat",
-   "ru": "Внедрить {placeholder}"
+   "ru": "Внедрить"
   },
   "kind.model": {
    "at": "2026-08-25T19:01:47",
@@ -1076,7 +1076,7 @@
    "at": "2026-08-25T19:01:49",
    "en": "Prune",
    "model": "deepseek/deepseek-chat",
-   "ru": "Обрезать {placeholders}"
+   "ru": "Обрезать"
   },
   "loading": {
    "at": "2026-08-25T19:01:50",
@@ -1172,7 +1172,7 @@
    "at": "2026-08-25T19:02:28",
    "en": "of context used",
    "model": "deepseek/deepseek-chat",
-   "ru": "использовано контекста: {context_used}"
+   "ru": "использовано контекста"
   },
   "plugin.github": {
    "at": "2026-08-25T19:02:29",
@@ -1226,7 +1226,7 @@
    "at": "2026-08-25T19:02:41",
    "en": "Cache Hits",
    "model": "deepseek/deepseek-chat",
-   "ru": "Кэш-попадания {placeholders}"
+   "ru": "Кэш-попадания"
   },
   "stats.compactions": {
    "at": "2026-08-25T19:02:42",
@@ -1868,7 +1868,7 @@
    "at": "2026-08-25T19:09:12",
    "en": "Switch on these failures",
    "model": "deepseek/deepseek-chat",
-   "ru": "Включите эти {сбои}"
+   "ru": "Включите эти"
   },
   "cooldown": {
    "at": "2026-08-25T19:09:14",
@@ -1958,7 +1958,7 @@
    "at": "2026-08-25T19:09:38",
    "en": "no such credential",
    "model": "deepseek/deepseek-chat",
-   "ru": "нет такого учетного {credential}"
+   "ru": "нет такого учетного"
   },
   "keyReady": {
    "at": "2026-08-25T19:09:39",
@@ -1982,7 +1982,7 @@
    "at": "2026-08-25T19:09:46",
    "en": "paste the key, then Save",
    "model": "deepseek/deepseek-chat",
-   "ru": "вставьте ключ, затем {Save}"
+   "ru": "вставьте ключ, затем"
   },
   "keyWriteFailed": {
    "at": "2026-08-25T19:09:47",
@@ -2042,7 +2042,7 @@
    "at": "2026-08-25T19:10:05",
    "en": "Remove key",
    "model": "deepseek/deepseek-chat",
-   "ru": "Удалить ключ {key}"
+   "ru": "Удалить ключ"
   },
   "removeProvider": {
    "at": "2026-08-25T19:10:07",
@@ -2102,7 +2102,7 @@
    "at": "2026-08-25T19:10:21",
    "en": "Test all keys",
    "model": "deepseek/deepseek-chat",
-   "ru": "Проверьте все {keys}"
+   "ru": "Проверьте все"
   },
   "testFail": {
    "at": "2026-08-25T19:10:24",
@@ -2132,7 +2132,7 @@
    "at": "2026-08-25T19:10:29",
    "en": "Key Rotation",
    "model": "deepseek/deepseek-chat",
-   "ru": "Ротация ключей {placeholders}"
+   "ru": "Ротация ключей"
   },
   "usedAgo": {
    "at": "2026-08-25T19:10:31",
@@ -3066,7 +3066,7 @@
    "at": "2026-08-25T19:13:38",
    "en": "Allowed user ids",
    "model": "deepseek/deepseek-chat",
-   "ru": "Разрешенные идентификаторы пользователей {placeholders}"
+   "ru": "Разрешенные идентификаторы пользователей"
   },
   "allowedIdsHint": {
    "at": "2026-08-25T19:13:40",
@@ -3120,7 +3120,7 @@
    "at": "2026-08-25T19:13:51",
    "en": "Hide advanced",
    "model": "deepseek/deepseek-chat",
-   "ru": "Скрыть дополнительные {параметры}"
+   "ru": "Скрыть дополнительные"
   },
   "idleTimeout": {
    "at": "2026-08-25T19:13:53",
@@ -3258,19 +3258,19 @@
    "at": "2026-08-25T19:14:19",
    "en": "Reply immediately",
    "model": "deepseek/deepseek-chat",
-   "ru": "Ответить сразу {placeholder}"
+   "ru": "Ответить сразу"
   },
   "pollInterval": {
    "at": "2026-08-25T19:14:20",
    "en": "pollIntervalMs",
    "model": "deepseek/deepseek-chat",
-   "ru": "интервал опроса {pollIntervalMs}"
+   "ru": "интервал опроса"
   },
   "pollTimeout": {
    "at": "2026-08-25T19:14:22",
    "en": "pollTimeoutSeconds",
    "model": "deepseek/deepseek-chat",
-   "ru": "таймаут опроса {pollTimeoutSeconds} секунд"
+   "ru": "таймаут опроса  секунд"
   },
   "progressEnable": {
    "at": "2026-08-26T14:46:47",
@@ -3764,7 +3764,7 @@
    "at": "2026-08-25T19:16:20",
    "en": "Choose a provider",
    "model": "deepseek/deepseek-chat",
-   "ru": "Выберите {provider}"
+   "ru": "Выберите"
   },
   "pillTitle": {
    "at": "2026-08-25T19:16:21",
@@ -3788,7 +3788,7 @@
    "at": "2026-08-25T19:16:25",
    "en": "quota",
    "model": "deepseek/deepseek-chat",
-   "ru": "квота {placeholder}"
+   "ru": "квота"
   },
   "refresh": {
    "at": "2026-08-25T19:16:26",
@@ -3866,7 +3866,7 @@
    "at": "2026-08-25T19:16:54",
    "en": "refresh in ",
    "model": "deepseek/deepseek-chat",
-   "ru": "обновить через {time}"
+   "ru": "обновить через"
   },
   "reset.s": {
    "at": "2026-08-25T19:16:55",
@@ -3896,7 +3896,7 @@
    "at": "2026-08-25T19:17:02",
    "en": "refresh in ",
    "model": "deepseek/deepseek-chat",
-   "ru": "обновить через {time}"
+   "ru": "обновить через"
   },
   "resetM": {
    "at": "2026-08-25T19:17:04",
@@ -3980,7 +3980,7 @@
    "at": "2026-08-25T19:17:28",
    "en": "Spend",
    "model": "deepseek/deepseek-chat",
-   "ru": "Потратить {amount}"
+   "ru": "Потратить"
   },
   "sidebarTitle": {
    "at": "2026-08-25T19:17:29",
@@ -3992,7 +3992,7 @@
    "at": "2026-08-25T19:17:30",
    "en": "Limits for all subscriptions",
    "model": "deepseek/deepseek-chat",
-   "ru": "Лимиты для всех подписок {placeholders}"
+   "ru": "Лимиты для всех подписок"
   },
   "slash.meter": {
    "at": "2026-08-25T19:17:32",
@@ -4004,7 +4004,7 @@
    "at": "2026-08-25T19:17:33",
    "en": "Subscription quotas",
    "model": "deepseek/deepseek-chat",
-   "ru": "Квоты подписки {placeholders}"
+   "ru": "Квоты подписки"
   },
   "slash.requests": {
    "at": "2026-08-25T19:17:35",
@@ -4016,7 +4016,7 @@
    "at": "2026-08-25T19:17:37",
    "en": "Sessions by spend",
    "model": "deepseek/deepseek-chat",
-   "ru": "Сессии по затратам {placeholders}"
+   "ru": "Сессии по затратам"
   },
   "slash.spend": {
    "at": "2026-08-25T19:17:38",
@@ -4118,7 +4118,7 @@
    "at": "2026-08-25T19:18:04",
    "en": "Spend",
    "model": "deepseek/deepseek-chat",
-   "ru": "Потратить {amount}"
+   "ru": "Потратить"
   },
   "tab.subs": {
    "at": "2026-08-25T19:18:06",
@@ -4136,7 +4136,7 @@
    "at": "2026-08-25T19:18:10",
    "en": "Spend Meter",
    "model": "deepseek/deepseek-chat",
-   "ru": "Расходуйте {Meter}"
+   "ru": "Расходуйте"
   },
   "tokCache": {
    "at": "2026-08-25T19:18:11",
@@ -4190,7 +4190,7 @@
    "at": "2026-08-25T19:18:21",
    "en": "Top providers",
    "model": "deepseek/deepseek-chat",
-   "ru": "Лучшие {providers}"
+   "ru": "Лучшие"
   },
   "uiHint": {
    "at": "2026-08-25T19:18:24",
@@ -4220,7 +4220,7 @@
    "at": "2026-08-25T19:18:29",
    "en": "Used ",
    "model": "deepseek/deepseek-chat",
-   "ru": "Использовано {count}"
+   "ru": "Использовано"
   },
   "week52": {
    "at": "2026-08-25T19:18:31",
@@ -4748,7 +4748,7 @@
    "at": "2026-08-25T19:21:19",
    "en": "-",
    "model": "deepseek/deepseek-chat",
-   "ru": "Пожалуйста, войдите в свою учетную запись {accountName}"
+   "ru": "Пожалуйста, войдите в свою учетную запись"
   },
   "escalation": {
    "at": "2026-08-25T19:21:21",
@@ -4946,7 +4946,7 @@
    "at": "2026-08-25T19:22:16",
    "en": "Vision LLM",
    "model": "deepseek/deepseek-chat",
-   "ru": "Vision {LLM}"
+   "ru": "Vision"
   },
   "strategyOcrLocal": {
    "at": "2026-08-25T19:22:18",
@@ -5640,7 +5640,7 @@
    "at": "2026-08-25T19:26:15",
    "en": "Signed in as",
    "model": "deepseek/deepseek-chat",
-   "ru": "Вошли как {username}"
+   "ru": "Вошли как"
   },
   "loginTimeout": {
    "at": "2026-08-25T19:26:20",
@@ -5652,7 +5652,7 @@
    "at": "2026-08-25T19:26:22",
    "en": "Sign in to fetch a key",
    "model": "deepseek/deepseek-chat",
-   "ru": "Войдите, чтобы получить ключ {key}"
+   "ru": "Войти, чтобы получить ключ"
   },
   "loginUnavailable": {
    "at": "2026-08-25T19:26:25",
@@ -5802,7 +5802,7 @@
    "at": "2026-08-25T19:27:12",
    "en": "Could not fetch usage",
    "model": "deepseek/deepseek-chat",
-   "ru": "Не удалось получить данные об использовании {placeholder}"
+   "ru": "Не удалось получить данные об использовании"
   },
   "usageExceeded": {
    "at": "2026-08-25T19:27:14",
@@ -5880,7 +5880,7 @@
    "at": "2026-08-25T19:27:38",
    "en": "No request reached the server. Check your network connection or the API base setting.",
    "model": "deepseek/deepseek-chat",
-   "ru": "На сервер не поступило ни одного запроса. Проверьте подключение к сети или настройку базового API {placeholder}."
+   "ru": "На сервер не поступило ни одного запроса. Проверьте подключение к сети или настройку базового API."
   },
   "usageNoKey": {
    "at": "2026-08-25T19:27:40",
@@ -6544,7 +6544,7 @@
    "at": "2026-08-25T19:31:51",
    "en": "Model",
    "model": "deepseek/deepseek-chat",
-   "ru": "Модель {placeholder}"
+   "ru": "Модель"
   },
   "col.models": {
    "at": "2026-08-25T19:31:53",
@@ -6562,7 +6562,7 @@
    "at": "2026-08-25T19:31:57",
    "en": "Rate",
    "model": "deepseek/deepseek-chat",
-   "ru": "Оцените {placeholder}"
+   "ru": "Тариф"
   },
   "col.provider": {
    "at": "2026-08-25T19:31:59",
@@ -6748,7 +6748,7 @@
    "at": "2026-08-25T19:33:01",
    "en": "{m}",
    "model": "deepseek/deepseek-chat",
-   "ru": "{м}"
+   "ru": "{m}"
   },
   "heatmap.more": {
    "at": "2026-08-25T19:33:03",
