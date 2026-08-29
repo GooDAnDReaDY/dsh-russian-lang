@@ -712,20 +712,16 @@ window.__ModuleLoader__.load({
         : (status === 'unavailable' ? t('statusUnavailable') : t('statusLoading'))
       const disabled = status !== 'ready'
 
-      // Ядровый шеврон раскрытия; в урезанной сборке — запасной SVG той же формы.
-      const Chevron = (() => {
-        try {
-          const primitives = require('@deepseek-ai/dsh-client-ui-primitives')
-          if (primitives && primitives.IconChevronDownOutline14) return primitives.IconChevronDownOutline14
-        } catch (e) { /* нет набора */ }
-        return () => React.createElement('svg', {
-          width: 14, height: 14, viewBox: '0 0 14 14', fill: 'none',
-          'aria-hidden': 'true',
-        }, React.createElement('path', {
-          d: 'M3.5 5.25 7 8.75l3.5-3.5', stroke: 'currentColor',
-          'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
-        }))
-      })()
+      // Шеврон раскрытия — чистый SVG той же формы, что ядровый
+      // (без зависимости от @deepseek-ai/dsh-client-ui-primitives: этот модуль
+      // не зарегистрирован в module table старых ядер и валил загрузчик).
+      const Chevron = () => React.createElement('svg', {
+        width: 14, height: 14, viewBox: '0 0 14 14', fill: 'none',
+        'aria-hidden': 'true',
+      }, React.createElement('path', {
+        d: 'M3.5 5.25 7 8.75l3.5-3.5', stroke: 'currentColor',
+        'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+      }))
 
       return React.createElement('div', { className: 'rl-card' },
         React.createElement('button', {
