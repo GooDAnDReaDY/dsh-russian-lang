@@ -1,4 +1,1128 @@
 {
+ "agentTeams": {
+  "action.openActivityPanel": {
+   "at": "2026-08-29T22:28:53",
+   "en": "Open activity panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Открыть панель активности"
+  },
+  "activity.badgeAria": {
+   "at": "2026-08-29T22:28:55",
+   "en": "AgentTeams activity and history, {count} team records",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Активность и история команд агентов, {count} записей команд"
+  },
+  "activity.collapse": {
+   "at": "2026-08-29T22:28:56",
+   "en": "Collapse activity panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Свернуть панель активности"
+  },
+  "activity.dockRight": {
+   "at": "2026-08-29T22:28:58",
+   "en": "Dock to the right",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрепить справа"
+  },
+  "activity.empty": {
+   "at": "2026-08-29T22:29:00",
+   "en": "No team activity",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет активности команды"
+  },
+  "activity.float": {
+   "at": "2026-08-29T22:29:02",
+   "en": "Switch to floating panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переключиться на плавающую панель"
+  },
+  "activity.panelAria": {
+   "at": "2026-08-29T22:29:03",
+   "en": "AgentTeams activity panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Панель активности команд агентов"
+  },
+  "activity.panelButton": {
+   "at": "2026-08-29T22:29:05",
+   "en": "Activity panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Панель активности"
+  },
+  "activity.title": {
+   "at": "2026-08-29T22:29:07",
+   "en": "AgentTeams activity",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Активность команд агентов"
+  },
+  "archive.discardedLabel": {
+   "at": "2026-08-29T22:29:09",
+   "en": "Plan discarded · Archived history",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План отменен · Архивная история"
+  },
+  "archive.label": {
+   "at": "2026-08-29T22:29:10",
+   "en": "Ended · Archived history",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Завершено · Архивная история"
+  },
+  "assignment.discarded": {
+   "at": "2026-08-29T22:29:11",
+   "en": "Plan not run",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План не выполнен"
+  },
+  "assignment.empty": {
+   "at": "2026-08-29T22:29:12",
+   "en": "No tasks",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет задач"
+  },
+  "assignment.label": {
+   "at": "2026-08-29T22:29:14",
+   "en": "Captain assigned",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Капитан назначен"
+  },
+  "assignment.staged": {
+   "at": "2026-08-29T22:29:15",
+   "en": "Planned task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запланированная задача"
+  },
+  "captain.name": {
+   "at": "2026-08-29T22:29:17",
+   "en": "Captain",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Капитан"
+  },
+  "captain.role": {
+   "at": "2026-08-29T22:29:18",
+   "en": "Break down · Delegate · Synthesize",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Разделить · Делегировать · Синтезировать"
+  },
+  "captain.state.awaitingFeedback": {
+   "at": "2026-08-29T22:29:20",
+   "en": "Awaiting feedback",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание отзыва"
+  },
+  "captain.state.collected": {
+   "at": "2026-08-29T22:29:22",
+   "en": "All reports received",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все полученные отчеты"
+  },
+  "captain.state.discarded": {
+   "at": "2026-08-29T22:29:24",
+   "en": "Discarded",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменено"
+  },
+  "captain.state.settled": {
+   "at": "2026-08-29T22:29:25",
+   "en": "Settled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оплачено"
+  },
+  "captain.state.staged": {
+   "at": "2026-08-29T22:29:27",
+   "en": "Awaiting approval",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидает одобрения"
+  },
+  "captain.state.takeover": {
+   "at": "2026-08-29T22:29:29",
+   "en": "Working on {tasks}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работаю над {tasks}"
+  },
+  "captain.state.waiting": {
+   "at": "2026-08-29T22:29:31",
+   "en": "Waiting for reports",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание отчетов"
+  },
+  "captain.state.working": {
+   "at": "2026-08-29T22:29:32",
+   "en": "{count} active",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} активных"
+  },
+  "captain.summary": {
+   "at": "2026-08-29T22:29:34",
+   "en": "Assigned {tasks} tasks to {members} members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Назначено {tasks} задач {members} участникам"
+  },
+  "captain.summary.awaitingFeedback": {
+   "at": "2026-08-29T22:29:36",
+   "en": "Draft preserved; waiting for your revision direction in chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Черновой вариант сохранен; ожидаем ваших указаний по доработке в чате"
+  },
+  "captain.summary.discarded": {
+   "at": "2026-08-29T22:29:38",
+   "en": "Plan discarded: {members} members were not created and {tasks} tasks did not run",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План отменён: {members} участников не созданы и {tasks} задачи не выполнены"
+  },
+  "captain.summary.staged": {
+   "at": "2026-08-29T22:29:40",
+   "en": "Planned {tasks} tasks and {members} members; awaiting approval",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запланировано {tasks} задач и {members} участников; ожидают утверждения"
+  },
+  "captain.summary.withTakeover": {
+   "at": "2026-08-29T22:29:42",
+   "en": "Assigned {tasks} to members · Captain owns {captainTasks}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Назначено {tasks} участникам · Капитан владеет {captainTasks}"
+  },
+  "card.memberCount": {
+   "at": "2026-08-29T22:29:43",
+   "en": "{count} members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} участников"
+  },
+  "delegation.aria": {
+   "at": "2026-08-29T22:29:45",
+   "en": "Captain delegation map",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Карта делегирования капитана"
+  },
+  "dependency.aria": {
+   "at": "2026-08-29T22:29:47",
+   "en": "Task dependency chain",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Цепочка зависимостей задач"
+  },
+  "dependency.hint.chain": {
+   "at": "2026-08-29T22:29:49",
+   "en": "Hover to highlight dependencies · Click to pin",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Наведите для подсветки зависимостей · Нажмите, чтобы закрепить"
+  },
+  "dependency.hint.parallel": {
+   "at": "2026-08-29T22:29:50",
+   "en": "No dependencies · Click for details",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет зависимостей · Нажмите для подробностей"
+  },
+  "dependency.hint.pinned": {
+   "at": "2026-08-29T22:29:52",
+   "en": "{taskId} pinned · Esc to clear",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{taskId} закреплена · Esc для сброса"
+  },
+  "dependency.parallel": {
+   "at": "2026-08-29T22:29:53",
+   "en": "Parallel tasks",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Параллельные задачи"
+  },
+  "dependency.title": {
+   "at": "2026-08-29T22:29:55",
+   "en": "Task dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Зависимости задач"
+  },
+  "format.listSeparator": {
+   "at": "2026-08-29T22:29:56",
+   "en": ", ",
+   "model": "deepseek/deepseek-chat",
+   "ru": ","
+  },
+  "member.model": {
+   "at": "2026-08-29T22:40:27",
+   "en": "{model}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{model}"
+  },
+  "member.state.delivered": {
+   "at": "2026-08-29T22:30:01",
+   "en": "Delivered",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доставлено"
+  },
+  "member.state.failed": {
+   "at": "2026-08-29T22:30:04",
+   "en": "Has failures",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Имеются сбои"
+  },
+  "member.state.left": {
+   "at": "2026-08-29T22:30:05",
+   "en": "Left team",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Левая команда"
+  },
+  "member.state.notCreated": {
+   "at": "2026-08-29T22:30:07",
+   "en": "Not created",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не создано"
+  },
+  "member.state.pending": {
+   "at": "2026-08-29T22:30:08",
+   "en": "Pending",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание"
+  },
+  "member.state.removed": {
+   "at": "2026-08-29T22:30:09",
+   "en": "Removed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалено"
+  },
+  "member.state.staged": {
+   "at": "2026-08-29T22:30:11",
+   "en": "Not spawned",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не создан"
+  },
+  "member.state.stopped": {
+   "at": "2026-08-29T22:30:13",
+   "en": "Stopped",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановлено"
+  },
+  "member.state.unassigned": {
+   "at": "2026-08-29T22:30:17",
+   "en": "Awaiting assignment",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание назначения"
+  },
+  "member.state.waiting": {
+   "at": "2026-08-29T22:30:19",
+   "en": "Waiting",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание"
+  },
+  "member.state.working": {
+   "at": "2026-08-29T22:30:21",
+   "en": "Working",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работает"
+  },
+  "member.status.delivered": {
+   "at": "2026-08-29T22:40:28",
+   "en": "Tasks delivered",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задачи выполнены"
+  },
+  "member.status.discarded": {
+   "at": "2026-08-29T22:30:25",
+   "en": "Plan discarded; member was not created",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План отклонён; участник не был создан"
+  },
+  "member.status.executing": {
+   "at": "2026-08-29T22:30:27",
+   "en": "Working on {taskId}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работа над {taskId}"
+  },
+  "member.status.executingModel": {
+   "at": "2026-08-29T22:30:29",
+   "en": "Working on {taskId} · {model}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работа над {taskId} · {model}"
+  },
+  "member.status.idle": {
+   "at": "2026-08-29T22:30:30",
+   "en": "Ready to continue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Готовы продолжить"
+  },
+  "member.status.settled": {
+   "at": "2026-08-29T22:30:32",
+   "en": "All assigned work is settled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вся назначенная работа выполнена"
+  },
+  "member.status.staged": {
+   "at": "2026-08-29T22:30:34",
+   "en": "Will be spawned after approval",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Будет создан после одобрения"
+  },
+  "member.status.stopped": {
+   "at": "2026-08-29T22:30:37",
+   "en": "Team stopped; explicit resume required",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Команда остановлена; требуется явное возобновление"
+  },
+  "member.status.unknown": {
+   "at": "2026-08-29T22:30:38",
+   "en": "Status unknown",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Статус неизвестен"
+  },
+  "member.status.waitingAssignment": {
+   "at": "2026-08-29T22:30:39",
+   "en": "Waiting for the captain to assign work",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание назначения работы от капитана"
+  },
+  "member.status.waitingOn": {
+   "at": "2026-08-29T22:30:41",
+   "en": "Waiting for {taskId} · {assignee}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание {taskId} · {assignee}"
+  },
+  "member.status.waitingPrerequisite": {
+   "at": "2026-08-29T22:30:43",
+   "en": "Waiting for prerequisites",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание выполнения предварительных условий"
+  },
+  "member.status.working": {
+   "at": "2026-08-29T22:30:44",
+   "en": "Working on assigned tasks",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работа над назначенными задачами"
+  },
+  "members.collapse": {
+   "at": "2026-08-29T22:30:46",
+   "en": "Collapse",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Свернуть"
+  },
+  "members.empty": {
+   "at": "2026-08-29T22:30:48",
+   "en": "No members yet; waiting for the captain to assemble the team",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пока нет участников; ожидаем, пока капитан соберёт команду"
+  },
+  "members.expand": {
+   "at": "2026-08-29T22:30:49",
+   "en": "Expand",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Развернуть"
+  },
+  "members.toggle": {
+   "at": "2026-08-29T22:30:51",
+   "en": "Members {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Участники {count}"
+  },
+  "plan.addTask": {
+   "at": "2026-08-29T22:30:53",
+   "en": "Add task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить задачу"
+  },
+  "plan.adding": {
+   "at": "2026-08-29T22:30:55",
+   "en": "Adding…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавление…"
+  },
+  "plan.approve": {
+   "at": "2026-08-29T22:40:30",
+   "en": "Approve & Run",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Одобрить и запустить"
+  },
+  "plan.approveConfirm": {
+   "at": "2026-08-29T22:31:02",
+   "en": "Confirm launch",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердить запуск"
+  },
+  "plan.approveConfirmTitle": {
+   "at": "2026-08-29T22:31:06",
+   "en": "Confirm team launch",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердить запуск команды"
+  },
+  "plan.approveHint": {
+   "at": "2026-08-29T22:31:08",
+   "en": "Approval creates {members} members and schedules {tasks} tasks.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Одобрение создаёт {members} участников и планирует {tasks} задачи."
+  },
+  "plan.approveTitle": {
+   "at": "2026-08-29T22:31:10",
+   "en": "Plan ready?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План готов?"
+  },
+  "plan.approveWarning": {
+   "at": "2026-08-29T22:31:12",
+   "en": "Member routes and dependencies cannot be edited here after launch.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Маршруты участников и зависимости нельзя редактировать здесь после запуска."
+  },
+  "plan.approving": {
+   "at": "2026-08-29T22:31:14",
+   "en": "Creating members…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создание участников…"
+  },
+  "plan.badge": {
+   "at": "2026-08-29T22:31:15",
+   "en": "Awaiting approval",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание подтверждения"
+  },
+  "plan.cancel": {
+   "at": "2026-08-29T22:31:16",
+   "en": "Cancel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена"
+  },
+  "plan.continue": {
+   "at": "2026-08-29T22:31:18",
+   "en": "Return to chat & revise",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вернуться в чат и исправить"
+  },
+  "plan.dependencies.count": {
+   "at": "2026-08-29T22:31:20",
+   "en": "{count} dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} зависимостей"
+  },
+  "plan.dependencies.none": {
+   "at": "2026-08-29T22:31:21",
+   "en": "No dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет зависимостей"
+  },
+  "plan.description": {
+   "at": "2026-08-29T22:31:24",
+   "en": "Members have not been spawned and tasks have not been scheduled. Edit the draft here, or return to chat and tell the Captain what should change.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Участники не были созданы, и задачи не были назначены. Отредактируйте черновик здесь или вернитесь в чат и сообщите Капитану, что нужно изменить."
+  },
+  "plan.discard": {
+   "at": "2026-08-29T22:31:26",
+   "en": "Discard this plan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменить этот план"
+  },
+  "plan.discardConfirm": {
+   "at": "2026-08-29T22:31:29",
+   "en": "Discard plan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменить план"
+  },
+  "plan.discardConfirmTitle": {
+   "at": "2026-08-29T22:31:31",
+   "en": "Discard this plan?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменить этот план?"
+  },
+  "plan.discardWarning": {
+   "at": "2026-08-29T22:31:33",
+   "en": "The plan will end and be archived. No members have been spawned and no tasks will run.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План будет завершён и заархивирован. Участники не были созданы, и задачи выполняться не будут."
+  },
+  "plan.discarding": {
+   "at": "2026-08-29T22:31:35",
+   "en": "Discarding…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена…"
+  },
+  "plan.failed": {
+   "at": "2026-08-29T22:31:38",
+   "en": "Operation failed: {message}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Операция не удалась: {message}"
+  },
+  "plan.feedbackHint": {
+   "at": "2026-08-29T22:31:40",
+   "en": "The Captain will ask in chat. After your reply, it will revise this draft and wait for approval again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Капитан спросит в чате. После вашего ответа он пересмотрит этот черновик и снова будет ждать одобрения."
+  },
+  "plan.feedbackTitle": {
+   "at": "2026-08-29T22:31:42",
+   "en": "Waiting for your revision direction",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание ваших указаний по исправлению"
+  },
+  "plan.flow.aria": {
+   "at": "2026-08-29T22:31:43",
+   "en": "Team launch flow",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Процесс запуска команды"
+  },
+  "plan.flow.review": {
+   "at": "2026-08-29T22:31:45",
+   "en": "Review plan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Просмотреть план"
+  },
+  "plan.flow.run": {
+   "at": "2026-08-29T22:31:46",
+   "en": "Start work",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Начать работу"
+  },
+  "plan.flow.spawn": {
+   "at": "2026-08-29T22:31:48",
+   "en": "Create members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создать участников"
+  },
+  "plan.member.model": {
+   "at": "2026-08-29T22:31:50",
+   "en": "Model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Модель"
+  },
+  "plan.member.prompt": {
+   "at": "2026-08-29T22:40:33",
+   "en": "Role prompt",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Роль подсказки"
+  },
+  "plan.member.provider": {
+   "at": "2026-08-29T22:31:56",
+   "en": "Provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер"
+  },
+  "plan.member.reasoning": {
+   "at": "2026-08-29T22:31:58",
+   "en": "Reasoning effort",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Усилие на рассуждение"
+  },
+  "plan.member.reasoningHint": {
+   "at": "2026-08-29T22:32:01",
+   "en": "Leave blank for default; accepts low, medium, high, xhigh, and more",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оставьте пустым для значения по умолчанию; принимает low, medium, high, xhigh и другие."
+  },
+  "plan.member.role": {
+   "at": "2026-08-29T22:32:02",
+   "en": "Role",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Роль"
+  },
+  "plan.member.roleFallback": {
+   "at": "2026-08-29T22:32:04",
+   "en": "Role not set",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Роль не установлена"
+  },
+  "plan.members.count": {
+   "at": "2026-08-29T22:32:07",
+   "en": "{count} members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} участников"
+  },
+  "plan.members.empty": {
+   "at": "2026-08-29T22:32:10",
+   "en": "No members planned yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пока нет запланированных участников"
+  },
+  "plan.members.title": {
+   "at": "2026-08-29T22:32:11",
+   "en": "Members & model routes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Участники и маршруты моделей"
+  },
+  "plan.model.back": {
+   "at": "2026-08-29T22:32:14",
+   "en": "Back",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Назад"
+  },
+  "plan.model.choose": {
+   "at": "2026-08-29T22:32:17",
+   "en": "Choose a model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите модель"
+  },
+  "plan.model.currentUnavailable": {
+   "at": "2026-08-29T22:32:24",
+   "en": "{provider}/{model} (not in the current catalog)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{provider}/{model} (нет в текущем каталоге)"
+  },
+  "plan.model.defaultReasoning": {
+   "at": "2026-08-29T22:32:26",
+   "en": "Default reasoning effort",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Усилия по умолчанию при рассуждении"
+  },
+  "plan.model.empty": {
+   "at": "2026-08-29T22:32:30",
+   "en": "No models available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет доступных моделей"
+  },
+  "plan.model.loading": {
+   "at": "2026-08-29T22:32:32",
+   "en": "Loading models…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка моделей…"
+  },
+  "plan.model.modelDefault": {
+   "at": "2026-08-29T22:32:34",
+   "en": "Model default ({effort})",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Модель по умолчанию ({effort})"
+  },
+  "plan.model.partialFailure": {
+   "at": "2026-08-29T22:32:36",
+   "en": "{count} provider catalogs could not be loaded",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} каталогов поставщиков не удалось загрузить"
+  },
+  "plan.model.providerDefault": {
+   "at": "2026-08-29T22:32:38",
+   "en": "Provider default",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер по умолчанию"
+  },
+  "plan.model.retry": {
+   "at": "2026-08-29T22:32:39",
+   "en": "Retry",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Повторить"
+  },
+  "plan.model.route": {
+   "at": "2026-08-29T22:32:41",
+   "en": "Route: {provider}/{model}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Маршрут: {provider}/{model}"
+  },
+  "plan.model.triggerAria": {
+   "at": "2026-08-29T22:32:43",
+   "en": "Choose member model, currently {model}, reasoning effort {effort}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите модель участника, текущая {model}, уровень усилий для рассуждений {effort}"
+  },
+  "plan.newTask": {
+   "at": "2026-08-29T22:32:44",
+   "en": "New task subject",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новая тема задачи"
+  },
+  "plan.newTaskLabel": {
+   "at": "2026-08-29T22:32:46",
+   "en": "Add a planned task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить запланированную задачу"
+  },
+  "plan.pendingEdits": {
+   "at": "2026-08-29T22:32:47",
+   "en": "Save the current edits before launching the team.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохраните текущие изменения перед запуском команды."
+  },
+  "plan.readySummary": {
+   "at": "2026-08-29T22:32:49",
+   "en": "{members} members · {tasks} tasks · {links} dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{members} участников · {tasks} задач · {links} зависимостей"
+  },
+  "plan.remove": {
+   "at": "2026-08-29T22:32:51",
+   "en": "Remove",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить"
+  },
+  "plan.removeConfirm": {
+   "at": "2026-08-29T22:40:34",
+   "en": "Confirm remove",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердите удаление"
+  },
+  "plan.removeWarning": {
+   "at": "2026-08-29T22:32:57",
+   "en": "Removing {task} will recalculate downstream dependencies.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удаление {task} приведет к пересчету зависимостей ниже по цепочке."
+  },
+  "plan.removed": {
+   "at": "2026-08-29T22:32:58",
+   "en": "Task removed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача удалена"
+  },
+  "plan.returnToChat": {
+   "at": "2026-08-29T22:33:00",
+   "en": "Return to chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вернуться в чат"
+  },
+  "plan.save": {
+   "at": "2026-08-29T22:33:01",
+   "en": "Save",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить"
+  },
+  "plan.saved": {
+   "at": "2026-08-29T22:33:03",
+   "en": "Plan saved",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План сохранён"
+  },
+  "plan.saving": {
+   "at": "2026-08-29T22:33:05",
+   "en": "Saving…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранение…"
+  },
+  "plan.task.assignee": {
+   "at": "2026-08-29T22:33:07",
+   "en": "Assignee",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Исполнитель"
+  },
+  "plan.task.dependencies": {
+   "at": "2026-08-29T22:33:09",
+   "en": "Dependency task IDs (comma-separated)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ID задач зависимостей (через запятую)"
+  },
+  "plan.task.dependenciesHint": {
+   "at": "2026-08-29T22:33:11",
+   "en": "For example task-1, task-2; cycles are rejected",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Например, task-1, task-2; циклы отклонены"
+  },
+  "plan.task.description": {
+   "at": "2026-08-29T22:33:13",
+   "en": "Task description",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Описание задачи"
+  },
+  "plan.task.subject": {
+   "at": "2026-08-29T22:33:14",
+   "en": "Task subject",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Тема задачи"
+  },
+  "plan.task.unassigned": {
+   "at": "2026-08-29T22:33:15",
+   "en": "Shared task pool",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общий пул задач"
+  },
+  "plan.taskAdded": {
+   "at": "2026-08-29T22:33:17",
+   "en": "Task added",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача добавлена"
+  },
+  "plan.tasks.count": {
+   "at": "2026-08-29T22:33:20",
+   "en": "{count} tasks · {links} dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} задач · {links} зависимостей"
+  },
+  "plan.tasks.empty": {
+   "at": "2026-08-29T22:33:22",
+   "en": "No tasks planned yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет запланированных задач"
+  },
+  "plan.tasks.title": {
+   "at": "2026-08-29T22:33:23",
+   "en": "Tasks & dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задачи и зависимости"
+  },
+  "plan.title": {
+   "at": "2026-08-29T22:33:25",
+   "en": "Pre-run plan review",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка плана перед запуском"
+  },
+  "plan.unsaved": {
+   "at": "2026-08-29T22:33:26",
+   "en": "Unsaved",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не сохранено"
+  },
+  "progress.aria": {
+   "at": "2026-08-29T22:33:28",
+   "en": "Overall team progress",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общий прогресс команды"
+  },
+  "progress.blocked": {
+   "at": "2026-08-29T22:33:29",
+   "en": "■ Waiting {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "■ Ожидание {count}"
+  },
+  "progress.delivered": {
+   "at": "2026-08-29T22:33:31",
+   "en": "■ Delivered {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "■ Доставлено {count}"
+  },
+  "progress.running": {
+   "at": "2026-08-29T22:33:33",
+   "en": "■ In progress {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "■ В процессе {count}"
+  },
+  "progress.title": {
+   "at": "2026-08-29T22:33:36",
+   "en": "Overall progress",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общий прогресс"
+  },
+  "task.assignee.unclaimed": {
+   "at": "2026-08-29T22:33:38",
+   "en": "Unclaimed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Невостребованные"
+  },
+  "task.detail.completed": {
+   "at": "2026-08-29T22:33:40",
+   "en": "Completed and delivered",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Завершено и доставлено"
+  },
+  "task.detail.noDownstream": {
+   "at": "2026-08-29T22:33:42",
+   "en": "No downstream tasks",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет последующих задач"
+  },
+  "task.detail.noPrerequisite": {
+   "at": "2026-08-29T22:33:45",
+   "en": "No prerequisites; ready to start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет требований; готовы начать"
+  },
+  "task.detail.notRun": {
+   "at": "2026-08-29T22:33:48",
+   "en": "Plan discarded; task was not run",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План отменён; задача не была выполнена"
+  },
+  "task.detail.ready": {
+   "at": "2026-08-29T22:33:49",
+   "en": "Prerequisites ready; can start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предварительные условия выполнены; можно начинать"
+  },
+  "task.detail.unlocks": {
+   "at": "2026-08-29T22:33:51",
+   "en": "Unlocks {tasks} when complete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Разблокирует {tasks} после завершения"
+  },
+  "task.detail.waitingOn": {
+   "at": "2026-08-29T22:33:53",
+   "en": "Waiting for {tasks}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание {tasks}"
+  },
+  "task.runningAria": {
+   "at": "2026-08-29T22:33:58",
+   "en": "Running",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выполняется"
+  },
+  "task.status.cancelled": {
+   "at": "2026-08-29T22:33:59",
+   "en": "Cancelled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменено"
+  },
+  "task.status.claimed": {
+   "at": "2026-08-29T22:34:00",
+   "en": "Claimed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заявлено"
+  },
+  "task.status.completed": {
+   "at": "2026-08-29T22:34:02",
+   "en": "Completed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Завершено"
+  },
+  "task.status.failed": {
+   "at": "2026-08-29T22:34:05",
+   "en": "Failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось"
+  },
+  "task.status.notRun": {
+   "at": "2026-08-29T22:34:11",
+   "en": "Not run",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не запущено"
+  },
+  "task.status.pending": {
+   "at": "2026-08-29T22:34:12",
+   "en": "Unclaimed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Невостребованные"
+  },
+  "task.summary.allDelivered": {
+   "at": "2026-08-29T22:34:14",
+   "en": "All {count} tasks delivered",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все {count} задачи доставлены"
+  },
+  "task.summary.blocked": {
+   "at": "2026-08-29T22:34:16",
+   "en": "{tasks} waiting on prerequisites",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{tasks} ожидают выполнения предварительных условий"
+  },
+  "task.summary.blockedAndRunning": {
+   "at": "2026-08-29T22:34:19",
+   "en": "{tasks}{more} waiting on prerequisites; other work has started",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{tasks}{more} ожидают выполнения предварительных условий; другая работа уже начата"
+  },
+  "task.summary.discarded": {
+   "at": "2026-08-29T22:34:21",
+   "en": "{count} planned tasks discarded; none ran",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} запланированных задач отменено; ни одна не выполнена"
+  },
+  "task.summary.ended": {
+   "at": "2026-08-29T22:34:24",
+   "en": "Final: {completed} delivered · {cancelled} cancelled · {failed} failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Итог: {completed} доставлено · {cancelled} отменено · {failed} не удалось"
+  },
+  "task.summary.failedSettled": {
+   "at": "2026-08-29T22:34:26",
+   "en": "{count} failed; the automatic loop has stopped",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} ошибок; автоматический цикл остановлен"
+  },
+  "task.summary.more": {
+   "at": "2026-08-29T22:34:29",
+   "en": " and {count} more",
+   "model": "deepseek/deepseek-chat",
+   "ru": "и ещё {count}"
+  },
+  "task.summary.ready": {
+   "at": "2026-08-29T22:34:31",
+   "en": "{tasks} ready to start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{tasks} готовы к началу"
+  },
+  "task.summary.running": {
+   "at": "2026-08-29T22:34:32",
+   "en": "{tasks} in progress",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{tasks} в процессе выполнения"
+  },
+  "task.summary.staged": {
+   "at": "2026-08-29T22:34:34",
+   "en": "{count} planned tasks awaiting approval",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} запланированных задач ожидают утверждения"
+  },
+  "task.summary.waitingBreakdown": {
+   "at": "2026-08-29T22:34:35",
+   "en": "Waiting for the captain to break down the work",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание, пока капитан распределит работу"
+  },
+  "task.summary.waitingSchedule": {
+   "at": "2026-08-29T22:34:37",
+   "en": "Waiting for the next scheduling round",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидание следующего цикла планирования"
+  },
+  "team.discarded": {
+   "at": "2026-08-29T22:34:38",
+   "en": "Discarded",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отклонено"
+  },
+  "team.ended": {
+   "at": "2026-08-29T22:34:39",
+   "en": "Ended",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Завершено"
+  },
+  "team.stats.completed": {
+   "at": "2026-08-29T22:34:41",
+   "en": "{completed}/{total} completed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{completed}/{total} завершено"
+  },
+  "team.stats.members": {
+   "at": "2026-08-29T22:34:42",
+   "en": "{count} members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} участников"
+  },
+  "team.stats.messages": {
+   "at": "2026-08-29T22:34:44",
+   "en": "{count} messages",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} сообщений"
+  },
+  "team.stop": {
+   "at": "2026-08-29T22:34:47",
+   "en": "Stop team",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановить команду"
+  },
+  "team.stopCancel": {
+   "at": "2026-08-29T22:34:50",
+   "en": "Keep running",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Продолжать работу"
+  },
+  "team.stopConfirm": {
+   "at": "2026-08-29T22:34:53",
+   "en": "Stop team",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановить команду"
+  },
+  "team.stopDescription": {
+   "at": "2026-08-29T22:34:56",
+   "en": "This cancels {tasks} unfinished tasks and stops {members} working members. Completed results are kept.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Это отменяет {tasks} незавершённых задач и останавливает {members} работающих участников. Завершённые результаты сохраняются."
+  },
+  "team.stopFailed": {
+   "at": "2026-08-29T22:34:57",
+   "en": "Could not stop team: {message}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось остановить команду: {message}"
+  },
+  "team.stopRequestFailed": {
+   "at": "2026-08-29T22:35:00",
+   "en": "The server could not stop this team. Try again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сервер не смог остановить эту команду. Попробуйте снова."
+  },
+  "team.stopTitle": {
+   "at": "2026-08-29T22:35:02",
+   "en": "Stop “{team}”?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановить “{team}”?"
+  },
+  "team.stopped": {
+   "at": "2026-08-29T22:35:03",
+   "en": "Stopped",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановлено"
+  },
+  "team.stopping": {
+   "at": "2026-08-29T22:35:04",
+   "en": "Stopping…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Остановка…"
+  }
+ },
  "betterSidebar": {
   "addPluginsNoMatch": {
    "at": "2026-08-25T18:55:35",
@@ -24,11 +1148,29 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Закрыть остальные вкладки"
   },
+  "closePinnedTerminal": {
+   "at": "2026-08-29T22:35:06",
+   "en": "Close Terminal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть терминал"
+  },
   "closeRightTabs": {
    "at": "2026-08-25T18:55:43",
    "en": "Close Tabs to the Right",
    "model": "deepseek/deepseek-chat",
    "ru": "Закрыть вкладки справа"
+  },
+  "dockToSidebar": {
+   "at": "2026-08-29T22:35:08",
+   "en": "Dock Back to Sidebar",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вернуть в боковую панель"
+  },
+  "floatDropHint": {
+   "at": "2026-08-29T22:35:10",
+   "en": "Release to open in a free window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отпустите, чтобы открыть в свободном окне"
   },
   "mermaidError": {
    "at": "2026-08-25T18:55:45",
@@ -59,6 +1201,12 @@
    "en": "Reset",
    "model": "deepseek/deepseek-chat",
    "ru": "Сбросить"
+  },
+  "moveToFreeWindow": {
+   "at": "2026-08-29T22:35:14",
+   "en": "Move to Free Window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить в свободное окно"
   },
   "openWithCursor": {
    "at": "2026-08-25T18:55:53",
@@ -168,17 +1316,83 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Зед"
   },
+  "pinAgentTerminal": {
+   "at": "2026-08-29T22:35:16",
+   "en": "Pin Agent Terminal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрепить терминал агента"
+  },
   "pinOpenWith": {
    "at": "2026-08-25T18:56:32",
    "en": "Pin to menu",
    "model": "deepseek/deepseek-chat",
    "ru": "Закрепить в меню"
   },
+  "pinTerminal": {
+   "at": "2026-08-29T22:35:18",
+   "en": "Pin Terminal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрепить терминал"
+  },
+  "pinToGlobal": {
+   "at": "2026-08-29T22:54:39",
+   "en": "Pin Globally",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрепить для всех"
+  },
+  "pinToWorkspace": {
+   "at": "2026-08-29T22:35:23",
+   "en": "Pin to Workspace",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрепить в рабочей области"
+  },
+  "pinnedRailLabel": {
+   "at": "2026-08-29T22:35:24",
+   "en": "Pinned Terminals",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закреплённые терминалы"
+  },
+  "pinnedTerminalKindAgent": {
+   "at": "2026-08-29T22:35:27",
+   "en": "Agent Terminal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Терминал агента"
+  },
+  "pinnedTerminalKindUi": {
+   "at": "2026-08-29T22:35:29",
+   "en": "UI Terminal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Терминал интерфейса"
+  },
+  "pinnedTerminalScopeGlobal": {
+   "at": "2026-08-29T22:35:31",
+   "en": "Pinned globally",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закреплено глобально"
+  },
+  "pinnedTerminalScopeWorkspace": {
+   "at": "2026-08-29T22:35:32",
+   "en": "Pinned to workspace",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закреплено в рабочей области"
+  },
+  "pinnedTerminalTooltip": {
+   "at": "2026-08-29T22:54:43",
+   "en": "{kind} · {scope} · {cwd}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{kind} · {scope} · {cwd}"
+  },
   "pluginDocsPanelDesc": {
    "at": "2026-08-25T18:56:36",
    "en": "Global docs in the DSH sidebar: read your own Markdown notes from any workspace — a file list, an outline, open in Chrome / VS Code, and copy buttons; the docs directory is configurable (default ~/.dsh/docs)",
    "model": "deepseek/deepseek-chat",
    "ru": "Глобальные документы в боковой панели DSH: читайте свои заметки в формате Markdown из любого рабочего пространства — список файлов, структура, открытие в Chrome / VS Code и кнопки копирования; директория документов настраивается (по умолчанию ~/.dsh/docs)"
+  },
+  "pluginEgoBrowserDesc": {
+   "at": "2026-08-29T22:35:44",
+   "en": "The agent browser for DeepSeek Harness: 32 ego_* tools drive a real Chromium, with a native sidebar \"ego browser\" tab giving a live view of every page the agent visits — you can click, drag, and type to take over. Registers the tab automatically when better-sidebar is present, otherwise falls back to a floating bubble",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Браузер агента для DeepSeek Harness: 32 инструмента ego_* управляют реальным Chromium, с нативной боковой панелью \"ego browser\", которая предоставляет живой просмотр каждой страницы, посещаемой агентом — вы можете кликать, перетаскивать и печатать, чтобы взять управление на себя. Регистрирует вкладку автоматически, если присутствует better-sidebar, в противном случае переходит на плавающий пузырь."
   },
   "pluginFlowglassDesc": {
    "at": "2026-08-25T18:56:42",
@@ -204,6 +1418,30 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Человеческий шлюз на только что завершённом ходе: Одобрить / Запросить изменения по пути с необязательным комментарием; пути сгруппированы по основной сессии / суб-агенту / без атрибуции; встроенное сравнение снимка и текущего состояния перед принятием решения. Без форка, без /rewind."
   },
+  "refreshUnsavedConfirm": {
+   "at": "2026-08-29T22:35:47",
+   "en": "The file changed on disk. Refreshing will discard unsaved edits. Continue?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Файл изменился на диске. Обновление приведёт к потере несохранённых изменений. Продолжить?"
+  },
+  "settingsBrowserLoopbackDesc": {
+   "at": "2026-08-29T22:35:52",
+   "en": "Comma-separated allowlist of loopback addresses (e.g. localhost:5174 or 127.0.0.1:8080) the sidebar browser may visit; empty blocks all local addresses by default. The sandbox still applies — pages cannot read GUI data",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Разделённый запятыми список разрешённых адресов локальной петли (например, localhost:5174 или 127.0.0.1:8080), которые может посещать боковой браузер; пустое значение блокирует все локальные адреса по умолчанию. Песочница всё ещё применяется — страницы не могут читать данные GUI."
+  },
+  "settingsBrowserLoopbackPlaceholder": {
+   "at": "2026-08-29T22:35:54",
+   "en": "e.g. localhost:5174, 127.0.0.1:8080",
+   "model": "deepseek/deepseek-chat",
+   "ru": "например, localhost:5174, 127.0.0.1:8080"
+  },
+  "settingsBrowserLoopbackTitle": {
+   "at": "2026-08-29T22:35:56",
+   "en": "Allowed local addresses",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Разрешенные локальные адреса"
+  },
   "settingsCustomCssDesc": {
    "at": "2026-08-25T18:56:55",
    "en": "Styles appended at the end of the page (later in the cascade wins ties; use !important to override JS-written inline variables)",
@@ -221,6 +1459,18 @@
    "en": "Custom CSS",
    "model": "deepseek/deepseek-chat",
    "ru": "Пользовательский CSS"
+  },
+  "settingsOpenToolsDesc": {
+   "at": "2026-08-29T22:35:59",
+   "en": "When enabled, the model can actively open files, folders, and HTTP(S) pages in the sidebar through the sidebar_open tool (off by default)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Когда включено, модель может активно открывать файлы, папки и HTTP(S)-страницы в боковой панели через инструмент sidebar_open (по умолчанию отключено)."
+  },
+  "settingsOpenToolsTitle": {
+   "at": "2026-08-29T22:36:00",
+   "en": "Inject the sidebar-open tool for the model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Внедрите инструмент sidebar-open для модели"
   },
   "settingsSchemeAutoDesc": {
    "at": "2026-08-25T18:57:02",
@@ -299,6 +1549,12 @@
    "en": "Shell path",
    "model": "deepseek/deepseek-chat",
    "ru": "Путь к оболочке"
+  },
+  "showInFolder": {
+   "at": "2026-08-29T22:36:04",
+   "en": "Show in folder",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать в папке"
   },
   "sideChat": {
    "at": "2026-08-25T18:57:29",
@@ -444,8 +1700,26 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Новая тема"
   },
+  "statusTruncated": {
+   "at": "2026-08-29T22:36:09",
+   "en": "Too many changes; showing the first 2,000 entries",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Слишком много изменений; показаны первые 2,000 записей"
+  },
+  "toc": {
+   "at": "2026-08-29T22:36:10",
+   "en": "Table of contents",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Содержание"
+  },
   "unpinOpenWith": {
    "at": "2026-08-25T18:58:19",
+   "en": "Unpin",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Открепить"
+  },
+  "unpinTerminal": {
+   "at": "2026-08-29T22:36:11",
    "en": "Unpin",
    "model": "deepseek/deepseek-chat",
    "ru": "Открепить"
@@ -527,6 +1801,12 @@
    "en": "Uploading into {dir}…",
    "model": "deepseek/deepseek-chat",
    "ru": "Загрузка в {dir}…"
+  },
+  "worktree": {
+   "at": "2026-08-29T22:36:12",
+   "en": "Worktree",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Рабочее дерево"
   }
  },
  "context-doctor": {
@@ -700,6 +1980,102 @@
   }
  },
  "dsh-context": {
+  "agents.billed": {
+   "at": "2026-08-29T22:36:14",
+   "en": "{n} billed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} выставлено к оплате"
+  },
+  "agents.chip.count": {
+   "at": "2026-08-29T22:36:15",
+   "en": "{n} agents",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} агентов"
+  },
+  "agents.chip.running": {
+   "at": "2026-08-29T22:36:17",
+   "en": "{n} running",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} запущено"
+  },
+  "agents.chip.tokens": {
+   "at": "2026-08-29T22:36:18",
+   "en": "{n} tokens in context",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} токенов в контексте"
+  },
+  "agents.continuable": {
+   "at": "2026-08-29T22:36:20",
+   "en": "continuable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "продолжаемый"
+  },
+  "agents.legend.free": {
+   "at": "2026-08-29T22:36:22",
+   "en": "free window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "свободное окно"
+  },
+  "agents.more": {
+   "at": "2026-08-29T22:36:23",
+   "en": "{n} more not shown",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ещё {n} не показано"
+  },
+  "agents.oneshot": {
+   "at": "2026-08-29T22:36:24",
+   "en": "one-shot",
+   "model": "deepseek/deepseek-chat",
+   "ru": "одноразовый"
+  },
+  "agents.open": {
+   "at": "2026-08-29T22:36:26",
+   "en": "click to open →",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нажмите, чтобы открыть →"
+  },
+  "agents.requests": {
+   "at": "2026-08-29T22:36:28",
+   "en": "{n} requests",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} запросов"
+  },
+  "agents.running": {
+   "at": "2026-08-29T22:36:29",
+   "en": "running",
+   "model": "deepseek/deepseek-chat",
+   "ru": "выполняется"
+  },
+  "agents.self": {
+   "at": "2026-08-29T22:36:31",
+   "en": "current",
+   "model": "deepseek/deepseek-chat",
+   "ru": "текущий"
+  },
+  "agents.solo": {
+   "at": "2026-08-29T22:36:33",
+   "en": "No subagents yet — when the agent delegates work through the subagent tool, the network unfolds here",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пока нет суб-агентов — когда агент делегирует работу через инструмент суб-агентов, сеть будет отображаться здесь"
+  },
+  "agents.sub": {
+   "at": "2026-08-29T22:36:36",
+   "en": "Live context of this agent and its subagents · click a node to open its session",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Живой контекст этого агента и его подчиненных агентов · нажмите на узел, чтобы открыть его сессию"
+  },
+  "agents.title": {
+   "at": "2026-08-29T22:36:37",
+   "en": "Agent Network",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сеть агентов"
+  },
+  "attach.close": {
+   "at": "2026-08-29T22:36:39",
+   "en": "Close",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть"
+  },
   "attach.image": {
    "at": "2026-08-25T18:59:44",
    "en": "Image",
@@ -736,6 +2112,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Другой контент"
   },
+  "attach.preview": {
+   "at": "2026-08-29T22:36:40",
+   "en": "Image preview",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Превью изображения"
+  },
   "attach.raw": {
    "at": "2026-08-25T18:59:55",
    "en": "Raw",
@@ -766,11 +2148,95 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Ответ"
   },
+  "block.content": {
+   "at": "2026-08-29T22:36:42",
+   "en": "Content",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Контент"
+  },
+  "block.line": {
+   "at": "2026-08-29T22:36:44",
+   "en": "1 line",
+   "model": "deepseek/deepseek-chat",
+   "ru": "1 строка"
+  },
+  "block.lines": {
+   "at": "2026-08-29T22:36:45",
+   "en": "{n} lines",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} строк"
+  },
+  "block.result": {
+   "at": "2026-08-29T22:36:47",
+   "en": "Result",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Результат"
+  },
+  "block.summary": {
+   "at": "2026-08-29T22:36:48",
+   "en": "Summary",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сводка"
+  },
   "block.thinking": {
    "at": "2026-08-25T19:00:02",
    "en": "Reasoning",
    "model": "deepseek/deepseek-chat",
    "ru": "Обоснование"
+  },
+  "brief.input": {
+   "at": "2026-08-29T22:36:49",
+   "en": "In",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В"
+  },
+  "brief.inputTip": {
+   "at": "2026-08-29T22:36:53",
+   "en": "What entered after the previous reply and before this request went out — usually the previous tool-call results; a turn opener has nothing new",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Что было введено после предыдущего ответа и перед этим запросом — обычно результаты предыдущего вызова инструмента; начало нового оборота не содержит ничего нового"
+  },
+  "brief.locate": {
+   "at": "2026-08-29T22:36:54",
+   "en": "Reveal in Context Browser",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать в контекстном браузере"
+  },
+  "brief.more": {
+   "at": "2026-08-29T22:36:56",
+   "en": "+{n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "+{n}"
+  },
+  "brief.noInputs": {
+   "at": "2026-08-29T22:36:57",
+   "en": "(nothing new)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "(ничего нового)"
+  },
+  "brief.reply": {
+   "at": "2026-08-29T22:36:59",
+   "en": "Response",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ответ"
+  },
+  "brief.replyTip": {
+   "at": "2026-08-29T22:37:02",
+   "en": "What the model returned on this step (a text reply or tool calls) — results of calls made here appear in the In row of the next bar",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Что модель вернула на этом шаге (текстовый ответ или вызовы инструментов) — результаты вызовов отображаются в строке In следующего бара"
+  },
+  "brief.turn": {
+   "at": "2026-08-29T22:37:03",
+   "en": "User",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользователь"
+  },
+  "brief.turnTip": {
+   "at": "2026-08-29T22:37:05",
+   "en": "The user message that opened this turn — every step of the turn recalls it",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сообщение пользователя, которое открыло этот ход — каждый шаг хода ссылается на него"
   },
   "browser.approx": {
    "at": "2026-08-25T19:00:07",
@@ -802,6 +2268,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "В прямом эфире · Следующий запрос"
   },
+  "browser.loadFailed": {
+   "at": "2026-08-29T22:37:07",
+   "en": "Load failed — click to retry",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось загрузить — нажмите, чтобы повторить"
+  },
   "browser.loading": {
    "at": "2026-08-25T19:00:21",
    "en": "Loading full content from older session history…",
@@ -832,17 +2304,71 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Обслуживается устаревшей версией плагина: только оценка токенов, без содержимого"
   },
+  "browser.notInLog": {
+   "at": "2026-08-29T22:37:09",
+   "en": "This item is not in the session log anymore (it may have been compacted away or cleared)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот элемент больше не находится в журнале сессии (возможно, он был удалён или очищен)"
+  },
   "browser.preview": {
    "at": "2026-08-25T19:00:34",
    "en": "Preview",
    "model": "deepseek/deepseek-chat",
    "ru": "Предварительный просмотр"
   },
+  "browser.rowNoMatch": {
+   "at": "2026-08-29T22:37:11",
+   "en": "No rows match the current filter",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет строк, соответствующих текущему фильтру"
+  },
+  "browser.search.assistant": {
+   "at": "2026-08-29T22:37:13",
+   "en": "Filter by reply or calls…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать по ответам или звонкам…"
+  },
+  "browser.search.inject": {
+   "at": "2026-08-29T22:37:15",
+   "en": "Filter injected context…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать введённый контекст…"
+  },
+  "browser.search.tool": {
+   "at": "2026-08-29T22:37:18",
+   "en": "Filter by tool or arguments…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать по инструменту или аргументам…"
+  },
+  "browser.search.user": {
+   "at": "2026-08-29T22:37:20",
+   "en": "Filter by message text…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать по тексту сообщения…"
+  },
   "browser.title": {
    "at": "2026-08-25T19:00:35",
    "en": "Context Browser",
    "model": "deepseek/deepseek-chat",
    "ru": "Контекстный браузер"
+  },
+  "call.exit": {
+   "at": "2026-08-29T22:37:22",
+   "en": "exit {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "выход {n}"
+  },
+  "call.fail": {
+   "at": "2026-08-29T22:37:23",
+   "en": "Failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось"
+  },
+  "call.ok": {
+   "at": "2026-08-29T22:37:25",
+   "en": "OK",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ОК"
   },
   "cat.assistant": {
    "at": "2026-08-25T19:00:37",
@@ -898,6 +2424,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Фактический запрос {n}"
   },
+  "detail.cache": {
+   "at": "2026-08-29T22:37:26",
+   "en": "Cache {n}%",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Кэш {n}%"
+  },
   "detail.estTotal": {
    "at": "2026-08-25T19:00:52",
    "en": "Estimated ≈ {n}",
@@ -945,6 +2477,18 @@
    "en": "Context compacted (summary replaced {n} messages)",
    "model": "deepseek/deepseek-chat",
    "ru": "Контекст сжат (резюме заменено {n} сообщений)"
+  },
+  "ev.mode.plan.off": {
+   "at": "2026-08-29T22:37:28",
+   "en": "Plan mode off",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Режим плана выключен"
+  },
+  "ev.mode.plan.on": {
+   "at": "2026-08-29T22:37:30",
+   "en": "Plan mode on",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Режим планирования включён"
   },
   "ev.model": {
    "at": "2026-08-25T19:01:07",
@@ -994,6 +2538,426 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Контекстные события"
   },
+  "files.chipTip": {
+   "at": "2026-08-29T22:37:32",
+   "en": "{files} files · {ops} ops",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{files} файлов · {ops} операций"
+  },
+  "files.deltaTip": {
+   "at": "2026-08-29T22:37:35",
+   "en": "Cumulative line change estimated from edit/write call arguments: + added / − removed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Совокупное изменение строк, оцененное по аргументам вызовов редактирования/записи: + добавлено / − удалено"
+  },
+  "files.empty": {
+   "at": "2026-08-29T22:37:37",
+   "en": "No file reads, writes, or searches in this range",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет чтений, записей или поиска файлов в этом диапазоне"
+  },
+  "files.errs": {
+   "at": "2026-08-29T22:37:38",
+   "en": "{n} failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} не удалось"
+  },
+  "files.files": {
+   "at": "2026-08-29T22:37:39",
+   "en": "{n} files",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} файлов"
+  },
+  "files.form.dir": {
+   "at": "2026-08-29T22:37:42",
+   "en": "Directory",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Каталог"
+  },
+  "files.form.image": {
+   "at": "2026-08-29T22:37:44",
+   "en": "Image",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Изображение"
+  },
+  "files.form.text": {
+   "at": "2026-08-29T22:37:45",
+   "en": "File",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Файл"
+  },
+  "files.glyph.archive": {
+   "at": "2026-08-29T22:37:47",
+   "en": "Archive",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Архив"
+  },
+  "files.glyph.assets": {
+   "at": "2026-08-29T22:37:48",
+   "en": "Assets",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Активы"
+  },
+  "files.glyph.build": {
+   "at": "2026-08-29T22:37:50",
+   "en": "Build output",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Результат сборки"
+  },
+  "files.glyph.config": {
+   "at": "2026-08-29T22:37:51",
+   "en": "Config",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Конфигурация"
+  },
+  "files.glyph.data": {
+   "at": "2026-08-29T22:37:53",
+   "en": "Data / manifest",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Данные / манифест"
+  },
+  "files.glyph.database": {
+   "at": "2026-08-29T22:37:55",
+   "en": "Database",
+   "model": "deepseek/deepseek-chat",
+   "ru": "База данных"
+  },
+  "files.glyph.deps": {
+   "at": "2026-08-29T22:37:56",
+   "en": "Dependencies",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Зависимости"
+  },
+  "files.glyph.docker": {
+   "at": "2026-08-29T22:37:57",
+   "en": "Docker",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Docker"
+  },
+  "files.glyph.docs": {
+   "at": "2026-08-29T22:37:59",
+   "en": "Docs",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Документы"
+  },
+  "files.glyph.document": {
+   "at": "2026-08-29T22:38:01",
+   "en": "Document",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Документ"
+  },
+  "files.glyph.font": {
+   "at": "2026-08-29T22:38:03",
+   "en": "Font",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Шрифт"
+  },
+  "files.glyph.hidden": {
+   "at": "2026-08-29T22:38:05",
+   "en": "Metadata directory",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Каталог метаданных"
+  },
+  "files.glyph.ignore": {
+   "at": "2026-08-29T22:38:06",
+   "en": "Ignore rules",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Игнорировать правила"
+  },
+  "files.glyph.lang.c": {
+   "at": "2026-08-29T22:38:08",
+   "en": "C",
+   "model": "deepseek/deepseek-chat",
+   "ru": "C"
+  },
+  "files.glyph.lang.cpp": {
+   "at": "2026-08-29T22:38:09",
+   "en": "C++",
+   "model": "deepseek/deepseek-chat",
+   "ru": "C++"
+  },
+  "files.glyph.lang.csharp": {
+   "at": "2026-08-29T22:38:11",
+   "en": "C#",
+   "model": "deepseek/deepseek-chat",
+   "ru": "C#"
+  },
+  "files.glyph.lang.dart": {
+   "at": "2026-08-29T22:38:13",
+   "en": "Dart",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Dart"
+  },
+  "files.glyph.lang.go": {
+   "at": "2026-08-29T22:38:14",
+   "en": "Go",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Перейти"
+  },
+  "files.glyph.lang.html": {
+   "at": "2026-08-29T22:38:16",
+   "en": "HTML",
+   "model": "deepseek/deepseek-chat",
+   "ru": "HTML"
+  },
+  "files.glyph.lang.java": {
+   "at": "2026-08-29T22:38:17",
+   "en": "Java",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Java"
+  },
+  "files.glyph.lang.js": {
+   "at": "2026-08-29T22:38:18",
+   "en": "JavaScript",
+   "model": "deepseek/deepseek-chat",
+   "ru": "JavaScript"
+  },
+  "files.glyph.lang.kotlin": {
+   "at": "2026-08-29T22:38:20",
+   "en": "Kotlin",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Kotlin"
+  },
+  "files.glyph.lang.lua": {
+   "at": "2026-08-29T22:38:21",
+   "en": "Lua",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Lua"
+  },
+  "files.glyph.lang.php": {
+   "at": "2026-08-29T22:38:22",
+   "en": "PHP",
+   "model": "deepseek/deepseek-chat",
+   "ru": "PHP"
+  },
+  "files.glyph.lang.ruby": {
+   "at": "2026-08-29T22:38:23",
+   "en": "Ruby",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Рубин"
+  },
+  "files.glyph.lang.rust": {
+   "at": "2026-08-29T22:38:25",
+   "en": "Rust",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ржавчина"
+  },
+  "files.glyph.lang.scala": {
+   "at": "2026-08-29T22:38:26",
+   "en": "Scala",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Скала"
+  },
+  "files.glyph.lang.svelte": {
+   "at": "2026-08-29T22:38:28",
+   "en": "Svelte",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Свелт"
+  },
+  "files.glyph.lang.swift": {
+   "at": "2026-08-29T22:38:30",
+   "en": "Swift",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Быстро"
+  },
+  "files.glyph.lang.ts": {
+   "at": "2026-08-29T22:38:31",
+   "en": "TypeScript",
+   "model": "deepseek/deepseek-chat",
+   "ru": "TypeScript"
+  },
+  "files.glyph.lang.vue": {
+   "at": "2026-08-29T22:38:33",
+   "en": "Vue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вью"
+  },
+  "files.glyph.license": {
+   "at": "2026-08-29T22:38:35",
+   "en": "License",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лицензия"
+  },
+  "files.glyph.lock": {
+   "at": "2026-08-29T22:38:37",
+   "en": "Lockfile",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Файл блокировки"
+  },
+  "files.glyph.log": {
+   "at": "2026-08-29T22:38:38",
+   "en": "Log",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Войти"
+  },
+  "files.glyph.markdown": {
+   "at": "2026-08-29T22:38:39",
+   "en": "Markup document",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Документ с разметкой"
+  },
+  "files.glyph.media": {
+   "at": "2026-08-29T22:38:41",
+   "en": "Media",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Медиа"
+  },
+  "files.glyph.notebook": {
+   "at": "2026-08-29T22:38:42",
+   "en": "Notebook",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Блокнот"
+  },
+  "files.glyph.python": {
+   "at": "2026-08-29T22:38:44",
+   "en": "Python",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Питон"
+  },
+  "files.glyph.root": {
+   "at": "2026-08-29T22:38:45",
+   "en": "Workspace root",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Корневая папка рабочей области"
+  },
+  "files.glyph.scripts": {
+   "at": "2026-08-29T22:38:47",
+   "en": "Scripts",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Скрипты"
+  },
+  "files.glyph.sheet": {
+   "at": "2026-08-29T22:38:49",
+   "en": "Spreadsheet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Таблица"
+  },
+  "files.glyph.shell": {
+   "at": "2026-08-29T22:38:50",
+   "en": "Shell",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оболочка"
+  },
+  "files.glyph.style": {
+   "at": "2026-08-29T22:40:47",
+   "en": "Styles",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Стили"
+  },
+  "files.glyph.tests": {
+   "at": "2026-08-29T22:40:48",
+   "en": "Tests",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Тесты"
+  },
+  "files.hits": {
+   "at": "2026-08-29T22:40:50",
+   "en": "{n} hits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} попаданий"
+  },
+  "files.kind.all": {
+   "at": "2026-08-29T22:40:52",
+   "en": "All",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все"
+  },
+  "files.kind.image": {
+   "at": "2026-08-29T22:40:54",
+   "en": "Images",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Изображения"
+  },
+  "files.kind.read": {
+   "at": "2026-08-29T22:40:55",
+   "en": "Read",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Читать"
+  },
+  "files.kind.search": {
+   "at": "2026-08-29T22:40:56",
+   "en": "Searched",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Искали"
+  },
+  "files.kind.write": {
+   "at": "2026-08-29T22:40:57",
+   "en": "Written",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Написано"
+  },
+  "files.locate": {
+   "at": "2026-08-29T22:40:59",
+   "en": "Reveal this operation in the Context Browser",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать эту операцию в Обозревателе контекста"
+  },
+  "files.noMatch": {
+   "at": "2026-08-29T22:41:01",
+   "en": "No files match the current filters",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет файлов, соответствующих текущим фильтрам"
+  },
+  "files.open": {
+   "at": "2026-08-29T22:41:02",
+   "en": "Open on your system",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Открыть на вашем устройстве"
+  },
+  "files.readEst": {
+   "at": "2026-08-29T22:41:04",
+   "en": "Lines read, estimated from the limit argument",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Строк прочитано, оценка на основе аргумента limit"
+  },
+  "files.readTip": {
+   "at": "2026-08-29T22:41:05",
+   "en": "Read lines {a}–{b}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Прочитайте строки {a}–{b}"
+  },
+  "files.scopeLatest": {
+   "at": "2026-08-29T22:41:10",
+   "en": "Up to latest · follows the trend chart pick",
+   "model": "deepseek/deepseek-chat",
+   "ru": "До последнего · следует за выбором трендового графика"
+  },
+  "files.search": {
+   "at": "2026-08-29T22:41:12",
+   "en": "Filter by path…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать по пути…"
+  },
+  "files.sort.count": {
+   "at": "2026-08-29T22:41:13",
+   "en": "Most active",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Самый активный"
+  },
+  "files.sort.latest": {
+   "at": "2026-08-29T22:41:14",
+   "en": "Latest",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последние"
+  },
+  "files.sort.path": {
+   "at": "2026-08-29T22:41:17",
+   "en": "By path",
+   "model": "deepseek/deepseek-chat",
+   "ru": "По пути"
+  },
+  "files.sortTip": {
+   "at": "2026-08-29T22:41:19",
+   "en": "Sort files by operation counts (of the selected kind when a kind chip is active), most recent activity, or path",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сортировать файлы по количеству операций (выбранного вида при активной метке вида), последней активности или пути"
+  },
+  "files.title": {
+   "at": "2026-08-29T22:41:20",
+   "en": "File Activity",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Активность файла"
+  },
   "footer": {
    "at": "2026-08-25T19:01:28",
    "en": "Estimate: same fixed-density heuristic as dsh’s built-in tokenMeter (~4 chars ≈ 1 token); “actual” is provider-reported usage.",
@@ -1042,11 +3006,29 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Снимок состояния"
   },
+  "gran.delta": {
+   "at": "2026-08-29T22:41:21",
+   "en": "Delta",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Дельта"
+  },
+  "gran.modeHint": {
+   "at": "2026-08-29T22:41:23",
+   "en": "Total: cumulative makeup; Delta: change vs the previous request",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Итого: суммарное значение; Дельта: изменение по сравнению с предыдущим запросом"
+  },
   "gran.step": {
    "at": "2026-08-25T19:01:40",
    "en": "Step",
    "model": "deepseek/deepseek-chat",
    "ru": "Шаг"
+  },
+  "gran.total": {
+   "at": "2026-08-29T22:41:25",
+   "en": "Total",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Всего"
   },
   "gran.turn": {
    "at": "2026-08-25T19:01:41",
@@ -1065,6 +3047,12 @@
    "en": "Inject",
    "model": "deepseek/deepseek-chat",
    "ru": "Внедрить"
+  },
+  "kind.mode": {
+   "at": "2026-08-29T22:41:26",
+   "en": "Mode",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Режим"
   },
   "kind.model": {
    "at": "2026-08-25T19:01:47",
@@ -1096,11 +3084,23 @@
    "model": "deepseek/deepseek-chat",
    "ru": "(пустой ответ)"
   },
+  "node.failed": {
+   "at": "2026-08-29T22:41:27",
+   "en": "Tool execution failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выполнение инструмента завершилось с ошибкой"
+  },
   "node.nonText": {
    "at": "2026-08-25T19:02:00",
    "en": "(non-text message)",
    "model": "deepseek/deepseek-chat",
    "ru": "(сообщение без текста)"
+  },
+  "node.skillTag": {
+   "at": "2026-08-29T22:41:29",
+   "en": "Skill · {name}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Навык · {name}"
   },
   "node.snapshot": {
    "at": "2026-08-25T19:02:02",
@@ -1222,6 +3222,54 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Просмотреть исходный текст"
   },
+  "settings.collapse": {
+   "at": "2026-08-29T22:41:30",
+   "en": "Collapse",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Свернуть"
+  },
+  "settings.desc": {
+   "at": "2026-08-29T22:41:32",
+   "en": "Display preferences for the Context panel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Настройки отображения для панели Context"
+  },
+  "settings.expand": {
+   "at": "2026-08-29T22:41:33",
+   "en": "Expand",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Развернуть"
+  },
+  "settings.fileSort": {
+   "at": "2026-08-29T22:41:35",
+   "en": "File Activity default sort",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сортировка файлов по умолчанию"
+  },
+  "settings.gran": {
+   "at": "2026-08-29T22:41:36",
+   "en": "Default trend granularity",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Гранулярность трендов по умолчанию"
+  },
+  "settings.mode": {
+   "at": "2026-08-29T22:41:38",
+   "en": "Default trend display",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отображение трендов по умолчанию"
+  },
+  "settings.readOnly": {
+   "at": "2026-08-29T22:41:39",
+   "en": "Settings are read-only in this environment",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Настройки доступны только для чтения в этой среде"
+  },
+  "settings.title": {
+   "at": "2026-08-29T22:41:40",
+   "en": "Context",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Контекст"
+  },
   "stats.cacheHit": {
    "at": "2026-08-25T19:02:41",
    "en": "Cache Hits",
@@ -1276,6 +3324,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "За период сохранённой истории (аналогично графику истории)"
   },
+  "stats.images": {
+   "at": "2026-08-29T22:41:42",
+   "en": "Images",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Изображения"
+  },
   "stats.injects": {
    "at": "2026-08-25T19:03:16",
    "en": "Injections",
@@ -1300,6 +3354,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Статистика контекста"
   },
+  "stats.toolCalls": {
+   "at": "2026-08-29T22:41:43",
+   "en": "Tool Calls",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вызовы инструментов"
+  },
   "stats.turns": {
    "at": "2026-08-25T19:03:26",
    "en": "Turns",
@@ -1317,6 +3377,12 @@
    "en": " (actual {n})",
    "model": "deepseek/deepseek-chat",
    "ru": "(фактическое {n})"
+  },
+  "tip.delta": {
+   "at": "2026-08-29T22:41:44",
+   "en": "Δ {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Дельта {n}"
   },
   "tip.step": {
    "at": "2026-08-25T19:03:33",
@@ -1354,6 +3420,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Просмотреть сырой JSON"
   },
+  "tool.noMatch": {
+   "at": "2026-08-29T22:41:46",
+   "en": "No tools match the current filter",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет инструментов, соответствующих текущему фильтру"
+  },
   "tool.params": {
    "at": "2026-08-25T19:03:45",
    "en": "Parameters",
@@ -1365,6 +3437,48 @@
    "en": "(no parameters)",
    "model": "deepseek/deepseek-chat",
    "ru": "(без параметров)"
+  },
+  "tool.plugin": {
+   "at": "2026-08-29T22:41:47",
+   "en": "The registering plugin of this tool (for reference)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Регистрирующий плагин этого инструмента (для справки)"
+  },
+  "tool.search": {
+   "at": "2026-08-29T22:41:49",
+   "en": "Filter by name, description, or parameters…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Фильтровать по названию, описанию или параметрам…"
+  },
+  "tool.sort.name": {
+   "at": "2026-08-29T22:41:50",
+   "en": "By name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "По имени"
+  },
+  "tool.sort.size": {
+   "at": "2026-08-29T22:41:52",
+   "en": "By size",
+   "model": "deepseek/deepseek-chat",
+   "ru": "По размеру"
+  },
+  "tool.sortTip": {
+   "at": "2026-08-29T22:41:54",
+   "en": "Sort tools by token size (default) or name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сортировать инструменты по размеру токена (по умолчанию) или по названию"
+  },
+  "tool.unknown": {
+   "at": "2026-08-29T22:41:56",
+   "en": "Unknown plugin",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неизвестный плагин"
+  },
+  "tool.unknownTitle": {
+   "at": "2026-08-29T22:41:58",
+   "en": "The tool was registered before the context plugin loaded, or its plugin has been unloaded, so its provider cannot be determined",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Инструмент был зарегистрирован до загрузки контекстного плагина, или его плагин был выгружен, поэтому его провайдер не может быть определен"
   },
   "tools.more": {
    "at": "2026-08-25T19:03:51",
@@ -1433,6 +3547,54 @@
    "en": "Expand",
    "model": "deepseek/deepseek-chat",
    "ru": "Развернуть"
+  },
+  "gitChanges": {
+   "at": "2026-08-29T22:42:00",
+   "en": "Changes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Изменения"
+  },
+  "gitClean": {
+   "at": "2026-08-29T22:42:01",
+   "en": "Clean",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить"
+  },
+  "gitCommits": {
+   "at": "2026-08-29T22:42:04",
+   "en": "Recent commits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последние коммиты"
+  },
+  "gitDirty": {
+   "at": "2026-08-29T22:42:05",
+   "en": "Uncommitted changes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Несохранённые изменения"
+  },
+  "gitEmpty": {
+   "at": "2026-08-29T22:42:07",
+   "en": "Appears after the agent opens a git folder.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Появляется после того, как агент открывает папку с git."
+  },
+  "gitHint": {
+   "at": "2026-08-29T22:42:08",
+   "en": "Git status for this chat: branch and uncommitted changes.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Статус Git для этого чата: ветка и незафиксированные изменения."
+  },
+  "gitNoChanges": {
+   "at": "2026-08-29T22:42:11",
+   "en": "No uncommitted changes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет непринятых изменений"
+  },
+  "gitNoCommits": {
+   "at": "2026-08-29T22:42:12",
+   "en": "No commits yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пока нет коммитов"
   },
   "intro": {
    "at": "2026-08-25T19:04:26",
@@ -1833,6 +3995,1408 @@
    "ru": "Несохранённые изменения"
   }
  },
+ "dsh-kanban": {
+  "archive.empty": {
+   "at": "2026-08-29T22:42:13",
+   "en": "The archive is empty.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Архив пуст."
+  },
+  "archive.hint": {
+   "at": "2026-08-29T22:42:16",
+   "en": "Cards that spent their term in Done. Nothing is deleted: a restored card returns to the column it left.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Карты, которые завершили свой срок в разделе «Готово». Ничего не удаляется: восстановленная карта возвращается в колонку, из которой она была перемещена."
+  },
+  "archive.restore": {
+   "at": "2026-08-29T22:42:18",
+   "en": "Back to the board",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вернуться к доске"
+  },
+  "archive.since": {
+   "at": "2026-08-29T22:42:20",
+   "en": "archived {ago} ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "архивировано {ago} назад"
+  },
+  "batch.hint": {
+   "at": "2026-08-29T22:42:22",
+   "en": "One session for all of them. Tasks arrive one at a time: the agent takes the next when it finishes the current one. Only the first moves to In progress — the rest wait their turn where they are.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Одна сессия для всех. Задачи поступают по одной: агент берет следующую, когда завершает текущую. Только первая переходит в статус \"В процессе\" — остальные ждут своей очереди на месте."
+  },
+  "batch.start": {
+   "at": "2026-08-29T22:42:24",
+   "en": "Start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Начать"
+  },
+  "batch.title": {
+   "at": "2026-08-29T22:42:25",
+   "en": "Start {n} tasks in one chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Начните {n} задач в одном чате"
+  },
+  "board.allRepos": {
+   "at": "2026-08-29T22:42:27",
+   "en": "All repositories",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все репозитории"
+  },
+  "board.archive": {
+   "at": "2026-08-29T22:42:29",
+   "en": "Archive",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Архив"
+  },
+  "board.back": {
+   "at": "2026-08-29T22:42:30",
+   "en": "To the chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В чат"
+  },
+  "board.backHint": {
+   "at": "2026-08-29T22:42:31",
+   "en": "Close the board and return to the conversation",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закройте доску и вернитесь к разговору"
+  },
+  "board.clearFilters": {
+   "at": "2026-08-29T22:42:33",
+   "en": "Clear filters",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить фильтры"
+  },
+  "board.collapse": {
+   "at": "2026-08-29T22:42:34",
+   "en": "Collapse the column",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Свернуть столбец"
+  },
+  "board.empty": {
+   "at": "2026-08-29T22:42:35",
+   "en": "No tasks yet.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет задач."
+  },
+  "board.expand": {
+   "at": "2026-08-29T22:42:37",
+   "en": "Expand the column",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Расширить столбец"
+  },
+  "board.limit": {
+   "at": "2026-08-29T22:42:38",
+   "en": "limit {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ограничение {n}"
+  },
+  "board.loading": {
+   "at": "2026-08-29T22:42:40",
+   "en": "Loading the board…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка доски…"
+  },
+  "board.newTask": {
+   "at": "2026-08-29T22:42:41",
+   "en": "Task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача"
+  },
+  "board.noMatch": {
+   "at": "2026-08-29T22:42:42",
+   "en": "Nothing matches the search.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ничего не найдено по запросу."
+  },
+  "board.noRepo": {
+   "at": "2026-08-29T22:42:43",
+   "en": "no project",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нет проекта"
+  },
+  "board.pickNone": {
+   "at": "2026-08-29T22:42:45",
+   "en": "Clear selection",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить выделение"
+  },
+  "board.pickStart": {
+   "at": "2026-08-29T22:42:47",
+   "en": "Start selected",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запустить выбранное"
+  },
+  "board.pickedCount": {
+   "at": "2026-08-29T22:42:48",
+   "en": "selected {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "выбрано {n}"
+  },
+  "board.refresh": {
+   "at": "2026-08-29T22:42:49",
+   "en": "Refresh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить"
+  },
+  "board.repo": {
+   "at": "2026-08-29T22:42:51",
+   "en": "repository",
+   "model": "deepseek/deepseek-chat",
+   "ru": "репозиторий"
+  },
+  "board.search": {
+   "at": "2026-08-29T22:42:53",
+   "en": "Search",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Поиск"
+  },
+  "board.shown": {
+   "at": "2026-08-29T22:42:55",
+   "en": "showing {shown} of {total}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "показано {shown} из {total}"
+  },
+  "board.sync": {
+   "at": "2026-08-29T22:42:56",
+   "en": "Check Gitea",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить Gitea"
+  },
+  "board.syncing": {
+   "at": "2026-08-29T22:42:57",
+   "en": "Checking…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка…"
+  },
+  "board.waiting": {
+   "at": "2026-08-29T22:42:58",
+   "en": "needs you",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нуждается в вас"
+  },
+  "boardName.main": {
+   "at": "2026-08-29T22:43:00",
+   "en": "Project board",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доска проекта"
+  },
+  "boardName.simple": {
+   "at": "2026-08-29T22:43:01",
+   "en": "Simple board",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Простая доска"
+  },
+  "card.move": {
+   "at": "2026-08-29T22:43:02",
+   "en": "move",
+   "model": "deepseek/deepseek-chat",
+   "ru": "переместить"
+  },
+  "card.pick": {
+   "at": "2026-08-29T22:43:04",
+   "en": "Select for a group start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выбрать для начала группы"
+  },
+  "card.queue": {
+   "at": "2026-08-29T22:43:06",
+   "en": "to a queue...",
+   "model": "deepseek/deepseek-chat",
+   "ru": "в очередь..."
+  },
+  "card.toChat": {
+   "at": "2026-08-29T22:43:07",
+   "en": "to the chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "в чат"
+  },
+  "card.unqueue": {
+   "at": "2026-08-29T22:43:08",
+   "en": "take out of the queue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "убрать из очереди"
+  },
+  "chip.note": {
+   "at": "2026-08-29T22:43:14",
+   "en": "Leave a note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оставьте заметку"
+  },
+  "chip.noteHint": {
+   "at": "2026-08-29T22:43:17",
+   "en": "The note is appended to the task body. The body goes to the agent with the first message, so a note left before the start reaches the work and one left after does not.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заметка добавляется к тексту задачи. Текст отправляется агенту с первым сообщением, поэтому заметка, оставленная до начала, попадает в работу, а оставленная после — нет."
+  },
+  "chip.noteSave": {
+   "at": "2026-08-29T22:43:19",
+   "en": "Append",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить"
+  },
+  "column.backlog": {
+   "at": "2026-08-29T22:43:23",
+   "en": "Backlog",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Бэклог"
+  },
+  "column.cleanup": {
+   "at": "2026-08-29T22:43:24",
+   "en": "Cleanup",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистка"
+  },
+  "column.deploy": {
+   "at": "2026-08-29T22:43:25",
+   "en": "Deploy",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Развернуть"
+  },
+  "column.done": {
+   "at": "2026-08-29T22:43:26",
+   "en": "Done",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Готово"
+  },
+  "column.in-progress": {
+   "at": "2026-08-29T22:43:29",
+   "en": "In progress",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В процессе"
+  },
+  "column.review": {
+   "at": "2026-08-29T22:43:30",
+   "en": "Review",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обзор"
+  },
+  "dialog.archived": {
+   "at": "2026-08-29T22:43:31",
+   "en": "archived",
+   "model": "deepseek/deepseek-chat",
+   "ru": "архивировано"
+  },
+  "dialog.bodyHint": {
+   "at": "2026-08-29T22:43:33",
+   "en": "Goes to the agent as the first message when the task starts.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переходит к агенту в качестве первого сообщения при запуске задачи."
+  },
+  "dialog.cancel": {
+   "at": "2026-08-29T22:43:34",
+   "en": "Cancel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена"
+  },
+  "dialog.create": {
+   "at": "2026-08-29T22:43:35",
+   "en": "Create",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создать"
+  },
+  "dialog.fromGitea": {
+   "at": "2026-08-29T22:43:36",
+   "en": "From Gitea",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Из Gitea"
+  },
+  "dialog.imported": {
+   "at": "2026-08-29T22:43:37",
+   "en": "already on the board",
+   "model": "deepseek/deepseek-chat",
+   "ru": "уже на доске"
+  },
+  "dialog.kind": {
+   "at": "2026-08-29T22:43:39",
+   "en": "What kind of task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Какой тип задачи"
+  },
+  "dialog.kindPlain": {
+   "at": "2026-08-29T22:43:40",
+   "en": "Not a project",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не проект"
+  },
+  "dialog.kindPlainHint": {
+   "at": "2026-08-29T22:43:42",
+   "en": "A note that touches no repository. It lives on the simple board and never reaches Gitea.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заметка, которая не связана ни с одним репозиторием. Она существует на простой доске и никогда не попадает в Gitea."
+  },
+  "dialog.kindProject": {
+   "at": "2026-08-29T22:43:43",
+   "en": "Project",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проект"
+  },
+  "dialog.kindProjectHint": {
+   "at": "2026-08-29T22:43:46",
+   "en": "An issue is created in Gitea and the card is bound to it. The card lives on the project board.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проблема создана в Gitea, и карточка привязана к ней. Карточка находится на доске проекта."
+  },
+  "dialog.labelsHint": {
+   "at": "2026-08-29T22:43:47",
+   "en": "comma separated",
+   "model": "deepseek/deepseek-chat",
+   "ru": "через запятую"
+  },
+  "dialog.loadingRepos": {
+   "at": "2026-08-29T22:43:48",
+   "en": "Loading repositories…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка репозиториев…"
+  },
+  "dialog.noIssues": {
+   "at": "2026-08-29T22:43:50",
+   "en": "No open issues found.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Открытых проблем не найдено."
+  },
+  "dialog.noRepos": {
+   "at": "2026-08-29T22:54:52",
+   "en": "No repositories available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет доступных репозиториев"
+  },
+  "dialog.own": {
+   "at": "2026-08-29T22:43:55",
+   "en": "Own task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Собственная задача"
+  },
+  "dialog.pickRepo": {
+   "at": "2026-08-29T22:43:57",
+   "en": "Pick a repository",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите репозиторий"
+  },
+  "dialog.repo": {
+   "at": "2026-08-29T22:43:58",
+   "en": "Repository",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Репозиторий"
+  },
+  "dialog.repoNamePlaceholder": {
+   "at": "2026-08-29T22:44:00",
+   "en": "name of the new repository",
+   "model": "deepseek/deepseek-chat",
+   "ru": "название нового репозитория"
+  },
+  "dialog.repoNew": {
+   "at": "2026-08-29T22:44:01",
+   "en": "— a new repository —",
+   "model": "deepseek/deepseek-chat",
+   "ru": "— новый репозиторий —"
+  },
+  "dialog.repoNewHint": {
+   "at": "2026-08-29T22:44:04",
+   "en": "It will be created in the organisation: private and empty, no README and no scaffolding. Creating a repository cannot be undone from here.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Репозиторий будет создан в организации: приватный и пустой, без README и без шаблонов. Создание репозитория нельзя отменить отсюда."
+  },
+  "dialog.taskBody": {
+   "at": "2026-08-29T22:44:05",
+   "en": "Description",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Описание"
+  },
+  "dialog.taskColumn": {
+   "at": "2026-08-29T22:44:07",
+   "en": "Column",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Столбец"
+  },
+  "dialog.taskLabels": {
+   "at": "2026-08-29T22:44:09",
+   "en": "Labels",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Метки"
+  },
+  "dialog.taskTitle": {
+   "at": "2026-08-29T22:44:11",
+   "en": "Title",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Название"
+  },
+  "dialog.title": {
+   "at": "2026-08-29T22:44:12",
+   "en": "New task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новая задача"
+  },
+  "discard": {
+   "at": "2026-08-29T22:44:14",
+   "en": "Discard",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменить"
+  },
+  "error.bad-repo-name": {
+   "at": "2026-08-29T22:44:16",
+   "en": "A repository name may contain only Latin letters, digits, dot, dash and underscore.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Название репозитория может содержать только латинские буквы, цифры, точку, дефис и подчёркивание."
+  },
+  "error.crossSite": {
+   "at": "2026-08-29T22:44:18",
+   "en": "Request rejected as cross-site.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запрос отклонён как межсайтовый."
+  },
+  "error.giteaAbsent": {
+   "at": "2026-08-29T22:44:21",
+   "en": "The Gitea plugin is not installed, so importing is unavailable.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Плагин Gitea не установлен, поэтому импорт недоступен."
+  },
+  "error.giteaUnconfigured": {
+   "at": "2026-08-29T22:44:23",
+   "en": "Configure Gitea in the Gitea plugin card first.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сначала настройте Gitea на карточке плагина Gitea."
+  },
+  "error.issue-not-created": {
+   "at": "2026-08-29T22:44:25",
+   "en": "The issue was not created. If the repository was new, it stayed — nothing was deleted.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проблема не была создана. Если репозиторий был новым, он остался — ничего не удалено."
+  },
+  "error.issueNotFound": {
+   "at": "2026-08-29T22:44:27",
+   "en": "Issue not found.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проблема не найдена."
+  },
+  "error.modelNotSelected": {
+   "at": "2026-08-29T22:44:28",
+   "en": "No model selected — pick one in Settings, or type it here.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Модель не выбрана — выберите её в Настройках или введите здесь."
+  },
+  "error.no-live-sessions": {
+   "at": "2026-08-29T22:44:30",
+   "en": "No running session to queue into.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет активной сессии для добавления в очередь."
+  },
+  "error.repo-not-created": {
+   "at": "2026-08-29T22:44:32",
+   "en": "The repository was not created; nothing else was done.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Репозиторий не был создан; больше ничего не было сделано."
+  },
+  "error.repo-required": {
+   "at": "2026-08-29T22:44:34",
+   "en": "Choose a repository or name a new one.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите репозиторий или укажите имя нового."
+  },
+  "error.session-not-live": {
+   "at": "2026-08-29T22:44:36",
+   "en": "That session is no longer running.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот сеанс больше не активен."
+  },
+  "error.sessionNotOpened": {
+   "at": "2026-08-29T22:44:39",
+   "en": "The session started ({id}) but this build cannot switch to it. Find it in the session list.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сессия началась ({id}), но эта сборка не может переключиться на неё. Найдите её в списке сессий."
+  },
+  "error.startFailed": {
+   "at": "2026-08-29T22:44:41",
+   "en": "Could not start the session.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось начать сессию."
+  },
+  "error.task-not-queued": {
+   "at": "2026-08-29T22:44:44",
+   "en": "This task is not in a queue.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Эта задача не находится в очереди."
+  },
+  "error.taskHasNoIssue": {
+   "at": "2026-08-29T22:44:45",
+   "en": "This task has no Gitea issue behind it.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "У этой задачи нет связанного вопроса в Gitea."
+  },
+  "error.taskNotFound": {
+   "at": "2026-08-29T22:44:46",
+   "en": "Task not found.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача не найдена."
+  },
+  "error.titleRequired": {
+   "at": "2026-08-29T22:44:48",
+   "en": "A title is required.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Требуется заголовок."
+  },
+  "error.unknown": {
+   "at": "2026-08-29T22:44:50",
+   "en": "Request failed.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запрос не выполнен."
+  },
+  "facet.priority": {
+   "at": "2026-08-29T22:44:51",
+   "en": "Priority",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Приоритет"
+  },
+  "facet.release": {
+   "at": "2026-08-29T22:44:52",
+   "en": "Release",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выпуск"
+  },
+  "facet.repo": {
+   "at": "2026-08-29T22:44:53",
+   "en": "Repository",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Репозиторий"
+  },
+  "facet.risk": {
+   "at": "2026-08-29T22:44:55",
+   "en": "Risk",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Риск"
+  },
+  "facet.scope": {
+   "at": "2026-08-29T22:54:55",
+   "en": "Scope",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Область действия"
+  },
+  "facet.signal": {
+   "at": "2026-08-29T22:45:00",
+   "en": "Signal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сигнал"
+  },
+  "facet.status": {
+   "at": "2026-08-29T22:45:02",
+   "en": "Status",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Статус"
+  },
+  "facet.type": {
+   "at": "2026-08-29T22:45:03",
+   "en": "Type",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Тип"
+  },
+  "field.archiveAfterDays": {
+   "at": "2026-08-29T22:45:05",
+   "en": "Archive a done card after, days",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Архивировать выполненную карточку через, дней"
+  },
+  "field.boardToolEnabled": {
+   "at": "2026-08-29T22:45:07",
+   "en": "Let the agent move cards",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Позвольте агенту перемещать карты"
+  },
+  "field.columnNames": {
+   "at": "2026-08-29T22:45:08",
+   "en": "Your own column names",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ваши собственные названия столбцов"
+  },
+  "field.defaultProjectRoot": {
+   "at": "2026-08-29T22:45:10",
+   "en": "Project root",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Корневая папка проекта"
+  },
+  "field.giteaOwner": {
+   "at": "2026-08-29T22:45:11",
+   "en": "Gitea organisation",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Организация Gitea"
+  },
+  "field.giteaTokenRef": {
+   "at": "2026-08-29T22:45:12",
+   "en": "Credential name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Имя учетных данных"
+  },
+  "field.giteaUrl": {
+   "at": "2026-08-29T22:45:14",
+   "en": "Instance URL",
+   "model": "deepseek/deepseek-chat",
+   "ru": "URL экземпляра"
+  },
+  "field.pushToGitea": {
+   "at": "2026-08-29T22:45:15",
+   "en": "Close the issue in Gitea",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть задачу в Gitea"
+  },
+  "field.replyInstruction": {
+   "at": "2026-08-29T22:45:17",
+   "en": "Standing note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Постоянная заметка"
+  },
+  "field.staleAfterMin": {
+   "at": "2026-08-29T22:45:19",
+   "en": "Call a task silent after, minutes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сделать задачу скрытой через, минут"
+  },
+  "field.startPrompt": {
+   "at": "2026-08-29T22:45:21",
+   "en": "First message template",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Шаблон первого сообщения"
+  },
+  "field.watchRepos": {
+   "at": "2026-08-29T22:45:26",
+   "en": "Narrow the pull to these repositories",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сузить запрос к этим репозиториям"
+  },
+  "field.webhookSecretRef": {
+   "at": "2026-08-29T22:45:27",
+   "en": "Webhook credential name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Имя учетных данных вебхука"
+  },
+  "field.wipInProgress": {
+   "at": "2026-08-29T22:55:04",
+   "en": "In progress limit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимит в процессе"
+  },
+  "field.wipReview": {
+   "at": "2026-08-29T22:45:32",
+   "en": "Review limit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимит отзывов"
+  },
+  "group.general": {
+   "at": "2026-08-29T22:45:33",
+   "en": "General",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общие"
+  },
+  "group.gitea": {
+   "at": "2026-08-29T22:45:34",
+   "en": "Gitea",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Gitea"
+  },
+  "group.limits": {
+   "at": "2026-08-29T22:45:36",
+   "en": "Column limits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ограничения столбцов"
+  },
+  "group.sync": {
+   "at": "2026-08-29T22:45:39",
+   "en": "Automatic moves",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Автоматические ходы"
+  },
+  "hint.archiveAfterDays": {
+   "at": "2026-08-29T22:45:41",
+   "en": "Counted from the moment the card entered Done. Zero keeps everything on the board.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подсчет с момента попадания карты в \"Готово\". Ноль оставляет все на доске."
+  },
+  "hint.boardToolEnabled": {
+   "at": "2026-08-29T22:45:43",
+   "en": "Off until the workflow skill stops forbidding this CLI to touch a kanban.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выключено до тех пор, пока навык рабочего процесса не перестанет запрещать этому CLI взаимодействовать с канбаном."
+  },
+  "hint.columnNames": {
+   "at": "2026-08-29T22:45:46",
+   "en": "Pairs «id=Name», comma separated, for example «backlog=Ideas, review=Check». Empty keeps the usual names.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пары «id=Название», разделённые запятыми, например «backlog=Идеи, review=Проверка». Пустое значение сохраняет стандартные названия."
+  },
+  "hint.defaultProjectRoot": {
+   "at": "2026-08-29T22:45:47",
+   "en": "Where project working copies live. Empty means the harness working directory.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Где находятся рабочие копии проекта. Пустое значение означает рабочий каталог harness."
+  },
+  "hint.giteaOwner": {
+   "at": "2026-08-29T22:45:50",
+   "en": "Whose repositories the board watches. Empty is fine while the token belongs to exactly one organisation.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Чьи репозитории отслеживает доска. Пустое значение допустимо, если токен принадлежит ровно одной организации."
+  },
+  "hint.giteaTokenRef": {
+   "at": "2026-08-29T22:45:52",
+   "en": "The NAME of a DSH credential holding the token. Never type the token itself here.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ИМЯ учётных данных DSH, содержащих токен. Никогда не вводите сам токен здесь."
+  },
+  "hint.giteaUrl": {
+   "at": "2026-08-29T22:45:55",
+   "en": "For example https://gitea.example.com. Empty means importing is unavailable.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Например, https://gitea.example.com. Пустое значение означает, что импорт недоступен."
+  },
+  "hint.label": {
+   "at": "2026-08-29T22:45:57",
+   "en": "Empty means no label is set for this column.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пусто означает, что для этой колонки не задана метка."
+  },
+  "hint.limit": {
+   "at": "2026-08-29T22:45:58",
+   "en": "Zero means no limit. Going over is highlighted, never blocked.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ноль означает отсутствие ограничения. Превышение подсвечивается, но никогда не блокируется."
+  },
+  "hint.pushToGitea": {
+   "at": "2026-08-29T22:46:01",
+   "en": "A card reaching Done closes its issue. The board sets no labels: the stage is already visible from the branch and the pull request.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Карточка, достигшая статуса Done, закрывает связанный issue. Доска не устанавливает меток: этап уже виден из ветки и пул-реквеста."
+  },
+  "hint.replyInstruction": {
+   "at": "2026-08-29T22:46:04",
+   "en": "Appended to every first message — the answer language, for instance. Empty adds nothing.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавляется к каждому первому сообщению — например, язык ответа. Пустое значение ничего не добавляет."
+  },
+  "hint.staleAfterMin": {
+   "at": "2026-08-29T22:46:06",
+   "en": "Only tasks that have a session are marked. Zero turns the mark off.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Только задачи, имеющие сессию, помечаются. Ноль отключает отметку."
+  },
+  "hint.startPrompt": {
+   "at": "2026-08-29T22:46:08",
+   "en": "Template for the first message to the agent. Empty means the built-in template.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Шаблон для первого сообщения агенту. Пустое значение означает использование встроенного шаблона."
+  },
+  "hint.syncIntervalSec": {
+   "at": "2026-08-29T22:46:11",
+   "en": "Zero turns the check off. Below fifteen seconds is raised to fifteen.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ноль отключает проверку. Меньше пятнадцати секунд округляется до пятнадцати."
+  },
+  "hint.watchRepos": {
+   "at": "2026-08-29T22:46:15",
+   "en": "Comma separated, «owner/repo» or just «repo». Empty means every repository of the organisation that has open issues.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Через запятую, «владелец/репозиторий» или просто «репозиторий». Пустое значение означает все репозитории организации, в которых есть открытые issues."
+  },
+  "hint.webhookSecretRef": {
+   "at": "2026-08-29T22:46:17",
+   "en": "NAME of a DSH credential holding the Gitea webhook secret. Empty leaves only polling.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ИМЯ учетных данных DSH, содержащих секрет вебхука Gitea. Пустое значение оставляет только опрос."
+  },
+  "move.backlog": {
+   "at": "2026-08-29T22:46:20",
+   "en": "Work on the task stops: the agent’s running turn is aborted. With no session, the card just moves.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Работа над задачей останавливается: текущий ход агента прерывается. Без сессии карточка просто перемещается."
+  },
+  "move.cleanup": {
+   "at": "2026-08-29T22:46:23",
+   "en": "The agent deletes the Gitea branch, the worktree and the local branch, and records that in the issue.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агент удаляет ветку Gitea, рабочий каталог и локальную ветку, а затем записывает это в задаче."
+  },
+  "move.confirm": {
+   "at": "2026-08-29T22:46:24",
+   "en": "Move",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить"
+  },
+  "move.deploy": {
+   "at": "2026-08-29T22:46:27",
+   "en": "The agent merges the pull request and deploys. This move IS your explicit go-ahead for the deploy — the agent will not ask again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агент объединяет пул-реквест и выполняет деплой. Это действие ЯВЛЯЕТСЯ вашим явным согласием на деплой — агент больше не будет спрашивать."
+  },
+  "move.done": {
+   "at": "2026-08-29T22:46:30",
+   "en": "The task counts as finished. This is a human decision: the agent never moves a card here itself.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача считается завершённой. Это решение принимает человек: агент никогда самостоятельно не перемещает карточку сюда."
+  },
+  "move.in-progress": {
+   "at": "2026-08-29T22:55:06",
+   "en": "The agent is told to start or continue the implementation.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агент получил указание начать или продолжить реализацию."
+  },
+  "move.review": {
+   "at": "2026-08-29T22:46:37",
+   "en": "The agent takes the work to review: drops the draft mark from the pull request and asks for a check.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агент берет работу на проверку: снимает метку черновика с пул-реквеста и запрашивает проверку."
+  },
+  "move.title": {
+   "at": "2026-08-29T22:46:39",
+   "en": "Move to “{column}”?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить в “{column}”?"
+  },
+  "panel.archive": {
+   "at": "2026-08-29T22:46:40",
+   "en": "To the archive",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В архив"
+  },
+  "panel.bodyLoading": {
+   "at": "2026-08-29T22:46:42",
+   "en": "reading the description…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "чтение описания…"
+  },
+  "panel.close": {
+   "at": "2026-08-29T22:46:45",
+   "en": "Close",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть"
+  },
+  "panel.continue": {
+   "at": "2026-08-29T22:46:46",
+   "en": "Continue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Продолжить"
+  },
+  "panel.continueHint": {
+   "at": "2026-08-29T22:46:57",
+   "en": "The task keeps its own chat: the existing session is opened, not a new one.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача сохраняет свой собственный чат: открывается существующая сессия, а не новая."
+  },
+  "panel.created": {
+   "at": "2026-08-29T22:47:00",
+   "en": "created {ago} ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "создано {ago} назад"
+  },
+  "panel.delete": {
+   "at": "2026-08-29T22:47:03",
+   "en": "Delete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить"
+  },
+  "panel.deleteConfirm": {
+   "at": "2026-08-29T22:47:04",
+   "en": "Delete \"{title}\"? This cannot be undone.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить \"{title}\"? Это действие нельзя отменить."
+  },
+  "panel.issue": {
+   "at": "2026-08-29T22:47:06",
+   "en": "Issue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проблема"
+  },
+  "panel.log": {
+   "at": "2026-08-29T22:47:10",
+   "en": "Transitions",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переходы"
+  },
+  "panel.message": {
+   "at": "2026-08-29T22:47:16",
+   "en": "Message to the agent",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сообщение агенту"
+  },
+  "panel.messageHint": {
+   "at": "2026-08-29T22:47:20",
+   "en": "Edit before sending. Empty falls back to the built-in text.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Редактировать перед отправкой. Пустое значение вернёт встроенный текст."
+  },
+  "panel.model": {
+   "at": "2026-08-29T22:47:24",
+   "en": "Model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Модель"
+  },
+  "panel.noLog": {
+   "at": "2026-08-29T22:47:31",
+   "en": "No transitions yet.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет переходов."
+  },
+  "panel.noModels": {
+   "at": "2026-08-29T22:47:34",
+   "en": "This provider offers no models",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот провайдер не предоставляет моделей"
+  },
+  "panel.noProviders": {
+   "at": "2026-08-29T22:47:36",
+   "en": "No providers available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет доступных провайдеров"
+  },
+  "panel.openChat": {
+   "at": "2026-08-29T22:47:37",
+   "en": "Open the chat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Откройте чат"
+  },
+  "panel.pickModel": {
+   "at": "2026-08-29T22:47:40",
+   "en": "Pick a model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите модель"
+  },
+  "panel.pickProviderFirst": {
+   "at": "2026-08-29T22:47:47",
+   "en": "Pick a provider first",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сначала выберите провайдера"
+  },
+  "panel.provider": {
+   "at": "2026-08-29T22:47:49",
+   "en": "Provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер"
+  },
+  "panel.refresh": {
+   "at": "2026-08-29T22:47:50",
+   "en": "Refresh from Gitea",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить из Gitea"
+  },
+  "panel.start": {
+   "at": "2026-08-29T22:47:52",
+   "en": "Start",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Начать"
+  },
+  "panel.startHint": {
+   "at": "2026-08-29T22:47:55",
+   "en": "A dedicated agent session opens for this task. Branch and worktree are created by the agent after its preflight, not here.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Для этой задачи открывается отдельная сессия агента. Ветка и рабочее дерево создаются агентом после предварительной проверки, а не здесь."
+  },
+  "panel.starting": {
+   "at": "2026-08-29T22:47:56",
+   "en": "Starting…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запуск…"
+  },
+  "panel.updated": {
+   "at": "2026-08-29T22:47:57",
+   "en": "last change {ago} ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "последнее изменение {ago} назад"
+  },
+  "plan.counter": {
+   "at": "2026-08-29T22:47:59",
+   "en": "{done} of {total}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{done} из {total}"
+  },
+  "plan.title": {
+   "at": "2026-08-29T22:48:01",
+   "en": "Agent plan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План агента"
+  },
+  "queue.add": {
+   "at": "2026-08-29T22:48:03",
+   "en": "To the queue",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В очередь"
+  },
+  "queue.hint": {
+   "at": "2026-08-29T22:48:06",
+   "en": "The task joins the session queue: the agent takes it when it finishes the current work. Until then the card stays where it is.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Задача добавляется в очередь сессии: агент возьмёт её, когда завершит текущую работу. До этого карточка останется на своём месте."
+  },
+  "queue.option": {
+   "at": "2026-08-29T22:48:08",
+   "en": "{title} - tasks: {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{title} - задач: {n}"
+  },
+  "queue.session": {
+   "at": "2026-08-29T22:48:09",
+   "en": "Session",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сессия"
+  },
+  "queue.title": {
+   "at": "2026-08-29T22:48:12",
+   "en": "Add to a running session",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить в текущую сессию"
+  },
+  "save": {
+   "at": "2026-08-29T22:48:14",
+   "en": "Save",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить"
+  },
+  "section.label": {
+   "at": "2026-08-29T22:48:15",
+   "en": "Kanban",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Канбан"
+  },
+  "settings.loading": {
+   "at": "2026-08-29T22:48:17",
+   "en": "Loading settings…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка настроек…"
+  },
+  "settings.readOnly": {
+   "at": "2026-08-29T22:48:19",
+   "en": "Settings are read-only in this session.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Настройки доступны только для чтения в этой сессии."
+  },
+  "settings.saveFailed": {
+   "at": "2026-08-29T22:48:21",
+   "en": "Failed to save: {fields}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось сохранить: {fields}"
+  },
+  "settings.saved": {
+   "at": "2026-08-29T22:48:23",
+   "en": "Saved.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранено."
+  },
+  "settings.unavailable": {
+   "at": "2026-08-29T22:48:25",
+   "en": "The host does not know the dsh-kanban settings namespace. Restart the Web UI after installing the plugin.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Хост не знает пространство имен настроек dsh-kanban. Перезапустите веб-интерфейс после установки плагина."
+  },
+  "state.queued": {
+   "at": "2026-08-29T22:48:26",
+   "en": "queued · {n}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "в очереди · {n}"
+  },
+  "state.running": {
+   "at": "2026-08-29T22:48:28",
+   "en": "working",
+   "model": "deepseek/deepseek-chat",
+   "ru": "работает"
+  },
+  "state.stopped": {
+   "at": "2026-08-29T22:48:29",
+   "en": "stopped",
+   "model": "deepseek/deepseek-chat",
+   "ru": "остановлено"
+  },
+  "subtitle": {
+   "at": "2026-08-29T22:48:31",
+   "en": "Task board: Gitea issues and a session per task",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доска задач: проблемы Gitea и сессия для каждой задачи"
+  },
+  "sync.failed": {
+   "at": "2026-08-29T22:48:32",
+   "en": "the check is failing",
+   "model": "deepseek/deepseek-chat",
+   "ru": "проверка завершается неудачно"
+  },
+  "sync.lastSeen": {
+   "at": "2026-08-29T22:48:34",
+   "en": "last successful check {ago} ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "последняя успешная проверка {ago} назад"
+  },
+  "sync.never": {
+   "at": "2026-08-29T22:48:35",
+   "en": "not checked with Gitea yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "еще не проверено в Gitea"
+  },
+  "sync.neverSeen": {
+   "at": "2026-08-29T22:48:37",
+   "en": "no successful check since the harness started",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нет успешных проверок с момента запуска тестового стенда"
+  },
+  "sync.okAgo": {
+   "at": "2026-08-29T22:48:38",
+   "en": "checked {ago} ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "проверено {ago} назад"
+  },
+  "sync.running": {
+   "at": "2026-08-29T22:48:40",
+   "en": "checking with Gitea…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "проверка с помощью Gitea…"
+  },
+  "time.day": {
+   "at": "2026-08-29T22:48:41",
+   "en": "{n} d",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} д"
+  },
+  "time.hour": {
+   "at": "2026-08-29T22:48:42",
+   "en": "{n} h",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} ч"
+  },
+  "time.min": {
+   "at": "2026-08-29T22:48:43",
+   "en": "{n} min",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{n} мин"
+  },
+  "time.now": {
+   "at": "2026-08-29T22:48:44",
+   "en": "just now",
+   "model": "deepseek/deepseek-chat",
+   "ru": "только что"
+  },
+  "title": {
+   "at": "2026-08-29T22:48:46",
+   "en": "Kanban",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Канбан"
+  }
+ },
+ "dsh-key-limits": {
+  "activeNoSession": {
+   "at": "2026-08-29T22:48:47",
+   "en": "session",
+   "model": "deepseek/deepseek-chat",
+   "ru": "сессия"
+  },
+  "activeNone": {
+   "at": "2026-08-29T22:48:48",
+   "en": "—",
+   "model": "deepseek/deepseek-chat",
+   "ru": "—"
+  },
+  "add": {
+   "at": "2026-08-29T22:48:50",
+   "en": "Add",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить"
+  },
+  "addKey": {
+   "at": "2026-08-29T22:48:51",
+   "en": "Add key",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить ключ"
+  },
+  "allSub": {
+   "at": "2026-08-29T22:48:53",
+   "en": "All keys",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все ключи"
+  },
+  "allTitle": {
+   "at": "2026-08-29T22:48:54",
+   "en": "Subscription limits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимиты подписки"
+  },
+  "balance": {
+   "at": "2026-08-29T22:48:55",
+   "en": "Balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Баланс"
+  },
+  "cancel": {
+   "at": "2026-08-29T22:48:56",
+   "en": "Cancel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена"
+  },
+  "close": {
+   "at": "2026-08-29T22:48:57",
+   "en": "Close",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть"
+  },
+  "dataPath": {
+   "at": "2026-08-29T22:48:59",
+   "en": "Data: ~/.dsh/storages/dsh-key-limits/",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Данные: ~/.dsh/storages/dsh-key-limits/"
+  },
+  "delete": {
+   "at": "2026-08-29T22:49:01",
+   "en": "Delete",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить"
+  },
+  "deleteConfirm": {
+   "at": "2026-08-29T22:49:03",
+   "en": "Delete key «",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить ключ «"
+  },
+  "errTitle": {
+   "at": "2026-08-29T22:49:05",
+   "en": "Key Limits: UI error",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ограничения ключа: ошибка интерфейса"
+  },
+  "extra": {
+   "at": "2026-08-29T22:49:07",
+   "en": "Extra",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Дополнительно"
+  },
+  "fillFields": {
+   "at": "2026-08-29T22:49:08",
+   "en": "Fill in: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заполните:"
+  },
+  "floatTitle": {
+   "at": "2026-08-29T22:49:10",
+   "en": "Key limits — click: all, drag: move",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимиты клавиш — клик: все, перетаскивание: перемещение"
+  },
+  "labelOptional": {
+   "at": "2026-08-29T22:49:12",
+   "en": "Label (optional)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Метка (необязательно)"
+  },
+  "loading": {
+   "at": "2026-08-29T22:49:14",
+   "en": "Loading…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка…"
+  },
+  "noQuota": {
+   "at": "2026-08-29T22:49:15",
+   "en": "No quota data",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет данных о квоте"
+  },
+  "noSubs": {
+   "at": "2026-08-29T22:49:17",
+   "en": "No keys yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ключей пока нет"
+  },
+  "oneTitle": {
+   "at": "2026-08-29T22:49:18",
+   "en": "Active key limits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимиты активных ключей"
+  },
+  "pctLeft": {
+   "at": "2026-08-29T22:49:20",
+   "en": " left",
+   "model": "deepseek/deepseek-chat",
+   "ru": "слева"
+  },
+  "pickDash": {
+   "at": "2026-08-29T22:49:21",
+   "en": "— choose —",
+   "model": "deepseek/deepseek-chat",
+   "ru": "— выбрать —"
+  },
+  "pickProvider": {
+   "at": "2026-08-29T22:49:23",
+   "en": "Choose a provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите провайдера"
+  },
+  "refresh": {
+   "at": "2026-08-29T22:49:25",
+   "en": "Refresh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить"
+  },
+  "refreshAll": {
+   "at": "2026-08-29T22:49:27",
+   "en": "Refresh all",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить все"
+  },
+  "refreshing": {
+   "at": "2026-08-29T22:49:28",
+   "en": "Refreshing…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновление…"
+  },
+  "remaining": {
+   "at": "2026-08-29T22:55:11",
+   "en": "remaining",
+   "model": "deepseek/deepseek-chat",
+   "ru": "осталось"
+  },
+  "retry": {
+   "at": "2026-08-29T22:49:33",
+   "en": "Retry",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Повторить"
+  },
+  "save": {
+   "at": "2026-08-29T22:49:34",
+   "en": "Save",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить"
+  },
+  "saveError": {
+   "at": "2026-08-29T22:49:35",
+   "en": "save error",
+   "model": "deepseek/deepseek-chat",
+   "ru": "ошибка сохранения"
+  },
+  "secret": {
+   "at": "2026-08-29T22:49:36",
+   "en": "Secret / key",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Секрет / ключ"
+  },
+  "stale": {
+   "at": "2026-08-29T22:49:37",
+   "en": "stale",
+   "model": "deepseek/deepseek-chat",
+   "ru": "устаревший"
+  },
+  "subtitle": {
+   "at": "2026-08-29T22:49:39",
+   "en": "API keys and subscription quotas",
+   "model": "deepseek/deepseek-chat",
+   "ru": "API-ключи и квоты подписки"
+  },
+  "title": {
+   "at": "2026-08-29T22:49:41",
+   "en": "Key Limits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Лимиты ключей"
+  },
+  "uiHint": {
+   "at": "2026-08-29T22:49:43",
+   "en": "Float chip and composer bar — cordis ui.*",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Плавающий чип и строка компоновки — интерфейс cordis."
+  },
+  "updated": {
+   "at": "2026-08-29T22:49:44",
+   "en": "Updated ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено"
+  }
+ },
  "dsh-key-rotation": {
   "addKey": {
    "at": "2026-08-25T19:09:02",
@@ -1935,6 +5499,18 @@
    "en": "cooling down, {s}s",
    "model": "deepseek/deepseek-chat",
    "ru": "охлаждение, {s}с"
+  },
+  "keyExpired": {
+   "at": "2026-08-29T22:49:46",
+   "en": "expired",
+   "model": "deepseek/deepseek-chat",
+   "ru": "истёк"
+  },
+  "keyExpiringSoon": {
+   "at": "2026-08-29T22:49:47",
+   "en": "expires in {n} d",
+   "model": "deepseek/deepseek-chat",
+   "ru": "истекает через {n} д"
   },
   "keyFromEnv": {
    "at": "2026-08-25T19:09:32",
@@ -2073,6 +5649,12 @@
    "en": "Saving…",
    "model": "deepseek/deepseek-chat",
    "ru": "Сохранение…"
+  },
+  "scheduleDays": {
+   "at": "2026-08-29T22:49:48",
+   "en": "Rotation schedule (days, 0=off)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "График ротации (дни, 0=выключено)"
   },
   "subtitle": {
    "at": "2026-08-25T19:10:15",
@@ -2238,6 +5820,48 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Нет несоответствий зависимостей на уровне предупреждений"
   },
+  "comments": {
+   "at": "2026-08-29T22:49:50",
+   "en": "Comments",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Комментарии"
+  },
+  "commentsError": {
+   "at": "2026-08-29T22:49:52",
+   "en": "Comments could not be loaded. Check your connection and try again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось загрузить комментарии. Проверьте подключение и попробуйте снова."
+  },
+  "commentsLoading": {
+   "at": "2026-08-29T22:49:53",
+   "en": "Loading comments…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка комментариев…"
+  },
+  "commentsNote": {
+   "at": "2026-08-29T22:49:55",
+   "en": "Comments come from GitHub Discussions. Opening this connects to giscus.app and GitHub; posting needs a GitHub account.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Комментарии поступают из GitHub Discussions. Открытие этого подключается к giscus.app и GitHub; для публикации требуется аккаунт GitHub."
+  },
+  "commentsOnGitHub": {
+   "at": "2026-08-29T22:49:57",
+   "en": "Read the discussion on GitHub",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Прочитайте обсуждение на GitHub"
+  },
+  "commentsRetry": {
+   "at": "2026-08-29T22:49:58",
+   "en": "Try again",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Попробуйте снова"
+  },
+  "commentsTitle": {
+   "at": "2026-08-29T22:49:59",
+   "en": "Comments",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Комментарии"
+  },
   "compatRiskBanner": {
    "at": "2026-08-25T19:10:54",
    "en": "Compatibility risk detected — open Diagnostics before restarting, or roll this operation back.",
@@ -2388,6 +6012,96 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Повторить"
   },
+  "noteAdd": {
+   "at": "2026-08-29T22:50:00",
+   "en": "Note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заметка"
+  },
+  "noteEdit": {
+   "at": "2026-08-29T22:50:02",
+   "en": "Edit note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Редактировать заметку"
+  },
+  "noteMine": {
+   "at": "2026-08-29T22:50:04",
+   "en": "My note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Моя заметка"
+  },
+  "notePlaceholder": {
+   "at": "2026-08-29T22:50:05",
+   "en": "Describe it in your own words. This replaces the author description.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Опишите это своими словами. Это заменит описание автора."
+  },
+  "noteSave": {
+   "at": "2026-08-29T22:50:07",
+   "en": "Save",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить"
+  },
+  "noteSeeMine": {
+   "at": "2026-08-29T22:50:08",
+   "en": "Back to my note",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вернуться к моей заметке"
+  },
+  "noteSeeTheirs": {
+   "at": "2026-08-29T22:50:09",
+   "en": "Show the author description",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать описание автора"
+  },
+  "noteTheirs": {
+   "at": "2026-08-29T22:50:11",
+   "en": "Original",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Оригинал"
+  },
+  "notesCommits": {
+   "at": "2026-08-29T22:50:12",
+   "en": "Commits",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Коммиты"
+  },
+  "notesCommitsRecent": {
+   "at": "2026-08-29T22:50:14",
+   "en": "Recent commits (could not be aligned with your installed version — for reference only)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последние коммиты (могут не совпадать с установленной версией — только для справки)"
+  },
+  "notesLink": {
+   "at": "2026-08-29T22:50:15",
+   "en": "What changed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Что изменилось"
+  },
+  "notesLoadFail": {
+   "at": "2026-08-29T22:50:17",
+   "en": "Update notes are unavailable right now — try again later.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновления сейчас недоступны — попробуйте позже."
+  },
+  "notesNone": {
+   "at": "2026-08-29T22:50:18",
+   "en": "This plugin does not publish update notes.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Этот плагин не публикует заметки об обновлениях."
+  },
+  "notesNpm": {
+   "at": "2026-08-29T22:50:20",
+   "en": "Version publish times",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Время публикации версии"
+  },
+  "notesRelease": {
+   "at": "2026-08-29T22:50:21",
+   "en": "Release notes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заметки о выпуске"
+  },
   "opBlockedCard": {
    "at": "2026-08-25T19:11:44",
    "en": "Cannot install · details",
@@ -2507,6 +6221,12 @@
    "en": "Tasks",
    "model": "deepseek/deepseek-chat",
    "ru": "Задачи"
+  },
+  "orphanBundle": {
+   "at": "2026-08-29T22:50:23",
+   "en": "⚠️ The next start will fail: the profile declares these bundles but they are not installed. Reinstall them, or remove them from dsh.profile.bundles in the profile package.json:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "⚠️ Следующий запуск завершится ошибкой: профиль объявляет эти пакеты, но они не установлены. Переустановите их или удалите из dsh.profile.bundles в файле package.json профиля:"
   },
   "peerInfoUnverified": {
    "at": "2026-08-26T14:44:26",
@@ -3332,6 +7052,18 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Дополнительные настройки"
   },
+  "statusIndicator": {
+   "at": "2026-08-29T22:50:25",
+   "en": "Status indicator (Online/Offline)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Индикатор статуса (Онлайн/Оффлайн)"
+  },
+  "statusIndicatorHint": {
+   "at": "2026-08-29T22:50:27",
+   "en": "Sets the bot short description; bots have no presence dot. Opt-in, visible to all users.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Устанавливает краткое описание бота; боты не имеют точки присутствия. По желанию, видно всем пользователям."
+  },
   "telegram": {
    "at": "2026-08-25T19:14:31",
    "en": "Telegram",
@@ -3451,6 +7183,1328 @@
    "en": "Full HTTPS URL Telegram will POST to",
    "model": "deepseek/deepseek-chat",
    "ru": "Полный HTTPS-URL, на который Telegram будет отправлять POST-запросы"
+  }
+ },
+ "dsh-skill-hub": {
+  "badge.source.bundled": {
+   "at": "2026-08-29T22:50:29",
+   "en": "bundled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "в комплекте"
+  },
+  "badge.source.custom": {
+   "at": "2026-08-29T22:50:31",
+   "en": "custom",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользовательский"
+  },
+  "badge.source.project-agents": {
+   "at": "2026-08-29T22:50:32",
+   "en": "project .agents",
+   "model": "deepseek/deepseek-chat",
+   "ru": "проект .агенты"
+  },
+  "badge.source.project-dsh": {
+   "at": "2026-08-29T22:50:34",
+   "en": "project .dsh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "проект .dsh"
+  },
+  "badge.source.runtime": {
+   "at": "2026-08-29T22:50:35",
+   "en": "runtime",
+   "model": "deepseek/deepseek-chat",
+   "ru": "время выполнения"
+  },
+  "badge.source.user-agents": {
+   "at": "2026-08-29T22:50:36",
+   "en": "user .agents",
+   "model": "deepseek/deepseek-chat",
+   "ru": "пользователь .агенты"
+  },
+  "badge.source.user-dsh": {
+   "at": "2026-08-29T22:50:38",
+   "en": "user .dsh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "пользователь .dsh"
+  },
+  "delete.confirm": {
+   "at": "2026-08-29T22:50:39",
+   "en": "Move to trash",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить в корзину"
+  },
+  "delete.confirmText": {
+   "at": "2026-08-29T22:50:42",
+   "en": "Move \"{name}\" to trash? It can be restored anytime.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить \"{name}\" в корзину? Его можно будет восстановить в любое время."
+  },
+  "delete.confirmTitle": {
+   "at": "2026-08-29T22:50:43",
+   "en": "Move to trash?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить в корзину?"
+  },
+  "detail.addedAt": {
+   "at": "2026-08-29T22:55:12",
+   "en": "Added",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавлено"
+  },
+  "detail.back": {
+   "at": "2026-08-29T22:50:48",
+   "en": "Back to list",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Назад к списку"
+  },
+  "detail.groups": {
+   "at": "2026-08-29T22:50:51",
+   "en": "Groups",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Группы"
+  },
+  "detail.loading": {
+   "at": "2026-08-29T22:50:54",
+   "en": "Loading skill body…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка тела навыка…"
+  },
+  "detail.path": {
+   "at": "2026-08-29T22:50:55",
+   "en": "Path",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Путь"
+  },
+  "detail.provider": {
+   "at": "2026-08-29T22:50:56",
+   "en": "Provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер"
+  },
+  "detail.updatedAt": {
+   "at": "2026-08-29T22:50:57",
+   "en": "Updated",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено"
+  },
+  "detail.whenToUse": {
+   "at": "2026-08-29T22:55:18",
+   "en": "When to use",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Когда использовать"
+  },
+  "entry.label": {
+   "at": "2026-08-29T22:51:05",
+   "en": "Skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Навыки"
+  },
+  "entry.tooltip": {
+   "at": "2026-08-29T22:51:07",
+   "en": "Skill hub: browse, group, and sync local skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Центр навыков: просматривайте, группируйте и синхронизируйте локальные навыки"
+  },
+  "err.dismiss": {
+   "at": "2026-08-29T22:51:08",
+   "en": "Dismiss",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Скрыть"
+  },
+  "filter.allSources": {
+   "at": "2026-08-29T22:51:09",
+   "en": "All sources",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все источники"
+  },
+  "filter.private": {
+   "at": "2026-08-29T22:51:10",
+   "en": "Personal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Личное"
+  },
+  "form.busy": {
+   "at": "2026-08-29T22:51:11",
+   "en": "Creating…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создание…"
+  },
+  "form.cancel": {
+   "at": "2026-08-29T22:51:13",
+   "en": "Cancel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена"
+  },
+  "form.capabilityHint": {
+   "at": "2026-08-29T22:51:14",
+   "en": "Choosing a capability: repeatable method → skill; external system → MCP; long-term knowledge → knowledge base.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выбор способности: повторяемый метод → навык; внешняя система → MCP; долгосрочные знания → база знаний."
+  },
+  "form.desc": {
+   "at": "2026-08-29T22:51:16",
+   "en": "Description (one routing sentence)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Описание (одно предложение о маршрутизации)"
+  },
+  "form.descPlaceholder": {
+   "at": "2026-08-29T22:51:19",
+   "en": "One line on what it does (with trigger words) — agents auto-activate from this",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Одна строка о том, что она делает (с триггерными словами) — агенты автоматически активируются из этого"
+  },
+  "form.error": {
+   "at": "2026-08-29T22:51:20",
+   "en": "Create failed: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создание не удалось:"
+  },
+  "form.name": {
+   "at": "2026-08-29T22:51:21",
+   "en": "Skill name (kebab-case, e.g. code-review)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Название навыка (в формате kebab-case, например, code-review)"
+  },
+  "form.root": {
+   "at": "2026-08-29T22:51:22",
+   "en": "Target root",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Целевой корень"
+  },
+  "form.submit": {
+   "at": "2026-08-29T22:51:24",
+   "en": "Create",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создать"
+  },
+  "form.success": {
+   "at": "2026-08-29T22:51:25",
+   "en": "Created: ",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Создано:"
+  },
+  "group.bundled": {
+   "at": "2026-08-29T22:51:28",
+   "en": "Bundled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В комплекте"
+  },
+  "group.custom": {
+   "at": "2026-08-29T22:51:29",
+   "en": "Custom directories",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользовательские каталоги"
+  },
+  "group.other": {
+   "at": "2026-08-29T22:51:30",
+   "en": "Other sources",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Другие источники"
+  },
+  "group.project-agents": {
+   "at": "2026-08-29T22:51:32",
+   "en": "Project .agents/skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проект .agents/навыки"
+  },
+  "group.project-dsh": {
+   "at": "2026-08-29T22:51:33",
+   "en": "Project .dsh/skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проект .dsh/навыки"
+  },
+  "group.runtime": {
+   "at": "2026-08-29T22:51:35",
+   "en": "Runtime",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Время выполнения"
+  },
+  "group.user-agents": {
+   "at": "2026-08-29T22:51:37",
+   "en": "User ~/.agents/skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользователь ~/.agents/skills"
+  },
+  "group.user-dsh": {
+   "at": "2026-08-29T22:51:38",
+   "en": "User ~/.dsh/skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользователь ~/.dsh/skills"
+  },
+  "groups.closeAll": {
+   "at": "2026-08-29T22:51:40",
+   "en": "Close all",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть все"
+  },
+  "groups.conflictText": {
+   "at": "2026-08-29T22:51:41",
+   "en": "These skills are also enabled in other groups; closing them affects those groups:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Эти навыки также активированы в других группах; их отключение повлияет на эти группы:"
+  },
+  "groups.conflictTitle": {
+   "at": "2026-08-29T22:51:43",
+   "en": "Close this group?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть эту группу?"
+  },
+  "groups.delete": {
+   "at": "2026-08-29T22:51:47",
+   "en": "Delete scene",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить сцену"
+  },
+  "groups.edit": {
+   "at": "2026-08-29T22:51:48",
+   "en": "Edit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Редактировать"
+  },
+  "groups.empty": {
+   "at": "2026-08-29T22:51:50",
+   "en": "No scenes yet. Create one and start categorizing skills.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сцен пока нет. Создайте одну и начните классифицировать навыки."
+  },
+  "groups.keepOn": {
+   "at": "2026-08-29T22:51:52",
+   "en": "Keep on",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Продолжать"
+  },
+  "groups.membersHint": {
+   "at": "2026-08-29T22:51:53",
+   "en": "Check skills to add to this scene (disabled skills included).",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите навыки для добавления в эту сцену (включая отключенные навыки)."
+  },
+  "groups.merge": {
+   "at": "2026-08-29T22:51:55",
+   "en": "Merge",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Объединить"
+  },
+  "groups.namePlaceholder": {
+   "at": "2026-08-29T22:51:57",
+   "en": "Scene name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Название сцены"
+  },
+  "groups.new": {
+   "at": "2026-08-29T22:51:58",
+   "en": "New scene",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новая сцена"
+  },
+  "groups.noCollections": {
+   "at": "2026-08-29T22:51:59",
+   "en": "No source groups yet. Import skills from the market to group them by source.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пока нет групп источников. Импортируйте навыки с рынка, чтобы сгруппировать их по источникам."
+  },
+  "groups.noWritable": {
+   "at": "2026-08-29T22:52:01",
+   "en": "No writable skills in this group (read-only skills cannot be switched from the hub)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет доступных для записи навыков в этой группе (навыки только для чтения нельзя переключить из хаба)"
+  },
+  "groups.personal": {
+   "at": "2026-08-29T22:52:03",
+   "en": "Personal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Личное"
+  },
+  "groups.project": {
+   "at": "2026-08-29T22:52:04",
+   "en": "Project",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проект"
+  },
+  "groups.rename": {
+   "at": "2026-08-29T22:52:06",
+   "en": "Save name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить имя"
+  },
+  "groups.saveMembers": {
+   "at": "2026-08-29T22:52:11",
+   "en": "Save members",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить участников"
+  },
+  "groups.subdivide": {
+   "at": "2026-08-29T22:52:12",
+   "en": "Split",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Разделить"
+  },
+  "legend.hint": {
+   "at": "2026-08-29T22:52:14",
+   "en": "At most one dot per skill; no dot = not invocable.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не более одной точки на навык; отсутствие точки = нельзя вызвать."
+  },
+  "legend.model": {
+   "at": "2026-08-29T22:52:16",
+   "en": "Model-invocable — agents may call automatically",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Модель, доступная для вызова — агенты могут вызывать автоматически"
+  },
+  "legend.user": {
+   "at": "2026-08-29T22:52:18",
+   "en": "User-invocable — explicit invocation only",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пользовательский вызов — только явный вызов"
+  },
+  "market.add": {
+   "at": "2026-08-29T22:52:20",
+   "en": "Add",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить"
+  },
+  "market.addPlaceholder": {
+   "at": "2026-08-29T22:52:21",
+   "en": "owner/repo or https://github.com/…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "владелец/репозиторий или https://github.com/…"
+  },
+  "market.addSource": {
+   "at": "2026-08-29T22:52:22",
+   "en": "Add source",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавить источник"
+  },
+  "market.branchConfirm": {
+   "at": "2026-08-29T22:52:24",
+   "en": "Confirm",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подтвердить"
+  },
+  "market.branchHint": {
+   "at": "2026-08-29T22:52:26",
+   "en": "This repo has no releases. Pick a branch to track (main by default):",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В этом репозитории нет релизов. Выберите ветку для отслеживания (по умолчанию main):"
+  },
+  "market.branchTitle": {
+   "at": "2026-08-29T22:52:30",
+   "en": "Choose a branch",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выберите ветку"
+  },
+  "market.catalog.anthropics": {
+   "at": "2026-08-29T22:52:31",
+   "en": "Official Anthropic skill collection (Claude Skills)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Официальная коллекция навыков Anthropic (Claude Skills)"
+  },
+  "market.catalog.mattpocock": {
+   "at": "2026-08-29T22:52:33",
+   "en": "Matt Pocock skill collection",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Коллекция навыков Matt Pocock"
+  },
+  "market.catalog.openDesign": {
+   "at": "2026-08-29T22:52:35",
+   "en": "Design skill collection (design-templates)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Коллекция навыков дизайна (design-templates)"
+  },
+  "market.catalog.superpowers": {
+   "at": "2026-08-29T22:52:36",
+   "en": "Superpowers community skill collection",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Коллекция навыков сообщества Superpowers"
+  },
+  "market.catalogHint": {
+   "at": "2026-08-29T22:52:39",
+   "en": "Curated skill repos — add one to scan and install, with ongoing update checks.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Кураторские репозитории навыков — добавьте один для сканирования и установки с проверкой обновлений."
+  },
+  "market.check": {
+   "at": "2026-08-29T22:52:40",
+   "en": "Check",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить"
+  },
+  "market.checkAll": {
+   "at": "2026-08-29T22:52:41",
+   "en": "Check all",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить все"
+  },
+  "market.checkUpdate": {
+   "at": "2026-08-29T22:52:48",
+   "en": "Check for updates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить наличие обновлений"
+  },
+  "market.checking": {
+   "at": "2026-08-29T22:52:49",
+   "en": "Checking…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка…"
+  },
+  "market.deleteSource": {
+   "at": "2026-08-29T22:52:50",
+   "en": "Remove source",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить источник"
+  },
+  "market.deletedUpstream": {
+   "at": "2026-08-29T22:52:52",
+   "en": "{count} deleted upstream",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} удалённых вышестоящих"
+  },
+  "market.installed": {
+   "at": "2026-08-29T22:52:53",
+   "en": "{count} installed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} установлено"
+  },
+  "market.newRelease": {
+   "at": "2026-08-29T22:52:56",
+   "en": "New release v{version}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новый релиз v{version}"
+  },
+  "market.noSources": {
+   "at": "2026-08-29T22:52:59",
+   "en": "No market sources yet. Add one from the built-in catalog below, or enter a GitHub repo.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет источников рынка. Добавьте один из встроенного каталога ниже или введите репозиторий GitHub."
+  },
+  "market.removeHint": {
+   "at": "2026-08-29T22:53:00",
+   "en": "Removing a source does not affect installed skills.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удаление источника не влияет на установленные навыки."
+  },
+  "market.scan": {
+   "at": "2026-08-29T22:53:02",
+   "en": "Scan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сканировать"
+  },
+  "market.scanning": {
+   "at": "2026-08-29T22:53:03",
+   "en": "Scanning…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сканирование…"
+  },
+  "market.sync": {
+   "at": "2026-08-29T22:53:06",
+   "en": "Sync",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизация"
+  },
+  "market.syncCancel": {
+   "at": "2026-08-29T22:53:07",
+   "en": "Skip",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пропустить"
+  },
+  "market.syncNone": {
+   "at": "2026-08-29T22:53:09",
+   "en": "No local skills tracked from this repo yet.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Локальные навыки из этого репозитория еще не отслеживаются."
+  },
+  "market.syncText": {
+   "at": "2026-08-29T22:53:11",
+   "en": "Market source aligned to {ref}. Update these local skills?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Источник рынка согласован с {ref}. Обновить эти локальные навыки?"
+  },
+  "market.syncTitle": {
+   "at": "2026-08-29T22:53:12",
+   "en": "Update local skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить локальные навыки"
+  },
+  "market.syncing": {
+   "at": "2026-08-29T22:53:14",
+   "en": "Syncing…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизация…"
+  },
+  "market.title": {
+   "at": "2026-08-29T22:53:15",
+   "en": "Market",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Рынок"
+  },
+  "market.upToDate": {
+   "at": "2026-08-29T22:53:16",
+   "en": "Up to date",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено"
+  },
+  "market.updatable": {
+   "at": "2026-08-29T22:53:18",
+   "en": "{count} updatable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} доступно для обновления"
+  },
+  "market.update": {
+   "at": "2026-08-29T22:53:19",
+   "en": "Update",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить"
+  },
+  "market.updateAll": {
+   "at": "2026-08-29T22:53:20",
+   "en": "Update all",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить все"
+  },
+  "market.updateAllConfirmText": {
+   "at": "2026-08-29T22:53:22",
+   "en": "The updatable skills of these sources will be overwritten with their latest upstream versions:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновляемые навыки этих источников будут перезаписаны их последними версиями из вышестоящих репозиториев:"
+  },
+  "market.updateAllConfirmTitle": {
+   "at": "2026-08-29T22:53:23",
+   "en": "Update every skill?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить каждый навык?"
+  },
+  "market.updateAllDone": {
+   "at": "2026-08-29T22:53:24",
+   "en": "Updated {count} sources",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено {count} источников"
+  },
+  "market.updateAllItem": {
+   "at": "2026-08-29T22:53:26",
+   "en": "{repo} ({count} skills)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{repo} ({count} навыков)"
+  },
+  "market.updateCount": {
+   "at": "2026-08-29T22:53:28",
+   "en": "Update {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить {count}"
+  },
+  "market.updated": {
+   "at": "2026-08-29T22:53:29",
+   "en": "Updates available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доступны обновления"
+  },
+  "panel.count": {
+   "at": "2026-08-29T22:53:31",
+   "en": "{count} skills total",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} навыков всего"
+  },
+  "panel.diagnostics": {
+   "at": "2026-08-29T22:55:20",
+   "en": "Discovery diagnostics",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Диагностика обнаружения"
+  },
+  "panel.disabled": {
+   "at": "2026-08-29T22:53:35",
+   "en": "Disabled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отключено"
+  },
+  "panel.disabledCount": {
+   "at": "2026-08-29T22:53:36",
+   "en": "{count} disabled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} отключено"
+  },
+  "panel.empty": {
+   "at": "2026-08-29T22:53:38",
+   "en": "No matching skills.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет подходящих навыков."
+  },
+  "panel.emptyAll": {
+   "at": "2026-08-29T22:53:40",
+   "en": "No skills installed yet. Create the first one.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ещё не установлено ни одного навыка. Создайте первый."
+  },
+  "panel.enabled": {
+   "at": "2026-08-29T22:53:41",
+   "en": "Enabled",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Включено"
+  },
+  "panel.incomplete": {
+   "at": "2026-08-29T22:53:42",
+   "en": "(catalog may be incomplete)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "(каталог может быть неполным)"
+  },
+  "panel.loading": {
+   "at": "2026-08-29T22:53:44",
+   "en": "Loading…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка…"
+  },
+  "panel.new": {
+   "at": "2026-08-29T22:53:46",
+   "en": "New Skill",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новый навык"
+  },
+  "panel.search": {
+   "at": "2026-08-29T22:53:47",
+   "en": "Search skills…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Поиск навыков…"
+  },
+  "panel.title": {
+   "at": "2026-08-29T22:53:48",
+   "en": "Skill Hub",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Центр навыков"
+  },
+  "panel.workspaceClear": {
+   "at": "2026-08-29T22:53:50",
+   "en": "Clear workspace",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить рабочую область"
+  },
+  "panel.workspaceHint": {
+   "at": "2026-08-29T22:53:52",
+   "en": "Enter a project path to also show that workspace's .dsh/skills and .agents/skills skills (read-only); clear + Enter to return to the user-level view.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Введите путь к проекту, чтобы также отобразить навыки из .dsh/skills и .agents/skills этого рабочего пространства (только для чтения); очистите + Enter, чтобы вернуться к пользовательскому представлению."
+  },
+  "panel.workspacePlaceholder": {
+   "at": "2026-08-29T22:53:53",
+   "en": "Workspace path (Enter to apply)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Путь к рабочей области (нажмите Enter для применения)"
+  },
+  "repo.cancel": {
+   "at": "2026-08-29T22:53:55",
+   "en": "Cancel",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отмена"
+  },
+  "repo.cancelled": {
+   "at": "2026-08-29T22:53:56",
+   "en": "Cancelled · {imported}/{total} kept, temp files cleaned",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменено · {imported}/{total} сохранено, временные файлы удалены"
+  },
+  "repo.clearAll": {
+   "at": "2026-08-29T22:53:58",
+   "en": "Clear",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить"
+  },
+  "repo.empty": {
+   "at": "2026-08-29T22:53:59",
+   "en": "No importable skills found.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Импортируемые навыки не найдены."
+  },
+  "repo.existing": {
+   "at": "2026-08-29T22:54:00",
+   "en": "Existing",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Существующий"
+  },
+  "repo.failed": {
+   "at": "2026-08-29T22:54:02",
+   "en": "Failed {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось {count}"
+  },
+  "repo.files": {
+   "at": "2026-08-29T22:54:05",
+   "en": "{count} files · {size}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} файлов · {size}"
+  },
+  "repo.import": {
+   "at": "2026-08-29T22:54:06",
+   "en": "Import selected ({count})",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Импортировать выбранные ({count})"
+  },
+  "repo.imported": {
+   "at": "2026-08-29T22:54:08",
+   "en": "Imported {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Импортировано {count}"
+  },
+  "repo.importing": {
+   "at": "2026-08-29T22:54:10",
+   "en": "Importing…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Импорт…"
+  },
+  "repo.importingCurrent": {
+   "at": "2026-08-29T22:54:11",
+   "en": "Importing: {name} ({done}/{total})",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Импорт: {name} ({done}/{total})"
+  },
+  "repo.ready": {
+   "at": "2026-08-29T22:54:13",
+   "en": "{count} importable skills found",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Найдено {count} импортируемых навыков"
+  },
+  "repo.root.designTemplates": {
+   "at": "2026-08-29T22:54:14",
+   "en": "Templates design-templates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Шаблоны дизайна {design-templates}"
+  },
+  "repo.root.generic": {
+   "at": "2026-08-29T22:54:16",
+   "en": "{root}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{root}"
+  },
+  "repo.root.skills": {
+   "at": "2026-08-29T22:54:17",
+   "en": "Skills",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Навыки"
+  },
+  "repo.selectAll": {
+   "at": "2026-08-29T22:54:19",
+   "en": "Select all",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выбрать все"
+  },
+  "repo.skippedExisting": {
+   "at": "2026-08-29T22:54:20",
+   "en": "Skipped existing {count}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пропущено существующих {count}"
+  },
+  "row.delete": {
+   "at": "2026-08-29T22:54:22",
+   "en": "Move to trash",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переместить в корзину"
+  },
+  "row.disable": {
+   "at": "2026-08-29T22:54:23",
+   "en": "Disable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отключить"
+  },
+  "row.enable": {
+   "at": "2026-08-29T22:54:25",
+   "en": "Enable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Включить"
+  },
+  "row.open": {
+   "at": "2026-08-29T22:54:27",
+   "en": "View {name} details (Enter)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Просмотреть детали {name} (Enter)"
+  },
+  "row.readonly": {
+   "at": "2026-08-29T22:54:28",
+   "en": "read-only",
+   "model": "deepseek/deepseek-chat",
+   "ru": "только для чтения"
+  },
+  "settings.announceToAgent": {
+   "at": "2026-08-29T22:54:31",
+   "en": "Announce to agent",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сообщить агенту"
+  },
+  "settings.announceToAgentHint": {
+   "at": "2026-08-29T22:55:22",
+   "en": "Adds a system-prompt section so agents know how to collaborate when users mention skill management.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавляет раздел с системным приглашением, чтобы агенты знали, как взаимодействовать, когда пользователи упоминают управление навыками."
+  },
+  "settings.collapse": {
+   "at": "2026-08-29T22:55:24",
+   "en": "Hide settings",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Скрыть настройки"
+  },
+  "settings.description": {
+   "at": "2026-08-29T22:55:26",
+   "en": "Manage the local dsh skill catalog: browse, group, sync, and scaffold skills.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Управляйте локальным каталогом навыков dsh: просматривайте, группируйте, синхронизируйте и создавайте шаблоны навыков."
+  },
+  "settings.discard": {
+   "at": "2026-08-29T22:55:29",
+   "en": "Discard",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отменить"
+  },
+  "settings.dotModelColor": {
+   "at": "2026-08-29T22:55:30",
+   "en": "Model-invocable dot color",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Цвет точки, доступной для вызова модели"
+  },
+  "settings.dotModelColorHint": {
+   "at": "2026-08-29T22:55:32",
+   "en": "Color of the blue \"model-callable\" dot in the skill panel and the chat / menu (#rrggbb).",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Цвет синей точки «model-callable» в панели навыков и чате / меню (#rrggbb)."
+  },
+  "settings.dotUserColor": {
+   "at": "2026-08-29T22:55:33",
+   "en": "User-invocable dot color",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Цвет точки, вызываемый пользователем"
+  },
+  "settings.dotUserColorHint": {
+   "at": "2026-08-29T22:55:36",
+   "en": "Color of the green \"user-only\" dot in the skill panel and the chat / menu (#rrggbb).",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Цвет зелёной точки «только для пользователя» на панели навыков и в чате / меню (#rrggbb)."
+  },
+  "settings.enabled": {
+   "at": "2026-08-29T22:55:37",
+   "en": "Enable plugin",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Включить плагин"
+  },
+  "settings.enabledHint": {
+   "at": "2026-08-29T22:55:39",
+   "en": "Disables the hub routes, entries, and announcement.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Отключает маршруты хаба, записи и объявления."
+  },
+  "settings.expand": {
+   "at": "2026-08-29T22:55:41",
+   "en": "Show settings",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать настройки"
+  },
+  "settings.inherit": {
+   "at": "2026-08-29T22:55:43",
+   "en": "Inherit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Наследовать"
+  },
+  "settings.notExposed": {
+   "at": "2026-08-29T22:55:44",
+   "en": "This deployment does not expose the settings namespace.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Это развертывание не предоставляет доступ к пространству имен настроек."
+  },
+  "settings.off": {
+   "at": "2026-08-29T22:55:46",
+   "en": "Off",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Выключено"
+  },
+  "settings.on": {
+   "at": "2026-08-29T22:55:48",
+   "en": "On",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Включено"
+  },
+  "settings.overridden": {
+   "at": "2026-08-29T22:55:49",
+   "en": "Overridden",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Переопределено"
+  },
+  "settings.readOnly": {
+   "at": "2026-08-29T22:55:51",
+   "en": "This deployment stores settings read-only.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Это развертывание сохраняет настройки только для чтения."
+  },
+  "settings.reset": {
+   "at": "2026-08-29T22:55:52",
+   "en": "Reset to default",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сбросить до значений по умолчанию"
+  },
+  "settings.save": {
+   "at": "2026-08-29T22:55:54",
+   "en": "Save",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранить"
+  },
+  "settings.saveFailed": {
+   "at": "2026-08-29T22:55:55",
+   "en": "The deployment did not accept these values; they were left for you to correct.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Развертывание не приняло эти значения; они были оставлены для вас, чтобы исправить."
+  },
+  "settings.saving": {
+   "at": "2026-08-29T22:55:56",
+   "en": "Saving…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сохранение…"
+  },
+  "settings.showGroupSummary": {
+   "at": "2026-08-29T22:55:58",
+   "en": "Show group summaries",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать сводки групп"
+  },
+  "settings.showGroupSummaryHint": {
+   "at": "2026-08-29T22:56:00",
+   "en": "Summarize invocation count and last-used time after group titles.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обобщить количество вызовов и время последнего использования после заголовков групп."
+  },
+  "settings.showUseCount": {
+   "at": "2026-08-29T22:56:01",
+   "en": "Show invocation count",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать количество вызовов"
+  },
+  "settings.showUseCountHint": {
+   "at": "2026-08-29T22:56:04",
+   "en": "Show the amber invocation count beside each skill name.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показывать количество янтарных призывов рядом с названием каждого навыка."
+  },
+  "settings.showUseTime": {
+   "at": "2026-08-29T22:56:06",
+   "en": "Show last-used time",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показать время последнего использования"
+  },
+  "settings.showUseTimeHint": {
+   "at": "2026-08-29T22:56:09",
+   "en": "Show relative last-used time on the name row (e.g. \"3 d ago\").",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Показывать относительное время последнего использования в строке имени (например, \"3 дн. назад\")."
+  },
+  "settings.statsScanMinutes": {
+   "at": "2026-08-29T22:56:10",
+   "en": "Auto stats interval (minutes)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Интервал автостатистики (минуты)"
+  },
+  "settings.statsScanMinutesHint": {
+   "at": "2026-08-29T22:56:13",
+   "en": "How often the background session-log scan runs (min 1); heavy scans automatically stretch it.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Как часто выполняется сканирование журнала сеансов в фоновом режиме (минимум 1); интенсивные сканирования автоматически увеличивают интервал."
+  },
+  "settings.statsWindowDays": {
+   "at": "2026-08-29T22:56:14",
+   "en": "Stats window (days)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Окно статистики (дни)"
+  },
+  "settings.statsWindowDaysHint": {
+   "at": "2026-08-29T22:56:16",
+   "en": "Count only usage within the last N days (default 14); 0 = full history. Changes apply immediately.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Учитывать использование только за последние N дней (по умолчанию 14); 0 = полная история. Изменения применяются сразу."
+  },
+  "settings.title": {
+   "at": "2026-08-29T22:56:18",
+   "en": "Skill Hub",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Центр навыков"
+  },
+  "settings.unsaved": {
+   "at": "2026-08-29T22:56:20",
+   "en": "Unsaved",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не сохранено"
+  },
+  "sort.added": {
+   "at": "2026-08-29T22:56:22",
+   "en": "By added",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Добавлено"
+  },
+  "sort.name": {
+   "at": "2026-08-29T22:56:24",
+   "en": "By name",
+   "model": "deepseek/deepseek-chat",
+   "ru": "По имени"
+  },
+  "source.check": {
+   "at": "2026-08-29T22:56:30",
+   "en": "Check for updates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить наличие обновлений"
+  },
+  "source.checkHint": {
+   "at": "2026-08-29T22:56:32",
+   "en": "Click to check the upstream for updates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нажмите, чтобы проверить наличие обновлений в вышестоящем репозитории"
+  },
+  "source.checking": {
+   "at": "2026-08-29T22:56:34",
+   "en": "Checking…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка…"
+  },
+  "source.clearTrash": {
+   "at": "2026-08-29T22:56:35",
+   "en": "Empty trash",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить корзину"
+  },
+  "source.clearTrashConfirm": {
+   "at": "2026-08-29T22:56:37",
+   "en": "Delete permanently",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить навсегда"
+  },
+  "source.clearTrashConfirmText": {
+   "at": "2026-08-29T22:56:39",
+   "en": "Skills in the trash will be permanently deleted and cannot be restored.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Навыки в корзине будут удалены навсегда и не могут быть восстановлены."
+  },
+  "source.clearTrashConfirmTitle": {
+   "at": "2026-08-29T22:56:40",
+   "en": "Empty the trash?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Очистить корзину?"
+  },
+  "source.commit": {
+   "at": "2026-08-29T22:56:42",
+   "en": "Synced commit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизированный коммит"
+  },
+  "source.deleteConfirmText": {
+   "at": "2026-08-29T22:56:44",
+   "en": "These skills were removed upstream; their local directories move to trash (restorable):",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Эти навыки были удалены в основном репозитории; их локальные папки перемещены в корзину (можно восстановить):"
+  },
+  "source.deleteConfirmTitle": {
+   "at": "2026-08-29T22:56:45",
+   "en": "Follow upstream deletion?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Следовать удалению вышестоящего?"
+  },
+  "source.deleteGroup": {
+   "at": "2026-08-29T22:56:47",
+   "en": "Delete group",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить группу"
+  },
+  "source.deleteGroupHint": {
+   "at": "2026-08-29T22:56:49",
+   "en": "Delete all {count} skills in this group",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить все {count} навыки в этой группе"
+  },
+  "source.deleteGroupText": {
+   "at": "2026-08-29T22:56:51",
+   "en": "All {count} skills in group \"{name}\" will be moved to trash (restorable); read-only skills will be skipped:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Все {count} навыки в группе \"{name}\" будут перемещены в корзину (восстановление возможно); навыки только для чтения будут пропущены:"
+  },
+  "source.deleteGroupTitle": {
+   "at": "2026-08-29T22:56:52",
+   "en": "Delete group?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Удалить группу?"
+  },
+  "source.deleted": {
+   "at": "2026-08-29T22:56:54",
+   "en": "{count} deleted upstream",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} удалённых вышестоящих"
+  },
+  "source.error": {
+   "at": "2026-08-29T22:56:55",
+   "en": "Check failed",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка не пройдена"
+  },
+  "source.private": {
+   "at": "2026-08-29T22:57:02",
+   "en": "Personal skill (not bound to an upstream; no update checks)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Личный навык (не привязан к вышестоящему источнику; проверка обновлений отсутствует)"
+  },
+  "source.restore": {
+   "at": "2026-08-29T22:57:04",
+   "en": "Restore",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восстановить"
+  },
+  "source.sync": {
+   "at": "2026-08-29T22:57:06",
+   "en": "Sync",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизация"
+  },
+  "source.syncConfirmText": {
+   "at": "2026-08-29T22:57:08",
+   "en": "This overwrites local changes to these skills with the latest upstream version:",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Это перезаписывает локальные изменения этих навыков последней версией из основного репозитория:"
+  },
+  "source.syncConfirmTitle": {
+   "at": "2026-08-29T22:57:10",
+   "en": "Sync skills?",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизировать навыки?"
+  },
+  "source.syncing": {
+   "at": "2026-08-29T22:57:11",
+   "en": "Syncing…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Синхронизация…"
+  },
+  "source.throttled": {
+   "at": "2026-08-29T22:57:13",
+   "en": "Checked recently",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверено недавно"
+  },
+  "source.trash": {
+   "at": "2026-08-29T22:57:15",
+   "en": "Trash",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Корзина"
+  },
+  "source.unverified": {
+   "at": "2026-08-29T22:57:16",
+   "en": "upstream not verified yet",
+   "model": "deepseek/deepseek-chat",
+   "ru": "upstream еще не проверен"
+  },
+  "source.upToDate": {
+   "at": "2026-08-29T22:57:17",
+   "en": "Up to date",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено"
+  },
+  "source.updated": {
+   "at": "2026-08-29T22:57:19",
+   "en": "{count} updates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} обновлений"
+  },
+  "time.daysAgo": {
+   "at": "2026-08-29T22:57:20",
+   "en": "{value} d ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{value} д. назад"
+  },
+  "time.hoursAgo": {
+   "at": "2026-08-29T22:57:23",
+   "en": "{value} h ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{value} ч назад"
+  },
+  "time.justNow": {
+   "at": "2026-08-29T22:57:24",
+   "en": "just now",
+   "model": "deepseek/deepseek-chat",
+   "ru": "только что"
+  },
+  "time.minutesAgo": {
+   "at": "2026-08-29T22:57:26",
+   "en": "{value} min ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{value} мин. назад"
+  },
+  "time.weeksAgo": {
+   "at": "2026-08-29T22:57:27",
+   "en": "{value} w ago",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{value} недель назад"
+  },
+  "update.available": {
+   "at": "2026-08-29T22:57:29",
+   "en": "Update available: v{version} (current v{current})",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доступно обновление: v{version} (текущая v{current})"
+  },
+  "update.check": {
+   "at": "2026-08-29T22:57:30",
+   "en": "Check for updates",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверить наличие обновлений"
+  },
+  "update.checking": {
+   "at": "2026-08-29T22:57:33",
+   "en": "Checking…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка…"
+  },
+  "update.error": {
+   "at": "2026-08-29T22:57:35",
+   "en": "Update check failed: {error}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось проверить обновление: {error}"
+  },
+  "update.newVersion": {
+   "at": "2026-08-29T22:57:37",
+   "en": "New version v{version}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Новая версия v{version}"
+  },
+  "update.unavailable": {
+   "at": "2026-08-29T22:57:39",
+   "en": "No release available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет доступного релиза"
+  },
+  "update.upToDate": {
+   "at": "2026-08-29T22:57:43",
+   "en": "Up to date: v{version}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Актуальная версия: v{version}"
+  },
+  "update.viewRelease": {
+   "at": "2026-08-29T22:57:46",
+   "en": "View release",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Просмотр релиза"
+  },
+  "view.flat": {
+   "at": "2026-08-29T22:57:47",
+   "en": "Flat",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Плоский"
+  },
+  "view.grouped": {
+   "at": "2026-08-29T22:57:49",
+   "en": "Grouped",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сгруппировано"
+  },
+  "view.market": {
+   "at": "2026-08-29T22:57:51",
+   "en": "Market",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Рынок"
+  },
+  "view.scenes": {
+   "at": "2026-08-29T22:57:52",
+   "en": "Scenes",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сцены"
+  },
+  "view.sources": {
+   "at": "2026-08-29T22:57:53",
+   "en": "Sources",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Источники"
   }
  },
  "dsh-spendmeter": {
@@ -4852,6 +9906,12 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Пресет: Облако"
   },
+  "presetLmStudio": {
+   "at": "2026-08-29T22:57:56",
+   "en": "Preset: LM Studio",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пресет: LM Studio"
+  },
   "presetLocal": {
    "at": "2026-08-26T14:47:21",
    "en": "Preset: Local",
@@ -5486,6 +10546,36 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Закрепите предпочтительный аккаунт; применяется к следующему запросу после сохранения. Если выбранный аккаунт исчерпан, запросы будут перенаправлены на другой доступный аккаунт."
   },
+  "advancedInvalid": {
+   "at": "2026-08-29T22:57:58",
+   "en": "A number in Advanced settings is not ready to save; expand to fix it.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Число в расширенных настройках не готово к сохранению; раскройте, чтобы исправить."
+  },
+  "advancedOverriddenMany": {
+   "at": "2026-08-29T22:58:00",
+   "en": "{count} customized",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{count} настроено"
+  },
+  "advancedOverriddenOne": {
+   "at": "2026-08-29T22:58:01",
+   "en": "1 customized",
+   "model": "deepseek/deepseek-chat",
+   "ru": "1 настроенный"
+  },
+  "advancedSettings": {
+   "at": "2026-08-29T22:58:02",
+   "en": "Advanced",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Дополнительно"
+  },
+  "advancedSettingsHint": {
+   "at": "2026-08-29T22:58:05",
+   "en": "Rarely touched options: API base URL, working directory, timeouts, and model filtering.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Редко используемые параметры: базовый URL API, рабочая директория, тайм-ауты и фильтрация моделей."
+  },
   "apiBase": {
    "at": "2026-08-25T19:25:18",
    "en": "API base URL",
@@ -5533,6 +10623,36 @@
    "en": "Cancel",
    "model": "deepseek/deepseek-chat",
    "ru": "Отмена"
+  },
+  "cardConfiguredHint": {
+   "at": "2026-08-29T22:58:07",
+   "en": "The API key is ready. To replace it, add account rotation, review usage, or change the API base, open the \"Command Code\" page in Settings.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "API-ключ готов. Чтобы заменить его, добавить ротацию аккаунтов, проверить использование или изменить базовый API, откройте страницу \"Command Code\" в Настройках."
+  },
+  "cardLoadingHint": {
+   "at": "2026-08-29T22:58:09",
+   "en": "Loading the Command Code configuration…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка конфигурации командного кода…"
+  },
+  "cardRegistrationHint": {
+   "at": "2026-08-29T22:58:12",
+   "en": "This card is contributed by the Command Code plugin; a newer DeepSeek Harness is needed to show the full controls.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Эта карта предоставлена плагином Command Code; для отображения всех элементов управления требуется более новая версия DeepSeek Harness."
+  },
+  "cardRouteActive": {
+   "at": "2026-08-29T22:58:13",
+   "en": "Active",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Активный"
+  },
+  "cardTitle": {
+   "at": "2026-08-29T22:58:15",
+   "en": "Command Code connection",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Подключение командного кода"
   },
   "discard": {
    "at": "2026-08-25T19:25:34",
@@ -6420,6 +11540,324 @@
   }
  },
  "usageStats": {
+  "account.balanceMode": {
+   "at": "2026-08-29T22:58:16",
+   "en": "API balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Баланс API"
+  },
+  "account.blocked": {
+   "at": "2026-08-29T22:58:18",
+   "en": "The account query was blocked by the local security policy. Check HTTPS, same-origin, and private-network settings.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запрос к учетной записи был заблокирован локальной политикой безопасности. Проверьте настройки HTTPS, same-origin и private-network."
+  },
+  "account.health.age": {
+   "at": "2026-08-29T22:58:19",
+   "en": "Data age",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Возраст данных"
+  },
+  "account.health.lastAttempt": {
+   "at": "2026-08-29T22:58:22",
+   "en": "Last attempt",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последняя попытка"
+  },
+  "account.health.lastSuccess": {
+   "at": "2026-08-29T22:58:23",
+   "en": "Last success",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последний успех"
+  },
+  "account.health.provenance": {
+   "at": "2026-08-29T22:58:24",
+   "en": "Source",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Источник"
+  },
+  "account.invalidResponse": {
+   "at": "2026-08-29T22:58:26",
+   "en": "The provider returned unrecognized quota data.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер вернул нераспознанные данные о квоте."
+  },
+  "account.loading": {
+   "at": "2026-08-29T22:58:28",
+   "en": "Loading providers…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка поставщиков…"
+  },
+  "account.provenance.configured": {
+   "at": "2026-08-29T22:58:29",
+   "en": "Configured",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Настроено"
+  },
+  "account.provenance.experimental": {
+   "at": "2026-08-29T22:58:31",
+   "en": "Experimental",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Экспериментальный"
+  },
+  "account.provenance.official": {
+   "at": "2026-08-29T22:58:32",
+   "en": "Official API",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Официальный API"
+  },
+  "account.provenance.provider": {
+   "at": "2026-08-29T22:58:34",
+   "en": "Provider API",
+   "model": "deepseek/deepseek-chat",
+   "ru": "API провайдера"
+  },
+  "account.provenance.unknown": {
+   "at": "2026-08-29T22:58:35",
+   "en": "Unknown",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неизвестно"
+  },
+  "account.provider": {
+   "at": "2026-08-29T22:58:37",
+   "en": "Current provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Текущий провайдер"
+  },
+  "account.reason.allAddressesUnreachable": {
+   "at": "2026-08-29T22:58:40",
+   "en": "None of the validated network addresses could be reached.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ни один из проверенных сетевых адресов не доступен."
+  },
+  "account.reason.blockedNetwork": {
+   "at": "2026-08-29T22:58:42",
+   "en": "The account request was blocked by the local network policy.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запрос на учетную запись был заблокирован политикой локальной сети."
+  },
+  "account.reason.dnsResolutionFailed": {
+   "at": "2026-08-29T22:58:43",
+   "en": "The provider hostname could not be resolved.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Имя хоста поставщика не удалось разрешить."
+  },
+  "account.reason.noValidatedAddress": {
+   "at": "2026-08-29T22:58:45",
+   "en": "No validated provider address was available.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не было доступно ни одного проверенного адреса поставщика."
+  },
+  "account.reason.rateLimited": {
+   "at": "2026-08-29T22:58:47",
+   "en": "The provider rate limited account checks.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер ограничил проверку аккаунтов по частоте запросов."
+  },
+  "account.reason.sub2apiBalanceShapeUnrecognized": {
+   "at": "2026-08-29T22:58:49",
+   "en": "The Sub2API balance endpoint returned an unrecognized data shape.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Конечная точка баланса Sub2API вернула данные в нераспознанном формате."
+  },
+  "account.reason.timeout": {
+   "at": "2026-08-29T22:58:51",
+   "en": "The account request timed out.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Запрос аккаунта завершился по тайм-ауту."
+  },
+  "account.reason.unauthorized": {
+   "at": "2026-08-29T22:58:52",
+   "en": "The account credential was rejected.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Учетные данные аккаунта были отклонены."
+  },
+  "account.reason.unknown": {
+   "at": "2026-08-29T22:58:55",
+   "en": "The account check failed without a safe diagnostic detail.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Проверка учетной записи завершилась неудачей без безопасного диагностического сообщения."
+  },
+  "account.reason.upstreamInvalidJson": {
+   "at": "2026-08-29T22:58:57",
+   "en": "The upstream returned unparsable JSON",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вверх по течению возвращен нечитаемый JSON"
+  },
+  "account.reason.upstreamInvalidResponse": {
+   "at": "2026-08-29T22:58:58",
+   "en": "The upstream returned an unrecognized response.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Восходящий поток вернул нераспознанный ответ."
+  },
+  "account.reason.upstreamNotJson": {
+   "at": "2026-08-29T22:59:00",
+   "en": "The upstream response was not JSON",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ответ вышестоящего сервера не был в формате JSON"
+  },
+  "account.reason.upstreamTooLarge": {
+   "at": "2026-08-29T22:59:01",
+   "en": "The upstream response exceeded the safety size limit.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ответ от вышестоящего сервера превысил допустимый размер."
+  },
+  "account.status.blocked": {
+   "at": "2026-08-29T22:59:02",
+   "en": "Blocked",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Заблокировано"
+  },
+  "account.status.invalidResponse": {
+   "at": "2026-08-29T22:59:04",
+   "en": "Invalid response",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неверный ответ"
+  },
+  "account.status.loading": {
+   "at": "2026-08-29T22:59:05",
+   "en": "Loading",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Загрузка"
+  },
+  "account.status.stale": {
+   "at": "2026-08-29T22:59:06",
+   "en": "Stale data",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Устаревшие данные"
+  },
+  "account.status.unknown": {
+   "at": "2026-08-29T22:59:07",
+   "en": "Unknown",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неизвестно"
+  },
+  "account.title": {
+   "at": "2026-08-29T22:59:12",
+   "en": "Provider account",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Аккаунт провайдера"
+  },
+  "action.close": {
+   "at": "2026-08-29T22:59:14",
+   "en": "Close",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Закрыть"
+  },
+  "action.nextMonth": {
+   "at": "2026-08-29T22:59:15",
+   "en": "Next month",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Следующий месяц"
+  },
+  "action.prevMonth": {
+   "at": "2026-08-29T22:59:17",
+   "en": "Previous month",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предыдущий месяц"
+  },
+  "action.refresh": {
+   "at": "2026-08-29T22:59:18",
+   "en": "Refresh",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновить"
+  },
+  "action.retry": {
+   "at": "2026-08-29T22:59:20",
+   "en": "Retry",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Повторить"
+  },
+  "action.today": {
+   "at": "2026-08-29T22:59:21",
+   "en": "Today",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сегодня"
+  },
+  "balance.available": {
+   "at": "2026-08-29T22:59:23",
+   "en": "available",
+   "model": "deepseek/deepseek-chat",
+   "ru": "доступно"
+  },
+  "balance.error": {
+   "at": "2026-08-29T22:59:24",
+   "en": "Balance fetch failed: {message}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось получить баланс: {message}"
+  },
+  "balance.granted": {
+   "at": "2026-08-29T22:59:25",
+   "en": "Granted",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Предоставлено"
+  },
+  "balance.loading": {
+   "at": "2026-08-29T22:59:27",
+   "en": "Fetching balance…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Получение баланса…"
+  },
+  "balance.noCredential": {
+   "at": "2026-08-29T22:59:29",
+   "en": "{ref} is not configured (edit ~/.dsh/.credentials.yaml)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{ref} не настроен (отредактируйте ~/.dsh/.credentials.yaml)"
+  },
+  "balance.noSchemeTag": {
+   "at": "2026-08-29T22:59:30",
+   "en": "no balance API",
+   "model": "deepseek/deepseek-chat",
+   "ru": "нет баланса API"
+  },
+  "balance.provider": {
+   "at": "2026-08-29T22:59:31",
+   "en": "Provider",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер"
+  },
+  "balance.remaining": {
+   "at": "2026-08-29T22:59:33",
+   "en": "Available balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Доступный баланс"
+  },
+  "balance.title": {
+   "at": "2026-08-29T22:59:34",
+   "en": "Account balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Баланс счета"
+  },
+  "balance.toppedUp": {
+   "at": "2026-08-29T22:59:36",
+   "en": "Topped up",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Пополнено"
+  },
+  "balance.total": {
+   "at": "2026-08-29T22:59:38",
+   "en": "Total balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общий баланс"
+  },
+  "balance.unavailable": {
+   "at": "2026-08-29T22:59:39",
+   "en": "unavailable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "недоступно"
+  },
+  "balance.unsupported": {
+   "at": "2026-08-29T22:59:41",
+   "en": "This provider has no public balance interface.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "У этого провайдера нет публичного интерфейса для проверки баланса."
+  },
+  "balance.used": {
+   "at": "2026-08-29T22:59:42",
+   "en": "Used",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Использовано"
+  },
   "billing.monthly": {
    "at": "2026-08-25T19:31:06",
    "en": "≈ {amount}/mo",
@@ -6456,17 +11894,53 @@
    "model": "deepseek/deepseek-chat",
    "ru": "превышен бюджет"
   },
+  "budget.level.critical": {
+   "at": "2026-08-29T22:59:43",
+   "en": "Over budget",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Превышение бюджета"
+  },
+  "budget.level.normal": {
+   "at": "2026-08-29T22:59:45",
+   "en": "Normal",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обычный"
+  },
+  "budget.level.unknown": {
+   "at": "2026-08-29T22:59:47",
+   "en": "Incomplete cost",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неполная стоимость"
+  },
+  "budget.level.warning": {
+   "at": "2026-08-29T22:59:49",
+   "en": "Near budget",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Близко к бюджету"
+  },
   "budget.over": {
    "at": "2026-08-25T19:31:18",
    "en": "{pct}% of budget used",
    "model": "deepseek/deepseek-chat",
    "ru": "{pct}% бюджета использовано"
   },
+  "budget.period.monthly": {
+   "at": "2026-08-29T22:59:55",
+   "en": "This month estimated",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ожидаемый за этот месяц"
+  },
   "budget.remaining": {
    "at": "2026-08-25T19:31:20",
    "en": "remaining",
    "model": "deepseek/deepseek-chat",
    "ru": "осталось"
+  },
+  "budget.summary": {
+   "at": "2026-08-29T22:59:57",
+   "en": "{period}: {spent} / {limit} · {level}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{period}: {spent} / {limit} · {level}"
   },
   "budget.title": {
    "at": "2026-08-25T19:31:23",
@@ -6690,6 +12164,48 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Обновлено"
   },
+  "duration.daysHours": {
+   "at": "2026-08-29T22:59:58",
+   "en": "{days}d {hours}h",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{days}д {hours}ч"
+  },
+  "duration.hoursMinutes": {
+   "at": "2026-08-29T23:00:00",
+   "en": "{hours}h {minutes}m",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{hours}ч {minutes}м"
+  },
+  "duration.minutes": {
+   "at": "2026-08-29T23:00:02",
+   "en": "{minutes}m",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{minutes}м"
+  },
+  "export.dailyCsv": {
+   "at": "2026-08-29T23:00:03",
+   "en": "Daily CSV",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ежедневный CSV"
+  },
+  "export.json": {
+   "at": "2026-08-29T23:00:07",
+   "en": "Full JSON",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Полный JSON"
+  },
+  "export.sessionsCsv": {
+   "at": "2026-08-29T23:00:08",
+   "en": "Sessions CSV",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сессии CSV"
+  },
+  "export.title": {
+   "at": "2026-08-29T23:00:14",
+   "en": "Secret-free export",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Экспорт без секретов"
+  },
   "filter.all": {
    "at": "2026-08-25T19:32:44",
    "en": "All workspaces",
@@ -6773,6 +12289,42 @@
    "en": "Updated",
    "model": "deepseek/deepseek-chat",
    "ru": "Обновлено"
+  },
+  "month.names": {
+   "at": "2026-08-29T23:00:23",
+   "en": "Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Янв,Фев,Мар,Апр,Май,Июн,Июл,Авг,Сен,Окт,Ноя,Дек"
+  },
+  "month.year": {
+   "at": "2026-08-29T23:00:25",
+   "en": "{month} {year}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{month} {year}"
+  },
+  "orcarouter.addError": {
+   "at": "2026-08-29T23:00:33",
+   "en": "Could not add OrcaRouter. Please try again.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось добавить OrcaRouter. Пожалуйста, попробуйте ещё раз."
+  },
+  "orcarouter.choiceSuffix": {
+   "at": "2026-08-29T23:00:41",
+   "en": " (Sponsored integration)",
+   "model": "deepseek/deepseek-chat",
+   "ru": "(Спонсированная интеграция)"
+  },
+  "panel.badge": {
+   "at": "2026-08-29T23:00:48",
+   "en": "Usage/Balance",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Использование/Баланс"
+  },
+  "panel.updatedAt": {
+   "at": "2026-08-29T23:00:55",
+   "en": "Updated at {time}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Обновлено в {time}"
   },
   "perf.empty": {
    "at": "2026-08-25T19:33:11",
@@ -7038,6 +12590,132 @@
    "model": "deepseek/deepseek-chat",
    "ru": "Повторить"
   },
+  "subscription.error": {
+   "at": "2026-08-29T23:00:58",
+   "en": "Subscription usage failed: {message}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не удалось использовать подписку: {message}"
+  },
+  "subscription.loading": {
+   "at": "2026-08-29T23:01:00",
+   "en": "Fetching subscription usage…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Получение данных об использовании подписки…"
+  },
+  "subscription.notConfigured": {
+   "at": "2026-08-29T23:01:03",
+   "en": "Configure {refs} to show live subscription usage.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Настройте {refs} для отображения текущего использования подписки."
+  },
+  "subscription.planUnknown": {
+   "at": "2026-08-29T23:01:06",
+   "en": "Subscription plan",
+   "model": "deepseek/deepseek-chat",
+   "ru": "План подписки"
+  },
+  "subscription.rateLimited": {
+   "at": "2026-08-29T23:01:08",
+   "en": "The provider is rate limiting checks; retry later.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер ограничивает частоту проверок; попробуйте позже."
+  },
+  "subscription.resets": {
+   "at": "2026-08-29T23:01:17",
+   "en": "Resets in {time}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сбросится через {time}"
+  },
+  "subscription.status.notConfigured": {
+   "at": "2026-08-29T23:01:19",
+   "en": "Not configured",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Не настроено"
+  },
+  "subscription.status.ok": {
+   "at": "2026-08-29T23:01:21",
+   "en": "Live",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В прямом эфире"
+  },
+  "subscription.status.rateLimited": {
+   "at": "2026-08-29T23:01:23",
+   "en": "Rate limited",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ограничение по частоте запросов"
+  },
+  "subscription.status.unauthorized": {
+   "at": "2026-08-29T23:01:27",
+   "en": "Sign in again",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Войдите снова"
+  },
+  "subscription.status.unavailable": {
+   "at": "2026-08-29T23:01:28",
+   "en": "Unavailable",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Недоступно"
+  },
+  "subscription.title": {
+   "at": "2026-08-29T23:01:31",
+   "en": "Subscription usage",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Использование подписки"
+  },
+  "subscription.unauthorized": {
+   "at": "2026-08-29T23:01:33",
+   "en": "The credential has expired; update it and retry.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Учетные данные истекли; обновите их и повторите попытку."
+  },
+  "subscription.unavailable": {
+   "at": "2026-08-29T23:01:35",
+   "en": "The provider returned no recognizable quota windows.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Провайдер не вернул распознаваемых окон квот."
+  },
+  "subscription.used": {
+   "at": "2026-08-29T23:01:37",
+   "en": "{value}% used",
+   "model": "deepseek/deepseek-chat",
+   "ru": "{value}% использовано"
+  },
+  "subscription.window.daily": {
+   "at": "2026-08-29T23:01:38",
+   "en": "Daily window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ежедневное окно"
+  },
+  "subscription.window.mcp": {
+   "at": "2026-08-29T23:01:40",
+   "en": "Monthly MCP quota",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ежемесячная квота MCP"
+  },
+  "subscription.window.monthly": {
+   "at": "2026-08-29T23:01:41",
+   "en": "Monthly window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ежемесячное окно"
+  },
+  "subscription.window.quota": {
+   "at": "2026-08-29T23:01:43",
+   "en": "Total quota",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Общая квота"
+  },
+  "subscription.window.session": {
+   "at": "2026-08-29T23:01:46",
+   "en": "5-hour window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "5-часовое окно"
+  },
+  "subscription.window.weekly": {
+   "at": "2026-08-29T23:01:48",
+   "en": "Weekly window",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Еженедельное окно"
+  },
   "summary.activeDays": {
    "at": "2026-08-25T19:34:57",
    "en": "Active days",
@@ -7169,6 +12847,156 @@
    "en": "Tokens today",
    "model": "deepseek/deepseek-chat",
    "ru": "Токены сегодня"
+  },
+  "usage.back": {
+   "at": "2026-08-29T23:01:49",
+   "en": "Back",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Назад"
+  },
+  "usage.cacheRead": {
+   "at": "2026-08-29T23:01:51",
+   "en": "Cache read",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Чтение кэша"
+  },
+  "usage.error": {
+   "at": "2026-08-29T23:01:53",
+   "en": "Usage aggregation failed: {message}",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агрегация использования не удалась: {message}"
+  },
+  "usage.heatmap": {
+   "at": "2026-08-29T23:01:54",
+   "en": "Daily usage this month",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ежедневное использование в этом месяце"
+  },
+  "usage.hit.today": {
+   "at": "2026-08-29T23:01:57",
+   "en": "Today's cache hit rate",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сегодняшний процент попаданий в кэш"
+  },
+  "usage.hitRate": {
+   "at": "2026-08-29T23:01:59",
+   "en": "Cache hit",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Кэш-попадание"
+  },
+  "usage.input": {
+   "at": "2026-08-29T23:02:00",
+   "en": "Input",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ввод"
+  },
+  "usage.legendLess": {
+   "at": "2026-08-29T23:02:01",
+   "en": "Less",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Меньше"
+  },
+  "usage.legendMore": {
+   "at": "2026-08-29T23:02:03",
+   "en": "More",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ещё"
+  },
+  "usage.loading": {
+   "at": "2026-08-29T23:02:05",
+   "en": "Aggregating usage…",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Агрегирование использования…"
+  },
+  "usage.month": {
+   "at": "2026-08-29T23:02:07",
+   "en": "This month",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В этом месяце"
+  },
+  "usage.noModels": {
+   "at": "2026-08-29T23:02:10",
+   "en": "No per-model data for this day.",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Нет данных по моделям за этот день."
+  },
+  "usage.output": {
+   "at": "2026-08-29T23:02:11",
+   "en": "Output",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Вывод"
+  },
+  "usage.recent": {
+   "at": "2026-08-29T23:02:13",
+   "en": "Last 14 days",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Последние 14 дней"
+  },
+  "usage.title": {
+   "at": "2026-08-29T23:02:18",
+   "en": "Token usage",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Использование токенов"
+  },
+  "usage.today": {
+   "at": "2026-08-29T23:02:19",
+   "en": "Today",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Сегодня"
+  },
+  "usage.total": {
+   "at": "2026-08-29T23:02:20",
+   "en": "All time",
+   "model": "deepseek/deepseek-chat",
+   "ru": "За всё время"
+  },
+  "usage.unknownModel": {
+   "at": "2026-08-29T23:02:21",
+   "en": "Unknown model",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Неизвестная модель"
+  },
+  "weekday.fri": {
+   "at": "2026-08-29T23:02:24",
+   "en": "F",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Ф"
+  },
+  "weekday.mon": {
+   "at": "2026-08-29T23:02:25",
+   "en": "M",
+   "model": "deepseek/deepseek-chat",
+   "ru": "М"
+  },
+  "weekday.sat": {
+   "at": "2026-08-29T23:02:27",
+   "en": "S",
+   "model": "deepseek/deepseek-chat",
+   "ru": "С"
+  },
+  "weekday.sun": {
+   "at": "2026-08-29T23:02:28",
+   "en": "S",
+   "model": "deepseek/deepseek-chat",
+   "ru": "С"
+  },
+  "weekday.thu": {
+   "at": "2026-08-29T23:02:29",
+   "en": "T",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Т"
+  },
+  "weekday.tue": {
+   "at": "2026-08-29T23:02:31",
+   "en": "T",
+   "model": "deepseek/deepseek-chat",
+   "ru": "Т"
+  },
+  "weekday.wed": {
+   "at": "2026-08-29T23:02:34",
+   "en": "W",
+   "model": "deepseek/deepseek-chat",
+   "ru": "В"
   },
   "widget.close": {
    "at": "2026-08-25T19:35:37",
