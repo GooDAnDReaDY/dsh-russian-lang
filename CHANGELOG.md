@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.18 (2026-08-29) — hotfix
+
+- `fix(client)`: drop the `@deepseek-ai/dsh-client-ui-primitives` require and
+  use a pure SVG chevron. That module is not registered in the module table of
+  the current DSH core, so requiring it aborted our plugin's loader entry and
+  broke production. Our bundle now requires only `react`. (#81)
+
 ## 0.1.16 (2026-08-27)
 
 - `feat(client)`: RU/EN layout indicator near the chat input; click converts
