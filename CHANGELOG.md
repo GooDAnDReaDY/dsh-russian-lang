@@ -1,3 +1,8 @@
+## 0.1.19 — 2026-08-30
+
+- fix: self-ru(dsh-key-limits) — private plugin self-localizes, exclude from bundle (49 ns/3309), fixes prod Failed to load (#81 suppl.)
+- fix(client): guard settings.plugin.item slot (hotfix #85) already in 0.1.18+main, keep in release
+
 # Changelog
 
 ## 0.1.18 (2026-08-29) — hotfix
