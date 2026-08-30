@@ -1,3 +1,7 @@
+## 0.1.20 — 2026-08-30
+
+- fix(client): register settings card via slots.inject so the slot is declared (PR #87). Direct register threw "slot is not declared" on DSH 0.1.2-alpha and the card never rendered; 0.1.19 only guarded the error. Now matches dsh-context/dsh-key-rotation.
+
 ## 0.1.19 — 2026-08-30
 
 - fix: self-ru(dsh-key-limits) — private plugin self-localizes, exclude from bundle (49 ns/3309), fixes prod Failed to load (#81 suppl.)
