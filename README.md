@@ -15,112 +15,32 @@
 <a name="-english"></a>
 ## 🇬🇧 English
 
-# @goodandready/dsh-russian-lang
+Complete native Russian localization pack for DeepSeek Harness Web GUI with typography engine, smart layout-switch hints, and plural form handling.
 
-Русская локализация веб-интерфейса DeepSeek Harness.
+### Key Features
 
-## Что делает
+- **Comprehensive Core Coverage**: Translates over 30 core DSH namespaces (720+ keys) including `common`, `conversation`, `settings`, `settings.models`, `workspace`, `subagent`, `reference`, and plugin settings cards.
+- **Native Language Switcher Integration**: Seamlessly adds **Русский** into **Settings → General → Language** and sets `<html lang="ru-RU">` without patching core files.
+- **Russian Plural Forms**: Resolves Russian counting rules (`one/few/many`) for nouns and dynamic variables.
+- **Typography Postprocessor (`russian-lang.typography`)**: Automatically formats quotes («ёлочки»), em-dashes, and non-breaking spaces after short prepositions without affecting code blocks.
+- **Input Layout Fixer (`Alt+L`)**: Detects text typed in the wrong keyboard layout (e.g. `ghjtrn` → `проект`), displays a live preview tooltip, and supports instant conversion with `Alt+L`.
+- **Custom Translation Overrides**: Override any key via `russian-lang.overrides` in settings.
+- **Spellcheck**: Enables browser spellchecking on Russian text areas while keeping monospace code fields clean.
 
-- Регистрирует русские словари для namespace'ов ядра (`common`,
-  `conversation`, `settings`, `settings.models`, `workspace`, `subagent`,
-  `reference` и другие — **30 namespace'ов ядра, 722 ключа, 100% покрытия**
-  релизной поверхности DSH 0.1.1-rc.2) и для ряда сторонних плагинов.
-- Добавляет **«Русский» третьей позицией** в родной список языков
-  (**Настройки → Общие → Язык**). Выбор сохраняется штатным механизмом
-  настроек DSH и переживает браузеры.
-- Синхронизирует `<html lang="ru-RU">` при активном русском.
-
-Непереведённые ключи показываются по-английски (штатный fallback ядра), пустых
-мест в интерфейсе не появляется.
-
-### Помимо словарей
-
-- **Русские plural-формы.** Обёртка `translate` резолвит `one/few/many` для
-  счётных ключей (как с суффиксом `.one/.other`, так и голых — через
-  `X.one/X.few/X.many`).
-- **Пользовательские переопределения.** Пространство настроек
-  `russian-lang.overrides` — `{ ключ: формулировка }`, применяется верхним
-  слоем поверх словарей.
-- **Типографика вывода** (`russian-lang.typography`). Идемпотентный
-  постпроцессор текстовых узлов: кавычки-«ёлочки», тире, неразрывные пробелы
-  после коротких слов, опциональная ё (флаг `yo`). Код, ссылки и поля ввода не
-  трогаются.
-- **Орфография** — браузерный `spellcheck` на текстовых полях при активном
-  русском; моноширинные поля (код, команды) исключаются.
-- **Фикс неправильной раскладки.** Если текст набран латиницей вместо
-  кириллицы, над инпутом появляется подсказка с превью конвертации; клик
-  заменяет. Конверсия кириллицы→латиницы предлагается только для
-  slash-команд. Ручной конверт текущего инпута — `Alt+L`.
-
-## Как это работает
-
-Реестр локалей живёт в браузере: плагин докладывает русские словари в чужие
-namespace'ы через `ctx.locale.register(ns, 'ru', dict)`. Namespace'ы, которые
-плагины уже локализуют сами на русский, пропускаются (иначе загрузчик падает с
-`already has locale ru`).
-
-Список языков штатного селектора (`Настройки → Общие → Язык`) живёт в snapshot
-локаль-runtime; меню строится из него, и `setLocale()` валидирует выбор по
-нему же. На версиях ядра, где `ru` ещё не в списке (DSH 0.1.1-rc.2 из
-коробки), плагин расширяет snapshot пунктом «Русский» — файлы ядра не
-правятся. Если ядро когда-нибудь узнает `ru` само, расширение не происходит
-и всё работает штатно. Запись выбора в настройки идёт через собственный
-namespace `russian-lang` (хост-схема ядра знает только `zh/en` и не
-принимает `ru`).
-
-Ничего в установке DSH не патчится; удаление плагина полностью возвращает
-интерфейс к исходному состоянию.
-
-## Установка
+### Install
 
 ```bash
 dsh plugin --profile web add @goodandready/dsh-russian-lang
 ```
 
-Затем: **Настройки → Общие → Язык → Русский**.
+After installation, select **Settings → General → Language → Русский** and reload.
 
-## Разработка и проверка
+### Limitations
 
-```bash
-python3 extract-dicts.py <node_modules ядра> [node_modules профиля]  # обновить *-en.json
-python3 check-coverage.py                                             # что не переведено / устарело
-python3 build.py                                                    # собрать lib/client.js
-python3 tools/mt_fallback.py --dry-run                              # непереведённые ключи
-python3 tools/mt_fallback.py --review                              # очередь ручной выверки MT
-python3 tools/merge_freq.py                                        # обновить freq-словарь для фикса раскладки
-python3 tools/upstream_check.py                                    # ночной апстрим-детектор новых ключей
-python3 tools/top100.py <профиль>/node_modules                     # отчёт покрытия плагинов
-python3 test/test_extract.py                                       # smoke для extract-dicts/check-coverage
-python3 test/smoke.py                                              # E2E против запущенного контура
-```
+- Translates the Web UI interface, buttons, and status indicators. Agent tool definitions and LLM system prompts remain in their native language.
+- Layout auto-fix uses a built-in frequency dictionary (~9k words) to avoid false positives.
 
-MT-переводы непереведённых ключей (`mt_fallback.py --apply`) пишутся в
-`mt-registry.json` как обычные строки; ручной перевод в `ru/*.json` всегда
-имеет приоритет. Очередь ручной выверки — `upstream/review-queue.md`.
-
-`smoke.py` требует `websocket-client` (`pip install websocket-client`) и Chrome
-на `/usr/bin/google-chrome`. Адрес переопределяется через `DSH_URL`.
-
-## Скриншоты
-
-| Что | Файл |
-|-----|------|
-| Интерфейс на русском | `docs/media/ui-russian.png` |
-| Список языков в Настройки → Общие | `docs/media/language-selector.png` |
-
-Скриншоты обновляются через `python3 test/screenshots.py`.
-
-## Ограничения
-
-- Переводится только веб-интерфейс. Описания тулов и системные промпты агента
-  — не locale, плагин их не трогает.
-- Плагины, которые рисуют текст инлайном без locale-слотов, не переводятся.
-- Текст, добавленный сторонним плагином без `ctx.locale.register`, остаётся на
-  языке плагина — для перевода нужно обновить сам плагин.
-- Фикс раскладки опирается на встроенный частотный словарь (~9k слов) и может
-  не распознать редкую терминологию; ложных замен нет — только подсказка.
-
-## Лицензия
+### License
 
 MIT
 
@@ -130,20 +50,32 @@ MIT
 <details open>
 <summary><h2>🇷🇺 Русский (Полное руководство)</h2></summary>
 
-Полная русская локализация веб-интерфейса DeepSeek Harness.
+Полная нативная русская локализация веб-интерфейса DeepSeek Harness с типографикой, исправлением раскладки и поддержкой plural-форм.
 
-## Что делает плагин
+### Ключевые возможности
 
-- Регистрирует русские словари для пространств имён ядра (`common`, `conversation`, `settings`, `settings.models`, `workspace`, `subagent`, `reference` и другие — более 30 пространств имён и 700+ ключей перевода).
-- Полная локализация настроек, карточек провайдеров и статусов агента.
+- **Полное покрытие ядра**: переведено более 30 пространств имён ядра DSH (720+ ключей), включая `common`, `conversation`, `settings`, `settings.models`, `workspace`, `subagent`, `reference` и карточки плагинов.
+- **Нативная интеграция в селектор языков**: добавляет пункт «Русский» прямо в **Настройки → Общие → Язык** и синхронизирует `<html lang="ru-RU">` без модификации исходных файлов ядра.
+- **Русские plural-формы**: обёртка `translate` корректно обрабатывает падежи числительных (`one/few/many`).
+- **Модуль типографики (`russian-lang.typography`)**: автоматическая замена кавычек на «ёлочки», расстановка длинных тире и неразрывных пробелов после коротких предлогов (не затрагивает блоки кода и команды).
+- **Исправление неверной раскладки (`Alt+L`)**: подсказка над полем ввода при наборе текста не в той раскладке (например, `ghjtrn` → `проект`), клик по подсказке заменяет текст; горячая клавиша `Alt+L`.
+- **Пользовательские переопределения**: возможность переопределить любой ключ перевода через `russian-lang.overrides`.
+- **Проверка орфографии**: включение встроенного браузерного `spellcheck` для текстовых полей при активном русском языке.
 
-## Установка
+### Установка
 
 ```bash
 dsh plugin --profile web add @goodandready/dsh-russian-lang
 ```
 
-## Лицензия
+После установки выберите: **Настройки → Общие → Язык → Русский**.
+
+### Ограничения
+
+- Переводится только интерфейс веб-приложения. Системные промпты и описания тулов LLM не изменяются.
+- Модуль исправления раскладки опирается на частотный словарь (~9k слов) во избежание ложных замен.
+
+### Лицензия
 
 MIT
 
@@ -155,20 +87,26 @@ MIT
 <details>
 <summary><h2>🇨🇳 中文 (完整技术文档)</h2></summary>
 
-DeepSeek Harness 官方 Web UI 俄语本地化语言包。
+DeepSeek Harness 官方 Web UI 俄语本地化语言包，内置俄语排版引擎、智能键盘输入法纠错与复数语法支持。
 
-## 功能说明
+### 核心功能
 
-- 为核心命名空间提供超过 30 个命名空间、700+ 条完整俄语翻译词条（涵盖会话、设置、智能体运行状态等）。
-- 完美适配系统原生语言切换菜单。
+- **全界面核心词条覆盖**：翻译超过 30 个 DSH 核心命名空间（720+ 条词条），涵盖 `common`、`conversation`、`settings`、`workspace`、`subagent` 等。
+- **无缝集成系统语言选择菜单**：在 **设置 → 通用 → 语言** 中直接新增 **Русский** 选项并同步 `<html lang="ru-RU">`，无需修改系统核心文件。
+- **俄语复数语法引擎**：基于 `translate` 智能适配俄语变格规则 (`one/few/many`)。
+- **俄语排版后处理器 (`russian-lang.typography`)**：自动转换俄语书名引号 («ёлочки»)、破折号与连字符，代码块内容自动免处理。
+- **误切输入法纠错 (`Alt+L`)**：智能识别误用英文键盘输入的西里尔文本（如 `ghjtrn` → `проект`）并提供悬浮预览，支持快捷键 `Alt+L` 快速纠正。
+- **自定义词条覆盖**：支持通过 `russian-lang.overrides` 自定义特定词条翻译。
 
-## 安装指南
+### 安装方法
 
 ```bash
 dsh plugin --profile web add @goodandready/dsh-russian-lang
 ```
 
-## 开源协议
+安装完成后在 **设置 → 通用 → 语言** 中选择 **Русский** 即可。
+
+### 开源协议
 
 MIT
 
