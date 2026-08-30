@@ -1,6 +1,5 @@
 [
  "dsh-gitea",
- "dsh-kanban",
  "dsh-key-limits",
  "dsh-key-rotation",
  "dsh-messenger-gateway",
