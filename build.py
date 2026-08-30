@@ -635,16 +635,18 @@ window.__ModuleLoader__.load({
           else runtime.publish(wantRu ? 'ru' : 'en', true)
         } catch (err) { console.warn('dsh-russian-lang: toggle failed', err) }
       }
-      // Слот может быть не объявлен родительским элементом (например, если
-      // настроечный UI не загрузился). Тогда карточка не появится, но плагин
-      // (и переводы) продолжают работать — не роняем всю загрузку.
+      // Регистрируем карточку через inject: так слот объявляется родителю,
+      // и карточка появляется в списке «Настройки → Плагины». Без inject
+      // register бросает "slot is not declared" на новых ядрах.
       try {
-        ctx.slots.register({
-          name: 'settings.plugin.item',
-          key: SETTINGS_NS_NAME,
-          locale: SETTINGS_NS_NAME,
-          inject: () => ({ scope, runtime, toggleRu }),
-        }, SettingsCard)
+        ctx.slots.inject('settings.plugin.item', () =>
+          ctx.slots.register({
+            name: 'settings.plugin.item',
+            key: SETTINGS_NS_NAME,
+            locale: SETTINGS_NS_NAME,
+            inject: () => ({ scope, runtime, toggleRu }),
+          }, SettingsCard),
+        )
       } catch (err) { console.warn('dsh-russian-lang: settings slot unavailable', err) }
     }
 
