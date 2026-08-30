@@ -40,8 +40,13 @@ try {
         translate(ns, key) { return key },
         lookup() { return undefined },
         subscribe(fn) { return () => {} },
-        publish(lang) { localeState.active = lang },
+        addLanguage(input) {
+          if (localeState.locales.some(l => l.id === input.id)) throw new Error('locale "' + input.id + '" is already registered')
+          localeState.locales = localeState.locales.concat([{ id: input.id, label: input.label, fallback: input.fallback }])
+          localeState.revision++
+        },
         setLocale(l) { localeState.active = l },
+        host: { getSnapshot: () => ({ value: {} }), subscribe() { return () => {} }, set() { return Promise.resolve() }, unset() { return Promise.resolve() } },
       },
       settingsScope: { bind() { return { getSnapshot: () => ({ status: 'ready', value: { enabled: true, overrides: {}, typography: {} } }), subscribe() { return () => {} }, set() {} } } },
       effect(cb) { const d = cb(); void d; return d },
