@@ -1,3 +1,7 @@
+## 0.1.21 — 2026-08-30
+
+- fix(client): use real LocaleRuntime API (addLanguage/setLocale) for RU switch (PR #88). Old code wrote runtime.snapshot / called runtime.publish() — neither exists on DSH 0.1.2-alpha, so switching silently no-op'd. Now the native Language menu lists Русский and selecting it switches the UI.
+
 ## 0.1.20 — 2026-08-30
 
 - fix(client): register settings card via slots.inject so the slot is declared (PR #87). Direct register threw "slot is not declared" on DSH 0.1.2-alpha and the card never rendered; 0.1.19 only guarded the error. Now matches dsh-context/dsh-key-rotation.
