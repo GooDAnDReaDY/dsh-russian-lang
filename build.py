@@ -199,16 +199,12 @@ window.__ModuleLoader__.load({
       const native = runtime.getLocale().locales.some((l) => l.id === 'ru')
 
       if (!native) {
-        // Ядро не знает ru: добавляем его в snapshot runtime. Родная строка
-        // Language берёт меню из snapshot.locales, setLocale() по нему же
-        // валидирует выбор — «Русский» появляется в родном списке.
-        const s0 = runtime.getLocale()
-        runtime.snapshot = Object.freeze({
-          active: s0.active,
-          locales: s0.locales.concat([{ id: 'ru', label: 'Русский' }]),
-          revision: s0.revision + 1
-        })
-        ctx.emit('locale/change', runtime.snapshot)
+        // Ядро не знает ru: регистрируем его через addLanguage (реальный API
+        // LocaleRuntime). Родная строка Language берёт меню из snapshot.locales,
+        // setLocale() по нему же валидирует выбор — «Русский» появляется в
+        // родном списке. (Старый код писал runtime.snapshot/publish напрямую —
+        // этих методов в DSH 0.1.2-alpha нет, переключение молча не работало.)
+        runtime.addLanguage({ id: 'ru', label: 'Русский', fallback: 'en' })
         syncLang()
 
         // Хост-схема namespace "locale" знает только zh/en, запись preference
@@ -264,8 +260,7 @@ window.__ModuleLoader__.load({
       const activate = () => {
         try {
           if (runtime.getLocale().active === 'ru') return
-          if (native) runtime.setLocale('ru')
-          else runtime.publish('ru', true)
+          runtime.setLocale('ru')
         } catch (err) { console.warn('dsh-russian-lang: activate failed', err) }
       }
       let booted = false
@@ -631,8 +626,7 @@ window.__ModuleLoader__.load({
       const toggleRu = (wantRu) => {
         try {
           if (runtime.getLocale().active === wantRu) return
-          if (native) runtime.setLocale(wantRu ? 'ru' : 'en')
-          else runtime.publish(wantRu ? 'ru' : 'en', true)
+          runtime.setLocale(wantRu ? 'ru' : 'en')
         } catch (err) { console.warn('dsh-russian-lang: toggle failed', err) }
       }
       // Регистрируем карточку через inject: так слот объявляется родителю,
