@@ -1,3 +1,7 @@
+## 0.1.23 — 2026-08-30
+
+- feat: русский словарь для `dsh-kanban` (221 ключ, `ru-plugins/10-kanban.json`). Плагин доски перестал нести свой `ru`: встроенные локали ядра — английская и китайская, русский даёт этот пакет. Пространство убрано из `self-ru.json` — пока оно там стояло, сборка пропускала его как «плагин локализовался сам». Выкатывать раньше dsh-kanban 0.1.12.
+
 ## 0.1.22 — 2026-08-30
 
 - fix(client): use real LocaleRuntime API (addLanguage/setLocale) for RU switch (PR #88). 0.1.21 was published from a stale local main and missed this fix; 0.1.22 is the corrected build.
