@@ -46,7 +46,13 @@ try {
       settingsScope: { bind() { return { getSnapshot: () => ({ status: 'ready', value: { enabled: true, overrides: {}, typography: {} } }), subscribe() { return () => {} }, set() {} } } },
       effect(cb) { const d = cb(); void d; return d },
       emit() {},
-      slots: { register(entry) { slotsRegistered.push(entry.name) } },
+      slots: {
+        inject(name, fn) {
+          if (name !== 'settings.plugin.item') throw new Error('slot "' + name + '" is not declared')
+          return fn()
+        },
+        register(entry) { slotsRegistered.push(entry.name) },
+      },
     }
     const exp = def.factory((name) => {
       // Минимальный React-стаб: карточка настроек регистрируется и компонент
