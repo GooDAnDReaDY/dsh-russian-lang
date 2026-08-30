@@ -1,3 +1,7 @@
+## 0.1.22 — 2026-08-30
+
+- fix(client): use real LocaleRuntime API (addLanguage/setLocale) for RU switch (PR #88). 0.1.21 was published from a stale local main and missed this fix; 0.1.22 is the corrected build.
+
 ## 0.1.21 — 2026-08-30
 
 - fix(client): use real LocaleRuntime API (addLanguage/setLocale) for RU switch (PR #88). Old code wrote runtime.snapshot / called runtime.publish() — neither exists on DSH 0.1.2-alpha, so switching silently no-op'd. Now the native Language menu lists Русский and selecting it switches the UI.
