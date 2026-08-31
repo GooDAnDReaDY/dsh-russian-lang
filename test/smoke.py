@@ -64,7 +64,7 @@ def main():
     chrome = subprocess.Popen([
         CHROME, '--headless=new', '--remote-debugging-port=' + str(PORT),
         '--remote-allow-origins=*', '--ignore-certificate-errors',
-        '--no-first-run', '--no-default-browser-check',
+        '--no-sandbox', '--no-first-run', '--no-default-browser-check',
         '--user-data-dir=' + profile, '--window-size=1440,900', 'about:blank',
     ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
