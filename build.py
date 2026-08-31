@@ -150,6 +150,22 @@ window.__ModuleLoader__.load({
         } catch (err) { return {} }
       }
       const fill = (template, params) => template.replace(/\{(\w+)\}/g, (match, name) => name in params ? String(params[name]) : match)
+      // lookup: в ядре 0.1.2 lookup(ns, key, chain) требует третий довод —
+      // цепочку языков; в старых ядрах его два. Спрашиваем у самого метода
+      // (lookup.length), цепочку берём у ядра (fallbackChain приватный, но в
+      // собранном коде доступен), иначе минимальная [active]. Голый вызов без
+      // chain ронял чужой слот sidebar.workspaces (chain is not iterable).
+      const lookupChain = () => {
+        try {
+          const chain = runtime.fallbackChain && runtime.fallbackChain(runtime.getLocale().active)
+          if (Array.isArray(chain) && chain.length) return chain
+        } catch (err) { /* ignore */ }
+        return [runtime.getLocale().active]
+      }
+      const lookup = (ns, key) => {
+        const chain = lookupChain()
+        return runtime.lookup.length >= 3 ? runtime.lookup(ns, key, chain) : runtime.lookup(ns, key)
+      }
       runtime.translate = function (ns, key, params) {
         // 1. Пользовательский override — самый верхний слой.
         const overrides = getOverrides()
@@ -166,7 +182,7 @@ window.__ModuleLoader__.load({
               // Ядро выбирает .one/.other по n===1; русскому нужны few/many.
               if (form === 'few' || form === 'many') {
                 const pluralKey = m[1] + '.' + form
-                const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
+                const template = lookup(ns, pluralKey) ?? lookup('common', pluralKey)
                 if (template !== undefined) {
                   return fill(template, params)
                 }
@@ -175,7 +191,7 @@ window.__ModuleLoader__.load({
               // Счётный ключ без суффикса: t('X', {n}). Если словарь даёт формы
               // X.one / X.few / X.many - берём подходящую, иначе как раньше.
               const pluralKey = key + '.' + form
-              const template = this.lookup(ns, pluralKey) ?? this.lookup('common', pluralKey)
+              const template = lookup(ns, pluralKey) ?? lookup('common', pluralKey)
               if (template !== undefined) {
                 return fill(template, params)
               }
