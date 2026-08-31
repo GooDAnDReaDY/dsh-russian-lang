@@ -7,3 +7,5 @@ credentials.yaml
 __pycache__/
 *.pyc
 .planning/
+.worktrees/
+*.tgz
