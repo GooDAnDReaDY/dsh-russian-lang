@@ -1,3 +1,7 @@
+## 0.1.26 — 2026-08-31
+
+- fix(client): pass lookup chain to core lookup for DSH 0.1.2 (PR #94, issue #93). The translate wrapper called `this.lookup(ns, key)` with two args; DSH 0.1.2 `lookup(ns, key, chain)` requires a third argument (the locale chain) and iterates it, so `chain === undefined` threw `chain is not iterable`. That crashed `timeLabel` → `SessionNodeItem` → the whole `sidebar.workspaces` slot, so the conversation list vanished with no mention of Russian. Now the wrapper asks the method's arity (`lookup.length`) and passes the chain only when the core expects it, taking it from the core's `fallbackChain` (else `[active]`). Old 2-arg cores keep working. Adds `test/test_lookup_chain.mjs`.
+
 ## 0.1.24 — 2026-08-30
 
 - fix: 0.1.23 вышла БЕЗ обещанного словаря `dsh-kanban`. Локальный `main` и `main` на GitHub разошлись: правка канбана лежала только на GitHub, релизные коммиты 0.1.21–0.1.23 — только локально, и сборка 0.1.23 шла по локальной ветке (49 пространств, 3309 ключей). 0.1.24 собрана после слияния обеих линий: 50 пространств, 3530 ключей, `dsh-kanban` внутри.
