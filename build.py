@@ -223,39 +223,12 @@ window.__ModuleLoader__.load({
         runtime.addLanguage({ id: 'ru', label: 'Русский', fallback: 'en' })
         syncLang()
 
-        // Хост-схема namespace "locale" знает только zh/en, запись preference
-        // "ru" он отклонит. Перехватываем её: выбор сохраняется нашим флагом
-        // russian-lang.enabled, остальные языки пишутся штатно.
-        //
-        // Кроме того, adopt() в ядре при каждом обновлении настроек возвращает
-        // активный язык к сохранённому preference (или языку браузера): он
-        // читает scope через getSnapshot. Пока активен русский, докладываем в
-        // снимок preference "ru", иначе любой settings-запись вернёт en.
-        const realHost = runtime.host
-        if (realHost) {
-          const origGetSnapshot = realHost.getSnapshot.bind(realHost)
-          const patchedGetSnapshot = () => {
-            const s = origGetSnapshot()
-            try {
-              if (runtime.getLocale().active === 'ru') {
-                return Object.assign({}, s, {
-                  value: Object.assign({}, s && s.value ? s.value : {}, { preference: 'ru' })
-                })
-              }
-            } catch (err) { /* ignore */ }
-            return s
-          }
-          realHost.getSnapshot = patchedGetSnapshot
-          runtime.host = {
-            getSnapshot: patchedGetSnapshot,
-            subscribe: (fn) => realHost.subscribe(fn),
-            set: (field, value) => {
-              if (field === 'preference' && value === 'ru') return Promise.resolve()
-              return realHost.set(field, value)
-            },
-            unset: (field) => realHost.unset ? realHost.unset(field) : Promise.resolve()
-          }
-        }
+        // Хост-monkey-patch (подмена runtime.host.getSnapshot/set ради
+        // preference="ru") удалён: в DSH v0.1.2-alpha.2 settings пишется через
+        // ctx.remote.settings.mutate, а adopt() читает preference из scope
+        // snapshot напрямую. Подмена host конфликтовала с новой settings-mirror
+        // и ломала запись namespace, из-за чего галочки не сохранялись. Выбор
+        // языка держим своим russian-lang.enabled; включение делает tryBoot ниже.
       }
 
       // 3. Флаг russianLang.enabled всегда повторяет активный язык: выбор
