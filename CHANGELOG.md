@@ -1,3 +1,7 @@
+## 0.1.27 — 2026-09-01
+
+- fix: адаптация под DSH v0.1.2-alpha.2 (PR #98, issue #97). После обновления ядра карточка настроек плагина сломалась: галочки не переключались или сбрасывались сразу после клика. Три причины: (1) `scope.set(...)` теперь возвращает `Promise<void>` и ошибка приходит через promise rejection, а старый `try/catch` ловил только sync throw — добавлен `.catch(...)` для promise + внешний `try/catch` для sync; (2) monkey-patch `runtime.host.getSnapshot` подменял новую `settings-mirror`, ломая путь записи — полностью удалён (DSH сам берёт preference из scope snapshot); (3) чекбокс `agentPrompt` жил на верхнем уровне namespace, а серверная schema отбрасывает неизвестные поля — перенесён под `scope.overrides`, который DSH всегда принимает. Тесты 31/31 pass; bundle валидируется `node --check` и acorn.
+
 ## 0.1.26 — 2026-08-31
 
 - fix(client): pass lookup chain to core lookup for DSH 0.1.2 (PR #94, issue #93). The translate wrapper called `this.lookup(ns, key)` with two args; DSH 0.1.2 `lookup(ns, key, chain)` requires a third argument (the locale chain) and iterates it, so `chain === undefined` threw `chain is not iterable`. That crashed `timeLabel` → `SessionNodeItem` → the whole `sidebar.workspaces` slot, so the conversation list vanished with no mention of Russian. Now the wrapper asks the method's arity (`lookup.length`) and passes the chain only when the core expects it, taking it from the core's `fallbackChain` (else `[active]`). Old 2-arg cores keep working. Adds `test/test_lookup_chain.mjs`.
