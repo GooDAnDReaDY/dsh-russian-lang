@@ -644,15 +644,21 @@ window.__ModuleLoader__.load({
       } catch (err) { console.warn('dsh-russian-lang: settings slot unavailable', err) }
     }
 
-    // Карточка настроек: React-компонент вне apply (замыкание не нужно —
-    // зависимости приходят через props.inject).
+    // Карточка настроек: React-компонент вне apply.
+    // v0.1.2-alpha.2: раннер slot-registry вызывает entry.inject() и
+    // РАЗВОРАЧИВАЕТ его результат прямо в props компонента
+    // (props.scope / props.runtime / props.toggleRu) — так же, как ядро читает
+    // props.save/props.edit в своих карточках. Формат props.inject() устарел:
+    // на alpha.2 props.inject === undefined, поэтому scope был undefined и
+    // scope.set падал ("Cannot read properties of undefined (reading 'set')").
+    // Читаем новые props напрямую, с фолбэком на inject() для старых ядер.
     function SettingsCard(props) {
-      const src = typeof props.inject === 'function'
+      const inj = typeof props.inject === 'function'
         ? (props.inject() || {})
         : (props.inject || {})
-      const scope = src.scope
-      const runtime = src.runtime
-      const toggleRu = src.toggleRu
+      const scope = props.scope || inj.scope
+      const runtime = props.runtime || inj.runtime
+      const toggleRu = props.toggleRu || inj.toggleRu
       const t = typeof props.t === 'function' ? props.t : ((k) => k)
 
       const [open, setOpen] = React.useState(false)
