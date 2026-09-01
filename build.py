@@ -260,12 +260,23 @@ window.__ModuleLoader__.load({
 
       // 3. Флаг russianLang.enabled всегда повторяет активный язык: выбор
       // английского или китайского в родном меню выключает русский и наоборот.
+      // scope.set возвращает Promise<void> в v0.1.2-alpha.2, ошибка приходит
+      // через rejection и try/catch её не ловит — обрабатываем оба канала.
       const syncFlag = () => {
         try {
           const wantRu = runtime.getLocale().active === 'ru'
           const value = scope.getSnapshot().value || {}
-          if (!!value.enabled !== wantRu) scope.set('enabled', wantRu)
-        } catch (err) { /* снимок ещё не готов */ }
+          if (!!value.enabled !== wantRu) {
+            const r = scope.set('enabled', wantRu)
+            if (r && typeof r.catch === 'function') {
+              r.catch((err) => {
+                console.warn('dsh-russian-lang: scope.set enabled failed', err && err.message || err)
+              })
+            }
+          }
+        } catch (err) {
+          /* snapshot ещё не готов, либо scope.set синхронно бросил */
+        }
       }
       ctx.effect(() => {
         try { return runtime.subscribe(syncFlag) }
@@ -708,7 +719,17 @@ window.__ModuleLoader__.load({
       const setTypo = (patch) => {
         const next = Object.assign({}, typo, patch)
         setTypoState(next) // мгновенно
-        try { scope.set('typography', next) } catch (err) { /* ignore */ }
+        // v0.1.2-alpha.2: scope.set returns Promise<void>, ошибка приходит через
+        // promise rejection. catch на promise не обработает sync throw, поэтому
+        // принимаем оба и логируем только реальные.
+        try {
+          const r = scope.set('typography', next)
+          if (r && typeof r.catch === 'function') r.catch((err) => {
+            console.warn('dsh-russian-lang: scope.set typography failed', err && err.message || err)
+          })
+        } catch (err) {
+          console.warn('dsh-russian-lang: scope.set typography sync threw', err && err.message || err)
+        }
       }
       const onEnabled = (ev) => { if (toggleRu) toggleRu(ev.target.checked) }
 
@@ -760,8 +781,18 @@ window.__ModuleLoader__.load({
             (ev) => setTypo({ enabled: ev.target.checked }), !ruActive), t('typographyDesc')),
           row(t('yo'), checkbox(typography.yo === true,
             (ev) => setTypo({ yo: ev.target.checked }), !ruActive), t('yoDesc')),
-          row(t('agentPrompt'), checkbox(value.agentPrompt === true,
-            (ev) => { try { scope.set('agentPrompt', ev.target.checked) } catch (e) { /* ignore */ } }, false), t('agentPromptDesc')),
+          row(t('agentPrompt'), checkbox(value.overrides && value.overrides.agentPrompt === true,
+            (ev) => {
+              const next = Object.assign({}, value.overrides || {}, { agentPrompt: ev.target.checked })
+              try {
+                const r = scope.set('overrides', next)
+                if (r && typeof r.catch === 'function') r.catch((err) => {
+                  console.warn('dsh-russian-lang: scope.set overrides failed', err && err.message || err)
+                })
+              } catch (err) {
+                console.warn('dsh-russian-lang: scope.set overrides sync threw', err && err.message || err)
+              }
+            }, false), t('agentPromptDesc')),
           React.createElement('div', { className: 'rl-note' },
             t('overridesCount') + ': ' + overridesCount),
           React.createElement('div', { className: 'rl-hint' }, t('altL')),
