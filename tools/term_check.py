@@ -57,9 +57,9 @@ def validate_glossary(ru_dicts, glossary):
         forbidden = spec.get('forbidden', [])
         canonical = spec.get('canonical', '')
         for bad in forbidden:
-            # Матчим основу слова (без окончания), чтобы ловить падежные формы (затравка / затравку / затравки)
-            stem = bad.rstrip('аяоеуыиь') if len(bad) > 4 else bad
-            pattern = re.compile(r'\b' + re.escape(stem) + r'[а-яё]*\b', re.IGNORECASE)
+            # Для склоняемых слов отсекаем только гласную окончания (-а/-я/-о/-е/-ы/-и/-ь), сохраняя основу
+            base = re.sub(r'[аяоеыиь]$', '', bad, flags=re.IGNORECASE)
+            pattern = re.compile(r'\b' + re.escape(base) + r'(?:[аяуеыи]|ом|ем|ой|ей|ам|ами|ах|ов)?\b', re.IGNORECASE)
             for ns, entries in ru_dicts.items():
                 for key, ru_text in entries.items():
                     if not isinstance(ru_text, str):
