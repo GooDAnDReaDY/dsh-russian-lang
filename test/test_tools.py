@@ -132,6 +132,25 @@ for ns, entries in en_fix.items():
 variants = {en_text: len({r for _, _, r in uses}) for en_text, uses in idx.items()}
 check(variants['Save'] == 2, 'term_check: одно en — два разных ru ловится')
 
+
+# ---------- term_check (glossary validation) ----------
+sample_glossary = {
+    'terms': {
+        'prompt': {
+            'canonical': 'Промпт',
+            'forbidden': ['Затравка', 'Побуждение']
+        }
+    }
+}
+clean_ru = {'ns1': {'p': 'Введите системный промпт'}}
+bad_ru = {'ns1': {'p': 'Введите системную затравку'}}
+
+check(len(tc.validate_glossary(clean_ru, sample_glossary)) == 0,
+      'term_check.validate_glossary: чистый словарь проходит')
+bad_hits = tc.validate_glossary(bad_ru, sample_glossary)
+check(len(bad_hits) == 1 and bad_hits[0][3] == 'Затравка',
+      'term_check.validate_glossary: запрещённый термин ловится')
+
 # ---------- mt_autofill ----------
 ma = load('mt_autofill', os.path.join(TOOLS, 'mt_autofill.py'))
 prev_fix = {'nsA': {'old': 'x'}}
