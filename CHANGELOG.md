@@ -1,3 +1,11 @@
+## 0.1.29 — 2026-09-02
+
+- feat(tools): formalize DSH glossary (`glossary.json`) and validate in CI (`tools/term_check.py --ci`) (PR #115, issue #108). Prevents calques and terminology divergence across 50+ namespaces.
+- feat(i18n): format helpers for numbers, currencies, and relative time (PR #116, issue #106). Adds `formatNumber` (non-breaking thousand separator), `formatRelativeTime` (`Intl.RelativeTimeFormat`), `formatCurrency` in `ru-RU`, and extends `fill()` with format specifiers `{val:number}`, `{val:reltime}`, `{val:currency}`.
+- feat(i18n): smart inflection engine for entity names and roles (PR #117, issue #104). Adds `inflect(phrase, case)` supporting `gen`, `dat`, `acc`, `ins`, `pre` Russian cases with safe fallback for Latin and acronyms.
+- feat(typography): streaming typography and Chinese quote normalization (PR #118, issue #105). Normalizes Chinese quotes (`“”`, `『』`) into Russian guillemets (`«...»`), cleans up stray spaces before punctuation, and isolates LaTeX math ($...$) and code blocks.
+- test(qa): UI text overflow and truncation detector (PR #119, issue #111). Adds `test/overflow.py` and `test/test_overflow.py` for automated inspection of UI elements (`scrollWidth > clientWidth`).
+
 ## 0.1.28 — 2026-09-02
 
 - fix(settings): карточка настроек работает на DSH v0.1.2-alpha.2 (PR #100, #101, #113; issues #99, #97). Три слоя проблем: (1) `scope.set` в ядре теперь возвращает `Promise<void>` — ошибка приходит через promise rejection, старый `try/catch` её глотал; добавлены `.catch(...)` для promise-канала и внешний `try/catch` для sync. (2) Устаревший monkey-patch `runtime.host.getSnapshot/set` конфликтовал с новой settings-mirror и ломал запись namespace — удалён полностью. (3) Контракт slot-inject изменился: renderer вызывает `entry.inject()` и разворачивает результат прямо в props (`props.scope`/`props.runtime`/`props.toggleRu`), а не отдаёт `props.inject` — карточка читала устаревший формат и получала `scope === undefined`, из-за чего каждый клик падал «Cannot read properties of undefined (reading 'set')». Читаем новые props с фолбэком на старый контракт.

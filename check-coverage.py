@@ -37,6 +37,10 @@ def load_dir(name):
 
 def load_file(name):
     path = os.path.join(HERE, name)
+    if not os.path.exists(path):
+        alt = os.path.join(HERE, 'upstream', name)
+        if os.path.exists(alt):
+            path = alt
     return json.load(open(path, encoding='utf-8')) if os.path.exists(path) else {}
 
 
