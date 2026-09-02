@@ -57,6 +57,34 @@ if os.path.exists(mt_path):
 
 payload = json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True)
 
+# Карта zh->ru для DOM-перевода панелей, игнорирующих locale-ядро (например
+# dsh-skill-hub выбирает свой словарь по documentElement.lang и умеет только
+# en/zh). Собирается из zh-референсов сторонних плагинов и наших ru-словарей:
+# совпал ключ — пара zh-строка -> ru-строка. Вставляется в бандл, клиент
+# заменяет китайские текстовые узлы при активном русском.
+import re as _re
+zh_ru = {}
+for ref_path in sorted(glob.glob(os.path.join(HERE, 'zh-refs', '*.json'))):
+    base = os.path.basename(ref_path)
+    num = base.split('-')[0]
+    ru_path = os.path.join(HERE, 'ru-plugins', num + '-' + base[len(num + '-'):-len('.zh.json')] + '.json')
+    if not os.path.exists(ru_path):
+        continue
+    zh = json.load(open(ref_path, encoding='utf-8'))
+    # ru-файл — {ns: {ключ: перевод}}
+    ru_part = json.load(open(ru_path, encoding='utf-8'))
+    ru_entries = {}
+    for ns_entries in ru_part.values():
+        ru_entries.update(ns_entries)
+    for key, zh_text in zh.items():
+        if not isinstance(zh_text, str) or not _re.search(r'[\u3400-\u9fff\uf900-\ufaff]', zh_text):
+            continue
+        ru_text = ru_entries.get(key)
+        if isinstance(ru_text, str) and ru_text:
+            zh_ru[zh_text] = ru_text
+zh_ru_json = json.dumps(zh_ru, ensure_ascii=False, sort_keys=True)
+print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
+
 # Частотный словарь для фикса раскладки (tools/ru-freq.json). Обновляется
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
@@ -118,6 +146,9 @@ window.__ModuleLoader__.load({
 
     /** namespace -> { ключ: перевод } */
     const RU = %s
+
+    /** zh-строка -> ru-строка для DOM-перевода панелей вне locale-ядра. */
+    const ZH_RU = %s
 
     // Подписи собственной карточки настроек (namespace russian-lang).
     RU['russian-lang'] = %s
@@ -347,6 +378,96 @@ window.__ModuleLoader__.load({
         try { document.querySelectorAll('[' + SPELL_ON + ']').forEach(spellOff) } catch (err) { /* ignore */ }
       }, 'dsh-russian-lang: spellcheck')
       syncSpell()
+
+      // 5b. DOM-перевод панелей, игнорирующих locale-ядро. dsh-skill-hub
+      // выбирает свой zh/en-словарь по documentElement.lang и умеет только эти
+      // два языка; наш ru-словарь в его lookup не попадает. Эти строки
+      // встречаются в DOM как готовый китайский текст, поэтому при активном
+      // русском заменяем их по карте ZH_RU (собрана на сборке из zh-референса
+      // плагина и нашего перевода по тем же ключам). Плейсхолдеры ({count} и
+      // т.п.) к моменту рендера уже подставлены — шаблонные пары превращаем в
+      // регексы, значения переносим в ru-шаблон. Реагируем на мутации DOM
+      // (панель перерисовывается React'ом), при уходе с русского ничего не
+      // восстанавливаем — панель сама перерисуется по новому lang.
+      const ZH_CJK = /[\u3400-\u9fff\uf900-\ufaff]/
+      const ZH_RE_ESC = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const ZH_EXACT = new Map()
+      const ZH_PATTERNS = []
+      for (const [zhText, ruText] of Object.entries(ZH_RU)) {
+        if (typeof zhText !== 'string' || !ZH_CJK.test(zhText) || !ruText) continue
+        if (/\{[a-zA-Z_]\w*\}/.test(zhText)) {
+          const parts = zhText.split(/\{[a-zA-Z_]\w*\}/g)
+          if (parts.some((p) => p.length === 0)) continue // якорь на соседние {} ненадёжен
+          ZH_PATTERNS.push({ re: new RegExp(parts.map(ZH_RE_ESC).join('([\\s\\S]*?)')), ruParts: ruText.split(/\{[a-zA-Z_]\w*\}/g) })
+        } else {
+          ZH_EXACT.set(zhText, ruText)
+        }
+      }
+      ZH_PATTERNS.sort((a, b) => b.re.source.length - a.re.source.length)
+      const zhTranslateText = (text) => {
+        if (!ZH_CJK.test(text)) return null
+        const exact = ZH_EXACT.get(text)
+        if (exact !== undefined) return exact
+        for (const p of ZH_PATTERNS) {
+          const m = p.re.exec(text)
+          if (m && m[0] === text) {
+            let out = p.ruParts[0]
+            for (let i = 1; i < p.ruParts.length; i++) out += m[i] + p.ruParts[i]
+            return out
+          }
+        }
+        return null
+      }
+      const ZH_WALKER = (root) => {
+        try {
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
+          const hits = []
+          for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+            if (node.nodeValue && node.nodeValue.length >= 2 && ZH_CJK.test(node.nodeValue)) hits.push(node)
+          }
+          for (const node of hits) {
+            const next = zhTranslateText(node.nodeValue)
+            if (next) node.nodeValue = next
+          }
+          // title/placeholder/aria-label — атрибуты с пользовательским текстом.
+          for (const el of root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label]') : []) {
+            for (const attr of ['title', 'placeholder', 'aria-label']) {
+              const v = el.getAttribute && el.getAttribute(attr)
+              if (v && v.length >= 2 && ZH_CJK.test(v)) {
+                const next = zhTranslateText(v)
+                if (next) el.setAttribute(attr, next)
+              }
+            }
+          }
+        } catch (err) { /* ignore */ }
+      }
+      let zhObserver = null
+      const syncZhDom = () => {
+        try {
+          if (typeof document === 'undefined') return
+          const ru = runtime.getLocale().active === 'ru'
+          if (!ru) {
+            if (zhObserver) { zhObserver.disconnect(); zhObserver = null }
+            return
+          }
+          if (!zhObserver) {
+            zhObserver = new MutationObserver(() => {
+              // Панель перерисовывается React'ом; обход после микрозадачи,
+              // чтобы поймать уже вставленные узлы. Тяжёлых страниц мало —
+              // ponytail: обход всего body, при тормозах ограничить секцией.
+              queueMicrotask(() => { try { ZH_WALKER(document.body) } catch (err) { /* ignore */ } })
+            })
+            zhObserver.observe(document.body, { childList: true, subtree: true, characterData: true })
+          }
+          ZH_WALKER(document.body)
+        } catch (err) { /* ignore */ }
+      }
+      const unsubscribeZh = runtime.subscribe(syncZhDom)
+      ctx.effect(() => {
+        unsubscribeZh()
+        if (zhObserver) zhObserver.disconnect()
+      }, 'dsh-russian-lang: zh-dom')
+      syncZhDom()
 
       // 6. Типографика (russian-lang.typography { enabled, yo }): постпроцессор
       // текстовых узлов при активном русском - ёлочки, тире, неразрывные
@@ -808,7 +929,7 @@ window.__ModuleLoader__.load({
     return module.exports
   },
 })
-''' % (payload, card_json, yo_json, freq_json)
+''' % (payload, zh_ru_json, card_json, yo_json, freq_json)
 
 open(os.path.join(HERE, 'lib', 'client.js'), 'w', encoding='utf-8').write(client)
 print('namespace-ов: %d, ключей: %d -> lib/client.js'
