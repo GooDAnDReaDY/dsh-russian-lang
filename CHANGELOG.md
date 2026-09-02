@@ -1,3 +1,10 @@
+## 0.1.30 — 2026-09-02
+
+- feat(ui): report translation issue and request plugin translation via GitHub Issues (PR #120, issue #112). Adds `makeIssueUrl` helper and UI link in SettingsCard generating pre-filled GitHub issues for `GooDAnDReaDY/dsh-russian-lang`.
+- feat(ui): plugin localization coverage inspector and badge status (PR #121, issue #107). Adds `getPluginLocalizationStatus(ns)` helper for checking dictionary coverage of installed plugins.
+- feat(tools): export and import utilities for PO, XLIFF 1.2, and CSV formats (PR #122, issue #109). Adds `tools/export_i18n.py` and `tools/import_i18n.py` with placeholder validation.
+- refactor(bundle): optimize dictionary payload serialization and client size (PR #123, issue #110). Compact JSON serialization reducing client bundle footprint.
+
 ## 0.1.29 — 2026-09-02
 
 - feat(tools): formalize DSH glossary (`glossary.json`) and validate in CI (`tools/term_check.py --ci`) (PR #115, issue #108). Prevents calques and terminology divergence across 50+ namespaces.
