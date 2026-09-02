@@ -45,7 +45,7 @@
   },
   "scripts": {
     "build": "python3 build.py",
-    "check": "python3 check-coverage.py",
+    "check": "python3 check-coverage.py && python3 tools/term_check.py --ci",
     "test": "python3 test/test_extract.py",
     "smoke": "python3 test/smoke.py"
   },

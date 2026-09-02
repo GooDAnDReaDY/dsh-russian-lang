@@ -142,7 +142,7 @@
     "delete.confirmText": "Переместить «{name}» в корзину? Его можно восстановить в любой момент.",
     "delete.confirm": "В корзину",
     "detail.back": "К списку",
-    "detail.provider": "Поставщик",
+    "detail.provider": "Провайдер",
     "detail.addedAt": "Добавлен",
     "detail.updatedAt": "Обновлён",
     "detail.path": "Путь",

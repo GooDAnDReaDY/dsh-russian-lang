@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
-"""Консистентность терминологии: один en-термин — один ru-перевод.
+# -*- coding: utf-8 -*-
+"""Консистентность терминологии и валидация по глоссарию (glossary.json).
 
-Собирает обратный индекс en-строка -> [(ns, key, ru)] по всем словарям
-(core-en/plugins-en против ru/ru-plugins) и печатает группы, где одинаковый
-en-текст переведён по-разному. Расхождения с разными {placeholders} или
-разным регистром целиком не считаются конфликтом.
+Проверяет:
+1. Отсутствие запрещенных терминов и калек из glossary.json в словарях ru/ и ru-plugins/.
+2. Единообразие перевода одинаковых en-терминов (один en-термин - один ru-перевод).
 
 Использование:
-    python3 tools/term_check.py            # отчёт в stdout
-    python3 tools/term_check.py --strict   # только точные совпадения en (без учёта регистра)
+    python3 tools/term_check.py            # отчет в stdout
+    python3 tools/term_check.py --ci       # выход с кодом 1 при наличии запрещенных терминов
+    python3 tools/term_check.py --strict   # строгая проверка расхождений en (без учета регистра)
 """
 import argparse
 import collections
 import glob
 import json
 import os
+import re
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -39,14 +42,58 @@ def _load_en():
     return out
 
 
+def load_glossary():
+    path = os.path.join(REPO, 'glossary.json')
+    if os.path.exists(path):
+        return json.load(open(path, encoding='utf-8'))
+    return {}
+
+
+def validate_glossary(ru_dicts, glossary):
+    """Поиск запрещенных терминов из glossary.json в переводах."""
+    forbidden_hits = []
+    terms = glossary.get('terms', {})
+    for term_key, spec in terms.items():
+        forbidden = spec.get('forbidden', [])
+        canonical = spec.get('canonical', '')
+        for bad in forbidden:
+            # Матчим основу слова (без окончания), чтобы ловить падежные формы (затравка / затравку / затравки)
+            stem = bad.rstrip('аяоеуыиь') if len(bad) > 4 else bad
+            pattern = re.compile(r'\b' + re.escape(stem) + r'[а-яё]*\b', re.IGNORECASE)
+            for ns, entries in ru_dicts.items():
+                for key, ru_text in entries.items():
+                    if not isinstance(ru_text, str):
+                        continue
+                    if pattern.search(ru_text):
+                        forbidden_hits.append((ns, key, ru_text, bad, canonical, term_key))
+    return forbidden_hits
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--strict', action='store_true')
+    ap.add_argument('--strict', action='store_true', help='Строгое сопоставление en')
+    ap.add_argument('--ci', action='store_true', help='Падать с ошибкой при нарушении глоссария')
     args = ap.parse_args()
 
     en = _load_en()
     ru = load_merged(('ru', 'ru-plugins'))
+    glossary = load_glossary()
 
+    # 1. Проверка по глоссарию
+    print('=== ПРОВЕРКА ГЛОССАРИЯ (glossary.json) ===')
+    hits = validate_glossary(ru, glossary)
+    if hits:
+        print('  ОБНАРУЖЕНЫ ЗАПРЕЩЕННЫЕ ТЕРМИНЫ (%d):' % len(hits))
+        for ns, key, ru_text, bad, canonical, term_key in hits:
+            print('    [!] %s.%s: найдено «%s» вместо «%s» (%s)' % (ns, key, bad, canonical, term_key))
+            print('        Текст: %s' % ru_text)
+    else:
+        terms_count = len(glossary.get('terms', {}))
+        print('  Все термины глоссария соблюдены (%d правил).' % terms_count)
+    print()
+
+    # 2. Обратный индекс расхождений en -> ru
+    print('=== СООТВЕТСТВИЕ ОРИГИНАЛАМ (EN -> RU) ===')
     index = collections.defaultdict(list)
     for ns, entries in en.items():
         for key, en_text in entries.items():
@@ -68,11 +115,17 @@ def main():
             variants.append((ns, key, ru_text))
         if len(variants) > 1:
             conflicts += 1
-            print('«%s»' % en_text)
-            for ns, key, ru_text in variants:
-                print('   %s.%s -> %s' % (ns, key, ru_text))
-            print()
-    print('расхождений: %d' % conflicts)
+            if not args.ci:
+                print('«%s»' % en_text)
+                for ns, key, ru_text in variants:
+                    print('   %s.%s -> %s' % (ns, key, ru_text))
+                print()
+    print('  Расхождений формулировок: %d' % conflicts)
+    print()
+
+    if args.ci and hits:
+        print('ОШИБКА CI: нарушены правила glossary.json!')
+        sys.exit(1)
 
 
 if __name__ == '__main__':
