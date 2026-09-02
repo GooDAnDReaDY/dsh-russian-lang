@@ -122,6 +122,8 @@ card_ru = {
     'statusUnavailable': 'Настройки недоступны на этом хосте',
     'hint': 'Машинные переводы помечены в очереди выверки; ручная правка словарей приоритетна.',
     'altL': 'Alt+L — конвертировать раскладку текущего поля',
+    'reportIssue': 'Сообщить об ошибке перевода',
+    'requestPlugin': 'Запросить перевод плагина',
 }
 card_json = json.dumps(card_ru, ensure_ascii=False)
 
@@ -288,6 +290,31 @@ window.__ModuleLoader__.load({
         const validCases = new Set(['gen', 'dat', 'acc', 'ins', 'pre'])
         if (!validCases.has(cName)) return phrase
         return phrase.split(' ').map((w) => inflectWord(w, cName)).join(' ')
+      }
+
+      const makeIssueUrl = (opts = {}) => {
+        const repo = 'GooDAnDReaDY/dsh-russian-lang'
+        const title = opts.title || (opts.plugin ? `[Перевод] Запрос локализации для плагина ${opts.plugin}` : '[Ошибка перевода] Неточный перевод фразы')
+        const bodyLines = [
+          '### Описание проблемы',
+          opts.description || (opts.plugin ? `Просьба добавить русскую локализацию для плагина \`${opts.plugin}\`.` : 'Обнаружена неточность в переводе интерфейса.'),
+          '',
+          '### Технический контекст',
+          opts.ns ? `- **Namespace**: \`${opts.ns}\`` : null,
+          opts.key ? `- **Ключ**: \`${opts.key}\`` : null,
+          opts.en ? `- **Оригинал (EN)**: ${opts.en}` : null,
+          opts.ru ? `- **Текущий перевод (RU)**: ${opts.ru}` : null,
+          opts.plugin ? `- **Плагин**: \`${opts.plugin}\`` : null,
+          `- **Версия dsh-russian-lang**: \`0.1.29\``,
+          typeof navigator !== 'undefined' ? `- **User Agent**: \`${navigator.userAgent}\`` : null,
+          '',
+          '### Предлагаемый вариант перевода',
+          opts.proposal || '_Опишите ваш вариант перевода..._'
+        ].filter(Boolean)
+        const params = new URLSearchParams()
+        params.set('title', title)
+        params.set('body', bodyLines.join('\n'))
+        return `https://github.com/${repo}/issues/new?` + params.toString()
       }
 
       const formatCurrency = (val, cur) => {
@@ -1035,6 +1062,13 @@ window.__ModuleLoader__.load({
           React.createElement('div', { className: 'rl-note' },
             t('overridesCount') + ': ' + overridesCount),
           React.createElement('div', { className: 'rl-hint' }, t('altL')),
+          React.createElement('div', { className: 'rl-actions' },
+            React.createElement('a', {
+              href: makeIssueUrl(),
+              target: '_blank',
+              rel: 'noopener noreferrer',
+              className: 'rl-link'
+            }, '💬 ' + t('reportIssue'))),
           React.createElement('div', { className: 'rl-foot' }))
       )
     }
@@ -1054,6 +1088,9 @@ window.__ModuleLoader__.load({
       '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary)}',
       '.rl-note{color:var(--dsw-alias-label-secondary);font-size:12px;padding:8px 0 4px}',
       '.rl-hint{color:var(--dsw-alias-label-secondary);font-size:12px;padding:4px 0 8px}',
+      '.rl-actions{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-start;align-items:center;gap:12px;padding:8px 0 4px}',
+      '.rl-link{color:var(--dsw-alias-label-secondary);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}',
+      '.rl-link:hover{color:var(--dsw-alias-label-primary);text-decoration:underline}',
       '.rl-foot{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0 4px}',
     ].join('\n')
     if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {
