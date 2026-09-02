@@ -676,7 +676,7 @@
       "at": "2026-08-29T22:32:36",
       "en": "{count} provider catalogs could not be loaded",
       "model": "deepseek/deepseek-chat",
-      "ru": "{count} каталогов поставщиков не удалось загрузить"
+      "ru": "{count} каталогов провайдеров не удалось загрузить"
     },
     "plan.model.providerDefault": {
       "at": "2026-08-29T22:32:38",
@@ -3826,7 +3826,7 @@
       "at": "2026-08-25T19:07:17",
       "en": "Provider",
       "model": "deepseek/deepseek-chat",
-      "ru": "Поставщик"
+      "ru": "Провайдер"
     },
     "f.providerHint": {
       "at": "2026-08-25T19:07:23",
@@ -5422,7 +5422,7 @@
       "at": "2026-08-25T19:09:06",
       "en": "+ Add provider",
       "model": "deepseek/deepseek-chat",
-      "ru": "+ Добавить поставщика"
+      "ru": "+ Добавить провайдера"
     },
     "brokenKey": {
       "at": "2026-08-25T19:09:08",
@@ -5602,7 +5602,7 @@
       "at": "2026-08-25T19:09:57",
       "en": "No providers registered with DSH — nothing to pick from yet.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Нет зарегистрированных поставщиков в DSH — пока не из чего выбирать."
+      "ru": "Нет зарегистрированных провайдеров в DSH — пока не из чего выбирать."
     },
     "notRegistered": {
       "at": "2026-08-25T19:09:59",
@@ -8658,7 +8658,7 @@
       "at": "2026-08-25T19:15:29",
       "en": "Filter provider/model…",
       "model": "deepseek/deepseek-chat",
-      "ru": "Фильтр по поставщику/модели…"
+      "ru": "Фильтр по провайдеру/модели…"
     },
     "hourSpend": {
       "at": "2026-08-25T19:15:32",
@@ -9344,7 +9344,7 @@
       "at": "2026-08-25T19:18:52",
       "en": "Log in with a consumer subscription. Tokens stay on the host credentials store. The browser never reads them back. After Connect, if the provider lands on localhost or a vendor page, paste the redirected URL or the code here.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Войдите с помощью потребительской подписки. Токены остаются в хранилище учетных данных хоста. Браузер никогда не читает их обратно. После подключения, если провайдер перенаправляет на localhost или страницу поставщика, вставьте перенаправленный URL или код сюда."
+      "ru": "Войдите с помощью потребительской подписки. Токены остаются в хранилище учетных данных хоста. Браузер никогда не читает их обратно. После подключения, если провайдер перенаправляет на localhost или страницу провайдера, вставьте перенаправленный URL или код сюда."
     },
     "loading": {
       "at": "2026-08-25T19:18:55",
@@ -9434,7 +9434,7 @@
       "at": "2026-08-25T19:19:20",
       "en": "Leave off unless you registered your own OAuth client for this origin. Vendor CLI clients usually require their published redirect URI plus the paste step.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Не включайте, если вы не зарегистрировали собственный OAuth-клиент для этого источника. CLI-клиенты поставщиков обычно требуют опубликованный URI перенаправления и шаг вставки."
+      "ru": "Не включайте, если вы не зарегистрировали собственный OAuth-клиент для этого источника. CLI-клиенты провайдеров обычно требуют опубликованный URI перенаправления и шаг вставки."
     },
     "verifyAccount": {
       "at": "2026-08-25T19:19:21",
@@ -9496,7 +9496,7 @@
       "at": "2026-08-25T19:19:39",
       "en": "Required for the azure provider, e.g. eastus.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Необходимо для поставщика Azure, например, eastus."
+      "ru": "Необходимо для провайдера Azure, например, eastus."
     },
     "azureRegion": {
       "at": "2026-08-25T19:19:41",
@@ -9544,7 +9544,7 @@
       "at": "2026-08-25T19:19:57",
       "en": "Provider chain",
       "model": "deepseek/deepseek-chat",
-      "ru": "Цепочка поставщиков"
+      "ru": "Цепочка провайдеров"
     },
     "chime": {
       "at": "2026-08-25T19:19:58",
@@ -9840,7 +9840,7 @@
       "at": "2026-08-26T14:47:18",
       "en": "Filter providers…",
       "model": "deepseek/deepseek-chat",
-      "ru": "Фильтровать поставщиков…"
+      "ru": "Фильтровать провайдеров…"
     },
     "keyHidden": {
       "at": "2026-08-25T19:21:26",
@@ -9948,7 +9948,7 @@
       "at": "2026-08-25T19:21:49",
       "en": "Vision provider",
       "model": "deepseek/deepseek-chat",
-      "ru": "Поставщик услуг по зрению"
+      "ru": "Провайдер услуг по зрению"
     },
     "remove": {
       "at": "2026-08-25T19:21:51",
@@ -10076,7 +10076,7 @@
       "at": "2026-08-25T19:22:37",
       "en": "Add provider",
       "model": "deepseek/deepseek-chat",
-      "ru": "Добавить поставщика"
+      "ru": "Добавить провайдера"
     },
     "browserFailed": {
       "at": "2026-08-25T19:22:39",
@@ -11594,7 +11594,7 @@
       "at": "2026-08-29T22:58:28",
       "en": "Loading providers…",
       "model": "deepseek/deepseek-chat",
-      "ru": "Загрузка поставщиков…"
+      "ru": "Загрузка провайдеров…"
     },
     "account.provenance.configured": {
       "at": "2026-08-29T22:58:29",
@@ -11648,13 +11648,13 @@
       "at": "2026-08-29T22:58:43",
       "en": "The provider hostname could not be resolved.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Имя хоста поставщика не удалось разрешить."
+      "ru": "Имя хоста провайдера не удалось разрешить."
     },
     "account.reason.noValidatedAddress": {
       "at": "2026-08-29T22:58:45",
       "en": "No validated provider address was available.",
       "model": "deepseek/deepseek-chat",
-      "ru": "Не было доступно ни одного проверенного адреса поставщика."
+      "ru": "Не было доступно ни одного проверенного адреса провайдера."
     },
     "account.reason.rateLimited": {
       "at": "2026-08-29T22:58:47",

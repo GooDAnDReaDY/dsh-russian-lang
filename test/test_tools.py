@@ -161,6 +161,24 @@ check(ma.new_keys({'nsA': {'a': '1'}}, {'nsA': {'a': '1'}}) == {}, 'mt_autofill:
 
 # ---------- итог ----------
 print()
+
+# ---------- lint_translations ----------
+import lint_translations as lt
+
+clean_en = {'ns1': {'hello': 'Hello {user}'}}
+clean_ru = {'ns1': {'hello': 'Привет, {user}'}}
+broken_ph_ru = {'ns1': {'hello': 'Привет, {wrong}'}}
+
+check(len(lt.lint_placeholders(clean_en, clean_ru)) == 0, 'lint_translations: чистые плейсхолдеры проходят')
+ph_errs = lt.lint_placeholders(clean_en, broken_ph_ru)
+check(len(ph_errs) == 1 and ph_errs[0][0] == 'PH_MISMATCH', 'lint_translations: ловит несоответствие плейсхолдеров')
+
+sample_glo = {'terms': {'subagent': {'canonical': 'Субагент', 'forbidden': ['Подагент']}}}
+bad_term_ru = {'ns1': {'sub': 'Это вспомогательный подагент'}}
+glo_errs = lt.lint_glossary(bad_term_ru, sample_glo)
+check(len(glo_errs) == 1 and glo_errs[0][0] == 'FORBIDDEN_TERM', 'lint_translations: ловит запрещённый термин')
+
+
 if FAILS:
     print('ПРОВАЛЕНО: %d' % len(FAILS))
     sys.exit(1)
@@ -208,7 +226,3 @@ check(len(delta['ph_mismatches']) == 1 and delta['ph_mismatches'][0][1] == 'key2
 rep = uw.generate_markdown_report(delta)
 check('### Новые ключи для перевода' in rep and 'key_new' in rep, 'upstream_watch: генерирует markdown отчёт')
 
-if FAILS:
-    print('ПРОВАЛЕНО: %d' % len(FAILS))
-    sys.exit(1)
-print('Все проверки инструментов пройдены.')
