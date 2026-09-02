@@ -164,4 +164,28 @@ print()
 if FAILS:
     print('ПРОВАЛЕНО: %d' % len(FAILS))
     sys.exit(1)
+
+# ---------- export_i18n / import_i18n ----------
+import export_i18n as exp
+import import_i18n as imp
+
+sample_en = {'ns1': {'greeting': 'Hello {name}', 'farewell': 'Goodbye'}}
+sample_ru = {'ns1': {'greeting': 'Привет, {name}', 'farewell': 'До свидания'}}
+
+# PO roundtrip
+po_data = exp.export_po(sample_en, sample_ru)
+po_parsed = imp.parse_po(po_data)
+check(po_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import PO: сохраняет плейсхолдеры и строки')
+check(po_parsed.get('ns1', {}).get('farewell') == 'До свидания', 'export/import PO: сохраняет простые строки')
+
+# XLIFF roundtrip
+xlf_data = exp.export_xliff(sample_en, sample_ru)
+xlf_parsed = imp.parse_xliff(xlf_data)
+check(xlf_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import XLIFF: сохраняет плейсхолдеры и строки')
+
+# CSV roundtrip
+csv_data = exp.export_csv(sample_en, sample_ru)
+csv_parsed = imp.parse_csv(csv_data)
+check(csv_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import CSV: сохраняет плейсхолдеры и строки')
+
 print('Все проверки инструментов пройдены.')
