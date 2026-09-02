@@ -1,3 +1,10 @@
+## 0.1.31 — 2026-09-02
+
+- feat(search): Russian search morphology and fuzzy matching for command palette (PR #128, issue #124). Adds `stemRussian` Porter-like stemmer and `fuzzyMatchRu` with support for inflected word forms, exact substrings, and layout transliteration in command palette search (`Ctrl+K`) and slash menu (`/`).
+- feat(errors): human-readable system and network error translator (PR #129, issue #125). Adds `humanizeError` translating Node.js POSIX (`ENOENT`, `EACCES`, `ECONNREFUSED`), HTTP (`401`, `403`, `404`, `429`, `500`), and API rate limit errors into friendly Russian explanations with actionable troubleshooting hints.
+- feat(tools): upstream watchdog and delta detector for DSH core updates (PR #130, issue #126). Adds `tools/upstream_watch.py` for automatically detecting newly added upstream strings and generating translation review queues (`upstream/review-queue.md`).
+- feat(tools): comprehensive dictionary linter and git pre-commit hook (PR #131, issue #127). Adds `tools/lint_translations.py` for static JSON validation, placeholder verification, and glossary compliance with `--install-hook` support.
+
 ## 0.1.30 — 2026-09-02
 
 - feat(ui): report translation issue and request plugin translation via GitHub Issues (PR #120, issue #112). Adds `makeIssueUrl` helper and UI link in SettingsCard generating pre-filled GitHub issues for `GooDAnDReaDY/dsh-russian-lang`.
