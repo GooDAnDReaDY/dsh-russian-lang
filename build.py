@@ -292,6 +292,16 @@ window.__ModuleLoader__.load({
         return phrase.split(' ').map((w) => inflectWord(w, cName)).join(' ')
       }
 
+      const getPluginLocalizationStatus = (ns) => {
+        if (!ns) return { status: 'none', count: 0, label: 'RU отсутствует' }
+        const dict = RU[ns] || {}
+        const count = Object.keys(dict).length
+        if (count > 0) {
+          return { status: 'full', count, label: `RU: ${count} строк` }
+        }
+        return { status: 'none', count: 0, label: 'RU отсутствует' }
+      }
+
       const makeIssueUrl = (opts = {}) => {
         const repo = 'GooDAnDReaDY/dsh-russian-lang'
         const title = opts.title || (opts.plugin ? `[Перевод] Запрос локализации для плагина ${opts.plugin}` : '[Ошибка перевода] Неточный перевод фразы')
@@ -339,6 +349,7 @@ window.__ModuleLoader__.load({
         runtime.formatRelativeTime = formatRelativeTime
         runtime.formatCurrency = formatCurrency
         runtime.inflect = inflect
+        runtime.getPluginLocalizationStatus = getPluginLocalizationStatus
       } catch (err) { /* ignore */ }
       // lookup: в ядре 0.1.2 lookup(ns, key, chain) требует третий довод —
       // цепочку языков; в старых ядрах его два. Спрашиваем у самого метода
