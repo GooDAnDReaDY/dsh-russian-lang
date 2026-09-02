@@ -55,7 +55,7 @@ if os.path.exists(mt_path):
             if key not in merged.get(ns, {}):
                 merged.setdefault(ns, {})[key] = rec.get('ru', '')
 
-payload = json.dumps(merged, ensure_ascii=False, indent=1, sort_keys=True)
+payload = json.dumps(merged, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
 
 # Карта zh->ru для DOM-перевода панелей, игнорирующих locale-ядро (например
 # dsh-skill-hub выбирает свой словарь по documentElement.lang и умеет только
