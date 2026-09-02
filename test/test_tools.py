@@ -188,4 +188,27 @@ csv_data = exp.export_csv(sample_en, sample_ru)
 csv_parsed = imp.parse_csv(csv_data)
 check(csv_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import CSV: сохраняет плейсхолдеры и строки')
 
+
+# ---------- upstream_watch ----------
+import upstream_watch as uw
+
+sample_en = {
+    'ns1': {'key1': 'Hello {user}', 'key2': 'Save changes'},
+    'ns2': {'key_new': 'New feature'}
+}
+sample_ru = {
+    'ns1': {'key1': 'Привет, {user}', 'key2': 'Сохранить {wrong}'},
+    'ns3': {'old_key': 'Старый ключ'}
+}
+
+delta = uw.compute_delta(sample_en, sample_ru)
+check(len(delta['new']) == 1 and delta['new'][0][1] == 'key_new', 'upstream_watch: находит новые ключи')
+check(len(delta['obsolete']) == 1 and delta['obsolete'][0][1] == 'old_key', 'upstream_watch: находит устаревшие ключи')
+check(len(delta['ph_mismatches']) == 1 and delta['ph_mismatches'][0][1] == 'key2', 'upstream_watch: находит несовпадения плейсхолдеров')
+rep = uw.generate_markdown_report(delta)
+check('### Новые ключи для перевода' in rep and 'key_new' in rep, 'upstream_watch: генерирует markdown отчёт')
+
+if FAILS:
+    print('ПРОВАЛЕНО: %d' % len(FAILS))
+    sys.exit(1)
 print('Все проверки инструментов пройдены.')
