@@ -24,7 +24,7 @@ PLACEHOLDER = re.compile(r'\{(\w+)\}')
 
 def placeholders(text):
     """Set of {name} placeholders in a template string."""
-    return set(PLACEHOLDER.findall(text))
+    return set(PLACEHOLDER.findall(text or ''))
 
 
 def load_dir(name):
