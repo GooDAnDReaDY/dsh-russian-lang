@@ -1,36 +1,26 @@
-// Plural-form selection for Russian, as used by the plugin's translate wrapper.
-// The core picks .one/.other by `n === 1`; Russian needs one/few/many. This
-// test pins the Intl.PluralRules('ru') mapping the wrapper relies on, so a
-// Node/ICU change that breaks the assumption fails here first.
+// Выбор формы числительного для русского — как это делает обёртка translate.
+// Ядро выбирает .one/.other по n === 1, русскому нужны one/few/many. Тест
+// закрепляет отображение Intl.PluralRules('ru-RU'), на которое опирается
+// обёртка: смена ICU в Node сломает сначала этот тест, а не интерфейс.
+//
+// pluralForm импортируется из lib/pure.js — из кода, который уезжает в бандл.
 import { test } from 'node:test'
 import assert from 'node:assert'
+import { pluralForm } from '../lib/pure.js'
 
-const rules = new Intl.PluralRules('ru-RU')
-
-function form(n) {
-  return rules.select(n)
-}
-
-test('ru plural: one for 1 and 21', () => {
-  assert.equal(form(1), 'one')
-  assert.equal(form(21), 'one')
+test('ru plural: one для 1 и 21', () => {
+  assert.equal(pluralForm(1), 'one')
+  assert.equal(pluralForm(21), 'one')
 })
 
-test('ru plural: few for 2-4 and 22-24', () => {
-  assert.equal(form(2), 'few')
-  assert.equal(form(3), 'few')
-  assert.equal(form(4), 'few')
-  assert.equal(form(22), 'few')
-  assert.equal(form(24), 'few')
+test('ru plural: few для 2–4 и 22–24', () => {
+  for (const n of [2, 3, 4, 22, 24]) assert.equal(pluralForm(n), 'few', 'n=' + n)
 })
 
-test('ru plural: many for 5-20 and 25', () => {
-  assert.equal(form(5), 'many')
-  assert.equal(form(10), 'many')
-  assert.equal(form(20), 'many')
-  assert.equal(form(25), 'many')
+test('ru plural: many для 5–20 и 25', () => {
+  for (const n of [5, 10, 20, 25]) assert.equal(pluralForm(n), 'many', 'n=' + n)
 })
 
-test('ru plural: many for 0', () => {
-  assert.equal(form(0), 'many')
+test('ru plural: many для 0', () => {
+  assert.equal(pluralForm(0), 'many')
 })

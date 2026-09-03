@@ -1,31 +1,8 @@
+// Ссылка «сообщить о проблеме перевода». Импорт из lib/pure.js —
+// проверяется отгружаемый код (#133).
 import { test } from 'node:test'
 import assert from 'node:assert'
-
-const makeIssueUrl = (opts = {}) => {
-  const repo = 'GooDAnDReaDY/dsh-russian-lang'
-  const title = opts.title || (opts.plugin ? `[Перевод] Запрос локализации для плагина ${opts.plugin}` : '[Ошибка перевода] Неточный перевод фразы')
-  const bodyLines = [
-    '### Описание проблемы',
-    opts.description || (opts.plugin ? `Просьба добавить русскую локализацию для плагина \`${opts.plugin}\`.` : 'Обнаружена неточность в переводе интерфейса.'),
-    '',
-    '### Технический контекст',
-    opts.ns ? `- **Namespace**: \`${opts.ns}\`` : null,
-    opts.key ? `- **Ключ**: \`${opts.key}\`` : null,
-    opts.en ? `- **Оригинал (EN)**: ${opts.en}` : null,
-    opts.ru ? `- **Текущий перевод (RU)**: ${opts.ru}` : null,
-    opts.plugin ? `- **Плагин**: \`${opts.plugin}\`` : null,
-    `- **Версия dsh-russian-lang**: \`0.1.29\``,
-    opts.userAgent ? `- **User Agent**: \`${opts.userAgent}\`` : null,
-    '',
-    '### Предлагаемый вариант перевода',
-    opts.proposal || '_Опишите ваш вариант перевода..._'
-  ].filter(Boolean)
-
-  const params = new URLSearchParams()
-  params.set('title', title)
-  params.set('body', bodyLines.join('\n'))
-  return `https://github.com/${repo}/issues/new?` + params.toString()
-}
+import { makeIssueUrl } from '../lib/pure.js'
 
 test('makeIssueUrl generates valid GitHub new issue link for translation mistake', () => {
   const url = makeIssueUrl({
