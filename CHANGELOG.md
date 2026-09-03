@@ -1,3 +1,16 @@
+## 0.2.0 — 2026-09-03
+
+- feat(i18n): 100% ручное покрытие всех установленных плагинов DSH (3044 ключа, 0 машинных черновиков).
+- feat(plugins): добавлены официальные словари для ключевых UI-модулей:
+  * `dsh-opencode-palette` (namespace `opencode-palette`, 27 ключей): выбор тем, шрифтов, стилей и палитр (PR #143, issue #142).
+  * `dsh-univer-office` (namespace `univer`, 53 ключа): интерфейс Univer Office, статусы Gateway, слияние и ревью документов (PR #143).
+  * `@linxin666/dsh-client-ui-skill-explorer` (namespace `dsh-skill-explorer`, 53 ключа): Центр навыков Skill Center, создание и управление скиллами (PR #143).
+- feat(dom): встроен интеллектуальный DOM-переводчик для плагинов без стандартного i18n:
+  * `dsh-auto-collapse`: автоматический перевод китайского интерфейса (сворачивание процессов, мысли, статусы) через карту `ZH_RU` (PR #143).
+  * `@dsh-external/dsh-visualize`: русификация всплывающих подсказок потокового предпросмотра (`[title]`) (PR #143).
+  * `dsh-effort-slider`: локализация градаций уровней рассуждений модели (`Low`, `Medium`, `High`, `Effort`) (PR #143).
+- test: добавлен тестовый набор `test/test_hardcoded_plugins.mjs` (общее число тестов выросло до 63) (PR #143).
+
 ## 0.1.33 — 2026-09-03
 
 - fix(runtime): устранена утечка памяти keydown-обработчика (добавлен `removeEventListener` в `ctx.effect`, PR #141, issue #140).
