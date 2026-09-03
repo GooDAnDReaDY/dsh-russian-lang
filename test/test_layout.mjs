@@ -52,3 +52,13 @@ test('частотный словарь достаточно покрывает 
   assert.ok(FREQ.size > 3000)
   for (const w of ['привет', 'как', 'дела']) assert.ok(FREQ.has(w), w)
 })
+
+test('Alt+L распознаёт как латинскую L, так и русскую Д (KeyL)', () => {
+  const isAltL = (ev) => ev.altKey && !ev.ctrlKey && !ev.metaKey && (ev.code === 'KeyL' || ev.key.toLowerCase() === 'l' || ev.key.toLowerCase() === 'д')
+  assert.ok(isAltL({ altKey: true, ctrlKey: false, metaKey: false, code: 'KeyL', key: 'l' }))
+  assert.ok(isAltL({ altKey: true, ctrlKey: false, metaKey: false, code: 'KeyL', key: 'д' }))
+  assert.ok(isAltL({ altKey: true, ctrlKey: false, metaKey: false, code: 'KeyL', key: 'Д' }))
+  assert.ok(!isAltL({ altKey: false, ctrlKey: false, metaKey: false, code: 'KeyL', key: 'l' }))
+  assert.ok(!isAltL({ altKey: true, ctrlKey: true, metaKey: false, code: 'KeyL', key: 'l' }))
+  assert.ok(!isAltL({ altKey: true, ctrlKey: false, metaKey: false, code: 'KeyA', key: 'f' }))
+})

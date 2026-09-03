@@ -46,7 +46,7 @@
   "scripts": {
     "build": "python3 build.py",
     "check": "python3 tools/lint_translations.py && python3 check-coverage.py && python3 tools/term_check.py --ci",
-    "test": "python3 test/test_extract.py",
+    "test": "node --test test/*.mjs && node test/_repro.cjs && python3 test/test_tools.py && python3 test/test_extract.py && python3 test/test_overflow.py",
     "smoke": "python3 test/smoke.py",
     "lint": "python3 tools/lint_translations.py"
   },

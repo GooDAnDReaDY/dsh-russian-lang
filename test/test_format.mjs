@@ -30,3 +30,17 @@ test('fill supports format specifiers {param:number} and {param:currency}', () =
   const res3 = fill('Обычный {param}', { param: 'текст' })
   assert.equal(res3, 'Обычный текст')
 })
+
+test('formatNumber, formatRelativeTime, formatCurrency обрабатывают null и пустые строки', () => {
+  assert.equal(formatNumber(null), '')
+  assert.equal(formatNumber(undefined), '')
+  assert.equal(formatNumber(''), '')
+
+  assert.equal(formatRelativeTime(null), '')
+  assert.equal(formatRelativeTime(undefined), '')
+  assert.equal(formatRelativeTime(''), '')
+
+  assert.equal(formatCurrency(null), '')
+  assert.equal(formatCurrency(undefined), '')
+  assert.equal(formatCurrency(''), '')
+})

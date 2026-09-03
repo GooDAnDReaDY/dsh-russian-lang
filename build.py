@@ -712,9 +712,10 @@ window.__ModuleLoader__.load({
       }
       const unsubscribeLayout = runtime.subscribe(layoutOnInput)
       document.addEventListener('input', layoutOnInput, true)
-      document.addEventListener('keydown', (ev) => {
-        // Alt+л (Latin 'l' код) ручной конверт текущего инпута
-        if (ev.altKey && !ev.ctrlKey && !ev.metaKey && ev.key.toLowerCase() === 'l') {
+      const layoutOnKeydown = (ev) => {
+        // Alt+L (клавиша KeyL, Latin 'l' или русская 'д'): ручной конверт текущего инпута
+        const isL = ev.code === 'KeyL' || ev.key.toLowerCase() === 'l' || ev.key.toLowerCase() === 'д'
+        if (ev.altKey && !ev.ctrlKey && !ev.metaKey && isL) {
           const el = layoutCurrentInput()
           if (el) {
             const value = el.value || ''
@@ -727,10 +728,12 @@ window.__ModuleLoader__.load({
             }
           }
         }
-      }, true)
+      }
+      document.addEventListener('keydown', layoutOnKeydown, true)
       ctx.effect(() => {
         unsubscribeLayout()
         document.removeEventListener('input', layoutOnInput, true)
+        document.removeEventListener('keydown', layoutOnKeydown, true)
         layoutDismiss()
         layoutBadgeHide()
       }, 'dsh-russian-lang: layout')
