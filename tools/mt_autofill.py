@@ -24,6 +24,11 @@ def load(path):
     return json.load(open(path, encoding='utf-8')) if os.path.exists(path) else {}
 
 
+def save_snapshot(data):
+    with open(SNAPSHOT, 'w', encoding='utf-8', newline='\n') as fh:
+        json.dump(data, fh, ensure_ascii=False, indent=1, sort_keys=True)
+
+
 def new_keys(prev, curr):
     """Новые ключи: есть в curr, нет в prev (по namespace)."""
     out = {}
@@ -35,18 +40,21 @@ def new_keys(prev, curr):
 
 
 def main():
+    prev = load(SNAPSHOT)
+    curr = load(PLUGINS_EN)
+
+    # Срез не коммитится (#136), поэтому в свежем клоне его нет. База — это
+    # запись текущего plugins-en.json, перевода она не требует, значит и ключ
+    # для неё не нужен: проверяем ключ уже после этой ветки.
+    if not prev:
+        save_snapshot(curr)
+        print('первый запуск: срез принят за базу, дельта не считается')
+        return 0
+
     api_key = os.environ.get('OPENROUTER_API_KEY')
     if not api_key:
         print('OPENROUTER_API_KEY не задан', file=sys.stderr)
         return 2
-
-    prev = load(SNAPSHOT)
-    curr = load(PLUGINS_EN)
-    if not prev:
-        # первый запуск: принимаем срез за базу, ничего не переводим
-        json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-        print('первый запуск: срез принят за базу')
-        return 0
 
     added = new_keys(prev, curr)
     total = sum(len(v) for v in added.values())
@@ -56,7 +64,7 @@ def main():
 
     # переводим только новые ключи (apply_mt сам пропустит уже переведённые)
     changed = mt_fallback.apply_mt(added, api_key)
-    json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
+    save_snapshot(curr)
     print('дотянуто MT: %d' % changed)
     return 0
 
