@@ -1,0 +1,31 @@
+{
+  "opencode-palette": {
+    "panelName": "Палитра Opencode",
+    "subtitle": "34 официальные темы opencode — переключение в один клик",
+    "enabled": "Включено",
+    "disabled": "Отключено",
+    "disableTitle": "Нажмите, чтобы отключить тему",
+    "enableTitle": "Нажмите, чтобы включить тему",
+    "typography": "Шрифт и размер",
+    "bodyStyle": "Стиль текста",
+    "mono": "Моноширинный (терминал)",
+    "sans": "Обычный (интерфейс)",
+    "fontSize": "Размер шрифта",
+    "codeFont": "Шрифт кода",
+    "fontPreview": "моно",
+    "themeSection": "Выбор темы",
+    "themeCount": "34 темы · по цветовым группам",
+    "search": "Поиск тем…",
+    "noMatch": "Подходящих тем не найдено",
+    "systemDefault": "Системная (по умолчанию)",
+    "group.warm": "Тёплые",
+    "group.yellow-green": "Жёлто-зелёные",
+    "group.teal": "Бирюзовые",
+    "group.cyan-blue": "Сине-голубые",
+    "group.cool-blue": "Холодные синие",
+    "group.violet": "Фиолетовые",
+    "group.neutral": "Нейтральные",
+    "group.transparent": "Прозрачные",
+    "group.special": "Особые"
+  }
+}

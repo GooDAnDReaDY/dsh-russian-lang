@@ -1,0 +1,14 @@
+{
+  "collapse": "收起工作过程",
+  "expand": "展开工作过程",
+  "think": "思考",
+  "processed": "已处理",
+  "collapseSettings": "收起设置",
+  "expandSettings": "展开设置",
+  "statusPrompt": "状态提示词",
+  "customStatusPrompt": "自定义状态提示词",
+  "unwritten": "未保存",
+  "overridden": "已覆盖",
+  "resetDefault": "恢复默认",
+  "hint": "为空时恢复默认Deep diving...提示词状态"
+}

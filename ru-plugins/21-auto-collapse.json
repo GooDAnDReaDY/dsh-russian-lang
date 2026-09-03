@@ -1,0 +1,16 @@
+{
+  "dsh-auto-collapse": {
+    "collapse": "Свернуть процесс",
+    "expand": "Развернуть процесс",
+    "think": "Рассуждения",
+    "processed": "Обработано",
+    "collapseSettings": "Свернуть настройки",
+    "expandSettings": "Развернуть настройки",
+    "statusPrompt": "Промпт статуса",
+    "customStatusPrompt": "Свой промпт статуса",
+    "unwritten": "Не сохранено",
+    "overridden": "Переопределено",
+    "resetDefault": "По умолчанию",
+    "hint": "Если пусто, возвращается исходный промпт Deep diving..."
+  }
+}

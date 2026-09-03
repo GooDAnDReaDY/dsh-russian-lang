@@ -479,12 +479,33 @@ window.__ModuleLoader__.load({
         }
         return null
       }
+      // Точечные замены атрибутов и текста в плагинах с хардкодом (dsh-visualize, effort-slider)
+      const DOM_EN_ATTRS = {
+        'Streaming preview': 'Предпросмотр стриминга',
+        'Visualization streaming preview': 'Предпросмотр визуализации'
+      }
+      const DOM_EN_TEXT = {
+        'Low': 'Низкий',
+        'Medium': 'Средний',
+        'High': 'Высокий',
+        'Effort': 'Рассуждения'
+      }
       const ZH_WALKER = (root) => {
         try {
           const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
           const hits = []
           for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-            if (node.nodeValue && node.nodeValue.length >= 2 && ZH_CJK.test(node.nodeValue)) hits.push(node)
+            if (node.nodeValue && node.nodeValue.length >= 2 && ZH_CJK.test(node.nodeValue)) {
+              hits.push(node)
+            } else if (node.nodeValue) {
+              const trimmed = node.nodeValue.trim()
+              if (DOM_EN_TEXT[trimmed]) {
+                const p = node.parentElement
+                if (p && (p.closest('[class*="effort"], [class*="slider"], [class*="reasoning"]') || p.getAttribute('role') === 'option')) {
+                  node.nodeValue = node.nodeValue.replace(trimmed, DOM_EN_TEXT[trimmed])
+                }
+              }
+            }
           }
           for (const node of hits) {
             const next = zhTranslateText(node.nodeValue)
@@ -494,10 +515,20 @@ window.__ModuleLoader__.load({
           for (const el of root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label]') : []) {
             for (const attr of ['title', 'placeholder', 'aria-label']) {
               const v = el.getAttribute && el.getAttribute(attr)
-              if (v && v.length >= 2 && ZH_CJK.test(v)) {
-                const next = zhTranslateText(v)
-                if (next) el.setAttribute(attr, next)
+              if (v) {
+                if (DOM_EN_ATTRS[v]) {
+                  el.setAttribute(attr, DOM_EN_ATTRS[v])
+                } else if (v.length >= 2 && ZH_CJK.test(v)) {
+                  const next = zhTranslateText(v)
+                  if (next) el.setAttribute(attr, next)
+                }
               }
+            }
+          }
+          if (root.getAttribute) {
+            for (const attr of ['title', 'placeholder', 'aria-label']) {
+              const v = root.getAttribute(attr)
+              if (v && DOM_EN_ATTRS[v]) root.setAttribute(attr, DOM_EN_ATTRS[v])
             }
           }
         } catch (err) { /* ignore */ }
