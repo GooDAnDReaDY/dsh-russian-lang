@@ -120,9 +120,17 @@ def apply_mt(pending, api_key, call=None):
                 print('  PH-MISMATCH %s.%s (попытка %d): %s' % (ns, key, attempt + 1, ru))
             if accepted is None:
                 continue
+            # status: draft — машинный перевод без вычитки, reviewed — выверен
+            # человеком. Без этого поля вычитанная строка неотличима от
+            # неглядя сгенерированной, и очередь ревью не может уменьшаться
+            # (#135). Уже выставленный reviewed не сбрасываем: перевод в
+            # реестр попадает только если ключа там ещё нет, но если запись
+            # перезаписывается принудительно — статус сохраняем.
+            prev_status = registry.get(ns, {}).get(key, {}).get('status')
             registry.setdefault(ns, {})[key] = {
                 'ru': accepted, 'en': en_text, 'model': MODEL,
                 'at': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'status': prev_status if prev_status == 'reviewed' else 'draft',
             }
             changed += 1
             # Записываем после каждого ключа: при прерывании прогресс не теряется.
@@ -138,13 +146,19 @@ def review_queue(ru):
     registry = json.load(open(REGISTRY, encoding='utf-8')) if os.path.exists(REGISTRY) else {}
     os.makedirs(os.path.dirname(REVIEW), exist_ok=True)
     lines = ['# Очередь ревью машинных переводов', '',
-             'Ключи, переведённые автоматически. Замените вручную в ru/*.json / '
-             'ru-plugins/*.json — после появления ручного перевода запись реестра '
-             'игнорируется.', '']
+             'Ключи, переведённые автоматически и ещё не выверенные '
+             '(`status: draft`). Замените вручную в ru/*.json / ru-plugins/*.json '
+             '— после появления ручного перевода запись реестра игнорируется. '
+             'Либо выверьте строку на месте и поставьте `"status": "reviewed"` '
+             'в mt-registry.json: тогда ключ уйдёт из очереди.', '']
     total = 0
     for ns in sorted(registry):
         for key in sorted(registry[ns]):
             if key in ru.get(ns, {}):
+                continue
+            # Выверенные строки в очереди не нужны — иначе прогресс вычитки
+            # некуда записать и очередь никогда не уменьшается (#135).
+            if registry[ns][key].get('status') == 'reviewed':
                 continue
             total += 1
             lines.append('- `%s.%s`: %s (модель: %s)'

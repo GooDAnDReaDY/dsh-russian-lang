@@ -170,16 +170,35 @@ def runtime_coverage():
                 ru_eff.setdefault(ns, {})[key] = val
 
     total = sum(len(v) for v in en_eff.values())
-    done = sum(1 for ns, entries in en_eff.items()
-               for k in entries if k in ru_eff.get(ns, {}))
-    manual = sum(len(v) for v in load_dir('ru-plugins').values()) \
-        + sum(len(v) for v in load_dir('ru').values())
-    mt_done = sum(1 for ns, entries in (mt or {}).items()
-                  if ns not in self_ru for k in entries)
+
+    # Раскладка обязана быть НЕПЕРЕСЕКАЮЩЕЙСЯ и давать в сумме done. Прежняя
+    # версия печатала «ручных 2320 + MT 1802» при итоге 2899: слагаемые
+    # считались по своим источникам и пересекались на ключах, у которых есть и
+    # ручной перевод, и запись в MT-реестре (#135).
+    ru_manual = load_dir('ru')
+    ru_manual.update(load_dir('ru-plugins'))
+    manual = mt_reviewed = mt_draft = 0
+    for ns, entries in en_eff.items():
+        for k in entries:
+            if k in ru_manual.get(ns, {}):
+                manual += 1
+            elif k in (mt or {}).get(ns, {}):
+                rec = mt[ns][k]
+                status = rec.get('status') if isinstance(rec, dict) else None
+                if status == 'reviewed':
+                    mt_reviewed += 1
+                else:
+                    mt_draft += 1
+    done = manual + mt_reviewed + mt_draft
     pct = (100.0 * done / total) if total else 100.0
     print('=== ЭФФЕКТИВНОЕ ПОКРЫТИЕ (runtime) ===')
-    print('  ключей в UI: %d | переведено: %d (ручных %d + MT %d) | покрытие: %.1f%%'
-          % (total, done, manual, mt_done, pct))
+    print('  ключей в UI: %d | переведено: %d | покрытие: %.1f%%'
+          % (total, done, pct))
+    print('  из них: ручных %d | MT выверенных %d | MT без вычитки %d'
+          % (manual, mt_reviewed, mt_draft))
+    if mt_draft:
+        print('  ВНИМАНИЕ: %.1f%% интерфейса — машинный перевод без вычитки '
+              '(очередь: upstream/review-queue.md)' % (100.0 * mt_draft / total))
     print()
     return pct
 
