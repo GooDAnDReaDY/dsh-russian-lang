@@ -91,20 +91,68 @@ freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
 freq_json = json.dumps(freq_words, ensure_ascii=False)
 
-# ё-пары для типографики: слова с ё из частотного корпуса дают безопасные
-# пары «еще -> ещё» (корпусное написание). Неоднозначные («все» может быть
-# и «всё») — в чёрном списке. yo по умолчанию выключен.
-YO_BLACKLIST = {'все'}
+# ё-пары для типографики: слова с ё из частотного корпуса дают пары
+# «еще -> ещё», плюс ручной список ниже. yo по умолчанию выключен.
+#
+# Чёрный список сверяется с написанием ЧЕРЕЗ Е (левая половина пары). Это не
+# косметика: цикл идёт по словам, содержащим ё, поэтому сравнение самого слова
+# со списком не срабатывает никогда — так пара «все -> всё» и уезжала в бандл
+# вопреки списку, комментарию и тесту (#132).
+#
+# Корпус на роль детектора омографов не годится: он написан без ё, поэтому
+# «еще», «идет», «черный» лежат в нём как обычные слова. Отличить омограф от
+# ё-less написания может только человек, отсюда ручной список.
+YO_BLACKLIST = {
+    # Омографы: написание через «е» — самостоятельное слово с другим смыслом.
+    'все',      # все (мн.ч.)        != всё (ср.р.)
+    'всем',     # всем (дат. мн.)    != всём (предл. ср.р.)
+    'чем',      # чем (тв./союз)     != чём (предл.)
+    'нем',      # нем (краткое прил.)!= нём (предл. от «он»)
+    'моем',     # моем («мы моем»)   != моём (предл.)
+    'берет',    # берет (головной убор) != берёт
+    'черт',     # черт (род. мн. от «черта») != чёрт
+    'черта',    # черта (линия, признак)    != чёрта (род. от «чёрт»)
+    'черту',    # черту (дат. от «черта»)   != чёрту
+    'чертов',   # чертов (род. мн. от «черта») != чёртов
+    # Мусор корпуса: не слова, попали из шумных источников.
+    'ето', 'пеп', 'хен',
+}
+
+# Ручные пары: частотные в интерфейсе слова, которых нет в корпусе с ё.
+YO_CURATED = [
+    ('еще', 'ещё'), ('ее', 'её'),
+    ('черный', 'чёрный'), ('черная', 'чёрная'), ('черные', 'чёрные'),
+    ('зеленый', 'зелёный'), ('желтый', 'жёлтый'),
+    ('легкий', 'лёгкий'), ('тяжелый', 'тяжёлый'),
+    ('надежный', 'надёжный'), ('дешевый', 'дешёвый'),
+    ('идет', 'идёт'), ('дает', 'даёт'), ('ведет', 'ведёт'),
+    ('несет', 'несёт'), ('живет', 'живёт'),
+    ('привел', 'привёл'), ('шел', 'шёл'),
+]
+
 yo_pairs = []
 seen_yo = set()
+
+
+def add_yo(e, y, min_len):
+    """Пара попадает в бандл, если она не в блеклисте и не короче min_len.
+
+    Короткие пары отсекаются отдельно от блеклиста: «ей -> ёй», «ен -> ён»,
+    «че -> чё» — обрывки, а не слова, и перечислять их поимённо бессмысленно.
+    """
+    if e == y or len(e) < min_len or e in YO_BLACKLIST or (e, y) in seen_yo:
+        return
+    seen_yo.add((e, y))
+    yo_pairs.append([e, y])
+
+
+for e, y in YO_CURATED:
+    add_yo(e, y, 2)
 for w in freq_words:
-    if 'ё' in w and w not in YO_BLACKLIST:
-        e = w.replace('ё', 'е')
-        if e != w and (e, w) not in seen_yo:
-            seen_yo.add((e, w))
-            yo_pairs.append([e, w])
+    if 'ё' in w:
+        add_yo(w.replace('ё', 'е'), w, 3)
 yo_json = json.dumps(yo_pairs, ensure_ascii=False)
-print('ё-пар из корпуса: %d' % len(yo_pairs))
+print('ё-пар (ручных + корпусных): %d' % len(yo_pairs))
 
 # Подписи карточки настроек (namespace russian-lang — наш собственный).
 card_ru = {
@@ -146,6 +194,8 @@ window.__ModuleLoader__.load({
     var React = null
     try { React = require('react') } catch (e) { /* карточка настроек необязательна */ }
 
+//__PURE_JS__
+
     /** namespace -> { ключ: перевод } */
     const RU = %s
 
@@ -174,7 +224,6 @@ window.__ModuleLoader__.load({
       // 1b. Пользовательские переопределения + плюрализация.
       // Overrides: пользовательский слой поверх словарей (russian-lang.overrides).
       // Plural: ядро выбирает .one/.other по n===1, русскому нужны few/many.
-      const pluralRules = new Intl.PluralRules('ru-RU')
       const origTranslate = runtime.translate.bind(runtime)
       const getOverrides = () => {
         try {
@@ -182,244 +231,7 @@ window.__ModuleLoader__.load({
           return value && value.overrides ? value.overrides : {}
         } catch (err) { return {} }
       }
-      // Форматирование чисел, валют и относительного времени для русского языка
-      const numberFormat = new Intl.NumberFormat('ru-RU')
-      const relativeTimeFormat = new Intl.RelativeTimeFormat('ru-RU', { numeric: 'auto' })
-      const currencyFormats = new Map()
-      const getCurrencyFormat = (cur) => {
-        const c = (cur || 'RUB').toUpperCase()
-        if (!currencyFormats.has(c)) {
-          try {
-            currencyFormats.set(c, new Intl.NumberFormat('ru-RU', { style: 'currency', currency: c }))
-          } catch (e) {
-            currencyFormats.set(c, numberFormat)
-          }
-        }
-        return currencyFormats.get(c)
-      }
-
-      const formatNumber = (val) => {
-        const n = typeof val === 'number' ? val : Number(val)
-        return isNaN(n) ? String(val) : numberFormat.format(n)
-      }
-
-      const formatRelativeTime = (val, unit) => {
-        if (typeof val === 'number' && typeof unit === 'string') {
-          return relativeTimeFormat.format(val, unit)
-        }
-        const ts = val instanceof Date ? val.getTime() : (typeof val === 'number' ? (val < 1e12 ? val * 1000 : val) : Number(val))
-        if (isNaN(ts)) return String(val)
-        const diffSec = Math.round((ts - Date.now()) / 1000)
-        const absSec = Math.abs(diffSec)
-        if (absSec < 45) return 'только что'
-        if (absSec < 3600) return relativeTimeFormat.format(Math.round(diffSec / 60), 'minute')
-        if (absSec < 86400) return relativeTimeFormat.format(Math.round(diffSec / 3600), 'hour')
-        if (absSec < 2592000) return relativeTimeFormat.format(Math.round(diffSec / 86400), 'day')
-        if (absSec < 31536000) return relativeTimeFormat.format(Math.round(diffSec / 2592000), 'month')
-        return relativeTimeFormat.format(Math.round(diffSec / 31536000), 'year')
-      }
-
-      // Морфологический хелпер склонений сущностей (Smart Inflection Engine)
-      const INFLECT_CUSTOM = {
-        'пользователь': { gen: 'пользователя', dat: 'пользователю', acc: 'пользователя', ins: 'пользователем', pre: 'пользователе' },
-        'агент': { gen: 'агента', dat: 'агенту', acc: 'агента', ins: 'агентом', pre: 'агенте' },
-        'субагент': { gen: 'субагента', dat: 'субагенту', acc: 'субагента', ins: 'субагентом', pre: 'субагенте' },
-        'модель': { gen: 'модели', dat: 'модели', acc: 'модель', ins: 'моделью', pre: 'модели' },
-        'промпт': { gen: 'промпта', dat: 'промпту', acc: 'промпт', ins: 'промптом', pre: 'промпте' },
-        'инструмент': { gen: 'инструмента', dat: 'инструменту', acc: 'инструмент', ins: 'инструментом', pre: 'инструменте' },
-        'сессия': { gen: 'сессии', dat: 'сессии', acc: 'сессию', ins: 'сессией', pre: 'сессии' },
-        'ветка': { gen: 'ветки', dat: 'ветке', acc: 'ветку', ins: 'веткой', pre: 'ветке' },
-        'файл': { gen: 'файла', dat: 'файлу', acc: 'файл', ins: 'файлом', pre: 'файле' },
-        'папка': { gen: 'папки', dat: 'папке', acc: 'папку', ins: 'папкой', pre: 'папке' }
-      }
-
-      const inflectWord = (word, cName) => {
-        if (!word || typeof word !== 'string') return word
-        const lower = word.toLowerCase()
-        if (INFLECT_CUSTOM[lower] && INFLECT_CUSTOM[lower][cName]) {
-          const res = INFLECT_CUSTOM[lower][cName]
-          return word[0] === word[0].toUpperCase() ? res[0].toUpperCase() + res.slice(1) : res
-        }
-        if (/[a-zA-Z0-9_-]/.test(word) || /^[А-ЯЁ]{2,}$/.test(word)) return word
-        if (/[оеиую]$/i.test(word) && !/(ко|ло|но|то|во|ро|до|по|со|мо|го)$/i.test(word)) return word
-
-        const isCap = word[0] === word[0].toUpperCase()
-        const w = lower
-        if (w.endsWith('ия')) {
-          const stem = w.slice(0, -2)
-          const map = { gen: stem + 'ии', dat: stem + 'ии', acc: stem + 'ию', ins: stem + 'ией', pre: stem + 'ии' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        if (w.endsWith('а')) {
-          const stem = w.slice(0, -1)
-          const lastCons = stem.slice(-1)
-          const genEnd = /[гкхжшчщ]/.test(lastCons) ? 'и' : 'ы'
-          const map = { gen: stem + genEnd, dat: stem + 'е', acc: stem + 'у', ins: stem + 'ой', pre: stem + 'е' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        if (w.endsWith('я')) {
-          const stem = w.slice(0, -1)
-          const map = { gen: stem + 'и', dat: stem + 'е', acc: stem + 'ю', ins: stem + 'ей', pre: stem + 'е' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        if (w.endsWith('ь')) {
-          const stem = w.slice(0, -1)
-          const map = { gen: stem + 'и', dat: stem + 'и', acc: stem + 'ь', ins: stem + 'ью', pre: stem + 'и' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        if (w.endsWith('й')) {
-          const stem = w.slice(0, -1)
-          const map = { gen: stem + 'я', dat: stem + 'ю', acc: stem + 'я', ins: stem + 'ем', pre: stem + 'е' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        if (/[бвгджзклмнпрстфхцчшщ]$/.test(w)) {
-          const map = { gen: w + 'а', dat: w + 'у', acc: w, ins: w + 'ом', pre: w + 'е' }
-          const out = map[cName] || w
-          return isCap ? out[0].toUpperCase() + out.slice(1) : out
-        }
-        return word
-      }
-
-      const inflect = (phrase, cName) => {
-        if (!phrase || typeof phrase !== 'string') return phrase
-        const validCases = new Set(['gen', 'dat', 'acc', 'ins', 'pre'])
-        if (!validCases.has(cName)) return phrase
-        return phrase.split(' ').map((w) => inflectWord(w, cName)).join(' ')
-      }
-
-      // Русская поисковая морфология и нечеткий матчинг для палитры команд и меню
-      const stemRussian = (word) => {
-        if (!word || typeof word !== 'string') return ''
-        let w = word.toLowerCase().trim()
-        if (w.length < 4) return w
-        w = w.replace(/(?:вшись|вши|ившись|ивши|ывшись|ывши|ив|ыв)$/, '')
-        w = w.replace(/(?:ся|сь)$/, '')
-        w = w.replace(/(?:ее|ие|ые|ое|ими|ыми|ей|ий|ый|ой|ем|им|ым|ом|его|ого|ему|ому|их|ых|ую|юю|ая|яя|ою|ею)$/, '')
-        w = w.replace(/(?:ила|ыла|ена|ейте|уйте|ите|или|ыли|ей|уй|ил|ыл|им|ым|ен|ило|ыло|ено|ят|ует|уют|ит|ыт|ены|ить|ыть|ишь|ую|ю)$/, '')
-        w = w.replace(/(?:ами|ями|иями|ией|иям|ием|ах|ях|иях|ев|ов|ие|ье|ей|ой|ий|ям|ем|ам|ом|а|е|и|о|у|ы|ь|ю|я)$/, '')
-        return w.length >= 2 ? w : word.toLowerCase()
-      }
-
-      const EN_RU_KEYS = {
-        'q':'й','w':'ц','e':'у','r':'к','t':'е','y':'н','u':'г','i':'ш','o':'щ','p':'з','[':'х',']':'ъ',
-        'a':'ф','s':'ы','d':'в','f':'а','g':'п','h':'р','j':'о','k':'л','l':'д',';':'ж',"'" : 'э',
-        'z':'я','x':'ч','c':'с','v':'м','b':'и','n':'т','m':'ь',',':'б','.':'ю'
-      }
-      const translitEnToRu = (str) => str.toLowerCase().split('').map(c => EN_RU_KEYS[c] || c).join('')
-
-      const fuzzyMatchRu = (query, target) => {
-        if (!query || !target) return 0
-        const q = query.toLowerCase().trim()
-        const t = target.toLowerCase().trim()
-        if (t === q) return 100
-        if (t.includes(q)) return 90
-        const qTranslit = translitEnToRu(q)
-        if (t.includes(qTranslit)) return 85
-        const qStems = q.split(/\s+/).map(stemRussian).filter(Boolean)
-        const tStems = t.split(/\s+/).map(stemRussian).filter(Boolean)
-        let matched = 0
-        for (const qs of qStems) {
-          if (tStems.some(ts => ts.startsWith(qs) || qs.startsWith(ts))) matched++
-        }
-        if (matched === qStems.length && qStems.length > 0) return 80
-        if (matched > 0) return 50
-        return 0
-      }
-
-      const getPluginLocalizationStatus = (ns) => {
-        if (!ns) return { status: 'none', count: 0, label: 'RU отсутствует' }
-        const dict = RU[ns] || {}
-        const count = Object.keys(dict).length
-        if (count > 0) {
-          return { status: 'full', count, label: `RU: ${count} строк` }
-        }
-        return { status: 'none', count: 0, label: 'RU отсутствует' }
-      }
-
-      // Русификатор и человекочитаемый интерпретатор системных ошибок (Error Humanizer)
-      const ERROR_MAP = {
-        ENOENT: { title: 'Файл не найден', message: 'Указанный файл или директория не существуют', hint: 'Проверьте правильность указанного пути к файлу.' },
-        EACCES: { title: 'Отказано в доступе', message: 'Недостаточно прав для чтения или записи', hint: 'Проверьте права доступа к файлу или директории (chmod/chown).' },
-        EPERM: { title: 'Операция запрещена', message: 'Недостаточно системных привилегий', hint: 'Запустите процесс с соответствующими правами.' },
-        ECONNREFUSED: { title: 'Соединение отклонено', message: 'Целевой сервер или сервис не отвечает', hint: 'Убедитесь, что локальный или удаленный сервис запущен и слушает порт.' },
-        ETIMEDOUT: { title: 'Таймаут соединения', message: 'Превышено время ожидания ответа', hint: 'Проверьте стабильность сети или увеличьте лимит ожидания.' },
-        ENOTFOUND: { title: 'Хост не найден', message: 'Не удалось разрешить сетевой адрес', hint: 'Проверьте правильность URL или настройки DNS.' },
-        EADDRINUSE: { title: 'Порт уже занят', message: 'Сетевой порт используется другим процессом', hint: 'Остановите конфликтующий процесс или выберите другой порт.' },
-        401: { title: 'Требуется авторизация', message: 'API-ключ или токен отсутствуют или недействительны', hint: 'Проверьте настройки учетных данных и актуальность токена.' },
-        403: { title: 'Доступ запрещен', message: 'Недостаточно прав для выполнения операции', hint: 'Проверьте область действия токена или права роли.' },
-        404: { title: 'Ресурс не найден', message: 'Запрошенный адрес или объект не существует', hint: 'Проверьте правильность пути или идентификатора ресурса.' },
-        429: { title: 'Превышен лимит запросов', message: 'Слишком много запросов (Rate Limit)', hint: 'Подождите несколько минут перед повторным запросом.' },
-        500: { title: 'Внутренняя ошибка сервера', message: 'На стороне сервера произошел сбой', hint: 'Попробуйте повторить запрос позже или проверьте серверные логи.' },
-        502: { title: 'Ошибочный шлюз (Bad Gateway)', message: 'Промежуточный прокси не получил корректный ответ', hint: 'Проверьте работу нижележащей службы или upstream-сервера.' },
-        503: { title: 'Служба временно недоступна', message: 'Сервер перегружен или находится на обслуживании', hint: 'Попробуйте повторить операцию через некоторое время.' }
-      }
-
-      const humanizeError = (err) => {
-        if (!err) return null
-        const rawMsg = typeof err === 'string' ? err : (err.message || String(err))
-        const code = err.code || (rawMsg.match(/\b(E[A-Z]{2,20})\b/) || [])[1]
-        const status = err.status || err.statusCode || (rawMsg.match(/\b([45]\d{2})\b/) || [])[1]
-        const lookupKey = code || status
-        if (lookupKey && ERROR_MAP[lookupKey]) {
-          const info = ERROR_MAP[lookupKey]
-          return { code: String(lookupKey), title: info.title, message: info.message, hint: info.hint, raw: rawMsg }
-        }
-        if (/rate limit|too many requests/i.test(rawMsg)) {
-          return { code: '429', title: ERROR_MAP[429].title, message: ERROR_MAP[429].message, hint: ERROR_MAP[429].hint, raw: rawMsg }
-        }
-        if (/unauthorized|invalid token|invalid api key/i.test(rawMsg)) {
-          return { code: '401', title: ERROR_MAP[401].title, message: ERROR_MAP[401].message, hint: ERROR_MAP[401].hint, raw: rawMsg }
-        }
-        return { code: 'UNKNOWN', title: 'Ошибка операции', message: rawMsg, hint: 'Проверьте параметры операции и логи.', raw: rawMsg }
-      }
-
-      const makeIssueUrl = (opts = {}) => {
-        const repo = 'GooDAnDReaDY/dsh-russian-lang'
-        const title = opts.title || (opts.plugin ? `[Перевод] Запрос локализации для плагина ${opts.plugin}` : '[Ошибка перевода] Неточный перевод фразы')
-        const bodyLines = [
-          '### Описание проблемы',
-          opts.description || (opts.plugin ? `Просьба добавить русскую локализацию для плагина \`${opts.plugin}\`.` : 'Обнаружена неточность в переводе интерфейса.'),
-          '',
-          '### Технический контекст',
-          opts.ns ? `- **Namespace**: \`${opts.ns}\`` : null,
-          opts.key ? `- **Ключ**: \`${opts.key}\`` : null,
-          opts.en ? `- **Оригинал (EN)**: ${opts.en}` : null,
-          opts.ru ? `- **Текущий перевод (RU)**: ${opts.ru}` : null,
-          opts.plugin ? `- **Плагин**: \`${opts.plugin}\`` : null,
-          `- **Версия dsh-russian-lang**: \`0.1.29\``,
-          typeof navigator !== 'undefined' ? `- **User Agent**: \`${navigator.userAgent}\`` : null,
-          '',
-          '### Предлагаемый вариант перевода',
-          opts.proposal || '_Опишите ваш вариант перевода..._'
-        ].filter(Boolean)
-        const params = new URLSearchParams()
-        params.set('title', title)
-        params.set('body', bodyLines.join('\n'))
-        return `https://github.com/${repo}/issues/new?` + params.toString()
-      }
-
-      const formatCurrency = (val, cur) => {
-        const n = typeof val === 'number' ? val : Number(val)
-        if (isNaN(n)) return String(val)
-        return getCurrencyFormat(cur).format(n)
-      }
-
-      // Расширенный fill с поддержкой спецификаторов {param:number}, {param:reltime}, {param:currency}
-      const fill = (template, params) => template.replace(/\{(\w+)(?::(\w+))?\}/g, (match, name, spec) => {
-        if (!(name in params)) return match
-        const val = params[name]
-        if (spec === 'number') return formatNumber(val)
-        if (spec === 'reltime') return formatRelativeTime(val)
-        if (spec === 'currency') return formatCurrency(val, params.currency || 'RUB')
-        if (spec === 'gen' || spec === 'dat' || spec === 'acc' || spec === 'ins' || spec === 'pre') return inflect(String(val), spec)
-        return String(val)
-      })
-
+      const getPluginLocalizationStatus = makePluginLocalizationStatus(RU)
       try {
         runtime.formatNumber = formatNumber
         runtime.formatRelativeTime = formatRelativeTime
@@ -456,7 +268,7 @@ window.__ModuleLoader__.load({
         if (runtime.getLocale().active === 'ru' && params) {
           const n = params.n ?? params.count
           if (typeof n === 'number') {
-            const form = pluralRules.select(n)
+            const form = pluralForm(n)
             const m = /^(.*)[.](one|other)$/.exec(key)
             if (m) {
               // Ядро выбирает .one/.other по n===1; русскому нужны few/many.
@@ -723,41 +535,9 @@ window.__ModuleLoader__.load({
       // пробелы перед короткими словами, опционально ё (безопасный список).
       // Код, ссылки, кнопки и поля ввода не трогаем. Правила идемпотентны,
       // повторный проход по своим же правкам ничего не меняет.
-      const TYPO_SKIP = new Set(['CODE', 'PRE', 'A', 'SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION', 'KBD', 'SAMP', 'BUTTON'])
-      const typoQuotes = (text) => text
-        .replace(/"([^"\n]{1,200})"/g, '\u00AB$1\u00BB')
-        .replace(/[“„]([^“”\n]{1,200})[”"]/g, '\u00AB$1\u00BB')
-        .replace(/[『「]([^』」\n]{1,200})[』」]/g, '\u00AB$1\u00BB')
-      const typoDash = (text) => text
-        .replace(/(^|[\s(\[\u00AB])--(?=\s|$)/g, '$1\u2014')
-        .replace(/(^|[\s(\[\u00AB])-(?=\s)/g, '$1\u2014')
-      const typoPunct = (text) => text.replace(/\s+([,.:;!?])(?=\s|$)/g, '$1')
-      const TYPO_SHORT = new Set(['в', 'с', 'к', 'о', 'у', 'а', 'и', 'но', 'не', 'ни', 'на', 'по', 'до', 'из', 'за', 'от', 'об'])
-      const typoNbsp = (text) => text.replace(/(^|[\s(\[\u00AB])([а-яё]{1,2})(\s+)/g, (match, lead, word) => (
-        TYPO_SHORT.has(word) ? lead + word + '\u00A0' : match
-      ))
-      const TYPO_YO_CURATED = [
-        [/еще/g, 'ещё'], [/Еще/g, 'Ещё'], [/ЕЩЕ/g, 'ЕЩЁ'],
-        [/\bее\b/g, 'её'], [/\bЕе\b/g, 'Её'],
-        [/\bчерный\b/g, 'чёрный'], [/\bчерная\b/g, 'чёрная'], [/\bчерные\b/g, 'чёрные'],
-        [/\bзеленый\b/g, 'зелёный'], [/\bжелтый\b/g, 'жёлтый'],
-        [/\bлегкий\b/g, 'лёгкий'], [/\bтяжелый\b/g, 'тяжёлый'],
-        [/\bнадежный\b/g, 'надёжный'], [/\bдешевый\b/g, 'дешёвый'],
-        [/\bидет\b/g, 'идёт'], [/\bдает\b/g, 'даёт'], [/\bберет\b/g, 'берёт'],
-        [/\bведет\b/g, 'ведёт'], [/\bнесет\b/g, 'несёт'], [/\bживет\b/g, 'живёт'],
-        [/\bпривел\b/g, 'привёл'], [/\bшел\b/g, 'шёл']
-      ]
-      // Корпусные ё-пары из freq-словаря (безопасные написания), генерируются build.py.
-      const TYPO_YO_FREQ = %s
-      const TYPO_YO = TYPO_YO_CURATED.concat(
-        TYPO_YO_FREQ
-          .filter((p) => p[0].length >= 3 && p[0] !== p[1])
-          .map((p) => [new RegExp('\\b' + p[0] + '\\b', 'g'), p[1]])
-      )
-      const typoYo = (text) => {
-        for (const pair of TYPO_YO) text = text.replace(pair[0], pair[1])
-        return text
-      }
+      // ё-пары: ручные + корпусные, омографы отсеяны в build.py (#132).
+      const TYPO_YO_PAIRS = %s
+      const typoYo = makeTypoYo(TYPO_YO_PAIRS)
       const getTypoConf = () => {
         try {
           const t = scope.getSnapshot().value && scope.getSnapshot().value.typography
@@ -828,52 +608,11 @@ window.__ModuleLoader__.load({
       // 7. Фикс раскладки (russian-lang.layout): подсказка-конвертер.
       // Пользователь печатает в неверной раскладке (yjdsq gjvfu -> новый вопрос).
       // Показываем плашку с превью, клик заменяет текст; тихой замены нет.
-      const LAYOUT_LAT_TO_CYR = {
-        'q':'й','w':'ц','e':'у','r':'к','t':'е','y':'н','u':'г','i':'ш','o':'щ','p':'з','[':'х',']':'ъ',
-        'a':'ф','s':'ы','d':'в','f':'а','g':'п','h':'р','j':'о','k':'л','l':'д',';':'ж',"'" : 'э',
-        'z':'я','x':'ч','c':'с','v':'м','b':'и','n':'т','m':'ь',',':'б','.':'ю','/':'.',
-        '`':'ё'
-      }
-      const LAYOUT_CYR_TO_LAT = {}
-      for (const k in LAYOUT_LAT_TO_CYR) LAYOUT_CYR_TO_LAT[LAYOUT_LAT_TO_CYR[k]] = k
-      const FREQ = new Set(%s)
-
-      const isLatin = (ch) => /[a-z]/.test(ch)
-      const isCyrillic = (ch) => /[\u0430-\u044f\u0451]/.test(ch)
-      const translit = (word, map) => {
-        let out = ''
-        for (const ch of word.toLowerCase()) out += map[ch] !== undefined ? map[ch] : ch
-        return out
-      }
-      const ruWordFraction = (text) => {
-        // доля слов текста, присутствующих в частотном словаре или локальном
-        const words = text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)
-        if (!words.length) return 0
-        const hit = words.filter((w) => FREQ.has(w) || localDict.has(w)).length
-        return hit / words.length
-      }
-      // Локальный словарь обучения (#67): слова, которые пользователь принял
-      // через «Исправить». Живёт в памяти сессии, в настройки/бандл не пишется.
-      const localDict = new Set()
-      const learnWords = (text) => {
-        for (const w of text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)) {
-          if (w.length >= 3) localDict.add(w)
-        }
-      }
-      const layoutFixCandidate = (value, direction) => {
-        // direction: 'lat2cyr' | 'cyr2lat'. Возвращает {converted} если подозрительно.
-        if (direction === 'lat2cyr') {
-          const converted = translit(value, LAYOUT_LAT_TO_CYR)
-          if (!/[а-яё]{2}/.test(converted)) return null
-          if (ruWordFraction(converted) < 0.7) return null
-          return { converted }
-        } else {
-          // cyr2lat только для команды в инпуте (/...)
-          const converted = translit(value, LAYOUT_CYR_TO_LAT)
-          if (!converted.startsWith('/')) return null
-          return { converted }
-        }
-      }
+      // Локальный словарь обучения (#67): слова, принятые через «Исправить».
+      // Живёт в памяти сессии, в настройки и бандл не пишется.
+      const layout = makeLayout(new Set(%s), new Set())
+      const layoutFixCandidate = layout.candidate
+      const learnWords = layout.learnWords
 
       // Отвечаем на real input: input / input_event, слушаем на document.
       // Читаем value у поля, где курсор (textarea/input), не трогая contenteditable.
@@ -1154,7 +893,7 @@ window.__ModuleLoader__.load({
           React.createElement('div', { className: 'rl-hint' }, t('altL')),
           React.createElement('div', { className: 'rl-actions' },
             React.createElement('a', {
-              href: makeIssueUrl(),
+              href: makeIssueUrl({}, '__PKG_VERSION__'),
               target: '_blank',
               rel: 'noopener noreferrer',
               className: 'rl-link'
@@ -1197,6 +936,25 @@ window.__ModuleLoader__.load({
 })
 ''' % (payload, zh_ru_json, card_json, yo_json, freq_json)
 
-open(os.path.join(HERE, 'lib', 'client.js'), 'w', encoding='utf-8').write(client)
+# Чистая половина (lib/pure.js) — один исходник на бандл и на тесты (#133).
+# Подставляем ПОСЛЕ %-форматирования: иначе каждый процент внутри pure.js
+# пришлось бы удваивать, и первый же забытый `%` ронял бы сборку.
+pure_src = open(os.path.join(HERE, 'lib', 'pure.js'), encoding='utf-8').read()
+pure_inline = _re.sub(r'^export (const|function|class) ', r'\1 ', pure_src, flags=_re.M)
+if '//__PURE_JS__' not in client:
+    raise SystemExit('в шаблоне нет маркера //__PURE_JS__ — вставлять pure.js некуда')
+client = client.replace('//__PURE_JS__', pure_inline)
+
+# Версия для ссылки «сообщить об ошибке»: берём из package.json, чтобы строка
+# не устаревала руками (в 0.1.31 в ней стояло «0.1.29»).
+pkg = json.load(open(os.path.join(HERE, 'package.json'), encoding='utf-8'))
+client = client.replace('__PKG_VERSION__', pkg['version'])
+
+# Перевод строки задаём явно: в текстовом режиме Windows пишет CRLF, Linux —
+# LF, и один и тот же исходник даёт разные байты бандла. Сверка собранного
+# файла с закоммиченным (CI, #134) от этого становится нестабильной.
+with open(os.path.join(HERE, 'lib', 'client.js'), 'w',
+          encoding='utf-8', newline='\n') as fh:
+    fh.write(client)
 print('namespace-ов: %d, ключей: %d -> lib/client.js'
       % (len(merged), sum(len(v) for v in merged.values())))
