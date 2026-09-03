@@ -1,40 +1,36 @@
-// Count-key plural selection: for bare keys called as t('X', { n }) the
-// wrapper now tries X.one / X.few / X.many via Intl.PluralRules('ru-RU')
-// before falling back to the base template. This pins the form mapping and
-// the suffix-guard the wrapper relies on, so a Node/ICU change or a refactor
-// that breaks the contract fails here first.
+// Счётные ключи: для голого t('X', { n }) обёртка пробует X.one / X.few /
+// X.many и только потом откатывается к базовому шаблону. Тест закрепляет
+// отображение формы и защиту от повторного навешивания суффикса.
+//
+// pluralForm берётся из lib/pure.js — из кода бандла, а не из копии (#133).
 import { test } from 'node:test'
 import assert from 'node:assert'
+import { pluralForm } from '../lib/pure.js'
 
-const rules = new Intl.PluralRules('ru-RU')
-
-function pick(base, has) {
-  return (n) => {
-    const form = rules.select(n)
-    if (form === 'other') return base
-    const suffixed = base + '.' + form
-    return has.has(suffixed) ? suffixed : base
-  }
+// Та же логика выбора ключа, что в обёртке translate: форма other ключа не
+// получает, отсутствующая форма откатывается к базе.
+const pick = (base, has) => (n) => {
+  const form = pluralForm(n)
+  if (form === 'other') return base
+  const suffixed = base + '.' + form
+  return has.has(suffixed) ? suffixed : base
 }
 
-test('count key: many/few/one variants are picked when present', () => {
-  const has = new Set(['cd.catalog.one', 'cd.catalog.few', 'cd.catalog.many'])
-  const pick_ = pick('cd.catalog', has)
-  assert.equal(pick_(1), 'cd.catalog.one')
-  assert.equal(pick_(2), 'cd.catalog.few')
-  assert.equal(pick_(5), 'cd.catalog.many')
-  assert.equal(pick_(21), 'cd.catalog.one')
+test('счётный ключ: подставляются формы one/few/many, когда они есть', () => {
+  const p = pick('cd.catalog', new Set(['cd.catalog.one', 'cd.catalog.few', 'cd.catalog.many']))
+  assert.equal(p(1), 'cd.catalog.one')
+  assert.equal(p(2), 'cd.catalog.few')
+  assert.equal(p(5), 'cd.catalog.many')
+  assert.equal(p(21), 'cd.catalog.one')
 })
 
-test('count key: falls back to base when the form is absent', () => {
-  const pick_ = pick('queue.count', new Set())
-  assert.equal(pick_(1), 'queue.count')
-  assert.equal(pick_(3), 'queue.count')
+test('счётный ключ: откат к базе, когда формы в словаре нет', () => {
+  const p = pick('queue.count', new Set())
+  assert.equal(p(1), 'queue.count')
+  assert.equal(p(3), 'queue.count')
 })
 
-test('suffix guard: .one/.other keys are never re-suffixed', () => {
-  const key = 'sessions.count.other'
-  assert.match(key, /[.](one|other|few|many)$/)
-  const bare = 'cd.catalog'
-  assert.doesNotMatch(bare, /[.](one|other|few|many)$/)
+test('защита суффикса: ключи .one/.other повторно не суффиксуются', () => {
+  assert.match('sessions.count.other', /[.](one|other|few|many)$/)
+  assert.doesNotMatch('cd.catalog', /[.](one|other|few|many)$/)
 })

@@ -179,6 +179,60 @@ glo_errs = lt.lint_glossary(bad_term_ru, sample_glo)
 check(len(glo_errs) == 1 and glo_errs[0][0] == 'FORBIDDEN_TERM', 'lint_translations: ловит запрещённый термин')
 
 
+
+# ---------- mt_autofill: первый запуск без базового среза (#136) ----------
+import shutil
+import subprocess
+
+with tempfile.TemporaryDirectory() as td:
+    repo = os.path.join(td, 'repo')
+    os.makedirs(os.path.join(repo, 'upstream'))
+    os.makedirs(os.path.join(repo, 'tools'))
+    for name in ('mt_autofill.py', 'mt_fallback.py'):
+        shutil.copy(os.path.join(TOOLS, name), os.path.join(repo, 'tools', name))
+    plugins_en = {'ns1': {'a': 'Alpha', 'b': 'Beta'}}
+    with open(os.path.join(repo, 'plugins-en.json'), 'w', encoding='utf-8') as fh:
+        json.dump(plugins_en, fh, ensure_ascii=False)
+    with open(os.path.join(repo, 'mt-registry.json'), 'w', encoding='utf-8') as fh:
+        json.dump({}, fh)
+    snapshot = os.path.join(repo, 'upstream', 'plugins-snapshot.json')
+
+    # Ключа намеренно нет: база среза перевода не требует, значит и ключ для
+    # неё не нужен — раньше проверка ключа стояла выше и обрывала первый запуск.
+    env = dict(os.environ)
+    env.pop('OPENROUTER_API_KEY', None)
+    run = subprocess.run([sys.executable, os.path.join(repo, 'tools', 'mt_autofill.py')],
+                         capture_output=True, text=True, env=env)
+    check(run.returncode == 0, 'mt_autofill: первый запуск без API-ключа завершается успешно')
+    check(os.path.exists(snapshot), 'mt_autofill: первый запуск создаёт базовый срез')
+    if os.path.exists(snapshot):
+        base = json.load(open(snapshot, encoding='utf-8'))
+        check(base == plugins_en, 'mt_autofill: база среза равна текущему plugins-en.json')
+        raw = open(snapshot, 'rb').read()
+        check(chr(13).encode() not in raw, 'mt_autofill: срез пишется с LF, без CRLF (#137)')
+
+    # Повторный прогон видит только реальную разницу, а не «всё новое».
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location('mt_autofill_mod', os.path.join(repo, 'tools', 'mt_autofill.py'))
+    _mod = _ilu.module_from_spec(_spec)
+    sys.modules['mt_autofill_mod'] = _mod
+    try:
+        _spec.loader.exec_module(_mod)
+        delta = _mod.new_keys(plugins_en, {'ns1': {'a': 'Alpha', 'b': 'Beta', 'c': 'Gamma'}})
+        check(delta == {'ns1': ['c']}, 'mt_autofill: дельта — только добавленный ключ')
+    except SystemExit:
+        check(False, 'mt_autofill: модуль импортируется без побочных эффектов')
+
+
+# ---------- mt-registry: статус вычитки (#135) ----------
+registry = json.load(open(os.path.join(REPO, 'mt-registry.json'), encoding='utf-8'))
+recs = [r for ns in registry for r in registry[ns].values()]
+check(bool(recs), 'mt-registry: реестр не пуст')
+check(all(isinstance(r, dict) and 'status' in r for r in recs),
+      'mt-registry: у каждой записи есть поле status')
+check(all(r.get('status') in ('draft', 'reviewed') for r in recs),
+      'mt-registry: status принимает только draft или reviewed')
+
 if FAILS:
     print('ПРОВАЛЕНО: %d' % len(FAILS))
     sys.exit(1)

@@ -14,27 +14,57 @@ jobs:
           node-version: 20
       # setup-python не используется: офлайн-раннер не достаёт из кэша python 3.12.
       # Тесты инструментов — чистый stdlib, хватает системного python3 act-образа.
-      - name: Node-тесты (словари/плюраль/типографика/раскладка)
-        run: node --test test/test_plural.mjs test/test_fill.mjs test/test_count_plural.mjs test/test_typography.mjs test/test_layout.mjs
-      - name: Репро загрузки бандла (mock ctx)
-        run: node test/_repro.cjs
-      - name: Тесты инструментов
-        run: python3 test/test_tools.py
+
+      # Сборка идёт ПЕРВОЙ: node-тесты читают lib/client.js и lib/pure.js,
+      # и проверять надо свежий бандл, а не тот, что лежал в коммите.
       - name: Сборка бандла + синтаксис
         run: |
           python3 build.py
           node --check lib/client.js
+
+      # Бандл сгенерирован, но закоммичен: npm publish уезжает тем файлом,
+      # который лежит на диске у релизящего. Если он разошёлся с исходником,
+      # пользователь получает не тот код, что прошёл ревью (#134).
+      - name: Бандл в коммите совпадает со сборкой
+        run: git diff --exit-code lib/client.js
+
+      # Все тесты, а не выборка: до 0.1.32 CI гонял 5 файлов из 14, и фичи
+      # 0.1.29–0.1.31 уехали в релиз непроверенными (#134).
+      - name: Node-тесты (все)
+        run: node --test test/*.mjs
+
+      - name: Репро загрузки бандла (mock ctx)
+        run: node test/_repro.cjs
+
+      - name: Тесты инструментов
+        run: |
+          python3 test/test_tools.py
+          python3 test/test_extract.py
+          python3 test/test_overflow.py
+
+      - name: Линтер словарей
+        run: python3 tools/lint_translations.py
+
       - name: Coverage gate
         run: python3 check-coverage.py
+
       - name: Терминология (предупреждение, не блокер)
         run: python3 tools/term_check.py || true
+
       - name: Обезличенность исходников (словари переводов исключены — там чужие примеры)
         run: |
-          ! grep -rniP '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' README.md lib/ tools/*.py tools/systemd/ test/
+          # --exclude-dir/--binary-files: шаг идёт после тестов, а те оставляют
+          # __pycache__/*.pyc, в котором grep находит собственные строки и даёт
+          # ложное срабатывание.
+          ! grep -rniP --exclude-dir=__pycache__ --binary-files=without-match \
+            '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' \
+            README.md lib/ tools/*.py tools/systemd/ test/
+
       - name: Сборка npm-пакета (.tgz) для test server
         run: |
           mkdir -p /tmp/pkg
           npm pack --pack-destination /tmp/pkg
+
       - name: Загрузить артефакт
         uses: actions/upload-artifact@v3
         with:

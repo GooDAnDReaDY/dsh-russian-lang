@@ -1,64 +1,54 @@
-// Layout-fix candidate logic as mirrored in the client bundle: translit a
-// latin string to cyrillic via the QWERTY<->ЙЦУКЕН map and require that a
-// large fraction of the converted words are in the bundled Russian frequency
-// list before the hint fires. Pins the mapping + dictionary coverage so a
-// change in the wordlist or the map is caught here.
+// Детектор неверной раскладки: транслитерация по клавишам и решение
+// «похоже ли это на русский». Импорт из lib/pure.js — проверяется код,
+// который уезжает в бандл, а не копия карт и порогов в тесте (#133).
 import { test } from 'node:test'
 import assert from 'node:assert'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { translit, makeLayout, LAYOUT_LAT_TO_CYR, LAYOUT_CYR_TO_LAT } from '../lib/pure.js'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const FREQ = new Set(JSON.parse(readFileSync(join(HERE, '..', 'tools', 'ru-freq.json'), 'utf-8')))
-
-const LAT_TO_CYR = {
-  q: 'й', w: 'ц', e: 'у', r: 'к', t: 'е', y: 'н', u: 'г', i: 'ш', o: 'щ', p: 'з', '[': 'х', ']': 'ъ',
-  a: 'ф', s: 'ы', d: 'в', f: 'а', g: 'п', h: 'р', j: 'о', k: 'л', l: 'д', ';': 'ж', "'": 'э',
-  z: 'я', x: 'ч', c: 'с', v: 'м', b: 'и', n: 'т', m: 'ь', ',': 'б', '.': 'ю', '/': '.',
-  '`': 'ё'
-}
-
-function translit(word, map) {
-  let out = ''
-  for (const ch of word.toLowerCase()) out += map[ch] !== undefined ? map[ch] : ch
-  return out
-}
-
-function ruFraction(text) {
-  const words = text.toLowerCase().split(/[^а-яё]+/).filter(Boolean)
-  if (!words.length) return 0
-  const hit = words.filter((w) => FREQ.has(w)).length
-  return hit / words.length
-}
-
-function candidate(value) {
-  const converted = translit(value, LAT_TO_CYR)
-  if (!/[а-яё]{2}/.test(converted)) return null
-  if (ruFraction(converted) < 0.7) return null
-  return converted
+const layout = makeLayout(FREQ)
+const candidate = (v) => {
+  const c = layout.candidate(v, 'lat2cyr')
+  return c ? c.converted : null
 }
 
 test('translit: ghbdtn rfr ltkf -> привет как дела', () => {
-  assert.equal(translit('ghbdtn', LAT_TO_CYR), 'привет')
-  assert.equal(translit('rfr', LAT_TO_CYR), 'как')
-  assert.equal(translit('ltkf', LAT_TO_CYR), 'дела')
+  assert.equal(translit('ghbdtn', LAYOUT_LAT_TO_CYR), 'привет')
+  assert.equal(translit('rfr', LAYOUT_LAT_TO_CYR), 'как')
+  assert.equal(translit('ltkf', LAYOUT_LAT_TO_CYR), 'дела')
 })
 
-test('candidate: gibberish latin that maps to Russian words fires', () => {
-  const c = candidate('ghbdtn rfr ltkf')
-  assert.ok(c !== null)
-  assert.equal(c, 'привет как дела')
+test('translit: обратная карта возвращает исходную латиницу', () => {
+  assert.equal(translit(translit('ghbdtn', LAYOUT_LAT_TO_CYR), LAYOUT_CYR_TO_LAT), 'ghbdtn')
 })
 
-test('candidate: real English words are rejected', () => {
-  // "hello world" maps to nonsense cyrillic that is not in the freq list
+test('candidate: латинская абракадабра, дающая русские слова, срабатывает', () => {
+  assert.equal(candidate('ghbdtn rfr ltkf'), 'привет как дела')
+})
+
+test('candidate: настоящие английские слова отвергаются', () => {
+  // "hello world" переводится в бессмыслицу, которой нет в частотном словаре
   assert.equal(candidate('hello world'), null)
 })
 
-test('freq dictionary has enough Russian coverage to be useful', () => {
+test('candidate: слова, выученные за сессию, поднимают долю распознанного', () => {
+  const learned = makeLayout(new Set())
+  assert.equal(learned.candidate('ghbdtn', 'lat2cyr'), null)
+  learned.learnWords('привет')
+  assert.deepEqual(learned.candidate('ghbdtn', 'lat2cyr'), { converted: 'привет' })
+})
+
+test('candidate: cyr2lat срабатывает только на команде со слешем', () => {
+  // «/help», набранное в русской раскладке, выглядит как «.рудз»
+  assert.deepEqual(layout.candidate('.рудз', 'cyr2lat'), { converted: '/help' })
+  assert.equal(layout.candidate('привет', 'cyr2lat'), null)
+})
+
+test('частотный словарь достаточно покрывает русский', () => {
   assert.ok(FREQ.size > 3000)
-  assert.ok(FREQ.has('привет'))
-  assert.ok(FREQ.has('как'))
-  assert.ok(FREQ.has('дела'))
+  for (const w of ['привет', 'как', 'дела']) assert.ok(FREQ.has(w), w)
 })

@@ -1,44 +1,9 @@
+// Форматы чисел, валют и относительного времени в ru-RU, плюс спецификаторы
+// {param:number} / {param:currency} в fill(). Импорт из lib/pure.js —
+// проверяется отгружаемый код, а не копия в тесте (#133).
 import { test } from 'node:test'
 import assert from 'node:assert'
-
-const numberFormat = new Intl.NumberFormat('ru-RU')
-const relativeTimeFormat = new Intl.RelativeTimeFormat('ru-RU', { numeric: 'auto' })
-
-const formatNumber = (val) => {
-  const n = typeof val === 'number' ? val : Number(val)
-  return isNaN(n) ? String(val) : numberFormat.format(n)
-}
-
-const formatRelativeTime = (val, unit) => {
-  if (typeof val === 'number' && typeof unit === 'string') {
-    return relativeTimeFormat.format(val, unit)
-  }
-  const ts = val instanceof Date ? val.getTime() : (typeof val === 'number' ? (val < 1e12 ? val * 1000 : val) : Number(val))
-  if (isNaN(ts)) return String(val)
-  const diffSec = Math.round((ts - Date.now()) / 1000)
-  const absSec = Math.abs(diffSec)
-  if (absSec < 45) return 'только что'
-  if (absSec < 3600) return relativeTimeFormat.format(Math.round(diffSec / 60), 'minute')
-  if (absSec < 86400) return relativeTimeFormat.format(Math.round(diffSec / 3600), 'hour')
-  if (absSec < 2592000) return relativeTimeFormat.format(Math.round(diffSec / 86400), 'day')
-  if (absSec < 31536000) return relativeTimeFormat.format(Math.round(diffSec / 2592000), 'month')
-  return relativeTimeFormat.format(Math.round(diffSec / 31536000), 'year')
-}
-
-const formatCurrency = (val, cur = 'RUB') => {
-  const n = typeof val === 'number' ? val : Number(val)
-  if (isNaN(n)) return String(val)
-  return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: cur.toUpperCase() }).format(n)
-}
-
-const fill = (template, params) => template.replace(/\{(\w+)(?::(\w+))?\}/g, (match, name, spec) => {
-  if (!(name in params)) return match
-  const val = params[name]
-  if (spec === 'number') return formatNumber(val)
-  if (spec === 'reltime') return formatRelativeTime(val)
-  if (spec === 'currency') return formatCurrency(val, params.currency || 'RUB')
-  return String(val)
-})
+import { formatNumber, formatRelativeTime, formatCurrency, fill } from '../lib/pure.js'
 
 test('formatNumber formats thousands and decimals in ru-RU', () => {
   assert.equal(formatNumber(10000).replace(/\s/g, ' '), '10 000')
