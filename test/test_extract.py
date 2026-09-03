@@ -50,65 +50,72 @@ PKG_DIRS = [
     ('@deepseek-ai/test-c', BUNDLE_SINGLE_QUOTES),
 ]
 
+# CWD возвращаем до выхода из контекста: Windows не удаляет каталог, который
+# является текущим для процесса, и уборка падала с WinError 32 (#134).
+ORIG_CWD = os.getcwd()
 with tempfile.TemporaryDirectory() as td:
-    nm = os.path.join(td, 'node_modules')
-    for scope, src in PKG_DIRS:
-        libdir = os.path.join(nm, scope, 'lib')
-        os.makedirs(libdir, exist_ok=True)
-        with open(os.path.join(libdir, 'client.js'), 'w', encoding='utf-8') as f:
-            f.write(src)
-    # Also a non-core package that extract-dicts.py should ignore.
-    os.makedirs(os.path.join(nm, '@scope', 'other', 'lib'), exist_ok=True)
-    with open(os.path.join(nm, '@scope', 'other', 'lib', 'client.js'), 'w', encoding='utf-8') as f:
-        f.write('ctx.locale.register("not-core", { zh: { "k": "v" } });')
-    cwd = os.path.join(td, 'work')
-    os.makedirs(cwd, exist_ok=True)
-    os.chdir(cwd)
-    # extract-dicts.py writes core-en.json into HERE; point HERE at cwd.
-    shutil.copy(EXTRACT, os.path.join(cwd, 'extract-dicts.py'))
-    shutil.copy(CHECK, os.path.join(cwd, 'check-coverage.py'))
-    proc = subprocess.run(
-        [sys.executable, os.path.join(cwd, 'extract-dicts.py'), nm],
-        cwd=cwd, capture_output=True, text=True, check=True,
-    )
-    en = json.load(open(os.path.join(cwd, 'core-en.json'), encoding='utf-8'))
-    # extract-dicts.py records a namespace even when only zh was registered, so
-    # we filter to non-empty harvests here (the real-life build pipeline does
-    # the same — see issue #4 follow-up).
-    en = {ns: v for ns, v in en.items() if v}
-    namespaces = sorted(en.keys())
-    assert namespaces == ['chrome', 'common', 'plugin'], namespaces
-    assert en['chrome'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['chrome']
-    assert en['common'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['common']
-    assert en['plugin'] == {'k': 'K'}, en['plugin']
-    # check-coverage: with no ru dir, the coverage report flags everything as
-    # missing and exits non-zero. That is the intended failure path — verify it.
-    proc2 = subprocess.run(
-        [sys.executable, os.path.join(cwd, 'check-coverage.py')],
-        cwd=cwd, capture_output=True, text=True,
-    )
-    assert proc2.returncode != 0
-    assert 'НЕТ ПЕРЕВОДА' in proc2.stdout
-    # Now add a partial ru dictionary and re-check: missing count should drop.
-    os.makedirs(os.path.join(cwd, 'ru'), exist_ok=True)
-    with open(os.path.join(cwd, 'ru', 'chrome.json'), 'w', encoding='utf-8') as f:
-        json.dump({'chrome': {'btn.ok': 'ОК'}}, f, ensure_ascii=False)
-    proc3 = subprocess.run(
-        [sys.executable, os.path.join(cwd, 'check-coverage.py')],
-        cwd=cwd, capture_output=True, text=True,
-    )
-    assert 'chrome' in proc3.stdout
-    assert 'btn.cancel' in proc3.stdout
-    # A ru translation that drops a {placeholder} must be flagged as a broken
-    # translation (the parameter substitution would fail at runtime).
-    with open(os.path.join(cwd, 'ru', 'chrome.json'), 'w', encoding='utf-8') as f:
-        json.dump({'chrome': {'btn.count': 'сессий'}}, f, ensure_ascii=False)
-    with open(os.path.join(cwd, 'core-en.json'), 'w', encoding='utf-8') as f:
-        json.dump({'chrome': {'btn.count': 'сессий: {n}'}}, f, ensure_ascii=False)
-    proc4 = subprocess.run(
-        [sys.executable, os.path.join(cwd, 'check-coverage.py')],
-        cwd=cwd, capture_output=True, text=True,
-    )
-    assert 'ПОТЕРЯН PH' in proc4.stdout
-    assert 'btn.count' in proc4.stdout
-    print('extract-dicts and check-coverage OK')
+  try:
+      nm = os.path.join(td, 'node_modules')
+      for scope, src in PKG_DIRS:
+          libdir = os.path.join(nm, scope, 'lib')
+          os.makedirs(libdir, exist_ok=True)
+          with open(os.path.join(libdir, 'client.js'), 'w', encoding='utf-8') as f:
+              f.write(src)
+      # Also a non-core package that extract-dicts.py should ignore.
+      os.makedirs(os.path.join(nm, '@scope', 'other', 'lib'), exist_ok=True)
+      with open(os.path.join(nm, '@scope', 'other', 'lib', 'client.js'), 'w', encoding='utf-8') as f:
+          f.write('ctx.locale.register("not-core", { zh: { "k": "v" } });')
+      cwd = os.path.join(td, 'work')
+      os.makedirs(cwd, exist_ok=True)
+      os.chdir(cwd)
+      # extract-dicts.py writes core-en.json into HERE; point HERE at cwd.
+      shutil.copy(EXTRACT, os.path.join(cwd, 'extract-dicts.py'))
+      shutil.copy(CHECK, os.path.join(cwd, 'check-coverage.py'))
+      proc = subprocess.run(
+          [sys.executable, os.path.join(cwd, 'extract-dicts.py'), nm],
+          cwd=cwd, capture_output=True, text=True, check=True,
+      )
+      en = json.load(open(os.path.join(cwd, 'core-en.json'), encoding='utf-8'))
+      # extract-dicts.py records a namespace even when only zh was registered, so
+      # we filter to non-empty harvests here (the real-life build pipeline does
+      # the same — see issue #4 follow-up).
+      en = {ns: v for ns, v in en.items() if v}
+      namespaces = sorted(en.keys())
+      assert namespaces == ['chrome', 'common', 'plugin'], namespaces
+      assert en['chrome'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['chrome']
+      assert en['common'] == {'btn.ok': 'OK', 'btn.cancel': 'Cancel'}, en['common']
+      assert en['plugin'] == {'k': 'K'}, en['plugin']
+      # check-coverage: with no ru dir, the coverage report flags everything as
+      # missing and exits non-zero. That is the intended failure path — verify it.
+      proc2 = subprocess.run(
+          [sys.executable, os.path.join(cwd, 'check-coverage.py')],
+          cwd=cwd, capture_output=True, text=True,
+      )
+      assert proc2.returncode != 0
+      assert 'НЕТ ПЕРЕВОДА' in proc2.stdout
+      # Now add a partial ru dictionary and re-check: missing count should drop.
+      os.makedirs(os.path.join(cwd, 'ru'), exist_ok=True)
+      with open(os.path.join(cwd, 'ru', 'chrome.json'), 'w', encoding='utf-8') as f:
+          json.dump({'chrome': {'btn.ok': 'ОК'}}, f, ensure_ascii=False)
+      proc3 = subprocess.run(
+          [sys.executable, os.path.join(cwd, 'check-coverage.py')],
+          cwd=cwd, capture_output=True, text=True,
+      )
+      assert 'chrome' in proc3.stdout
+      assert 'btn.cancel' in proc3.stdout
+      # A ru translation that drops a {placeholder} must be flagged as a broken
+      # translation (the parameter substitution would fail at runtime).
+      with open(os.path.join(cwd, 'ru', 'chrome.json'), 'w', encoding='utf-8') as f:
+          json.dump({'chrome': {'btn.count': 'сессий'}}, f, ensure_ascii=False)
+      with open(os.path.join(cwd, 'core-en.json'), 'w', encoding='utf-8') as f:
+          json.dump({'chrome': {'btn.count': 'сессий: {n}'}}, f, ensure_ascii=False)
+      proc4 = subprocess.run(
+          [sys.executable, os.path.join(cwd, 'check-coverage.py')],
+          cwd=cwd, capture_output=True, text=True,
+      )
+      assert 'ПОТЕРЯН PH' in proc4.stdout
+      assert 'btn.count' in proc4.stdout
+      print('extract-dicts and check-coverage OK')
+
+  finally:
+    os.chdir(ORIG_CWD)
