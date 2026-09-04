@@ -488,7 +488,10 @@ window.__ModuleLoader__.load({
         'Low': 'Низкий',
         'Medium': 'Средний',
         'High': 'Высокий',
-        'Effort': 'Рассуждения'
+        'Effort': 'Рассуждения',
+        'Search engine (ModSearch)': 'Поисковая система (ModSearch)',
+        'Search engine provider configuration.': 'Настройка провайдера поисковой системы.',
+        'X search only': 'Только поиск в X'
       }
       const ZH_WALKER = (root) => {
         try {
