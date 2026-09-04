@@ -1,0 +1,9 @@
+{
+  "addHook": "+ 新增 hook",
+  "noHooks": "暂无 hook，点「编辑」添加",
+  "currentHooks": "当前 hooks",
+  "notifyWebhook": "通知 webhook",
+  "hookTriggered": "个 hook 触发",
+  "fillRunOrChannel": "hook #{i}：请填写 run 命令或选择通知渠道",
+  "routeUnavailable": "无法访问 /dsh-hooks/* 路由：请确认 dsh-hooks 核心插件已安装且 dsh web 已重启。"
+}

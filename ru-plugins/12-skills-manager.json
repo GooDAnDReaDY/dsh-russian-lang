@@ -166,6 +166,25 @@
     "root.codex": "Codex",
     "root.claude": "Claude",
     "root.gemini": "Gemini",
-    "root.opencode": "OpenCode"
+    "root.opencode": "OpenCode",
+    "link.project": "GitHub",
+    "link.feedback": "Обратная связь",
+    "summary.total.one": "{count} навык",
+    "summary.total.other": "{count} навыков",
+    "summary.enabled.one": "{count} включён",
+    "summary.enabled.other": "{count} включено",
+    "summary.disabled.one": "{count} отключён",
+    "summary.disabled.other": "{count} отключено",
+    "summary.issues.one": "{count} проблема",
+    "summary.issues.other": "{count} проблем",
+    "summary.group.one": "{count} навык",
+    "summary.group.other": "{count} навыков",
+    "upload.selected.one": "Выбран {count} файл · {size}",
+    "upload.selected.other": "Выбрано {count} файлов · {size}",
+    "trash.count.one": "{count} навык в корзине",
+    "trash.count.other": "{count} навыков в корзине",
+    "error.skill.notLoadable": "Структура навыка неполная, невозможно выполнить {action}: {name}",
+    "root.ccswitch": "CC Switch",
+    "root.cursor": "Cursor"
   }
 }
