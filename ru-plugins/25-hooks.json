@@ -1,0 +1,11 @@
+{
+  "dsh-hooks": {
+    "addHook": "+ Добавить hook",
+    "noHooks": "Нет хуков, нажмите «Редактировать» для добавления",
+    "currentHooks": "Текущие хуки",
+    "notifyWebhook": "Webhook уведомлений",
+    "hookTriggered": "срабатываний хука",
+    "fillRunOrChannel": "hook #{i}：укажите команду run или выберите канал уведомлений",
+    "routeUnavailable": "Не удаётся получить доступ к маршрутам /dsh-hooks/*: убедитесь, что плагин dsh-hooks установлен и DSH перезапущен."
+  }
+}
