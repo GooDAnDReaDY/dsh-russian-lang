@@ -1,0 +1,8 @@
+{
+  "dsh-clinebot": {
+    "settings.loading": "Загрузка настроек ClineBot…",
+    "settings.unavailable": "Настройки ClineBot недоступны (системный namespace не готов).",
+    "subtitle": "Подписка ClinePass ($9.99/мес) с проверенными и пользовательскими моделями.",
+    "title": "ClineBot"
+  }
+}

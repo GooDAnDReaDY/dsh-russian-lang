@@ -1,0 +1,30 @@
+{
+  "dsh-cost-meter": {
+    "catalogUnavailable": "Каталог OpenRouter недоступен: ",
+    "chipRate": "тариф",
+    "chipUnknown": "тариф ?",
+    "field.currency": "Символ валюты",
+    "field.displayTimeZone": "Часовой пояс отображения",
+    "field.usdRate": "Курс к USD",
+    "flat": "фикс.",
+    "hint.currency": "Символ валюты в виджете (например $, ₽, €).",
+    "hint.displayTimeZone": "Часовой пояс IANA для расписания пиковых/ночных тарифов.",
+    "hint.usdRate": "Курс обмена: количество единиц валюты за 1 USD (например 80 для ₽).",
+    "modal.close": "Закрыть",
+    "modal.title": "Тарифы и стоимость моделей",
+    "offPeak": "ночь",
+    "peak": "пик",
+    "rate.custom": "Пользовательский",
+    "rate.default": "По умолчанию",
+    "rate.input": "Вход: {price} / 1M токенов",
+    "rate.output": "Выход: {price} / 1M токенов",
+    "rate.unit": "/ 1M ток.",
+    "table.model": "Модель",
+    "table.provider": "Провайдер",
+    "table.rate": "Тарифная ставка",
+    "table.total": "Итого",
+    "title": "Счётчик стоимости токенов",
+    "totalCost": "Общая стоимость: {cost}",
+    "totalTokens": "Всего токенов: {count}"
+  }
+}

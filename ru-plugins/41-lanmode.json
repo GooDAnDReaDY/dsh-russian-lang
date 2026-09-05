@@ -1,0 +1,6 @@
+{
+  "dsh-lanmode": {
+    "sub": "mDNS (dsh.local), полифилы Web API, TLS для микрофона и PWA",
+    "title": "Локальный и мобильный доступ (dsh-lanmode)"
+  }
+}
