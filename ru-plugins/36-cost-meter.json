@@ -24,7 +24,19 @@
     "table.rate": "Тарифная ставка",
     "table.total": "Итого",
     "title": "Счётчик стоимости токенов",
-    "totalCost": "Общая стоимость: {cost}",
-    "totalTokens": "Всего токенов: {count}"
+    "totalCost": "Общая стоимость",
+    "modelNotFound": "Модель не найдена в каталоге OpenRouter. Задайте цены вручную в настройках или сопоставьте модель через modelMap.",
+    "modelsBreakdown": "Детализация по моделям",
+    "noPriceSpecified": "тариф не указан",
+    "noUsageYet": "Провайдер ещё не передал данные об использовании для этой сессии.",
+    "routeUnknown": "маршрут неизвестен",
+    "sessionTokens": "Токены сессии",
+    "settings.loading": "Загрузка настроек…",
+    "settings.save": "Сохранить",
+    "settings.saveFailed": "Не удалось сохранить настройки: ",
+    "settings.saved": "Сохранено",
+    "settings.saving": "Сохранение…",
+    "settings.unavailable": "Настройки недоступны (namespace ещё не зарегистрирован).",
+    "subtitle": "Стоимость сессии в шапке, тарифы токенов и детализация по моделям"
   }
 }
