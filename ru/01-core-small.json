@@ -1,97 +1,149 @@
 {
- "common": {
-  "back": "Назад",
-  "cancel": "Отмена",
-  "close": "Закрыть",
-  "collapse": "Свернуть",
-  "copied": "Скопировано",
-  "copy": "Копировать",
-  "delete": "Удалить",
-  "edit": "Изменить",
-  "expand": "Развернуть",
-  "load.failed": "Не удалось загрузить",
-  "loading": "Загрузка…",
-  "more": "Ещё",
-  "next": "Дальше",
-  "none": "Нет",
-  "ok": "ОК",
-  "previous": "Назад",
-  "retry": "Повторить",
-  "save": "Сохранить",
-  "search": "Поиск",
-  "skip": "Пропустить",
-  "submit": "Отправить",
-  "submitting": "Отправка…",
-  "truncated": "Обрезано",
-  "unknown": "Неизвестно"
- },
- "sidebar": {
-  "session.new": "Новая сессия",
-  "session.new.label": "Новая сессия",
-  "toggle.collapse": "Свернуть панель",
-  "toggle.open": "Открыть панель"
- },
- "settings": {
-  "close": "Закрыть",
-  "general.nav": "Общие",
-  "openDocument": "Открыть файл настроек",
-  "openDocument.error": "Не удалось открыть файл настроек",
-  "title": "Настройки",
-  "trigger": "Настройки"
- },
- "settings.theme": {
-  "appearance.dark": "Тёмная",
-  "appearance.light": "Светлая",
-  "appearance.system": "Как в системе",
-  "appearance.title": "Оформление"
- },
- "settings.locale": {
-  "language.title": "Язык"
- },
- "plan": {
-  "chip.off.aria": "Режим плана выключен, нажмите, чтобы включить",
-  "chip.off.title": "Режим плана выключен — нажмите, чтобы включить (/plan)",
-  "chip.on.aria": "Режим плана включён, нажмите, чтобы выключить",
-  "chip.on.title": "Режим плана включён — нажмите, чтобы выключить (/plan off)"
- },
- "skill": {
-  "menu.userOnly": "только вручную",
-  "row.failed": "Не удалось загрузить скилл",
-  "row.instructions": "Инструкции",
-  "row.running": "Загрузка скилла",
-  "row.stopped": "Загрузка скилла остановлена"
- },
- "slash.menu": {
-  "command": "Команды",
-  "loading": "Загрузка…",
-  "skill": "Скиллы",
-  "subagent": "Субагенты",
-  "suggestions.aria": "Подсказки по вводу"
- },
- "deliverables": {
-  "produced.label": "Создано",
-  "produced.more": "+ {count} файлов",
-  "produced.moreOne": "+ 1 файл",
-  "produced.open": "Открыть {name}",
-  "produced.showInFolder": "Показать в папке"
- },
+  "common": {
+    "back": "Назад",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "collapse": "Свернуть",
+    "copied": "Скопировано",
+    "copy": "Копировать",
+    "delete": "Удалить",
+    "edit": "Изменить",
+    "expand": "Развернуть",
+    "load.failed": "Не удалось загрузить",
+    "loading": "Загрузка…",
+    "more": "Ещё",
+    "next": "Дальше",
+    "none": "Нет",
+    "ok": "ОК",
+    "previous": "Назад",
+    "retry": "Повторить",
+    "save": "Сохранить",
+    "search": "Поиск",
+    "skip": "Пропустить",
+    "submit": "Отправить",
+    "submitting": "Отправка…",
+    "truncated": "Обрезано",
+    "unknown": "Неизвестно",
+    "brand.localBuild": "Локальная сборка DSH",
+    "copy.compactJson": "Копировать компактный JSON",
+    "copy.failed": "Не удалось скопировать",
+    "copy.json": "Копировать JSON",
+    "copy.optionsHint": "{action}; правый клик для вариантов копирования",
+    "copy.path": "Копировать путь к свойству",
+    "copy.prettyJson": "Копировать форматированный JSON",
+    "copy.value": "Копировать значение",
+    "json.collapseNode": "Свернуть узел JSON",
+    "json.expandNode": "Развернуть узел JSON",
+    "json.label": "JSON",
+    "markdown.footnotes": "Сноски",
+    "markdown.truncatedCharacters": "… обрезано на {total} символах",
+    "number.million": "{value}M",
+    "number.thousand": "{value}K"
+  },
+  "sidebar": {
+    "session.new": "Новая сессия",
+    "session.new.label": "Новая сессия",
+    "toggle.collapse": "Свернуть панель",
+    "toggle.open": "Открыть панель"
+  },
+  "settings": {
+    "close": "Закрыть",
+    "general.nav": "Общие",
+    "openDocument": "Открыть файл настроек",
+    "openDocument.error": "Не удалось открыть файл настроек",
+    "title": "Настройки",
+    "trigger": "Настройки"
+  },
+  "settings.theme": {
+    "appearance.dark": "Тёмная",
+    "appearance.light": "Светлая",
+    "appearance.system": "Как в системе",
+    "appearance.title": "Оформление"
+  },
+  "settings.locale": {
+    "language.title": "Язык"
+  },
+  "plan": {
+    "chip.off.aria": "Режим плана выключен, нажмите, чтобы включить",
+    "chip.off.title": "Режим плана выключен — нажмите, чтобы включить (/plan)",
+    "chip.on.aria": "Режим плана включён, нажмите, чтобы выключить",
+    "chip.on.title": "Режим плана включён — нажмите, чтобы выключить (/plan off)",
+    "chip.exitFailed": "Не удалось выйти из режима планирования",
+    "chip.label": "План"
+  },
+  "skill": {
+    "menu.userOnly": "только вручную",
+    "row.failed": "Не удалось загрузить скилл",
+    "row.instructions": "Инструкции",
+    "row.running": "Загрузка скилла",
+    "row.stopped": "Загрузка скилла остановлена",
+    "row.inspect": "Инспектировать",
+    "row.title": "Навык"
+  },
+  "slash.menu": {
+    "command": "Команды",
+    "loading": "Загрузка…",
+    "skill": "Скиллы",
+    "subagent": "Субагенты",
+    "suggestions.aria": "Подсказки по вводу"
+  },
+  "deliverables": {
+    "produced.label": "Создано",
+    "produced.more": "+ {count} файлов",
+    "produced.moreOne": "+ 1 файл",
+    "produced.open": "Открыть {name}",
+    "produced.showInFolder": "Показать в папке"
+  },
   "command": {
-  "listbox.aria": "Совпадения /{command}",
-  "notice.imagesUnsupported": "/{command} не принимает вложения-изображения — сначала удалите их",
-  "overlay.aria": "Параметры /{command}",
-  "search.aria": "Фильтр параметров",
-  "search.placeholder": "Поиск…",
-  "status.applying": "Применение…",
-  "status.empty": "Нет параметров",
-  "status.loading": "Загрузка параметров…"
- },
- "session-log-download": {
-  "dialog.close": "Закрыть",
-  "dialog.commandFailed": "Не удалось запустить экспорт сессии.",
-  "dialog.errorTitle": "Экспорт сессии не удался",
-  "dialog.preparingDescription": "Готовится ZIP с этой сессией, её подсессиями и вложениями.",
-  "dialog.preparingTitle": "Экспорт сессии",
-  "dialog.successDescription": "Браузер загружает ZIP с сессией.",
-  "dialog.successTitle": "Загрузка сессии началась"
- }
+    "listbox.aria": "Совпадения /{command}",
+    "notice.imagesUnsupported": "/{command} не принимает вложения-изображения — сначала удалите их",
+    "overlay.aria": "Параметры /{command}",
+    "search.aria": "Фильтр параметров",
+    "search.placeholder": "Поиск…",
+    "status.applying": "Применение…",
+    "status.empty": "Нет параметров",
+    "status.loading": "Загрузка параметров…"
+  },
+  "session-log-download": {
+    "dialog.close": "Закрыть",
+    "dialog.commandFailed": "Не удалось запустить экспорт сессии.",
+    "dialog.errorTitle": "Экспорт сессии не удался",
+    "dialog.preparingDescription": "Готовится ZIP с этой сессией, её подсессиями и вложениями.",
+    "dialog.preparingTitle": "Экспорт сессии",
+    "dialog.successDescription": "Браузер загружает ZIP с сессией.",
+    "dialog.successTitle": "Загрузка сессии началась",
+    "header.action": "Журнал сессии"
+  },
+  "approval": {
+    "allowOnce": "Разрешить один раз",
+    "detail.aria": "Сведения о подтверждении",
+    "escalation": "Инструмент {toolName} запрашивает привилегированное выполнение",
+    "reject": "Отклонить",
+    "waiting": "Ожидание подтверждения"
+  },
+  "cordis": {
+    "action.inspect": "Инспектировать"
+  },
+  "model": {
+    "trigger.loading": "Загрузка моделей…"
+  },
+  "permission.access": {
+    "preset.fullAccess": "Полный доступ",
+    "preset.readOnly": "Только чтение",
+    "preset.workspaceWrite": "Запись в рабочую область"
+  },
+  "reference": {
+    "crumb.root": "Рабочая область",
+    "time.days": "{n} дн.",
+    "time.hours": "{n} ч",
+    "time.minutes": "{n} мин",
+    "time.months": "{n} мес.",
+    "time.now": "сейчас",
+    "time.years": "{n} г."
+  },
+  "subagent": {
+    "tokens.million": "{value}M",
+    "tokens.thousand": "{value}K",
+    "tokens.total": "{value} ток."
+  }
 }

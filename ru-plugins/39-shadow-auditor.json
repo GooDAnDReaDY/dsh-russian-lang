@@ -1,0 +1,16 @@
+{
+  "@goodandready/dsh-shadow-auditor": {
+    "auditBadge": "Аудит команд",
+    "blockCommands": "Блокировать опасные команды",
+    "blockCommandsDesc": "Проверяет --force, rm -rf, systemctl, удаление БД, curl|bash",
+    "lastAudit": "Последний аудит",
+    "loading": "Загрузка…",
+    "save": "Сохранить",
+    "saved": "Сохранено",
+    "saving": "Сохранение…",
+    "strictSecrets": "Строгое сканирование секретов",
+    "strictSecretsDesc": "Блокировать при наличии API-ключей или приватных токенов в diff",
+    "title": "Аудитор безопасности (Shadow Auditor)",
+    "unlocked": "Разблокировано"
+  }
+}

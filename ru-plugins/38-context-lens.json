@@ -1,0 +1,19 @@
+{
+  "@goodandready/dsh-context-lens": {
+    "budget": "Бюджет",
+    "compress": "Сжать",
+    "depth": "Макс. глубина AST",
+    "history": "Недавние операции",
+    "lowBudget": "Бюджет почти исчерпан",
+    "mode": "Режим сжатия",
+    "placeholder": "Вставьте лог Jest/Pytest сюда…",
+    "preview": "Предпросмотр лога",
+    "ready": "Готово",
+    "saved": "Сохранено",
+    "stats": "Статистика",
+    "tokens": "Токены",
+    "total": "Всего",
+    "trimmed": "Обрезано",
+    "viewLog": "Просмотреть лог"
+  }
+}
