@@ -27,8 +27,8 @@ test('бандл v0.2.5 содержит обновлённые переводы
 })
 
 test('словари v0.2.5 сохраняют корректные плейсхолдеры', () => {
-  assert.match(BUNDLE, /Статистика контекста: \{tokens\} ток\. • Занято \{percent\}%/)
-  assert.match(BUNDLE, /Включать последние N реплик \(\{count\}\) как контекст для оптимизации/)
+  assert.match(BUNDLE, /dsh-context поддерживает DeepSeek Harness версии \{minimum\} или новее\./)
+  assert.match(BUNDLE, /Включать последние N реплик как контекст для оптимизации\./)
   assert.match(BUNDLE, /ИИ выполняет развёртывание…/)
   assert.match(BUNDLE, /Оптимизировать промпт/)
   assert.match(BUNDLE, /Порог срабатывания предохранителя/)

@@ -16,6 +16,11 @@
     "loading": "Загрузка настроек LLM Wiki…",
     "save": "Сохранить",
     "saved": "Настройки сохранены",
-    "title": "База знаний LLM Wiki"
+    "title": "База знаний LLM Wiki",
+    "field.wikiFindScript": "Скрипт wiki-find",
+    "field.wwScript": "Скрипт ww",
+    "saving": "Сохранение…",
+    "subtitle": "Инструменты CouchDB / LiveSync и пути подготовки",
+    "unavailable": "Область настроек недоступна"
   }
 }

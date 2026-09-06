@@ -7,7 +7,7 @@
     "aboutVersionLabel": "Установленная версия",
     "checkUpdateButton": "Проверить обновления",
     "checkingUpdate": "Проверка…",
-    "contextTurnsHint": "Включать последние N реплик ({count}) как контекст для оптимизации. 0 = выключено. По умолчанию 3.",
+    "contextTurnsHint": "Включать последние N реплик как контекст для оптимизации. 0 = выключено. По умолчанию 3.",
     "contextTurnsLabel": "Глубина контекста",
     "convertAddFile": "Добавить файл",
     "convertAttach": "Прикрепить файл",

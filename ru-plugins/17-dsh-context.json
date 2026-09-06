@@ -276,12 +276,12 @@
     "rich.md.copy": "Копировать",
     "rich.md.copied": "Скопировано",
     "rich.md.footnotes": "Сноски",
-    "gate.body": "Для работы этой функции требуется версия DeepSeek Harness не ниже {minimum}. Текущая версия: {current}.",
-    "gate.current": "Текущая: {current}",
-    "gate.minimum": "Требуется: {minimum}",
+    "gate.body": "dsh-context поддерживает DeepSeek Harness версии {minimum} или новее.",
+    "gate.current": "Текущая",
+    "gate.minimum": "Минимально требуемая",
     "gate.ok": "Понятно",
     "gate.orNewer": "или новее",
     "gate.title": "Требуется обновление DSH",
-    "jump.statsLine": "Статистика контекста: {tokens} ток. • Занято {percent}%"
+    "jump.statsLine": "Просмотр состава контекста на вкладке «Контекст»"
   }
 }

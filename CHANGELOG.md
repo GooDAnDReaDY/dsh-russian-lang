@@ -1,3 +1,23 @@
+## 0.2.5 — 2026-09-06
+
+### Новое
+- **100% локализация 13 новых и обновлённых плагинов экосистемы DSH (659 ключей)**:
+  - `@noob-stupid/dsh-plugin-console` (`settings.pluginConsole`, 314 ключей) — Консоль управления плагинами, диагностика, развёртывание через ИИ, каталоги и источники репозиториев.
+  - `dsh-better-input` (`better-input`, 123 ключа) — Умный голосовой ввод, распознавание речи, оптимизация промптов через LLM, конвертер файлов и шаблоны.
+  - `@jhckevin/dsh-auto-review` (`settings.autoReview`, 71 ключ) — Изолированный ИИ-ревьюер опасных и сетевых действий, уровни риска, предохранители и песочница.
+  - `@goodandready/dsh-session-control` (`dsh-session-control`, 49 ключей) — Управление активными сессиями, закрепление, скрытие, поиск и архивация.
+  - `@goodandready-private/dsh-memory-brain` (`@goodandready-private/dsh-memory-brain`, 19 ключей) — Долгосрочная векторная память и граф знаний.
+  - `@goodandready-private/dsh-llm-wiki` (`dsh-llm-wiki`, 17 ключей) — База знаний LLM Wiki, синхронизация с CouchDB и автоиндексация.
+  - `@goodandready-private/dsh-task-tracker` (`dsh-task-tracker`, 13 ключей) — Интеграция с внутренним трекером задач и тикетов.
+  - `@goodandready/dsh-usage-guard` (`dsh-usage-guard`, 13 ключей) — Мониторинг расхода токенов и защита от зацикливаний.
+  - `@log.li/dsh-automode` (`dsh-auto-mode.permission`, 8 ключей) — Политики безопасности и разрешения автономного режима.
+  - `@goodandready-private/dsh-plugin-guard` (`dsh-plugin-guard`, 8 ключей) — Страж целостности активных плагинов и профилей DSH.
+  - Обновления локализации для `dsh-context`, `@goodandready/dsh-context-lens`, `@goodandready/dsh-shadow-auditor`, `dsh-vision-bridge`, `dsh-messenger-gateway`, `dsh-key-rotation`, `dsh-gitea`.
+- **Эффективное покрытие рантайма**: 100.0% (4752/4752 ключей), 0 машинных черновиков, 0 ошибок плейсхолдеров, полное соответствие глоссарию терминов.
+- **Тесты**: Добавлен модульный тест `test/test_v025_plugins.mjs` (общее число проверок в наборе — 78).
+
+---
+
 ## 0.2.4 — 2026-09-05
 
 - feat(i18n): 100% ручное покрытие всех обновлений ядра DSH и 13 новых плагинов (суммарно +871 новый ключ, 0 машинных черновиков).
