@@ -66,6 +66,21 @@
     "giteaUrl": "URL сервера",
     "giteaUser": "Пользователь",
     "repoCloned": "Репозиторий успешно клонирован",
-    "repoCloning": "Клонирование репозитория…"
+    "repoCloning": "Клонирование репозитория…",
+    "gitSync": "Синхронизация",
+    "graphClose": "Закрыть граф",
+    "graphEmpty": "В репозитории не найдено коммитов",
+    "graphLoadMore": "Загрузить ещё коммиты",
+    "graphLoading": "Загрузка графа коммитов…",
+    "graphTitle": "Граф коммитов Git",
+    "intro": "Создайте учётные данные DSH, вставьте туда токен API, затем укажите только имя учётных данных ниже (например, GITEA_TOKEN).",
+    "openGraph": "Граф коммитов",
+    "saveFailed": "Сохранить failed",
+    "settingsUnavailable": "Настройки unavailable (namespace not registered).",
+    "tokenEnv": "Имя учётных данных",
+    "tokenEnvHint": "Имя учётных данных DSH, а не сам токен. По умолчанию GITEA_TOKEN.",
+    "tokenOff": "Токен не настроен",
+    "tokenOn": "Токен настроен",
+    "unsaved": "Не сохранено"
   }
 }

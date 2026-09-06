@@ -275,6 +275,13 @@
     "browser.noSystem": "В заголовке этого запроса не было системного промпта",
     "rich.md.copy": "Копировать",
     "rich.md.copied": "Скопировано",
-    "rich.md.footnotes": "Сноски"
+    "rich.md.footnotes": "Сноски",
+    "gate.body": "Для работы этой функции требуется версия DeepSeek Harness не ниже {minimum}. Текущая версия: {current}.",
+    "gate.current": "Текущая: {current}",
+    "gate.minimum": "Требуется: {minimum}",
+    "gate.ok": "Понятно",
+    "gate.orNewer": "или новее",
+    "gate.title": "Требуется обновление DSH",
+    "jump.statsLine": "Статистика контекста: {tokens} ток. • Занято {percent}%"
   }
 }
