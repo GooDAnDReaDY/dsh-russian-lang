@@ -1,0 +1,17 @@
+{
+  "dsh-task-tracker": {
+    "field.base": "URL сервера Task Tracker",
+    "field.pass": "Пароль / Токен",
+    "field.passFile": "Путь к файлу пароля",
+    "field.user": "Пользователь",
+    "loading": "Загрузка настроек трекера…",
+    "passHint": "Токен доступа к API Task Tracker",
+    "passPlaceholder": "Секретный токен",
+    "save": "Сохранить",
+    "saved": "Настройки сохранены",
+    "saving": "Сохранение…",
+    "sub": "Интеграция с внутренним трекером задач и тикетов",
+    "title": "Трекер задач (Task Tracker)",
+    "userHint": "Логин сервисного аккаунта"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "dsh-llm-wiki": {
+    "field.couchDb": "Имя базы CouchDB",
+    "field.couchUrl": "URL сервера CouchDB",
+    "field.couchUser": "Пользователь CouchDB",
+    "field.rawImportDir": "Каталог сырых документов для импорта",
+    "field.searchTop": "Максимум результатов поиска (Top-K)",
+    "field.timeoutMs": "Таймаут запросов к Wiki (мс)",
+    "field.wikiAgent": "Имя агента управления базой знаний",
+    "field.wikiEnvFile": "Путь к файлу переменных окружения (.env)",
+    "hint.couchDb": "Имя базы данных для хранения статей и графа знаний",
+    "hint.couchUrl": "Адрес экземпляра Apache CouchDB",
+    "hint.rawImportDir": "Папка с markdown-файлами и документами для фоновой индексации",
+    "hint.searchTop": "Количество возвращаемых статей при поиске по вики",
+    "hint.wikiAgent": "Системный агент, отвечающий за автоструктурирование знаний",
+    "loading": "Загрузка настроек LLM Wiki…",
+    "save": "Сохранить",
+    "saved": "Настройки сохранены",
+    "title": "База знаний LLM Wiki"
+  }
+}
