@@ -151,7 +151,19 @@
     "rulesTitle": "Правила маршрутизации моделей",
     "rulesTotal": "Всего правил: {count}",
     "webSearch": "Использовать Command Code для веб-поиска DSH",
-    "webSearchHint": "Если включено, инструмент web_search для модели работает через Command Code (тот же API-ключ и base URL, что и в чате). Если выключено, используется встроенный поиск DeepSeek."
+    "webSearchHint": "Если включено, инструмент web_search для модели работает через Command Code (тот же API-ключ и base URL, что и в чате). Если выключено, используется встроенный поиск DeepSeek.",
+    "modelSearchEmpty": "Подходящих моделей не найдено",
+    "modelSearchPlaceholder": "Поиск модели по имени или ID…",
+    "modelStale": "Устаревшая модель (не найдена в текущем каталоге)",
+    "visibleModelsCleanStale": "Очистить устаревшие ({count})",
+    "visibleModelsCount": "Выбрано моделей: {count}",
+    "visibleModelsHint": "Выберите модели, которые будут доступны для назначения правил маршрутизации",
+    "visibleModelsPick": "Выбрать модели",
+    "visibleModelsShowAll": "Показать все модели",
+    "visibleModelsHideInactive": "Скрыть неактивные",
+    "visibleModelsReset": "Сбросить выбор моделей",
+    "visibleModelsStaleHint": "{count} выбранных моделей больше нет в каталоге (возможно, выведены из эксплуатации); на остальные модели это не влияет. Удалите их или сохраните.",
+    "visibleModelsTitle": "Видимые модели"
   },
   "commandcode": {
     "title": "📊 Использование Command Code{account}",

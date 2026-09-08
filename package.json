@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.2.6",
-  "description": "Russian localization for the DeepSeek Harness web UI: adds Русский as the native language option in Settings - General - Language. 100% hand-reviewed translation covering the full DSH core surface (722 keys across 30+ namespaces) plus 30+ ecosystem plugins (3989 keys) — 4711 keys total with zero machine drafts. Features Russian plural forms (one/few/many), automatic typography pass (guillemets, em dashes, non-breaking spaces), wrong-layout input hint (Alt+L), browser spellcheck, and runtime snapshot extension without modifying core files.",
+  "version": "0.2.7",
+  "description": "Russian localization for DeepSeek Harness (DSH v0.1.5-alpha.1+) web UI: adds Русский as the native language option in Settings - General - Language. 100.0% coverage across 5395 keys (1144 core UI keys + 4251 keys across 40+ ecosystem plugins) with zero machine drafts. Features Russian plural forms (one/few/many), automatic typography pass (guillemets, em dashes, non-breaking spaces, optional ё), wrong-layout input hint (Alt+L), browser spellcheck, and runtime snapshot extension without modifying core files.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

@@ -96,13 +96,26 @@
   },
   "command": {
     "listbox.aria": "Совпадения /{command}",
-    "notice.imagesUnsupported": "/{command} не принимает вложения-изображения — сначала удалите их",
+    "notice.imagesUnsupported": "/{command} не принимает изображения; сначала удалите их",
     "overlay.aria": "Параметры /{command}",
     "search.aria": "Фильтр параметров",
     "search.placeholder": "Поиск…",
     "status.applying": "Применение…",
     "status.empty": "Нет параметров",
-    "status.loading": "Загрузка параметров…"
+    "status.loading": "Загрузка параметров…",
+    "executing": "Выполнение команды…",
+    "completed": "Команда завершена",
+    "failed": "Сбой выполнения команды",
+    "cancelled": "Команда отменена",
+    "timeout": "Превышено время ожидания команды",
+    "running": "Выполняется",
+    "description.compact": "Сжать раннюю историю диалога",
+    "description.export": "Скачать журнал сессии в формате ZIP-архива",
+    "description.feedback": "Оставить отзыв о текущей сессии",
+    "description.goal": "Установить или просмотреть цель для длительной задачи",
+    "description.permission": "Переключить пресет разрешений (режим песочницы и политики подтверждений)",
+    "description.plan": "Войти или выйти из режима планирования",
+    "notice.attachmentsUnsupported": "/{command} не принимает вложения; сначала удалите их"
   },
   "session-log-download": {
     "dialog.close": "Закрыть",
