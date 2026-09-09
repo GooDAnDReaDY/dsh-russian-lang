@@ -1,20 +1,23 @@
-# Task Plan: Issue #158 — Smart Russian UX Features
+# Task Plan: Fix Smart Russian UX Runtime Features (Issue #162 -> Release v0.2.9)
 
-## Goal
-Implement advanced productivity features for Russian-speaking DSH users:
-1. **Live Input Typography & Shortcuts**: auto-replace `""` -> `«»`, `--` -> `—`, `...` -> `…`, non-breaking spaces after prepositions; input layout indicator (`RU`/`EN`); Russian slash-command aliases (`/цель` -> `/goal`, `/сжать` -> `/compact`, `/план` -> `/plan`, etc.); <kbd>Alt+T</kbd> transliteration.
-2. **Agent Directives & Presets**: System prompt style presets in settings card («Технический эксперт», «Технический писатель», «Лаконичный режим») + "Translate turn to Russian" helper button on assistant message actions.
-3. **Quick Language Switcher**: `RU ⇄ EN` toggle button in header utilities (`conversation.session.header.utilities`).
-4. **Localized Session Export**: Markdown exporter with Russian dates, statuses, token metrics.
-5. **DO NOT RELEASE / PUBLISH** until explicit user command.
+## 1. Goal
+Fix all 6 non-working features reported by user during v0.2.8 testing, verify 100% on MiniPC test server, and release v0.2.9.
 
-## Phases
-- [x] **Phase 0: Planning & Design Contract** — Created DESIGN.md, task_plan.md, findings.md, progress.md.
-- [x] **Phase 1: Pure Logic Implementation in `lib/pure.js`** — Transliteration, live typography engine (ignoring code blocks), Russian slash-command parser, localized export formatter.
-- [x] **Phase 2: Host Settings & System Prompt Extension in `lib/index.js`** — Expanded settings schema with prompt presets (`technical_expert`, `tech_writer`, `concise`), dynamic system prompt sections.
-- [x] **Phase 3: Browser UI Components in `build.py` / `lib/client.js`** — Quick language switcher chip in header utilities, live typography and slash-command alias expansion in composer, assistant message translate action, settings card prompt preset selector.
-- [x] **Phase 4: Unit Testing & Verification** — Added tests in `test/test_smart_ux.mjs` (all 93 checks passing), optimized banner image to 81K.
-- [ ] **Phase 5: Commit & Quality Summary** — Conventional commit with `Refs: #158`, report to user without release.
+## 2. Issues to Fix
+- [x] Item 2: Live typography in input composer (React controlled textarea descriptor setter + event dispatch)
+- [x] Item 3: Russian slash command aliases (/цель -> /goal) on Space & Enter
+- [x] Item 4: Alt+T phonetic transliteration in input composer
+- [x] Item 5: System prompt presets dropdown & missing toggles in SettingsCard
+- [x] Item 6: Turn Translate action (RU ↗) with real translation, code preservation, and inline card
+- [x] Item 7: Localized Markdown export button (📥 MD) in session header utilities
 
-## Next Step
-Commit changes to `feat/158-smart-ux` with `git-antigravity` and summarize to user.
+## 3. Execution Steps
+1. [x] Research root causes in DSH web client architecture.
+2. [x] Implement fixes in `build.py` and compile `lib/client.js`.
+3. [x] Verify unit tests (`npm test` & `test_smart_ux.mjs`).
+4. [x] Bump version to `0.2.9`, update CHANGELOG and docs.
+5. [ ] Package tarball (`npm pack`) and validate on MiniPC test environment (`192.168.1.123`).
+6. [ ] Commit, push branch `fix/smart-ux-runtime`, create PR in Gitea for Issue #162, merge into `main`.
+7. [ ] Tag `v0.2.9`, publish to npm (`--access public`), sync GitHub mirror and create release.
+8. [ ] Deploy to production profile on MiniAI (`192.168.1.111`).
+9. [ ] Close Issue #162 and report results to user.
