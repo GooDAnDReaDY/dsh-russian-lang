@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/npm/v/@goodandready/dsh-russian-lang.svg?style=for-the-badge&color=6366f1&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.2.8-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -167,3 +167,41 @@ russian-lang:
 ## 📄 Лицензия
 
 MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
+
+
+## ⚡ Новые возможности v0.2.8 — Smart Russian UX
+
+Версия **v0.2.8** расширяет функционал плагина от чистой локализации до полноценной адаптации пользовательского опыта работы с моделями на русском языке:
+
+1. **Живая экранная типографика в поле ввода (Live Input Typography)**:
+   - Автоматическая подстановка кавычек-ёлочек («...») вместо машинных программистских кавычек (`""`).
+   - Автоматическая замена двойного дефиса (`--`) на длинное тире (`—`).
+   - Автоматическая замена троеточия (`...`) на знак многоточия (`…`).
+   - Неразрывные пробелы (` `) после однобуквенных и коротких русских предлогов (`в`, `на`, `с`, `к`, `о`, `у`, `за`, `по` и др.).
+   - **Строгая изоляция кода**: текст внутри инлайн-кода (бэктики `` `code` ``) и многострочных блоков (``` ``` ```) сохраняется в неизменном виде без искажения синтаксиса.
+
+2. **Быстрый переключатель языка (Quick Language Switcher)**:
+   - Компактный чип `RU ⇄ EN` встроен прямо в шапку диалоговой сессии (`conversation.session.header.utilities`).
+   - Позволяет мгновенно переключать язык всего интерфейса в один клик без перехода в Настройки.
+
+3. **Русские алиасы слэш-команд (Slash-Command Aliases)**:
+   - Мгновенное авто-разворачивание команд при вводе:
+     - `/цель` ➔ `/goal`
+     - `/сжать` ➔ `/compact`
+     - `/план` ➔ `/plan`
+     - `/экспорт` ➔ `/export`
+     - `/память` ➔ `/memory`
+     - `/отзыв` ➔ `/feedback`
+     - `/разрешения` ➔ `/permission`
+
+4. **Пресеты системных директив агента (Agent Style Presets)**:
+   - В карточке настроек плагина доступен выбор канонического стиля ответов для моделей:
+     - 💼 **Технический эксперт**: строгая русская инженерная терминология, аккуратный код, русскоязычные комментарии к архитектуре.
+     - 📝 **Технический писатель**: книжная типографика, Markdown, ГОСТ/RFC-структура документации.
+     - ⚡ **Лаконичный режим**: предельно сжатые и точные ответы без вступительных любезностей.
+
+5. **Локализованный экспорт сессии (Localized Markdown Export)**:
+   - Генерация красивого Markdown-файла всей истории диалога с русскими датами, именами ролей («👤 Пользователь», «🤖 Ассистент»), метриками токенов и индикацией вызовов инструментов.
+
+6. **Хоткей транслитерации (<kbd>Alt+T</kbd>)**:
+   - Мгновенная конвертация набранного транслита в кириллицу и обратно прямо в поле ввода (`privet` ⇄ `привет`).

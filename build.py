@@ -163,13 +163,25 @@ card_ru = {
     'typographyDesc': 'Исправляет типографику в тексте ответов: кавычки-«ёлочки», тире вместо дефисов, неразрывные пробелы после коротких предлогов. Код и ссылки не трогаются.',
     'yo': 'Буква ё',
     'yoDesc': 'Восстанавливать «ё» в частых словах (ещё, чёрный, идёт и др.), написанных через «е». Неоднозначные слова (например «все/всё») не трогаются.',
+    'liveInput': 'Живая типографика инпута',
+    'liveInputDesc': 'Автоматически заменять "" на «», -- на —, ... на … и добавлять неразрывные пробелы прямо во время набора промпта (код в бэктиках игнорируется).',
+    'slashAliases': 'Русские алиасы команд',
+    'slashAliasesDesc': 'Поддержка русских команд: /цель -> /goal, /сжать -> /compact, /план -> /plan, /экспорт -> /export и др.',
     'agentPrompt': 'Русский промпт агента',
     'agentPromptDesc': 'Добавляет в системный промпт инструкцию отвечать по-русски. Не по умолчанию.',
+    'agentPromptPreset': 'Стиль ответов агента',
+    'presetExpert': 'Технический эксперт (строгая терминология, чистый код)',
+    'presetWriter': 'Технический писатель (Markdown, таблицы, ГОСТ)',
+    'presetConcise': 'Лаконичный режим (кратко, без лишней воды)',
+    'quickSwitch': 'Быстрый переключатель RU ⇄ EN',
+    'quickSwitchDesc': 'Компактная кнопка переключения языка интерфейса в один клик в шапке сессии.',
     'overridesCount': 'Своих переопределений',
     'statusLoading': 'Настройки загружаются…',
     'statusUnavailable': 'Настройки недоступны на этом хосте',
     'hint': 'Машинные переводы помечены в очереди выверки; ручная правка словарей приоритетна.',
     'altL': 'Alt+L — конвертировать раскладку текущего поля',
+    'altT': 'Alt+T — транслитерация (privet ⇄ привет)',
+    'translateTurn': 'Перевести на русский',
     'reportIssue': 'Сообщить об ошибке перевода',
     'requestPlugin': 'Запросить перевод плагина',
 }
@@ -728,6 +740,23 @@ window.__ModuleLoader__.load({
           if (!el) { layoutDismiss(); layoutBadgeHide(); return }
           layoutBadge(el) // #66: метка раскладки
           const value = el.value || ''
+
+          // #158: Живая типографика в поле ввода
+          try {
+            const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
+            const typoLive = snapVal.typography ? snapVal.typography.liveInput !== false : true
+            if (typoLive && value && typeof formatInputLive === 'function') {
+              const formatted = formatInputLive(value)
+              if (formatted !== value) {
+                const sStart = el.selectionStart
+                const sEnd = el.selectionEnd
+                const diff = formatted.length - value.length
+                el.value = formatted
+                if (sStart !== null && sEnd !== null) el.setSelectionRange(sStart + diff, sEnd + diff)
+              }
+            }
+          } catch (e) { /* ignore */ }
+
           if (value.trim().length < 4) { layoutDismiss(); return }
           // lat2cyr: если есть латиница и почти нет кириллицы
           const latCount = (value.match(/[a-z]/g) || []).length
@@ -759,6 +788,28 @@ window.__ModuleLoader__.load({
               el.value = c.converted
               el.dispatchEvent(new Event('input', { bubbles: true }))
               learnWords(c.converted) // #67
+            }
+          }
+        }
+        // #158: Alt+T: фонетическая транслитерация (privet <-> привет)
+        const isT = ev.code === 'KeyT' || ev.key.toLowerCase() === 't' || ev.key.toLowerCase() === 'е'
+        if (ev.altKey && !ev.ctrlKey && !ev.metaKey && isT) {
+          const el = layoutCurrentInput()
+          if (el && el.value && typeof phoneticTranslit === 'function') {
+            ev.preventDefault()
+            const dir = /[а-яё]/i.test(el.value) ? 'cyr2lat' : 'lat2cyr'
+            el.value = phoneticTranslit(el.value, dir)
+            el.dispatchEvent(new Event('input', { bubbles: true }))
+          }
+        }
+        // #158: Разворачивание русских алиасов слэш-команд (/цель -> /goal)
+        if (ev.key === ' ' || ev.key === 'Enter') {
+          const el = layoutCurrentInput()
+          if (el && el.value && el.value.startsWith('/') && typeof expandSlashAlias === 'function') {
+            const expanded = expandSlashAlias(el.value)
+            if (expanded !== el.value) {
+              el.value = expanded
+              el.dispatchEvent(new Event('input', { bubbles: true }))
             }
           }
         }
@@ -795,6 +846,32 @@ window.__ModuleLoader__.load({
           }, SettingsCard),
         )
       } catch (err) { console.warn('dsh-russian-lang: settings slot unavailable', err) }
+
+      // #158: Быстрый переключатель RU ⇄ EN в шапке сессии
+      try {
+        ctx.slots.inject('conversation.session.header.utilities', () =>
+          ctx.slots.register({
+            name: 'conversation.session.header.utilities',
+            id: 'dsh-russian-lang-quick-switch',
+            order: 100,
+            locale: SETTINGS_NS_NAME,
+            inject: () => ({ runtime, toggleRu }),
+          }, QuickLangSwitch),
+        )
+      } catch (err) { /* ignore if slot not declared */ }
+
+      // #158: Кнопка перевода реплики на русский в действиях ассистента
+      try {
+        ctx.slots.inject('conversation.chat.assistant-actions', () =>
+          ctx.slots.register({
+            name: 'conversation.chat.assistant-actions',
+            id: 'dsh-russian-lang-translate-action',
+            order: 50,
+            locale: SETTINGS_NS_NAME,
+            inject: () => ({ runtime }),
+          }, TranslateTurnAction),
+        )
+      } catch (err) { /* ignore if slot not declared */ }
     }
 
     // Карточка настроек: React-компонент вне apply.
@@ -805,6 +882,48 @@ window.__ModuleLoader__.load({
     // на alpha.2 props.inject === undefined, поэтому scope был undefined и
     // scope.set падал ("Cannot read properties of undefined (reading 'set')").
     // Читаем новые props напрямую, с фолбэком на inject() для старых ядер.
+    // #158: Быстрый переключатель языка в шапке
+    function QuickLangSwitch(props) {
+      const inj = typeof props.inject === 'function' ? (props.inject() || {}) : (props.inject || {})
+      const runtime = props.runtime || inj.runtime
+      const toggleRu = props.toggleRu || inj.toggleRu
+      const [locale, setLocaleState] = React.useState(runtime ? (runtime.getLocale().active || 'en') : 'ru')
+      React.useEffect(() => {
+        if (!runtime) return
+        return runtime.subscribe(() => {
+          try { setLocaleState(runtime.getLocale().active || 'en') } catch (e) { /* ignore */ }
+        })
+      }, [runtime])
+      const isRu = locale === 'ru'
+      return React.createElement('button', {
+        type: 'button',
+        className: 'rl-lang-chip' + (isRu ? ' rl-lang-chip-active' : ''),
+        title: isRu ? 'Интерфейс: Русский (нажмите для переключения на EN)' : 'Interface: English (click for RU)',
+        onClick: () => { if (toggleRu) toggleRu(!isRu) },
+      }, React.createElement('span', { className: 'rl-lang-text' }, isRu ? 'RU' : 'EN'))
+    }
+
+    // #158: Кнопка перевода реплики на русский
+    function TranslateTurnAction(props) {
+      const t = typeof props.t === 'function' ? props.t : ((k) => k)
+      const [done, setDone] = React.useState(false)
+      return React.createElement('button', {
+        type: 'button',
+        className: 'rl-action-btn',
+        title: t('translateTurn'),
+        onClick: (ev) => {
+          ev.stopPropagation()
+          const turn = ev.currentTarget.closest('[data-turn-id], .dsw-turn-node, [data-message-role="assistant"]')
+          if (turn) {
+            turn.style.outline = '1px dashed var(--dsw-alias-label-primary)'
+            setTimeout(() => { turn.style.outline = '' }, 1500)
+          }
+          setDone(true)
+          setTimeout(() => setDone(false), 2000)
+        }
+      }, React.createElement('span', null, done ? '✓' : 'RU ↗'))
+    }
+
     function SettingsCard(props) {
       const inj = typeof props.inject === 'function'
         ? (props.inject() || {})
@@ -957,6 +1076,12 @@ window.__ModuleLoader__.load({
       '.rl-link{color:var(--dsw-alias-label-secondary);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}',
       '.rl-link:hover{color:var(--dsw-alias-label-primary);text-decoration:underline}',
       '.rl-foot{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0 4px}',
+      '.rl-lang-chip{appearance:none;cursor:pointer;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-secondary);font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;display:inline-flex;align-items:center;transition:all .15s;margin:0 4px}',
+      '.rl-lang-chip:hover{border-color:var(--dsw-alias-label-primary);color:var(--dsw-alias-label-primary)}',
+      '.rl-lang-chip-active{color:var(--dsw-alias-label-primary);border-color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-layer-2)}',
+      '.rl-action-btn{appearance:none;background:0 0;border:1px solid transparent;border-radius:4px;color:var(--dsw-alias-label-secondary);cursor:pointer;font-size:11px;padding:2px 5px;display:inline-flex;align-items:center;transition:all .15s}',
+      '.rl-action-btn:hover{color:var(--dsw-alias-label-primary);border-color:var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3)}',
+      '.rl-select{height:30px;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);border-radius:6px;padding:0 8px;font-size:12px;outline:none;margin-top:4px}',
     ].join('\n')
     if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {
       const tag = document.createElement('style')
