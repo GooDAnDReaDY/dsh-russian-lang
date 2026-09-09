@@ -342,6 +342,13 @@
     "removeSourceHint": "Удалить: убрать этот источник из списка (установленные плагины не пострадают)",
     "repoLandSourceUnknown": "настроенный источник git",
     "setPrimaryHint": "Сделать основным: опрашивается первым, при сбое используются остальные",
-    "unknown": "неизвестно"
+    "unknown": "неизвестно",
+    "registryScan": "Сканировать источники",
+    "registryScanBest": "Свежая {version} получена из: {name}",
+    "registryScanFail": "недоступен",
+    "registryScanHint": "Опрос реестров npm: доступность, пинг и последняя версия dsh-plugin-console для выбора основного источника",
+    "registryScanNoVersion": "Пакет отсутствует в этом реестре",
+    "registryScanSummary": "Сканирование завершено: {ok} из {total} доступны",
+    "registryScanning": "Сканирование…"
   }
 }

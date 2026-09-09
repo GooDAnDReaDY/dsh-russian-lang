@@ -446,9 +446,11 @@ window.__ModuleLoader__.load({
       }
       const unsubscribeSpell = runtime.subscribe(syncSpell)
       ctx.effect(() => {
-        unsubscribeSpell()
-        if (spellObserver) spellObserver.disconnect()
-        try { document.querySelectorAll('[' + SPELL_ON + ']').forEach(spellOff) } catch (err) { /* ignore */ }
+        return () => {
+          unsubscribeSpell()
+          if (spellObserver) spellObserver.disconnect()
+          try { document.querySelectorAll('[' + SPELL_ON + ']').forEach(spellOff) } catch (err) { /* ignore */ }
+        }
       }, 'dsh-russian-lang: spellcheck')
       syncSpell()
 
@@ -571,8 +573,10 @@ window.__ModuleLoader__.load({
       }
       const unsubscribeZh = runtime.subscribe(syncZhDom)
       ctx.effect(() => {
-        unsubscribeZh()
-        if (zhObserver) zhObserver.disconnect()
+        return () => {
+          unsubscribeZh()
+          if (zhObserver) zhObserver.disconnect()
+        }
       }, 'dsh-russian-lang: zh-dom')
       syncZhDom()
 
@@ -646,8 +650,10 @@ window.__ModuleLoader__.load({
       }
       const unsubscribeTypo = runtime.subscribe(syncTypo)
       ctx.effect(() => {
-        unsubscribeTypo()
-        if (typoObserver) typoObserver.disconnect()
+        return () => {
+          unsubscribeTypo()
+          if (typoObserver) typoObserver.disconnect()
+        }
       }, 'dsh-russian-lang: typography')
       syncTypo()
 
@@ -662,8 +668,12 @@ window.__ModuleLoader__.load({
 
       // Отвечаем на real input: input / input_event, слушаем на document.
       // Читаем value у поля, где курсор (textarea/input), не трогая contenteditable.
-      function setNativeInputValue(el, value) {
+      function setNativeInputValue(el, value, cursorStart, cursorEnd) {
         if (!el) return
+        const oldVal = el.value || ''
+        if (oldVal === value) return
+
+        // 1. Prototype descriptor setter (bypasses element-level getter/setter)
         const proto = el.tagName === 'TEXTAREA' ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype
         const desc = Object.getOwnPropertyDescriptor(proto, 'value')
         if (desc && desc.set) {
@@ -671,28 +681,87 @@ window.__ModuleLoader__.load({
         } else {
           el.value = value
         }
+
+        // 2. Desynchronize React _valueTracker so React detects change on input event
         if (el._valueTracker) {
-          try { el._valueTracker.setValue(value) } catch (e) {}
+          el._valueTracker.setValue(value === '' ? '__force__' : '')
         }
-        el.dispatchEvent(new Event('input', { bubbles: true }))
+
+        // 3. Direct React synthetic event invocation if available on React Fiber/Props
+        try {
+          const propsKey = Object.keys(el).find((k) => k.startsWith('__reactProps$') || k.startsWith('__reactEventHandlers$'))
+          if (propsKey && el[propsKey] && typeof el[propsKey].onChange === 'function') {
+            el[propsKey].onChange({ target: el, currentTarget: el })
+          }
+        } catch (e) {}
+
+        // 4. Dispatch native browser input & change events
+        try {
+          el.dispatchEvent(new InputEvent('input', { bubbles: true, composed: true }))
+        } catch (e) {
+          el.dispatchEvent(new Event('input', { bubbles: true }))
+        }
         el.dispatchEvent(new Event('change', { bubbles: true }))
+
+        // 5. Restore cursor position if requested
+        if (typeof cursorStart === 'number' && typeof el.setSelectionRange === 'function') {
+          const end = typeof cursorEnd === 'number' ? cursorEnd : cursorStart
+          try { el.setSelectionRange(cursorStart, end) } catch (e) {}
+        }
       }
 
       let layoutHintEl = null
       const layoutCurrentInput = (ev) => {
-        if (ev && ev.target && (ev.target.tagName === 'TEXTAREA' || (ev.target.tagName === 'INPUT' && (ev.target.type === 'text' || !ev.target.type)))) {
-          return ev.target
+        if (ev && ev.target) {
+          const t = ev.target
+          if (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && (t.type === 'text' || !t.type))) {
+            return t
+          }
+          const c = t.closest ? t.closest('[data-composer-input], [contenteditable="true"], [role="textbox"]') : null
+          if (c) return c
         }
         const el = document.activeElement
-        if (el && (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && (ev.target ? ev.target.type === 'text' : true)))) return el
-        if (el && typeof el.querySelector === 'function') {
-          const inner = el.querySelector('textarea, input[type="text"]')
-          if (inner) return inner
+        if (el) {
+          if (el.tagName === 'TEXTAREA' || (el.tagName === 'INPUT' && (el.type === 'text' || !el.type))) {
+            return el
+          }
+          const c = el.closest ? el.closest('[data-composer-input], [contenteditable="true"], [role="textbox"]') : null
+          if (c) return c
         }
-        const focused = document.querySelector('textarea:focus, input[type="text"]:focus')
+        const focused = document.querySelector('[data-composer-input], [contenteditable="true"][role="textbox"], textarea:focus, textarea')
         if (focused) return focused
         return null
       }
+
+      const getComposerText = (el) => {
+        if (!el) return ''
+        if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+          return el.value || ''
+        }
+        const host = (el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el
+        const raw = host.innerText !== undefined ? host.innerText : (host.textContent || '')
+        return raw.replace(/\r/g, '').replace(/[\u200B\uFEFF]/g, '').replace(/\n+$/, '')
+      }
+
+      const setComposerText = (el, value, cursorStart, cursorEnd) => {
+        if (!el) return
+        if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+          setNativeInputValue(el, value, cursorStart, cursorEnd)
+          return
+        }
+
+        const host = (el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el
+        const apply = () => {
+          try {
+            host.focus()
+            document.execCommand('selectAll', false, null)
+            document.execCommand('insertText', false, value)
+          } catch (e) {}
+        }
+        apply()
+        setTimeout(apply, 15)
+      }
+
       const layoutDismiss = () => {
         if (layoutHintEl) { layoutHintEl.remove(); layoutHintEl = null }
       }
@@ -709,7 +778,7 @@ window.__ModuleLoader__.load({
         layoutHintEl.textContent = label + ': ' + converted
         layoutHintEl.addEventListener('mousedown', (ev) => {
           ev.preventDefault()
-          setNativeInputValue(inputEl, converted)
+          setComposerText(inputEl, converted)
           learnWords(converted) // #67: запомнить принятые слова
           layoutDismiss()
         })
@@ -720,11 +789,10 @@ window.__ModuleLoader__.load({
         layoutHintEl.style.bottom = (window.innerHeight - r.top + 6) + 'px'
       }
 
-      // #66: индикатор активной раскладки у чат-инпута. Определяем по последнему
-      // введённому символу (кириллица → RU, латиница → EN); клик — Alt+L-конверт.
+      // #66: индикатор активной раскладки у чат-инпута.
       let layoutBadgeEl = null
       const layoutBadge = (el) => {
-        const value = el.value || ''
+        const value = getComposerText(el)
         const last = value.trim().slice(-1)
         const isCyr = /[\u0430-\u044f\u0451]/.test(last)
         const isLat = /[a-z]/i.test(last)
@@ -738,15 +806,15 @@ window.__ModuleLoader__.load({
             position: 'fixed', zIndex: '99998', background: 'var(--dsw-alias-bg-layer-3, #fff)',
             color: 'var(--dsw-alias-label-secondary, #666)', border: '1px solid var(--dsw-alias-border-l2, #888)',
             borderRadius: '6px', padding: '1px 6px', fontSize: '11px', cursor: 'pointer',
-            fontFamily: 'monospace', lineHeight: '1.4',
+            fontFamily: 'monospace', lineHeight: '1.4', fontWeight: '600'
           })
           layoutBadgeEl.title = 'Раскладка — клик: конвертировать (Alt+L)'
           layoutBadgeEl.addEventListener('mousedown', (ev) => {
             ev.preventDefault()
-            const v = el.value || ''
+            const v = getComposerText(el)
             const c = layoutFixCandidate(v, 'lat2cyr') || layoutFixCandidate(v, 'cyr2lat')
             if (c) {
-              setNativeInputValue(el, c.converted)
+              setComposerText(el, c.converted)
               learnWords(c.converted)
             }
           })
@@ -754,8 +822,8 @@ window.__ModuleLoader__.load({
         }
         layoutBadgeEl.textContent = label
         const r = el.getBoundingClientRect()
-        layoutBadgeEl.style.left = (r.right - 24) + 'px'
-        layoutBadgeEl.style.top = (r.top - 20) + 'px'
+        layoutBadgeEl.style.left = (r.right - 36) + 'px'
+        layoutBadgeEl.style.top = (r.top - 22) + 'px'
       }
       const layoutBadgeHide = () => {
         if (layoutBadgeEl) { layoutBadgeEl.remove(); layoutBadgeEl = null }
@@ -765,11 +833,10 @@ window.__ModuleLoader__.load({
       const layoutOnInput = (ev) => {
         if (isFormatting) return
         try {
-          if (runtime.getLocale().active !== 'ru') { layoutDismiss(); layoutBadgeHide(); return }
           const el = layoutCurrentInput(ev)
           if (!el) { layoutDismiss(); layoutBadgeHide(); return }
           layoutBadge(el) // #66: метка раскладки
-          const value = el.value || ''
+          const value = getComposerText(el)
 
           // #158: Живая типографика в поле ввода
           try {
@@ -781,13 +848,9 @@ window.__ModuleLoader__.load({
                 isFormatting = true
                 try {
                   const sStart = el.selectionStart
-                  const sEnd = el.selectionEnd
                   const diff = formatted.length - value.length
-                  setNativeInputValue(el, formatted)
-                  if (sStart !== null && sEnd !== null) {
-                    const nextPos = Math.max(0, sStart + diff)
-                    el.setSelectionRange(nextPos, nextPos)
-                  }
+                  const nextPos = typeof sStart === 'number' ? Math.max(0, sStart + diff) : undefined
+                  setComposerText(el, formatted, nextPos, nextPos)
                 } finally {
                   isFormatting = false
                 }
@@ -795,7 +858,8 @@ window.__ModuleLoader__.load({
             }
           } catch (e) { /* ignore */ }
 
-          // #158: Русские алиасы слэш-команд при вводе пробела после команды (например "/цель ")
+
+          // #158: Русские алиасы слэш-команд при вводе пробела после команды
           try {
             const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
             const allowAliases = snapVal.slashAliases !== false
@@ -805,13 +869,9 @@ window.__ModuleLoader__.load({
                 isFormatting = true
                 try {
                   const sStart = el.selectionStart
-                  const sEnd = el.selectionEnd
                   const diff = expanded.length - value.length
-                  setNativeInputValue(el, expanded)
-                  if (sStart !== null && sEnd !== null) {
-                    const nextPos = Math.max(0, sStart + diff)
-                    el.setSelectionRange(nextPos, nextPos)
-                  }
+                  const nextPos = typeof sStart === 'number' ? Math.max(0, sStart + diff) : undefined
+                  setComposerText(el, expanded, nextPos, nextPos)
                 } finally {
                   isFormatting = false
                 }
@@ -836,73 +896,50 @@ window.__ModuleLoader__.load({
         } catch (err) { /* ignore */ }
       }
       const unsubscribeLayout = runtime.subscribe(layoutOnInput)
-      document.addEventListener('input', layoutOnInput, true)
 
       const layoutOnKeydown = (ev) => {
         const el = layoutCurrentInput(ev)
         if (!el) return
 
+        const value = getComposerText(el)
+
         // Alt+L (клавиша KeyL, Latin 'l' или русская 'д'): ручной конверт текущего инпута
         const isL = ev.code === 'KeyL' || ev.key.toLowerCase() === 'l' || ev.key.toLowerCase() === 'д'
         if (ev.altKey && !ev.ctrlKey && !ev.metaKey && isL) {
-          const value = el.value || ''
           const c = layoutFixCandidate(value, 'lat2cyr') || layoutFixCandidate(value, 'cyr2lat')
           if (c) {
             ev.preventDefault()
             isFormatting = true
             try {
-              setNativeInputValue(el, c.converted)
+              setComposerText(el, c.converted)
               learnWords(c.converted) // #67
             } finally {
               isFormatting = false
             }
           }
+          return
         }
 
-        // #158: Alt+T: фонетическая транслитерация (privet <-> привет)
-        const isT = ev.code === 'KeyT' || ev.key.toLowerCase() === 't' || ev.key.toLowerCase() === 'е'
-        if (ev.altKey && !ev.ctrlKey && !ev.metaKey && isT) {
-          if (el.value && typeof phoneticTranslit === 'function') {
-            ev.preventDefault()
-            isFormatting = true
-            try {
-              const sStart = el.selectionStart
-              const sEnd = el.selectionEnd
-              if (sStart !== null && sEnd !== null && sStart !== sEnd) {
-                const sel = el.value.slice(sStart, sEnd)
-                const dir = /[а-яё]/i.test(sel) ? 'cyr2lat' : 'lat2cyr'
-                const converted = phoneticTranslit(sel, dir)
-                const next = el.value.slice(0, sStart) + converted + el.value.slice(sEnd)
-                setNativeInputValue(el, next)
-                el.setSelectionRange(sStart, sStart + converted.length)
-              } else {
-                const dir = /[а-яё]/i.test(el.value) ? 'cyr2lat' : 'lat2cyr'
-                const converted = phoneticTranslit(el.value, dir)
-                setNativeInputValue(el, converted)
-              }
-            } finally {
-              isFormatting = false
-            }
-          }
-        }
 
         // #158: Разворачивание русских алиасов слэш-команд (/цель -> /goal)
         if (ev.key === ' ' || ev.key === 'Enter') {
-          if (el.value && el.value.startsWith('/') && typeof expandSlashAlias === 'function') {
-            const expanded = expandSlashAlias(el.value)
-            if (expanded !== el.value) {
+          if (value && value.startsWith('/') && typeof expandSlashAlias === 'function') {
+            const expanded = expandSlashAlias(value)
+            if (expanded !== value) {
               if (ev.key === ' ') {
                 ev.preventDefault()
                 isFormatting = true
                 try {
-                  setNativeInputValue(el, expanded + ' ')
+                  const nextVal = expanded + ' '
+                  setComposerText(el, nextVal, nextVal.length, nextVal.length)
                 } finally {
                   isFormatting = false
                 }
+                return
               } else if (ev.key === 'Enter') {
                 isFormatting = true
                 try {
-                  setNativeInputValue(el, expanded)
+                  setComposerText(el, expanded, expanded.length, expanded.length)
                 } finally {
                   isFormatting = false
                 }
@@ -910,14 +947,61 @@ window.__ModuleLoader__.load({
             }
           }
         }
+
+        // #158: Мгновенная типографика прямо по нажатию клавиш
+        try {
+          const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
+          const typoLive = snapVal.typography ? snapVal.typography.liveInput !== false : true
+          if (typoLive && !ev.ctrlKey && !ev.altKey && !ev.metaKey) {
+            // 1. Двойной дефис: если нажат '-' и предыдущий символ тоже '-'
+            if (ev.key === '-' && (value.endsWith('-') || /-\s*$/.test(value))) {
+              ev.preventDefault()
+              isFormatting = true
+              try {
+                if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+                  const sStart = el.selectionStart || value.length
+                  const nextVal = value.slice(0, sStart).replace(/-$/, '—') + value.slice(sStart)
+                  setNativeInputValue(el, nextVal, sStart, sStart)
+                } else {
+                  document.execCommand('delete', false, null)
+                  document.execCommand('insertText', false, '—')
+                }
+              } finally {
+                isFormatting = false
+              }
+              return
+            }
+            // 3. Кавычки-ёлочки: если нажата клавиша '"'
+            if (ev.key === '"') {
+              ev.preventDefault()
+              isFormatting = true
+              try {
+                const lastChar = value.slice(-1)
+                if (lastChar === '«') {
+                  setComposerText(el, value + '»', value.length + 1, value.length + 1)
+                } else {
+                  const isOpening = !value || /[\s([{-]/.test(lastChar)
+                  const quoteChar = isOpening ? '«' : '»'
+                  setComposerText(el, value + quoteChar, value.length + 1, value.length + 1)
+                }
+              } finally {
+                isFormatting = false
+              }
+              return
+            }
+          }
+        } catch (e) {}
       }
-      document.addEventListener('keydown', layoutOnKeydown, true)
       ctx.effect(() => {
-        unsubscribeLayout()
-        document.removeEventListener('input', layoutOnInput, true)
-        document.removeEventListener('keydown', layoutOnKeydown, true)
-        layoutDismiss()
-        layoutBadgeHide()
+        document.addEventListener('input', layoutOnInput, true)
+        document.addEventListener('keydown', layoutOnKeydown, true)
+        return () => {
+          unsubscribeLayout()
+          document.removeEventListener('input', layoutOnInput, true)
+          document.removeEventListener('keydown', layoutOnKeydown, true)
+          layoutDismiss()
+          layoutBadgeHide()
+        }
       }, 'dsh-russian-lang: layout')
 
       // 8. Карточка настроек («Настройки → Плагины → Настройки плагинов»).
@@ -1018,26 +1102,46 @@ window.__ModuleLoader__.load({
       const [done, setDone] = React.useState(false)
       const onExport = () => {
         try {
-          const titleEl = document.querySelector('.dsw-session-title, [data-session-title], header h1, header h2')
-          const title = (titleEl && titleEl.textContent.trim()) || document.title || 'Диалог DSH'
-          const messageNodes = document.querySelectorAll(
-            '[data-turn-id], [data-message-role], .dsw-turn-node, .dsw-chat-message, [data-turn-tail]'
-          )
+          const titleEl = document.querySelector('.dsw-session-title, [data-session-title], header h1, header h2, [class*="title"]')
+          const rawTitle = (titleEl && titleEl.textContent.trim()) || document.title || 'Диалог DSH'
+          const title = rawTitle.replace(/\s*—\s*DeepSeek Harness\s*$/, '').trim() || 'Диалог DSH'
+
+          const flow = document.querySelector('[data-chat-flow]') || document.querySelector('[data-chat-flow-scroll]') || document.body
+          const flowItems = Array.from(flow.querySelectorAll('[data-chat-flow-kind]'))
           const messages = []
-          const seen = new Set()
-          messageNodes.forEach((node) => {
-            let role = 'assistant'
-            const roleAttr = node.getAttribute('data-message-role')
-            if (roleAttr === 'user' || node.classList.contains('dsw-user-message') || node.querySelector('[data-role="user"]')) {
-              role = 'user'
-            }
-            const prose = node.querySelector('.dsw-prose, [data-block-kind="text"], .dsw-markdown-view, p')
-            let text = (prose ? prose.innerText : node.innerText) || ''
-            text = text.trim()
-            if (!text || seen.has(text)) return
-            seen.add(text)
-            messages.push({ role, content: text })
-          })
+
+          if (flowItems.length > 0) {
+            flowItems.forEach((node) => {
+              const kind = node.getAttribute('data-chat-flow-kind')
+              if (kind === 'user' || kind === 'steering') {
+                const bubble = node.querySelector('[class*="bubble"]') || node
+                const clone = bubble.cloneNode(true)
+                clone.querySelectorAll('button, svg, [class*="actions"], [class*="Actions"]').forEach((b) => b.remove())
+                const text = clone.innerText.trim()
+                if (text) messages.push({ role: 'user', content: text })
+              } else if (kind === 'assistant-step') {
+                const clone = node.cloneNode(true)
+                clone.querySelectorAll('button, svg, [class*="actions"], [class*="Actions"], .rl-turn-translation').forEach((b) => b.remove())
+                const text = clone.innerText.trim()
+                if (text) messages.push({ role: 'assistant', content: text })
+              }
+            })
+          }
+
+          if (messages.length === 0) {
+            const allElements = Array.from(document.querySelectorAll('[class*="userRow"], [class*="UserRow"], [class*="assistant-step"], [class*="AssistantMarkdown"], .dsw-turn-node, [data-role]'))
+            const seen = new Set()
+            allElements.forEach((node) => {
+              const isUser = node.matches('[class*="userRow"], [class*="UserRow"], [data-role="user"]') || !!node.querySelector('[data-role="user"]')
+              const role = isUser ? 'user' : 'assistant'
+              const clone = node.cloneNode(true)
+              clone.querySelectorAll('button, svg, [class*="actions"], [class*="Actions"], .rl-turn-translation, [data-turn-tail]').forEach((b) => b.remove())
+              const text = clone.innerText.trim()
+              if (!text || seen.has(text)) return
+              seen.add(text)
+              messages.push({ role, content: text })
+            })
+          }
 
           const session = {
             title,
@@ -1049,13 +1153,15 @@ window.__ModuleLoader__.load({
           const url = URL.createObjectURL(blob)
           const a = document.createElement('a')
           const safeTitle = (title || 'dialog').replace(/[/\\?%%*:|"<>]/g, '-').slice(0, 50)
+          a.style.display = 'none'
           a.href = url
           a.download = safeTitle + '-' + new Date().toISOString().slice(0, 10) + '.md'
           document.body.appendChild(a)
           a.click()
-          document.body.removeChild(a)
-          URL.revokeObjectURL(url)
           setDone(true)
+          setTimeout(() => {
+            try { document.body.removeChild(a); URL.revokeObjectURL(url) } catch (e) {}
+          }, 30000)
           setTimeout(() => setDone(false), 2000)
         } catch (err) {
           console.warn('dsh-russian-lang: export md failed', err)
@@ -1085,30 +1191,46 @@ window.__ModuleLoader__.load({
         for (const para of paragraphs) {
           const pTrim = para.trim()
           if (!pTrim) continue
-          try {
-            const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(pTrim) + '&langpair=en|ru'
-            const res = await fetch(url)
-            if (res.ok) {
-              const data = await res.json()
-              if (data && data.responseData && data.responseData.translatedText) {
-                translatedParas.push(data.responseData.translatedText)
-                continue
-              }
-            }
-          } catch (err) {
+
+          const sentences = pTrim.match(/[^.!?\n]+[.!?\n]*/g) || [pTrim]
+          const translatedSentences = []
+
+          for (const s of sentences) {
+            let translated = ''
+
+            // 1. Google translate web API (sl=auto -> tl=ru)
             try {
-              const gurl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=' + encodeURIComponent(pTrim)
+              const gurl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=' + encodeURIComponent(s)
               const gres = await fetch(gurl)
               if (gres.ok) {
                 const gdata = await gres.json()
                 if (Array.isArray(gdata) && Array.isArray(gdata[0])) {
-                  translatedParas.push(gdata[0].map((it) => it[0]).join(''))
-                  continue
+                  translated = gdata[0].map((it) => it[0]).join('')
                 }
               }
-            } catch (e2) {}
+            } catch (e1) {}
+
+            // 2. MyMemory fallback with valid ISO language pair
+            if (!translated) {
+              try {
+                const isZh = /[\u3400-\u9fff]/.test(s)
+                const langPair = isZh ? 'zh-CN|ru' : 'en|ru'
+                const murl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(s.slice(0, 450)) + '&langpair=' + langPair
+                const mres = await fetch(murl)
+                if (mres.ok) {
+                  const mdata = await mres.json()
+                  if (mdata && mdata.responseData && mdata.responseData.translatedText) {
+                    const txtEl = document.createElement('textarea')
+                    txtEl.innerHTML = mdata.responseData.translatedText
+                    translated = txtEl.value
+                  }
+                }
+              } catch (e2) {}
+            }
+
+            translatedSentences.push(translated || s)
           }
-          translatedParas.push(pTrim)
+          translatedParas.push(translatedSentences.join(' '))
         }
         parts[i] = translatedParas.join('\n\n')
       }
@@ -1125,13 +1247,19 @@ window.__ModuleLoader__.load({
         type: 'button',
         className: 'rl-action-btn' + (open ? ' rl-action-btn-active' : ''),
         title: t('translateTurn'),
+        disabled: loading,
         onClick: async (ev) => {
           ev.stopPropagation()
           const btn = ev.currentTarget
-          const turn = btn.closest('[data-turn-tail], [data-turn-id], .osXY9a_root, [data-message-role="assistant"], .dsw-turn-node') || btn.parentElement.parentElement
-          if (!turn) return
+          // The button is inside [data-chat-flow-kind="turn-tail"]
+          const tailFlowItem = btn.closest('[data-chat-flow-kind="turn-tail"]') || btn.closest('[data-chat-flow-kind]') || btn.closest('[data-turn-tail]')?.closest('[data-chat-flow-kind]') || btn.closest('[data-turn-tail]')
+          if (!tailFlowItem) return
 
-          let box = turn.querySelector('.rl-turn-translation')
+          const parentContainer = tailFlowItem.parentElement
+          let box = parentContainer ? parentContainer.querySelector('.rl-turn-translation[data-tail-key="' + (tailFlowItem.getAttribute('data-chat-flow-key') || '') + '"]') : null
+          if (!box) {
+            box = tailFlowItem.querySelector('.rl-turn-translation')
+          }
           if (box) {
             box.style.display = box.style.display === 'none' ? 'block' : 'none'
             setOpen(box.style.display !== 'none')
@@ -1140,12 +1268,46 @@ window.__ModuleLoader__.load({
 
           setLoading(true)
           try {
-            const prose = turn.querySelector('.dsw-prose, [data-block-kind="text"], .dsw-markdown-view, p')
-            const rawText = (prose ? prose.innerText : turn.innerText) || ''
-            const translated = await translateTurnContent(rawText)
+            const assistantNodes = []
+            let prev = tailFlowItem.previousElementSibling
+            while (prev && prev.getAttribute('data-chat-flow-kind') !== 'user') {
+              if (prev.getAttribute('data-chat-flow-kind') === 'assistant-step') {
+                assistantNodes.unshift(prev)
+              }
+              prev = prev.previousElementSibling
+            }
+
+            let rawText = ''
+            if (assistantNodes.length > 0) {
+              rawText = assistantNodes.map((node) => {
+                const clone = node.cloneNode(true)
+                clone.querySelectorAll('button, svg, [class*="actions"], [class*="Actions"]').forEach((b) => b.remove())
+                return clone.innerText.trim()
+              }).filter(Boolean).join('\n\n')
+            } else if (parentContainer) {
+              const allSteps = Array.from(parentContainer.querySelectorAll('[data-chat-flow-kind="assistant-step"]'))
+              if (allSteps.length > 0) {
+                const beforeTail = allSteps.filter((s) => (s.compareDocumentPosition(tailFlowItem) & Node.DOCUMENT_POSITION_FOLLOWING))
+                const targetSteps = beforeTail.length > 0 ? [beforeTail[beforeTail.length - 1]] : [allSteps[allSteps.length - 1]]
+                rawText = targetSteps.map((s) => {
+                  const clone = s.cloneNode(true)
+                  clone.querySelectorAll('button, svg, [class*="actions"], [class*="Actions"]').forEach((b) => b.remove())
+                  return clone.innerText.trim()
+                }).filter(Boolean).join('\n\n')
+              }
+            }
+
+            if (!rawText) {
+              const prose = tailFlowItem.querySelector('.dsw-prose, [data-block-kind="text"], .dsw-markdown-view, p')
+              if (prose) rawText = prose.innerText.trim()
+            }
+
+            const translated = rawText ? await translateTurnContent(rawText) : 'Не удалось обнаружить текст сообщения ассистента для перевода.'
 
             box = document.createElement('div')
             box.className = 'rl-turn-translation'
+            const key = tailFlowItem.getAttribute('data-chat-flow-key')
+            if (key) box.dataset.tailKey = key
             box.innerHTML = '<div class="rl-trans-head">' +
               '<span class="rl-trans-title">🌐 Перевод на русский</span>' +
               '<div class="rl-trans-tools">' +
@@ -1171,11 +1333,10 @@ window.__ModuleLoader__.load({
               setOpen(false)
             })
 
-            const actionsBar = btn.closest('.dsw-turn-actions, [data-turn-actions]') || btn.parentElement
-            if (actionsBar && actionsBar.parentNode) {
-              actionsBar.parentNode.insertBefore(box, actionsBar)
+            if (parentContainer) {
+              parentContainer.insertBefore(box, tailFlowItem)
             } else {
-              turn.appendChild(box)
+              tailFlowItem.appendChild(box)
             }
             setOpen(true)
           } catch (err) {
@@ -1183,8 +1344,8 @@ window.__ModuleLoader__.load({
           } finally {
             setLoading(false)
           }
-        }
-      }, React.createElement('span', null, loading ? '⏳' : (open ? 'RU ✓' : 'RU ↗')))
+        },
+      }, React.createElement('span', null, loading ? '...' : (open ? 'RU ✓' : 'RU ↗')))
     }
 
     function SettingsCard(props) {
@@ -1377,7 +1538,8 @@ window.__ModuleLoader__.load({
       '.rl-trans-btn{appearance:none;background:var(--dsw-alias-bg-layer-3);border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;padding:2px 7px;border-radius:4px;font-size:11px}',
       '.rl-trans-btn:hover{background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-primary)}',
       '.rl-trans-body{color:var(--dsw-alias-label-primary);white-space:pre-wrap;word-break:break-word;user-select:text}',
-      '.rl-export-md-btn{font-weight:600}',
+      '.rl-export-md-btn{appearance:none;border:1px solid var(--dsw-alias-border-l2);height:32px;color:var(--dsw-alias-label-primary);cursor:pointer;background:transparent;border-radius:18px;justify-content:center;align-items:center;gap:4px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;white-space:nowrap;margin-left:6px;transition:all .15s ease}',
+      '.rl-export-md-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}',
       '.rl-select{height:30px;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);border-radius:6px;padding:0 8px;font-size:12px;outline:none;margin-top:4px}',
     ].join('\n')
     if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {

@@ -44,7 +44,8 @@
     "session.new": "Новая сессия",
     "session.new.label": "Новая сессия",
     "toggle.collapse": "Свернуть панель",
-    "toggle.open": "Открыть панель"
+    "toggle.open": "Открыть панель",
+    "panels.label": "Глобальные панели"
   },
   "settings": {
     "close": "Закрыть",
@@ -92,7 +93,41 @@
     "produced.more": "+ {count} файлов",
     "produced.moreOne": "+ 1 файл",
     "produced.open": "Открыть {name}",
-    "produced.showInFolder": "Показать в папке"
+    "produced.showInFolder": "Показать в папке",
+    "presented.action": "Открыть",
+    "presented.all": "Все {count} файлов",
+    "presented.collapse": "Свернуть",
+    "presented.collapseAria": "Свернуть файлы результатов",
+    "presented.defaultApp": "Открыть в приложении по умолчанию",
+    "presented.directory": "Открыть папку с файлом",
+    "presented.directoryError": "Не удалось открыть папку с файлом. Попробуйте снова.",
+    "presented.directoryOpened": "Запрошено открытие папки с файлом",
+    "presented.directoryOpening": "Открытие папки с файлом…",
+    "presented.error": "Не удалось открыть. Нажмите для повтора.",
+    "presented.expandAria": "Показать все {count} файлов результатов",
+    "presented.explorer": "Показать в Проводнике",
+    "presented.file": "Файл",
+    "presented.finder": "Показать в Finder",
+    "presented.hostError": "Не удалось прочитать сведения о рабочем столе хоста",
+    "presented.more": "Другие действия с файлом {name}",
+    "presented.nativeUnavailable": "Для этого файла нет доступного пути на хосте. Просмотрите его на боковой панели.",
+    "presented.open": "Открыть {name} в приложении по умолчанию",
+    "presented.opened": "Открыто в приложении по умолчанию",
+    "presented.opening": "Открытие…",
+    "presented.preview": "Предпросмотр на боковой панели",
+    "presented.previewButton": "Открыть {name} на боковой панели",
+    "presented.previewCard": "Предпросмотр {name} на боковой панели",
+    "presented.retry": "Повторить",
+    "presented.revealError": "Не удалось показать в файловом менеджере. Попробуйте снова.",
+    "presented.revealed": "Запрошен показ в файловом менеджере",
+    "presented.revealing": "Отображение в файловом менеджере…",
+    "presented.unavailable": "На этом хосте нет доступного рабочего стола для открытия файлов или папок",
+    "row.error": "Сбой создания результатов",
+    "row.inspect": "Инспектировать вызов",
+    "row.ok": "Результаты подготовлены",
+    "row.running": "Подготовка результатов",
+    "row.stopped": "Прервано",
+    "row.title": "Предоставление файлов"
   },
   "command": {
     "listbox.aria": "Совпадения /{command}",
@@ -125,7 +160,9 @@
     "dialog.preparingTitle": "Экспорт сессии",
     "dialog.successDescription": "Браузер загружает ZIP с сессией.",
     "dialog.successTitle": "Загрузка сессии началась",
-    "header.action": "Журнал сессии"
+    "header.action": "Журнал сессии",
+    "header.more": "Другие действия",
+    "menu.download": "Скачать журнал сессии"
   },
   "approval": {
     "allowOnce": "Разрешить один раз",
@@ -138,7 +175,9 @@
     "action.inspect": "Инспектировать"
   },
   "model": {
-    "trigger.loading": "Загрузка моделей…"
+    "trigger.loading": "Загрузка моделей…",
+    "option.deepseekV4Flash.description": "Быстрая, эффективная и экономичная; подходит для типовых, повседневных или параллельных задач.",
+    "option.deepseekV4Pro.description": "Улучшенное агентное написание кода, глубокие знания и сложное мышление; подходит для комплексных задач с высокими требованиями к качеству при более высокой стоимости."
   },
   "permission.access": {
     "preset.fullAccess": "Полный доступ",

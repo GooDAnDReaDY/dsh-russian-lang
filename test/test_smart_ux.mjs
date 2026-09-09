@@ -9,12 +9,12 @@ import {
   exportSessionToMarkdown
 } from '../lib/pure.js'
 
-test('formatInputLive: форматирует кавычки, тире, многоточие и неразрывные пробелы', () => {
+test('formatInputLive: форматирует кавычки, тире и неразрывные пробелы (точки остаются стандартными)', () => {
   const input = 'Тест "кавычек" и -- тире... в коде'
   const formatted = formatInputLive(input)
   assert.match(formatted, /«кавычек»/)
   assert.match(formatted, /—/)
-  assert.match(formatted, /…/)
+  assert.ok(formatted.includes('...'))
   assert.match(formatted, /в\u00A0коде/)
 })
 
@@ -79,4 +79,15 @@ test('exportSessionToMarkdown: формирует валидный Markdown-до
   assert.match(md, /👤 Пользователь/)
   assert.match(md, /🤖 Ассистент/)
   assert.match(md, /Здравствуйте!/)
+})
+
+test('formatInputLive: заменяет двойной дефис без пробелов и пустые кавычки', () => {
+  assert.strictEqual(formatInputLive('слово--слово'), 'слово—слово')
+  assert.strictEqual(formatInputLive('""'), '«»')
+})
+
+test('expandSlashAlias: разворачивает новые алиасы /справка, /задача, /контекст', () => {
+  assert.strictEqual(expandSlashAlias('/справка'), '/help')
+  assert.strictEqual(expandSlashAlias('/задача рефакторинг'), '/task рефакторинг')
+  assert.strictEqual(expandSlashAlias('/контекст'), '/context')
 })
