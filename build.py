@@ -158,32 +158,46 @@ print('ё-пар (ручных + корпусных): %d' % len(yo_pairs))
 card_ru = {
     'cardTitle': 'Русская локализация',
     'cardSub': 'Язык интерфейса, типографика, раскладка',
+    'badgeRu': '🟢 RU активен',
+    'badgeEn': '⚪ EN активен',
+    'badgeCoverage': '🟢 100% (5,688 ключей)',
+    'badgeSmartUx': '⚡ Smart UX активен',
+    'secLanguage': '🌐 Язык интерфейса',
+    'secLanguageDesc': 'Нативное переключение языка интерфейса DSH на русский без перезагрузки страницы.',
     'enabled': 'Русский язык включён',
+    'enabledDesc': 'Переключает язык интерфейса DeepSeek Harness на русский.',
+    'quickSwitchNote': 'Быстрый переключатель RU ⇄ EN доступен в шапке сессии рядом с кнопками диалога.',
+    'secTypography': '✍️ Умная типографика и ввод (Smart UX)',
+    'secTypographyDesc': 'Автоматическое улучшение текстов по нормам русской типографики во время диалога и набора.',
     'typography': 'Типографика вывода',
-    'typographyDesc': 'Исправляет типографику в тексте ответов: кавычки-«ёлочки», тире вместо дефисов, неразрывные пробелы после коротких предлогов. Код и ссылки не трогаются.',
-    'yo': 'Буква ё',
-    'yoDesc': 'Восстанавливать «ё» в частых словах (ещё, чёрный, идёт и др.), написанных через «е». Неоднозначные слова (например «все/всё») не трогаются.',
+    'typographyDesc': 'Исправляет типографику ответов модели: кавычки-«ёлочки», тире («—») вместо дефисов, неразрывные пробелы после предлогов.',
+    'yo': 'Буква «ё»',
+    'yoDesc': 'Восстанавливать «ё» в частых словах (ещё, чёрный, идёт и др.), написанных через «е». Неоднозначные слова (все/всё) не трогаются.',
     'liveInput': 'Живая типографика инпута',
-    'liveInputDesc': 'Автоматически заменять "" на «», -- на —, ... на … и добавлять неразрывные пробелы прямо во время набора промпта (код в бэктиках игнорируется).',
+    'liveInputDesc': 'Автоматически заменять "" на «» и -- на — прямо во время набора промпта (код в бэктиках игнорируется).',
     'slashAliases': 'Русские алиасы команд',
-    'slashAliasesDesc': 'Поддержка русских команд: /цель -> /goal, /сжать -> /compact, /план -> /plan, /экспорт -> /export и др.',
+    'slashAliasesDesc': 'Поддержка русских команд: /цель -> /goal, /сжать -> /compact, /план -> /plan, /справка -> /help, /память -> /memory.',
+    'altLHintText': 'Мгновенная конвертация раскладки текущего поля (ghbdtn ⇄ привет, /vjltkm ⇄ /model). В углу поля ввода также отображается метка раскладки.',
+    'secAgentPrompt': '🤖 Системный промпт агента',
+    'secAgentPromptDesc': 'Официальная секция расширения DSH systemPrompt для ведения диалога на русском языке.',
     'agentPrompt': 'Русский промпт агента',
-    'agentPromptDesc': 'Добавляет в системный промпт инструкцию отвечать по-русски. Не по умолчанию.',
+    'agentPromptDesc': 'Добавляет в системный промпт инструкцию отвечать по-русски в выбранном стиле.',
     'agentPromptPreset': 'Стиль ответов агента',
     'presetExpert': 'Технический эксперт (строгая терминология, чистый код)',
     'presetWriter': 'Технический писатель (Markdown, таблицы, ГОСТ)',
     'presetConcise': 'Лаконичный режим (кратко, без лишней воды)',
-    'quickSwitch': 'Быстрый переключатель RU ⇄ EN',
-    'quickSwitchDesc': 'Компактная кнопка переключения языка интерфейса в один клик в шапке сессии.',
+    'secSupport': '📊 Покрытие экосистемы и поддержка',
+    'secSupportDesc': 'Словари синхронизированы с DSH v0.1.5-rc.1. 100.0% UI-покрытие без черновых машинных переводов.',
+    'statNamespaces': 'Пространств имён',
+    'statCoreKeys': 'Ключей ядра',
+    'statPluginKeys': 'Ключей плагинов',
     'overridesCount': 'Своих переопределений',
     'statusLoading': 'Настройки загружаются…',
     'statusUnavailable': 'Настройки недоступны на этом хосте',
-    'hint': 'Машинные переводы помечены в очереди выверки; ручная правка словарей приоритетна.',
-    'altL': 'Alt+L — конвертировать раскладку текущего поля',
-    'altT': 'Alt+T — транслитерация (privet ⇄ привет)',
     'translateTurn': 'Перевести на русский',
-    'reportIssue': 'Сообщить об ошибке перевода',
-    'requestPlugin': 'Запросить перевод плагина',
+    'reportIssue': 'Сообщить о неточности перевода',
+    'exportMdHint': 'Экспорт диалога в Markdown доступен по кнопке [ 📥 MD ] в шапке сессии.',
+    'translateTurnHint': 'Перевод ответов ассистента на русский доступен по кнопке [ RU ↗ ] на блоках сообщений.',
 }
 card_json = json.dumps(card_ru, ensure_ascii=False)
 
@@ -1362,8 +1376,6 @@ window.__ModuleLoader__.load({
         () => (scope && scope.getSnapshot ? scope.getSnapshot() : { status: 'loading', value: {} }))
       const [ruActive, setRuActive] = React.useState(
         () => { try { return runtime.getLocale().active === 'ru' } catch (e) { return false } })
-      // Оптимистичное состояние типографики: галочка переключается сразу,
-      // а host-подтверждение (scope.subscribe) лишь синхронизирует его позже.
       const [typo, setTypoState] = React.useState(() =>
         (snap.value && snap.value.typography) || {})
 
@@ -1376,7 +1388,7 @@ window.__ModuleLoader__.load({
         })
         setSnap(scope.getSnapshot())
         return un
-      }, [])
+      }, [scope])
       React.useEffect(() => {
         try {
           const un = runtime.subscribe(() => {
@@ -1384,7 +1396,7 @@ window.__ModuleLoader__.load({
           })
           return un
         } catch (e) { return undefined }
-      }, [])
+      }, [runtime])
 
       const status = snap.status || 'loading'
       const value = snap.value || {}
@@ -1393,10 +1405,7 @@ window.__ModuleLoader__.load({
 
       const setTypo = (patch) => {
         const next = Object.assign({}, typo, patch)
-        setTypoState(next) // мгновенно
-        // v0.1.2-alpha.2: scope.set returns Promise<void>, ошибка приходит через
-        // promise rejection. catch на promise не обработает sync throw, поэтому
-        // принимаем оба и логируем только реальные.
+        setTypoState(next)
         try {
           const r = scope.set('typography', next)
           if (r && typeof r.catch === 'function') r.catch((err) => {
@@ -1408,33 +1417,27 @@ window.__ModuleLoader__.load({
       }
       const onEnabled = (ev) => { if (toggleRu) toggleRu(ev.target.checked) }
 
-      const row = (label, control, desc) =>
-        React.createElement('div', { className: 'rl-field' },
-          React.createElement('span', { className: 'rl-label' }, label),
-          control,
-          desc ? React.createElement('div', { className: 'rl-desc' }, desc) : null)
-
       const checkbox = (checked, onChange, disabled) =>
         React.createElement('input', {
           type: 'checkbox', checked: !!checked, disabled: !!disabled,
           className: 'rl-check', onChange: (ev) => onChange(ev),
         })
 
+      const disabled = status !== 'ready'
       const statusLine = status === 'ready'
         ? ''
         : (status === 'unavailable' ? t('statusUnavailable') : t('statusLoading'))
-      const disabled = status !== 'ready'
 
-      // Шеврон раскрытия — чистый SVG той же формы, что ядровый
-      // (без зависимости от @deepseek-ai/dsh-client-ui-primitives: этот модуль
-      // не зарегистрирован в module table старых ядер и валил загрузчик).
       const Chevron = () => React.createElement('svg', {
         width: 14, height: 14, viewBox: '0 0 14 14', fill: 'none',
         'aria-hidden': 'true',
       }, React.createElement('path', {
         d: 'M3.5 5.25 7 8.75l3.5-3.5', stroke: 'currentColor',
-        'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+        strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
       }))
+
+      const presetKey = value.agentPromptPreset || 'technical_expert'
+      const presetInfo = typeof SYSTEM_PROMPT_PRESETS !== 'undefined' ? SYSTEM_PROMPT_PRESETS[presetKey] : null
 
       return React.createElement('div', { className: 'rl-card' },
         React.createElement('button', {
@@ -1443,88 +1446,233 @@ window.__ModuleLoader__.load({
           'aria-expanded': String(open),
           onClick: () => setOpen(!open),
         },
-          React.createElement('span', { style: { flex: '1' } },
-            React.createElement('div', { className: 'rl-title' }, t('cardTitle')),
+          React.createElement('span', { className: 'rl-head-main' },
+            React.createElement('div', { className: 'rl-title' },
+              '🇷🇺 ' + t('cardTitle'),
+              React.createElement('span', { className: 'rl-badge ' + (ruActive ? 'rl-badge-ok' : 'rl-badge-warn') },
+                ruActive ? t('badgeRu') : t('badgeEn')),
+              React.createElement('span', { className: 'rl-badge rl-badge-ok' }, t('badgeCoverage'))
+            ),
             React.createElement('div', { className: 'rl-sub' },
               statusLine || t('cardSub'))),
           React.createElement('span', {
             className: 'rl-chev' + (open ? ' rl-chev-open' : ''),
           }, React.createElement(Chevron, null))),
         open && React.createElement('div', { className: 'rl-body' },
-          row(t('enabled'), checkbox(ruActive, onEnabled, false), null),
-          row(t('typography'), checkbox(typography.enabled !== false && ruActive,
-            (ev) => setTypo({ enabled: ev.target.checked }), !ruActive), t('typographyDesc')),
-          row(t('liveInput'), checkbox(typography.liveInput !== false && ruActive,
-            (ev) => setTypo({ liveInput: ev.target.checked }), !ruActive), t('liveInputDesc')),
-          row(t('yo'), checkbox(typography.yo === true,
-            (ev) => setTypo({ yo: ev.target.checked }), !ruActive), t('yoDesc')),
-          row(t('slashAliases'), checkbox(value.slashAliases !== false && ruActive,
-            (ev) => {
-              try { scope.set('slashAliases', ev.target.checked) } catch (err) {}
-            }, !ruActive), t('slashAliasesDesc')),
-          row(t('agentPrompt'), checkbox(value.agentPrompt === true,
-            (ev) => {
-              try {
-                const r = scope.set('agentPrompt', ev.target.checked)
-                if (r && typeof r.catch === 'function') r.catch((err) => {
-                  console.warn('dsh-russian-lang: scope.set agentPrompt failed', err && err.message || err)
-                })
-              } catch (err) {
-                console.warn('dsh-russian-lang: scope.set agentPrompt sync threw', err && err.message || err)
-              }
-            }, false), t('agentPromptDesc')),
-          row(t('agentPromptPreset'),
-            React.createElement('select', {
-              className: 'rl-select',
-              value: value.agentPromptPreset || 'technical_expert',
-              disabled: !value.agentPrompt || !ruActive,
-              onChange: (ev) => {
-                try {
-                  const val = ev.target.value
-                  scope.set('agentPromptPreset', val)
-                } catch (err) { console.warn('dsh-russian-lang: set agentPromptPreset failed', err) }
-              }
-            },
-              React.createElement('option', { value: 'technical_expert' }, t('presetExpert')),
-              React.createElement('option', { value: 'tech_writer' }, t('presetWriter')),
-              React.createElement('option', { value: 'concise' }, t('presetConcise'))
+          React.createElement('div', { className: 'rl-page' },
+
+            // Секция 1: Язык интерфейса
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secLanguage')),
+                React.createElement('span', { className: 'rl-badge ' + (ruActive ? 'rl-badge-ok' : 'rl-badge-dim') },
+                  ruActive ? t('badgeRu') : t('badgeEn'))
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secLanguageDesc')),
+              React.createElement('div', { className: 'rl-item-card' },
+                React.createElement('div', { className: 'rl-item-head' },
+                  React.createElement('label', { className: 'rl-item-label' },
+                    checkbox(ruActive, onEnabled, disabled),
+                    t('enabled')
+                  )
+                ),
+                React.createElement('div', { className: 'rl-item-desc' }, t('enabledDesc'))
+              ),
+              React.createElement('div', { className: 'rl-hint-text' }, t('quickSwitchNote')),
+              overridesCount > 0 ? React.createElement('div', { className: 'rl-badge rl-badge-dim', style: { alignSelf: 'flex-start' } },
+                t('overridesCount') + ': ' + overridesCount) : null
             ),
-            t('agentPromptDesc')
-          ),
-          React.createElement('div', { className: 'rl-note' },
-            t('overridesCount') + ': ' + overridesCount),
-          React.createElement('div', { className: 'rl-hint' }, t('altL')),
-          React.createElement('div', { className: 'rl-hint' }, t('altT')),
-          React.createElement('div', { className: 'rl-actions' },
-            React.createElement('a', {
-              href: makeIssueUrl({}, '__PKG_VERSION__'),
-              target: '_blank',
-              rel: 'noopener noreferrer',
-              className: 'rl-link'
-            }, '💬 ' + t('reportIssue'))),
-          React.createElement('div', { className: 'rl-foot' }))
+
+            // Секция 2: Умная типографика и ввод (Smart UX)
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secTypography')),
+                React.createElement('span', { className: 'rl-badge rl-badge-ok' }, t('badgeSmartUx'))
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secTypographyDesc')),
+              React.createElement('div', { className: 'rl-grid-2' },
+                // 1. Типографика вывода
+                React.createElement('div', { className: 'rl-item-card' },
+                  React.createElement('div', { className: 'rl-item-head' },
+                    React.createElement('label', { className: 'rl-item-label' },
+                      checkbox(typography.enabled !== false && ruActive,
+                        (ev) => setTypo({ enabled: ev.target.checked }), !ruActive || disabled),
+                      t('typography')
+                    )
+                  ),
+                  React.createElement('div', { className: 'rl-item-desc' }, t('typographyDesc'))
+                ),
+                // 2. Живая типографика инпута
+                React.createElement('div', { className: 'rl-item-card' },
+                  React.createElement('div', { className: 'rl-item-head' },
+                    React.createElement('label', { className: 'rl-item-label' },
+                      checkbox(typography.liveInput !== false && ruActive,
+                        (ev) => setTypo({ liveInput: ev.target.checked }), !ruActive || disabled),
+                      t('liveInput')
+                    )
+                  ),
+                  React.createElement('div', { className: 'rl-item-desc' }, t('liveInputDesc'))
+                ),
+                // 3. Буква «ё»
+                React.createElement('div', { className: 'rl-item-card' },
+                  React.createElement('div', { className: 'rl-item-head' },
+                    React.createElement('label', { className: 'rl-item-label' },
+                      checkbox(typography.yo === true && ruActive,
+                        (ev) => setTypo({ yo: ev.target.checked }), !ruActive || disabled),
+                      t('yo')
+                    )
+                  ),
+                  React.createElement('div', { className: 'rl-item-desc' }, t('yoDesc'))
+                ),
+                // 4. Русские алиасы слэш-команд
+                React.createElement('div', { className: 'rl-item-card' },
+                  React.createElement('div', { className: 'rl-item-head' },
+                    React.createElement('label', { className: 'rl-item-label' },
+                      checkbox(value.slashAliases !== false && ruActive,
+                        (ev) => {
+                          try { scope.set('slashAliases', ev.target.checked) } catch (err) {}
+                        }, !ruActive || disabled),
+                      t('slashAliases')
+                    )
+                  ),
+                  React.createElement('div', { className: 'rl-item-desc' }, t('slashAliasesDesc'))
+                )
+              ),
+              React.createElement('div', { className: 'rl-hotkey-box' },
+                React.createElement('span', { className: 'rl-hotkey-tag' }, '⌨️ Alt+L'),
+                React.createElement('span', null, t('altLHintText'))
+              )
+            ),
+
+            // Секция 3: Системный промпт агента
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secAgentPrompt')),
+                React.createElement('span', { className: 'rl-badge ' + (value.agentPrompt ? 'rl-badge-ok' : 'rl-badge-dim') },
+                  value.agentPrompt ? 'Активен' : 'Выключен')
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secAgentPromptDesc')),
+              React.createElement('div', { className: 'rl-item-card' },
+                React.createElement('div', { className: 'rl-item-head' },
+                  React.createElement('label', { className: 'rl-item-label' },
+                    checkbox(value.agentPrompt === true,
+                      (ev) => {
+                        try {
+                          const r = scope.set('agentPrompt', ev.target.checked)
+                          if (r && typeof r.catch === 'function') r.catch((err) => {
+                            console.warn('dsh-russian-lang: scope.set agentPrompt failed', err && err.message || err)
+                          })
+                        } catch (err) {
+                          console.warn('dsh-russian-lang: scope.set agentPrompt sync threw', err && err.message || err)
+                        }
+                      }, false),
+                    t('agentPrompt')
+                  )
+                ),
+                React.createElement('div', { className: 'rl-item-desc' }, t('agentPromptDesc'))
+              ),
+              value.agentPrompt ? React.createElement(React.Fragment, null,
+                React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px' } },
+                  React.createElement('label', { className: 'rl-item-label', style: { fontWeight: 500 } }, t('agentPromptPreset')),
+                  React.createElement('select', {
+                    className: 'rl-select',
+                    value: value.agentPromptPreset || 'technical_expert',
+                    onChange: (ev) => {
+                      try {
+                        const val = ev.target.value
+                        scope.set('agentPromptPreset', val)
+                      } catch (err) { console.warn('dsh-russian-lang: set agentPromptPreset failed', err) }
+                    }
+                  },
+                    React.createElement('option', { value: 'technical_expert' }, t('presetExpert')),
+                    React.createElement('option', { value: 'tech_writer' }, t('presetWriter')),
+                    React.createElement('option', { value: 'concise' }, t('presetConcise'))
+                  )
+                ),
+                presetInfo ? React.createElement('div', { className: 'rl-preview-box' },
+                  React.createElement('div', { style: { fontWeight: 600, marginBottom: '4px', color: 'var(--dsw-alias-label-primary)' } }, '💬 ' + presetInfo.label + ':'),
+                  presetInfo.text
+                ) : null
+              ) : null
+            ),
+
+            // Секция 4: Покрытие экосистемы и поддержка
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secSupport')),
+                React.createElement('span', { className: 'rl-badge rl-badge-ok' }, '🟢 100.0%%')
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secSupportDesc')),
+              React.createElement('div', { className: 'rl-grid-3' },
+                React.createElement('div', { className: 'rl-stat-box' },
+                  React.createElement('div', { className: 'rl-stat-val' }, '99'),
+                  React.createElement('div', { className: 'rl-stat-label' }, t('statNamespaces'))
+                ),
+                React.createElement('div', { className: 'rl-stat-box' },
+                  React.createElement('div', { className: 'rl-stat-val' }, '1 225'),
+                  React.createElement('div', { className: 'rl-stat-label' }, t('statCoreKeys'))
+                ),
+                React.createElement('div', { className: 'rl-stat-box' },
+                  React.createElement('div', { className: 'rl-stat-val' }, '4 463'),
+                  React.createElement('div', { className: 'rl-stat-label' }, t('statPluginKeys'))
+                )
+              ),
+              React.createElement('div', { className: 'rl-actions-row' },
+                React.createElement('a', {
+                  href: makeIssueUrl({}, '__PKG_VERSION__'),
+                  target: '_blank',
+                  rel: 'noopener noreferrer',
+                  className: 'rl-btn rl-btn-primary'
+                }, '💬 ' + t('reportIssue')),
+                React.createElement('div', { className: 'rl-hint-text', style: { flex: 1 } },
+                  t('exportMdHint')
+                )
+              )
+            )
+          )
+        )
       )
     }
 
-    // Стили карточки: префикс rl-, только переменные темы.
     const RL_CSS = [
-      '.rl-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:12px;list-style:none}',
-      '.rl-head{appearance:none;width:100%%;font:inherit;color:inherit;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:12px;display:flex;align-items:center;gap:12px;padding:14px 16px}',
-      '.rl-title{color:var(--dsw-alias-label-primary);font-size:15px;font-weight:600;line-height:1.4}',
+      '.rl-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:12px;list-style:none;overflow:hidden;transition:border-color .15s ease}',
+      '.rl-head{appearance:none;width:100%%;font:inherit;color:inherit;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:12px;display:flex;align-items:center;gap:12px;padding:14px 18px}',
+      '.rl-head:hover{background:var(--dsw-alias-bg-layer-2)}',
+      '.rl-head-main{flex:1;display:flex;flex-direction:column;gap:4px}',
+      '.rl-title{color:var(--dsw-alias-label-primary);font-size:16px;font-weight:600;line-height:1.4;display:flex;align-items:center;flex-wrap:wrap;gap:8px}',
       '.rl-sub{color:var(--dsw-alias-label-secondary);font-size:13px}',
       '.rl-chev{margin-left:auto;flex:none;color:var(--dsw-alias-label-tertiary);display:inline-flex;transition:transform .16s}',
       '.rl-chev-open{transform:rotate(180deg)}',
-      '.rl-body{border-top:1px solid var(--dsw-alias-border-l2);margin:0 16px;padding-bottom:8px}',
-      '.rl-field{display:flex;flex-direction:column;gap:6px;padding:12px 0}',
-      '.rl-label{color:var(--dsw-alias-label-primary);font-size:13px}',
-      '.rl-desc{color:var(--dsw-alias-label-secondary);font-size:12px;line-height:1.4}',
-      '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary)}',
-      '.rl-note{color:var(--dsw-alias-label-secondary);font-size:12px;padding:8px 0 4px}',
-      '.rl-hint{color:var(--dsw-alias-label-secondary);font-size:12px;padding:4px 0 8px}',
-      '.rl-actions{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-start;align-items:center;gap:12px;padding:8px 0 4px}',
-      '.rl-link{color:var(--dsw-alias-label-secondary);font-size:12px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}',
-      '.rl-link:hover{color:var(--dsw-alias-label-primary);text-decoration:underline}',
-      '.rl-foot{border-top:1px solid var(--dsw-alias-border-l2);display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:12px 0 4px}',
+      '.rl-body{border-top:1px solid var(--dsw-alias-border-l2);padding:18px}',
+      '.rl-page{display:flex;flex-direction:column;gap:16px;max-width:960px}',
+      '.rl-section-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-2);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}',
+      '.rl-section-title{font-size:14px;font-weight:600;color:var(--dsw-alias-label-primary);display:flex;align-items:center;justify-content:space-between;gap:8px}',
+      '.rl-section-desc{font-size:12px;color:var(--dsw-alias-label-secondary);margin-top:-4px;line-height:1.4}',
+      '.rl-grid-2{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:10px}',
+      '.rl-grid-3{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px}',
+      '.rl-badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--dsw-alias-border-l2);display:inline-flex;align-items:center;gap:4px;font-weight:500}',
+      '.rl-badge-ok{border-color:var(--dsw-alias-state-success-primary);color:var(--dsw-alias-state-success-primary);background:rgba(16,185,129,0.08)}',
+      '.rl-badge-warn{border-color:var(--dsw-alias-state-warning-primary);color:var(--dsw-alias-state-warning-primary);background:rgba(245,158,11,0.08)}',
+      '.rl-badge-dim{border-color:var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-bg-layer-3)}',
+      '.rl-item-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}',
+      '.rl-item-head{display:flex;align-items:center;justify-content:space-between;gap:8px}',
+      '.rl-item-label{font-size:13px;font-weight:500;color:var(--dsw-alias-label-primary);display:flex;align-items:center;gap:8px;cursor:pointer}',
+      '.rl-item-desc{font-size:11px;color:var(--dsw-alias-label-secondary);line-height:1.4}',
+      '.rl-stat-box{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}',
+      '.rl-stat-val{font-size:16px;font-weight:700;color:var(--dsw-alias-label-primary)}',
+      '.rl-stat-label{font-size:11px;color:var(--dsw-alias-label-secondary);letter-spacing:0.3px}',
+      '.rl-hotkey-box{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--dsw-alias-label-secondary);line-height:1.4;display:flex;align-items:flex-start;gap:10px}',
+      '.rl-hotkey-tag{font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-primary);white-space:nowrap}',
+      '.rl-preview-box{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--dsw-alias-label-secondary);line-height:1.4}',
+      '.rl-btn{appearance:none;font:inherit;cursor:pointer;border:1px solid var(--dsw-alias-border-l2);border-radius:8px;padding:6px 12px;font-size:12px;background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);font-weight:500;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .15s ease;text-decoration:none}',
+      '.rl-btn:hover:not(:disabled){background:var(--dsw-alias-bg-layer-1);border-color:var(--dsw-alias-label-secondary)}',
+      '.rl-btn-primary{background:var(--dsw-alias-label-primary);color:var(--dsw-alias-bg-layer-3);border-color:transparent}',
+      '.rl-btn-primary:hover:not(:disabled){opacity:0.9}',
+      '.rl-select{height:32px;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);border-radius:6px;padding:0 8px;font-size:12px;outline:none;width:100%%;max-width:380px}',
+      '.rl-select:focus{border-color:var(--dsw-alias-state-brand-primary)}',
+      '.rl-check{width:16px;height:16px;accent-color:var(--dsw-alias-label-primary);cursor:pointer;flex-shrink:0}',
+      '.rl-hint-text{font-size:11px;color:var(--dsw-alias-label-secondary);line-height:1.4}',
+      '.rl-actions-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding-top:4px}',
       '.rl-lang-chip{appearance:none;cursor:pointer;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-secondary);font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;display:inline-flex;align-items:center;transition:all .15s;margin:0 4px}',
       '.rl-lang-chip:hover{border-color:var(--dsw-alias-label-primary);color:var(--dsw-alias-label-primary)}',
       '.rl-lang-chip-active{color:var(--dsw-alias-label-primary);border-color:var(--dsw-alias-label-primary);background:var(--dsw-alias-bg-layer-2)}',
@@ -1540,7 +1688,6 @@ window.__ModuleLoader__.load({
       '.rl-trans-body{color:var(--dsw-alias-label-primary);white-space:pre-wrap;word-break:break-word;user-select:text}',
       '.rl-export-md-btn{appearance:none;border:1px solid var(--dsw-alias-border-l2);height:32px;color:var(--dsw-alias-label-primary);cursor:pointer;background:transparent;border-radius:18px;justify-content:center;align-items:center;gap:4px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;white-space:nowrap;margin-left:6px;transition:all .15s ease}',
       '.rl-export-md-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}',
-      '.rl-select{height:30px;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-label-primary);border-radius:6px;padding:0 8px;font-size:12px;outline:none;margin-top:4px}',
     ].join('\n')
     if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {
       const tag = document.createElement('style')

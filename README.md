@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.2.11-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.2.12-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -205,7 +205,7 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 
 6. **Хоткей транслитерации (<kbd>Alt+T</kbd>)**:
    - Мгновенная конвертация набранного транслита в кириллицу и обратно прямо в поле ввода (`privet` ⇄ `привет`).
-   - *(Deprecated since v0.2.11: экспериментальный UI-перехватчик удалён для обеспечения беспрепятственного нативного ввода Lexical; программная функция `phoneticTranslit` сохранена в `lib/pure.js`).*
+   - *(Deprecated since v0.2.12: экспериментальный UI-перехватчик удалён для обеспечения беспрепятственного нативного ввода Lexical; программная функция `phoneticTranslit` сохранена в `lib/pure.js`).*
 
 7. **Инлайн-перевод реплик ассистента (`RU ↗`)**:
    - Кнопка `RU ↗` в панели действий ответа ассистента переводит текст ответа на русский язык с сохранением блоков кода и выводит карточку перевода прямо под сообщением с кнопкой быстрого копирования (`📋 Копировать`).
