@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.2.13-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.2.14-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -14,7 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.1.5--rc.1%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.1.5-rc.1+">
   <img src="https://img.shields.io/badge/Покрытие-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="Покрытие 100%">
-  <img src="https://img.shields.io/badge/Ключей_UI-5765-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="5765 ключей">
+  <img src="https://img.shields.io/badge/Ключей_UI-6002-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="6002 ключей">
   <img src="https://img.shields.io/badge/Ручная_вычитка-100%25-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="100% ручная вычитка">
 </p>
 
@@ -42,9 +42,9 @@ graph LR
         DSH[Web UI Интерфейс] --> Loader[Загрузчик локализации dsh-russian-lang]
     end
 
-    subgraph TranslationLayer [Слой перевода и адаптации — 5765 ключей / 100% вычитано]
+    subgraph TranslationLayer [Слой перевода и адаптации — 6002 ключей / 100% вычитано]
         Loader --> CoreDict[30+ Пространств имён ядра DSH / 1225 ключа]
-        Loader --> PluginDict[30+ Плагинов экосистемы DSH / 4540 ключ]
+        Loader --> PluginDict[30+ Плагинов экосистемы DSH / 4777 ключ]
         Loader --> PluralEngine[Движок грамматических Plural-форм: 1/2/5]
     end
 
@@ -84,9 +84,9 @@ graph LR
 * **Планировщик и инвентарь (`schedule.catalog`, `settings.pluginInventory`, `settings.plugins`)**: фоновые задания, периодичность, фильтры и каталог установленных плагинов.
 * **Права доступа и безопасность (`permission.access`, `plan`, `skill`)**: пресеты прав (полный доступ, только чтение, запись в рабочую область), выполнение планов и навыки.
 
-> **О качестве перевода.** Все **5765 ключей интерфейса (722 ядра + 3989 плагинов) переведены на 100% и вычитаны вручную**. Черновой машинный перевод полностью замещён проверенными формулировками (`draft = 0`). Перевод регулярно валидируется автоматическими линтерами целостности плейсхолдеров, проверкой соблюдения глоссария (`glossary.json`) и детекторами переполнения верстки. Нашли неточность — кнопка «Сообщить о проблеме перевода» в карточке настроек создаёт готовый issue.
+> **О качестве перевода.** Все **6002 ключей интерфейса (722 ядра + 3989 плагинов) переведены на 100% и вычитаны вручную**. Черновой машинный перевод полностью замещён проверенными формулировками (`draft = 0`). Перевод регулярно валидируется автоматическими линтерами целостности плейсхолдеров, проверкой соблюдения глоссария (`glossary.json`) и детекторами переполнения верстки. Нашли неточность — кнопка «Сообщить о проблеме перевода» в карточке настроек создаёт готовый issue.
 
-### 2. 🧩 Встроенный перевод 30+ плагинов экосистемы DSH (4540 ключ)
+### 2. 🧩 Встроенный перевод 30+ плагинов экосистемы DSH (4777 ключ)
 Локализация автоматически распространяется на все ключевые плагины экосистемы DeepSeek Harness:
 * **`dsh-session-control`** — расширенное управление сессиями: закрепление диалогов, архив по периодам, просмотр расшифровок и фильтрация шума;
 * **`dsh-kanban` и `task-board`** — канбан-доски задач, карточки, чек-листы, дедлайны, критерии готовности (DoD) и шлюз приёмки (Acceptance Gate);
@@ -205,7 +205,7 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 
 6. **Хоткей транслитерации (<kbd>Alt+T</kbd>)**:
    - Мгновенная конвертация набранного транслита в кириллицу и обратно прямо в поле ввода (`privet` ⇄ `привет`).
-   - *(Deprecated since v0.2.13: экспериментальный UI-перехватчик удалён для обеспечения беспрепятственного нативного ввода Lexical; программная функция `phoneticTranslit` сохранена в `lib/pure.js`).*
+   - *(Deprecated since v0.2.14: экспериментальный UI-перехватчик удалён для обеспечения беспрепятственного нативного ввода Lexical; программная функция `phoneticTranslit` сохранена в `lib/pure.js`).*
 
 7. **Инлайн-перевод реплик ассистента (`RU ↗`)**:
    - Кнопка `RU ↗` в панели действий ответа ассистента переводит текст ответа на русский язык с сохранением блоков кода и выводит карточку перевода прямо под сообщением с кнопкой быстрого копирования (`📋 Копировать`).

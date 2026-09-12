@@ -172,6 +172,25 @@
     "history.channelWebdav": "WebDAV",
     "common.close": "Закрыть",
     "common.retry": "Повторить",
-    "common.loading": "Загрузка…"
+    "common.loading": "Загрузка…",
+    "syncStatus.lastSync": "Последняя синхронизация",
+    "syncStatus.sections": "Синхронизируемые разделы",
+    "syncStatus.state": "Состояние",
+    "toast.autosyncLoadFailed": "Не удалось загрузить статус автосинхронизации",
+    "toast.configSaveFailed": "Не удалось сохранить настройки канала",
+    "toast.configSaved": "Настройки канала сохранены",
+    "toast.configNothingToSave": "Введите URL канала перед сохранением",
+    "toast.selectionSaveFailed": "Не удалось сохранить настройки синхронизации",
+    "toast.pushPreviewFailed": "Не удалось сформировать предпросмотр отправки",
+    "toast.pushFailed": "Ошибка отправки",
+    "toast.pushDone": "Отправка завершена",
+    "toast.pullFailed": "Ошибка получения",
+    "toast.pullDone": "Получение завершено",
+    "toast.syncStartFailed": "Синхронизация в один клик не удалась",
+    "toast.autosyncUpdateFailed": "Не удалось обновить параметры автосинхронизации",
+    "toast.autosyncUpdated": "Параметры автосинхронизации обновлены",
+    "toast.snapshotsLoadFailed": "Не удалось загрузить удалённые снимки",
+    "toast.snapshotsRefreshed": "Список удалённых снимков обновлён",
+    "load.failed": "Не удалось загрузить статус синхронизации"
   }
 }

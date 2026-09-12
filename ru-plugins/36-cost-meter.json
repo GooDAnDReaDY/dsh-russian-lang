@@ -60,6 +60,18 @@
     "field.refreshHours": "Интервал обновления каталога (в часах)",
     "hint.refreshHours": "Интервал фонового запроса каталога в часах (от 1 до 168).",
     "settings.retry": "Повторить попытку",
-    "offpeak": "ночной тариф"
+    "offpeak": "ночной тариф",
+    "badge.catalog_stale": "Кэш: офлайн",
+    "field.budgetThreshold": "Порог бюджета сессии (USD)",
+    "hint.budgetThreshold": "Предупреждать цветом плашки при превышении расходов в сессии (0 — выключено).",
+    "action.sync_now": "Синхронизировать сейчас",
+    "action.syncing": "Синхронизация…",
+    "action.sync_ok": "Каталог обновлён",
+    "action.sync_err": "Синхронизация не удалась",
+    "action.sync_rate_limited": "Подождите {seconds} с",
+    "action.copy_report": "Скопировать сводку",
+    "action.copied": "Скопировано!",
+    "savings.hint": "💡 Скидка 50% начнётся через {time} ({clock} {zone})",
+    "budget.exceeded": "⚠️ Лимит бюджета превышен: {limit}"
   }
 }

@@ -296,6 +296,14 @@
     "timing.text": "Ответ",
     "timing.toolArgs": "Аргументы инструментов",
     "rich.copy": "Скопировать исходный текст",
-    "rich.copied": "Скопировано"
+    "rich.copied": "Скопировано",
+    "stats.humanInputs": "Сообщения пользователя",
+    "stats.humanInputsTip": "Сообщения пользователя и ответы на вопросы в текущей сессии.",
+    "tokens.total": "Всего",
+    "settings.placement": "Варианты размещения",
+    "placement.tab": "Вкладка",
+    "placement.sidebar": "Боковая панель",
+    "placement.all": "Везде",
+    "files.preview": "Предпросмотр в боковой панели"
   }
 }
