@@ -121,6 +121,20 @@
     "fileSaved": "Файл успешно сохранён.",
     "tunnelTraffic": "Вход: {rx} | Выход: {tx}",
     "tunnelUptime": "Работает: {sec} с",
-    "openLocalLink": "🌐 Открыть локальный порт"
+    "openLocalLink": "🌐 Открыть локальный порт",
+    "tabEnv": "🗃️ Менеджер .env",
+    "btnImportSsh": "Импорт из ~/.ssh/config",
+    "envTitle": "Удалённые переменные окружения (.env)",
+    "envKey": "Ключ",
+    "envVal": "Значение",
+    "envSaveVar": "Сохранить",
+    "envShowVal": "Показать",
+    "envHideVal": "Скрыть",
+    "tarSyncFast": "🚀 Быстрый поток архива (Tarball Stream)",
+    "diagnoseTitle": "Экспресс-диагностика",
+    "diagnosePorts": "Открытые порты",
+    "diagnoseOom": "Проверка OOM Killer",
+    "diagnoseDisk": "Использование диска",
+    "alertLabel": "Оповещения ({count})"
   }
 }

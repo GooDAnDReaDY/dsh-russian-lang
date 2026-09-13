@@ -8,5 +8,21 @@
     "dialog.title": "Разрешение автономного режима",
     "preset.description": "Шаблон прав и политик безопасности для автоматического цикла",
     "preset.label": "Пресет автономного режима"
+  },
+  "@goodandready/dsh-agent-loop-guard": {
+    "title": "Agent Loop Guard",
+    "sub": "Защитные лимиты циклов вызова инструментов и ответов ассистента (fail-closed)",
+    "maxToolAttemptsPerTurn": "Макс. попыток вызова инструментов за ход",
+    "maxProgressToolCallsPerTurn": "Макс. вызовов инструментов прогресса за ход",
+    "maxCallsPerRepeatGroup": "Макс. вызовов в группе повторений",
+    "blockExactDuplicates": "Блокировать точные дубликаты вызовов инструментов",
+    "assistantOutputGuard": "Защита вывода ассистента",
+    "maxRepeatedAssistantLines": "Макс. повторяющихся строк ассистента",
+    "maxRepeatedAssistantBlocks": "Макс. повторяющихся блоков ассистента",
+    "maxAssistantBlockChars": "Макс. символов в блоке ассистента",
+    "progressToolNames": "Имена инструментов прогресса (через запятую)",
+    "saving": "Сохранение…",
+    "ready": "Сохранить",
+    "saved": "Сохранено"
   }
 }

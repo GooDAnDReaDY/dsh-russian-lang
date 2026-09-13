@@ -72,6 +72,19 @@
     "action.copy_report": "Скопировать сводку",
     "action.copied": "Скопировано!",
     "savings.hint": "💡 Скидка 50% начнётся через {time} ({clock} {zone})",
-    "budget.exceeded": "⚠️ Лимит бюджета превышен: {limit}"
+    "budget.exceeded": "⚠️ Лимит бюджета превышен: {limit}",
+    "savings.cache_saved": "⚡ Сэкономлено на кэше контекста: ≈ {amount} ({percent}%)",
+    "models.show_more": "Показать все модели ({count})",
+    "models.show_less": "Свернуть",
+    "rate.per_1m": "1 млн токенов, $",
+    "rate.cache_hit": "Вход (попадание в кэш)",
+    "rate.cache_write": "Вход (запись в кэш)",
+    "tokens.session": "Токены сессии",
+    "tokens.tokens_col": "Токены",
+    "tokens.models_spent": "Расходы по моделям",
+    "tokens.session_total": "Всего за сессию:",
+    "tokens.no_usage_yet": "Провайдер пока не передал статистику использования для этой сессии.",
+    "tokens.not_priced": "Тариф не задан",
+    "tz.invalid": "Недопустимый идентификатор часового пояса IANA"
   }
 }

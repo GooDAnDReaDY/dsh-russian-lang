@@ -191,6 +191,12 @@
     "toast.autosyncUpdated": "Параметры автосинхронизации обновлены",
     "toast.snapshotsLoadFailed": "Не удалось загрузить удалённые снимки",
     "toast.snapshotsRefreshed": "Список удалённых снимков обновлён",
-    "load.failed": "Не удалось загрузить статус синхронизации"
+    "load.failed": "Не удалось загрузить статус синхронизации",
+    "history.stats.total": "Всего: {count}",
+    "history.stats.snapshots": "Снимков: {count}",
+    "history.stats.autosync": "Автосинхронизаций: {count}",
+    "history.stats.failed": "Сбоев: {count}",
+    "history.stats.skipped": "Пропущено: {count}",
+    "history.stats.summary": "Статистика истории синхронизации"
   }
 }

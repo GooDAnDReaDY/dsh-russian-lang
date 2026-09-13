@@ -435,6 +435,26 @@
     "template.none": "Без шаблона (пусто)",
     "template.refactor": "Рефакторинг (Refactor)",
     "template.release": "Релиз (Подготовка выпуска)",
-    "template.security": "Безопасность (Аудит и CVE)"
+    "template.security": "Безопасность (Аудит и CVE)",
+    "epic.badge": "Эпик",
+    "epic.progress": "Подзадач: {done}/{total}",
+    "epic.triage": "Декомпозировать",
+    "epic.triageTitle": "Декомпозиция задачи на подзадачи",
+    "epic.triageHelp": "Введите по одному названию подзадачи в строке. Дочерние задачи будут привязаны к этому эпику.",
+    "epic.triageSubmit": "Создать подзадачи",
+    "epic.createGiteaIssues": "Также создать связанные задачи в Gitea",
+    "epic.subtasks": "Подзадачи",
+    "epic.addSubtask": "Добавить подзадачу",
+    "epic.noSubtasks": "Подзадач пока нет.",
+    "console.tab": "Живая консоль",
+    "console.empty": "Вывод агента пока не записан.",
+    "filter.active": "Активные",
+    "filter.review": "На проверке",
+    "filter.epics": "Эпики",
+    "filter.stale": "Без активности",
+    "pr.create": "Создать PR в Gitea",
+    "pr.creating": "Создание PR…",
+    "pr.created": "PR #{n} создан",
+    "pr.view": "Открыть PR"
   }
 }

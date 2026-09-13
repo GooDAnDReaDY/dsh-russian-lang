@@ -160,7 +160,7 @@ card_ru = {
     'cardSub': 'Язык интерфейса, типографика, раскладка',
     'badgeRu': '🟢 RU активен',
     'badgeEn': '⚪ EN активен',
-    'badgeCoverage': '🟢 100% (6,002 ключа)',
+    'badgeCoverage': '🟢 100% (6,629 ключей)',
     'badgeSmartUx': '⚡ Smart UX активен',
     'secLanguage': '🌐 Язык интерфейса',
     'secLanguageDesc': 'Нативное переключение языка интерфейса DSH на русский без перезагрузки страницы.',
@@ -1613,7 +1613,7 @@ window.__ModuleLoader__.load({
                   React.createElement('div', { className: 'rl-stat-label' }, t('statCoreKeys'))
                 ),
                 React.createElement('div', { className: 'rl-stat-box' },
-                  React.createElement('div', { className: 'rl-stat-val' }, '4 777'),
+                  React.createElement('div', { className: 'rl-stat-val' }, '5 404'),
                   React.createElement('div', { className: 'rl-stat-label' }, t('statPluginKeys'))
                 )
               ),
