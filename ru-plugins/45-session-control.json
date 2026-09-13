@@ -108,6 +108,15 @@
     "viewer.copy": "Копировать как Markdown",
     "viewer.exportFailed": "Не удалось экспортировать: {message}",
     "viewer.noClipboard": "буфер обмена недоступен в этом контексте браузера",
-    "viewer.save": "Сохранить .md"
+    "viewer.save": "Сохранить .md",
+    "bulk.archive": "В архив",
+    "bulk.export": "Экспорт Markdown",
+    "confirm.archiveBulk": "Архивировать {n} сессий навсегда? Восстановление невозможно.",
+    "jump.filterAll": "Все",
+    "jump.filterPinned": "Закреплённые",
+    "jump.filterTags": "Метки",
+    "jump.filterArchived": "Архив",
+    "row.turns": "{n} сообщений",
+    "menu.forkClean": "Новый диалог с этими настройками"
   }
 }

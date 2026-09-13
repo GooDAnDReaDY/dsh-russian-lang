@@ -1,0 +1,8 @@
+{
+  "@goodandready/dsh-model-search": {
+    "dms.placeholder": "Поиск модели или провайдера…",
+    "dms.empty": "Нет подходящих моделей",
+    "dms.clear": "Очистить поиск",
+    "dms.recent": "Недавние"
+  }
+}

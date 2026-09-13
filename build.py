@@ -160,7 +160,7 @@ card_ru = {
     'cardSub': 'Язык интерфейса, типографика, раскладка',
     'badgeRu': '🟢 RU активен',
     'badgeEn': '⚪ EN активен',
-    'badgeCoverage': '🟢 100% (6,629 ключей)',
+    'badgeCoverage': '🟢 100% (6,808 ключей)',
     'badgeSmartUx': '⚡ Smart UX активен',
     'secLanguage': '🌐 Язык интерфейса',
     'secLanguageDesc': 'Нативное переключение языка интерфейса DSH на русский без перезагрузки страницы.',
@@ -187,7 +187,7 @@ card_ru = {
     'presetWriter': 'Технический писатель (Markdown, таблицы, ГОСТ)',
     'presetConcise': 'Лаконичный режим (кратко, без лишней воды)',
     'secSupport': '📊 Покрытие экосистемы и поддержка',
-    'secSupportDesc': 'Словари синхронизированы с DSH v0.1.5-rc.1. 100.0% UI-покрытие без черновых машинных переводов.',
+    'secSupportDesc': 'Словари синхронизированы с DSH v0.1.5-rc.2. 100.0% UI-покрытие без черновых машинных переводов.',
     'statNamespaces': 'Пространств имён',
     'statCoreKeys': 'Ключей ядра',
     'statPluginKeys': 'Ключей плагинов',
@@ -1613,7 +1613,7 @@ window.__ModuleLoader__.load({
                   React.createElement('div', { className: 'rl-stat-label' }, t('statCoreKeys'))
                 ),
                 React.createElement('div', { className: 'rl-stat-box' },
-                  React.createElement('div', { className: 'rl-stat-val' }, '5 404'),
+                  React.createElement('div', { className: 'rl-stat-val' }, '5 583'),
                   React.createElement('div', { className: 'rl-stat-label' }, t('statPluginKeys'))
                 )
               ),
