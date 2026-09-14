@@ -318,6 +318,17 @@
     "history.applySuggestion": "Открыть форму редактирования с этой рекомендацией",
     "form.inspectOnFailureLabel": "Диагностировать сбои с помощью модели",
     "form.inspectOnFailureHint": "После сбоя модель анализирует промпт, ошибку и вывод, сохраняя диагноз и предлагаемые правки промпта вместе с запуском. Изменения не применяются автоматически.",
-    "settings.inspectorModelLabel": "Модель для диагностики сбоев"
+    "settings.inspectorModelLabel": "Модель для диагностики сбоев",
+    "form.agentPresetLabel": "Пресет агента",
+    "form.agentPresetPlaceholder": "standard (оставьте пустым для значения по умолчанию)",
+    "form.agentPresetHint": "Пресет агента из dsh-agent-presets (например: standard, minimal, cordis, ptc). Монтирует рабочее пространство и инструменты написания кода.",
+    "form.targetSessionIdLabel": "ID постоянной сессии (Target Session ID)",
+    "form.targetSessionIdPlaceholder": "например: audit-chat или dev-summary (пусто = изолированный запуск)",
+    "form.targetSessionIdHint": "Если указан, запланированные запуски возобновляют эту сессию для непрерывности контекста диалога вместо создания новой изолированной сессии.",
+    "form.targetSessionResetLabel": "Ротация контекста сессии",
+    "form.targetSessionResetNever": "Непрерывно (без ротации)",
+    "form.targetSessionResetDaily": "Ежедневная ротация (новая сессия каждый день)",
+    "form.targetSessionResetWeekly": "Еженедельная ротация (новая сессия каждую неделю)",
+    "form.targetSessionResetHint": "Автоматически меняет идентификатор сессии, предотвращая разрастание контекстного окна при долгосрочной работе."
   }
 }

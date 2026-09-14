@@ -160,7 +160,7 @@ card_ru = {
     'cardSub': 'Язык интерфейса, типографика, раскладка',
     'badgeRu': '🟢 RU активен',
     'badgeEn': '⚪ EN активен',
-    'badgeCoverage': '🟢 100% (6,808 ключей)',
+    'badgeCoverage': '🟢 100% (7,149 ключей)',
     'badgeSmartUx': '⚡ Smart UX активен',
     'secLanguage': '🌐 Язык интерфейса',
     'secLanguageDesc': 'Нативное переключение языка интерфейса DSH на русский без перезагрузки страницы.',
@@ -186,7 +186,20 @@ card_ru = {
     'presetExpert': 'Технический эксперт (строгая терминология, чистый код)',
     'presetWriter': 'Технический писатель (Markdown, таблицы, ГОСТ)',
     'presetConcise': 'Лаконичный режим (кратко, без лишней воды)',
-    'secSupport': '📊 Покрытие экосистемы и поддержка',
+        'secUpdater': '🔄 Обновление языкового пакета',
+    'secUpdaterDesc': 'Проверка наличия новых релизов в реестре npm и обновление в один клик.',
+    'updaterCurrent': 'Текущая версия: v{version}',
+    'updaterLatest': 'Доступна новая версия: v{version}',
+    'updaterUpToDate': 'Установлена актуальная версия',
+    'updaterChecking': 'Проверка…',
+    'updaterCheckBtn': 'Проверить обновления',
+    'updaterBtn': 'Обновить до v{version} в 1 клик',
+    'updaterUpdating': 'Установка обновления…',
+    'updaterSuccess': '✅ Плагин успешно обновлён! Перезапустите DSH для применения.',
+    'updaterFailed': '❌ Не удалось проверить/обновить плагин. Проверьте сеть или логи сервера.',
+    'badgeUpdateAvailable': 'Доступно обновление',
+    'badgeUpToDate': 'Актуальная версия',
+'secSupport': '📊 Покрытие экосистемы и поддержка',
     'secSupportDesc': 'Словари синхронизированы с DSH v0.1.5-rc.2. 100.0% UI-покрытие без черновых машинных переводов.',
     'statNamespaces': 'Пространств имён',
     'statCoreKeys': 'Ключей ядра',
@@ -1256,6 +1269,56 @@ window.__ModuleLoader__.load({
       const t = typeof props.t === 'function' ? props.t : ((k) => k)
       const [loading, setLoading] = React.useState(false)
       const [open, setOpen] = React.useState(false)
+      const [upStatus, setUpStatus] = React.useState({
+        currentVersion: '0.2.17',
+        latestVersion: undefined,
+        updateAvailable: false
+      })
+      const [upLoading, setUpLoading] = React.useState(false)
+      const [upMsg, setUpMsg] = React.useState(null)
+
+      const checkUpdate = () => {
+        setUpLoading(true)
+        setUpMsg(null)
+        fetch('/api/dsh-russian-lang/update')
+          .then((r) => r.json())
+          .then((data) => {
+            setUpStatus(data)
+            setUpLoading(false)
+          })
+          .catch(() => {
+            setUpLoading(false)
+            setUpMsg({ type: 'err', text: t('updaterFailed') })
+          })
+      }
+
+      const triggerUpdate = () => {
+        setUpLoading(true)
+        setUpMsg(null)
+        fetch('/api/dsh-russian-lang/update', {
+          method: 'POST',
+          headers: { 'x-dsh-plugin-update': '1' }
+        })
+          .then((r) => r.json())
+          .then((data) => {
+            setUpLoading(false)
+            if (data.restartRequired || data.updatedVersion) {
+              setUpStatus(data)
+              setUpMsg({ type: 'ok', text: t('updaterSuccess') })
+            } else if (data.error) {
+              setUpMsg({ type: 'err', text: data.error })
+            }
+          })
+          .catch(() => {
+            setUpLoading(false)
+            setUpMsg({ type: 'err', text: t('updaterFailed') })
+          })
+      }
+
+      React.useEffect(() => {
+        if (open) checkUpdate()
+      }, [open])
+
 
       return React.createElement('button', {
         type: 'button',
@@ -1596,6 +1659,49 @@ window.__ModuleLoader__.load({
               ) : null
             ),
 
+            // Секция 3.5: One-Click Обновление плагина (DSH Updater Standard)
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secUpdater')),
+                React.createElement('span', { className: 'rl-badge ' + (upStatus.updateAvailable ? 'rl-badge-warn' : 'rl-badge-ok') },
+                  upStatus.updateAvailable ? t('badgeUpdateAvailable') : t('badgeUpToDate'))
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secUpdaterDesc')),
+              React.createElement('div', { className: 'rl-item-card' },
+                React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' } },
+                  React.createElement('div', null,
+                    React.createElement('div', { style: { fontWeight: 600, color: 'var(--dsw-alias-label-primary)' } },
+                      t('updaterCurrent').replace('{version}', upStatus.currentVersion || '0.2.17')),
+                    upStatus.updateAvailable
+                      ? React.createElement('div', { style: { color: 'var(--dsw-alias-color-warning, #eab308)', marginTop: '2px', fontWeight: 500 } },
+                          t('updaterLatest').replace('{version}', upStatus.latestVersion || ''))
+                      : React.createElement('div', { style: { color: 'var(--dsw-alias-label-secondary)', marginTop: '2px' } },
+                          t('updaterUpToDate'))
+                  ),
+                  upStatus.updateAvailable
+                    ? React.createElement('button', {
+                        type: 'button',
+                        className: 'rl-btn rl-btn-primary',
+                        disabled: upLoading,
+                        onClick: triggerUpdate,
+                      }, upLoading ? t('updaterUpdating') : t('updaterBtn').replace('{version}', upStatus.latestVersion || ''))
+                    : React.createElement('button', {
+                        type: 'button',
+                        className: 'rl-btn',
+                        disabled: upLoading,
+                        onClick: checkUpdate,
+                      }, upLoading ? t('updaterChecking') : t('updaterCheckBtn'))
+                ),
+                upMsg ? React.createElement('div', {
+                  style: {
+                    marginTop: '10px', padding: '8px 12px', borderRadius: '8px',
+                    background: upMsg.type === 'ok' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                    color: upMsg.type === 'ok' ? '#16a34a' : '#dc2626', fontSize: '12px', fontWeight: 500
+                  }
+                }, upMsg.text) : null
+              )
+            ),
+
             // Секция 4: Покрытие экосистемы и поддержка
             React.createElement('div', { className: 'rl-section-card' },
               React.createElement('div', { className: 'rl-section-title' },
@@ -1605,7 +1711,7 @@ window.__ModuleLoader__.load({
               React.createElement('div', { className: 'rl-section-desc' }, t('secSupportDesc')),
               React.createElement('div', { className: 'rl-grid-3' },
                 React.createElement('div', { className: 'rl-stat-box' },
-                  React.createElement('div', { className: 'rl-stat-val' }, '99'),
+                  React.createElement('div', { className: 'rl-stat-val' }, '113'),
                   React.createElement('div', { className: 'rl-stat-label' }, t('statNamespaces'))
                 ),
                 React.createElement('div', { className: 'rl-stat-box' },
@@ -1613,7 +1719,7 @@ window.__ModuleLoader__.load({
                   React.createElement('div', { className: 'rl-stat-label' }, t('statCoreKeys'))
                 ),
                 React.createElement('div', { className: 'rl-stat-box' },
-                  React.createElement('div', { className: 'rl-stat-val' }, '5 583'),
+                  React.createElement('div', { className: 'rl-stat-val' }, '5 924'),
                   React.createElement('div', { className: 'rl-stat-label' }, t('statPluginKeys'))
                 )
               ),
