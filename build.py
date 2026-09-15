@@ -625,9 +625,28 @@ window.__ModuleLoader__.load({
       const typoNode = (node, conf) => {
         const before = node.nodeValue
         if (!before || !before.match || (before.match(/[\u0400-\u04FF]/g) || []).length < 3) return
-        if (node.parentElement && node.parentElement.closest('code, pre, a, script, style, textarea, input, select, button, kbd, samp')) return
+        
+        // #198: Exclude code, pre, inputs, AND contenteditable composers
+        if (node.parentElement && node.parentElement.closest('code, pre, a, script, style, textarea, input, select, button, kbd, samp, [contenteditable="true"], [data-composer-input], [role="textbox"]')) return
         if (node.parentElement && node.parentElement.closest('.katex, [data-latex], math')) return
         if (/\$[^$\n]+\$/.test(before)) return
+
+        // #198: Exclude active streaming turns so selection is never destroyed while model streams
+        if (node.parentElement && node.parentElement.closest('[data-chat-flow-status="running"], [data-turn-running], [data-turn-tail], [data-streaming="true"], .dsw-turn-running, [class*="streaming"], [class*="Streaming"]')) {
+          return
+        }
+
+        // #198: Do not mutate node if user currently has an active text selection intersecting it
+        const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+        if (sel && !sel.isCollapsed && sel.rangeCount > 0) {
+          try {
+            const range = sel.getRangeAt(0)
+            if (range.intersectsNode ? range.intersectsNode(node) : (sel.containsNode && sel.containsNode(node, true))) {
+              return
+            }
+          } catch (e) {}
+        }
+
         let after = typoQuotes(before)
         after = typoDash(after)
         after = typoPunct(after)
@@ -669,10 +688,16 @@ window.__ModuleLoader__.load({
           typoWalk(document.body, getTypoConf())
           typoObserver = new MutationObserver((records) => {
             const roots = []
-            for (const record of records) roots.push(record.nodeType ? record.target : record)
-            queueTypo(roots)
+            for (const record of records) {
+              if (record.type === 'childList') {
+                for (const added of record.addedNodes) {
+                  if (added.nodeType === 3 || added.nodeType === 1) roots.push(added)
+                }
+              }
+            }
+            if (roots.length > 0) queueTypo(roots)
           })
-          typoObserver.observe(document.body, { childList: true, characterData: true, subtree: true })
+          typoObserver.observe(document.body, { childList: true, subtree: true })
         } catch (err) { /* ignore */ }
       }
       const unsubscribeTypo = runtime.subscribe(syncTypo)
@@ -760,6 +785,68 @@ window.__ModuleLoader__.load({
         return null
       }
 
+      function getCaretCharacterOffset(root) {
+        if (!root) return -1
+        const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+        if (!sel || !sel.rangeCount) return -1
+        try {
+          const range = sel.getRangeAt(0)
+          if (!root.contains(range.startContainer)) return -1
+          const preCaretRange = range.cloneRange()
+          preCaretRange.selectNodeContents(root)
+          preCaretRange.setEnd(range.startContainer, range.startOffset)
+          return preCaretRange.toString().length
+        } catch (e) {
+          return -1
+        }
+      }
+
+      function setCaretCharacterOffset(root, offset) {
+        if (!root || offset < 0) return
+        const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+        if (!sel) return
+        try {
+          let current = 0
+          let targetNode = null
+          let targetOffset = 0
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null)
+          let node = walker.nextNode()
+          while (node) {
+            const len = node.nodeValue.length
+            if (current + len >= offset) {
+              targetNode = node
+              targetOffset = Math.max(0, offset - current)
+              break
+            }
+            current += len
+            node = walker.nextNode()
+          }
+          if (targetNode) {
+            const range = document.createRange()
+            range.setStart(targetNode, targetOffset)
+            range.collapse(true)
+            sel.removeAllRanges()
+            sel.addRange(range)
+          }
+        } catch (e) {}
+      }
+
+      const isCaretInCode = (el, value, caretOffset) => {
+        if (!el) return false
+        if (caretOffset == null || caretOffset < 0) caretOffset = (value || '').length
+        const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+        if (sel && sel.anchorNode && sel.anchorNode.parentElement) {
+          if (sel.anchorNode.parentElement.closest('code, pre, .katex, [data-latex], math')) return true
+        }
+        const textBefore = (value || '').slice(0, caretOffset)
+        const triple = textBefore.match(/```/g)
+        if (triple && triple.length %% 2 === 1) return true
+        const lastLine = textBefore.split('\n').pop()
+        const single = lastLine.match(/`/g)
+        if (single && single.length %% 2 === 1) return true
+        return false
+      }
+
       const getComposerText = (el) => {
         if (!el) return ''
         if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
@@ -778,15 +865,23 @@ window.__ModuleLoader__.load({
         }
 
         const host = (el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el
-        const apply = () => {
-          try {
-            host.focus()
-            document.execCommand('selectAll', false, null)
-            document.execCommand('insertText', false, value)
-          } catch (e) {}
-        }
-        apply()
-        setTimeout(apply, 15)
+        const initialOffset = typeof cursorStart === 'number' ? cursorStart : getCaretCharacterOffset(host)
+
+        try {
+          host.focus()
+          const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+          if (sel) {
+            const range = document.createRange()
+            range.selectNodeContents(host)
+            sel.removeAllRanges()
+            sel.addRange(range)
+          }
+          document.execCommand('insertText', false, value)
+
+          // Restore caret without delayed setTimeout (#198)
+          const targetOffset = typeof cursorStart === 'number' ? cursorStart : (initialOffset >= 0 ? Math.min(initialOffset, value.length) : value.length)
+          setCaretCharacterOffset(host, targetOffset)
+        } catch (e) {}
       }
 
       const layoutDismiss = () => {
@@ -865,46 +960,8 @@ window.__ModuleLoader__.load({
           layoutBadge(el) // #66: метка раскладки
           const value = getComposerText(el)
 
-          // #158: Живая типографика в поле ввода
-          try {
-            const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
-            const typoLive = snapVal.typography ? snapVal.typography.liveInput !== false : true
-            if (typoLive && value && typeof formatInputLive === 'function') {
-              const formatted = formatInputLive(value)
-              if (formatted !== value) {
-                isFormatting = true
-                try {
-                  const sStart = el.selectionStart
-                  const diff = formatted.length - value.length
-                  const nextPos = typeof sStart === 'number' ? Math.max(0, sStart + diff) : undefined
-                  setComposerText(el, formatted, nextPos, nextPos)
-                } finally {
-                  isFormatting = false
-                }
-              }
-            }
-          } catch (e) { /* ignore */ }
-
-
-          // #158: Русские алиасы слэш-команд при вводе пробела после команды
-          try {
-            const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
-            const allowAliases = snapVal.slashAliases !== false
-            if (allowAliases && value.startsWith('/') && typeof expandSlashAlias === 'function') {
-              const expanded = expandSlashAlias(value)
-              if (expanded !== value) {
-                isFormatting = true
-                try {
-                  const sStart = el.selectionStart
-                  const diff = expanded.length - value.length
-                  const nextPos = typeof sStart === 'number' ? Math.max(0, sStart + diff) : undefined
-                  setComposerText(el, expanded, nextPos, nextPos)
-                } finally {
-                  isFormatting = false
-                }
-              }
-            }
-          } catch (e) { /* ignore */ }
+          // #198: Больше НИКАКИХ перезаписей всего документа в input event!
+          // Живая типографика выполняется локально у каретки в keydown.
 
           if (value.trim().length < 4) { layoutDismiss(); return }
           // lat2cyr: если есть латиница и почти нет кириллицы
@@ -933,12 +990,45 @@ window.__ModuleLoader__.load({
         // Alt+L (клавиша KeyL, Latin 'l' или русская 'д'): ручной конверт текущего инпута
         const isL = ev.code === 'KeyL' || ev.key.toLowerCase() === 'l' || ev.key.toLowerCase() === 'д'
         if (ev.altKey && !ev.ctrlKey && !ev.metaKey && isL) {
+          const sel = typeof window !== 'undefined' && window.getSelection && window.getSelection()
+          const selectedText = (sel && !sel.isCollapsed) ? sel.toString() : ''
+
+          if (selectedText) {
+            const c = layoutFixCandidate(selectedText, 'lat2cyr') || layoutFixCandidate(selectedText, 'cyr2lat')
+            if (c) {
+              ev.preventDefault()
+              isFormatting = true
+              try {
+                if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+                  const sStart = el.selectionStart || 0
+                  const sEnd = el.selectionEnd || sStart
+                  const nextVal = value.slice(0, sStart) + c.converted + value.slice(sEnd)
+                  setNativeInputValue(el, nextVal, sStart, sStart + c.converted.length)
+                } else {
+                  document.execCommand('insertText', false, c.converted)
+                }
+                learnWords(c.converted)
+              } finally {
+                isFormatting = false
+              }
+              return
+            }
+          }
+
           const c = layoutFixCandidate(value, 'lat2cyr') || layoutFixCandidate(value, 'cyr2lat')
           if (c) {
             ev.preventDefault()
             isFormatting = true
             try {
-              setComposerText(el, c.converted)
+              if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
+                const sStart = el.selectionStart || 0
+                const sEnd = el.selectionEnd || sStart
+                setNativeInputValue(el, c.converted, sStart, sEnd)
+              } else {
+                const host = (el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el
+                const offset = getCaretCharacterOffset(host)
+                setComposerText(el, c.converted, offset, offset)
+              }
               learnWords(c.converted) // #67
             } finally {
               isFormatting = false
@@ -946,7 +1036,6 @@ window.__ModuleLoader__.load({
           }
           return
         }
-
 
         // #158: Разворачивание русских алиасов слэш-команд (/цель -> /goal)
         if (ev.key === ' ' || ev.key === 'Enter') {
@@ -975,46 +1064,72 @@ window.__ModuleLoader__.load({
           }
         }
 
-        // #158: Мгновенная типографика прямо по нажатию клавиш
+        // #198: Локальная типографика у каретки без перезаписи всего документа
         try {
           const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
           const typoLive = snapVal.typography ? snapVal.typography.liveInput !== false : true
           if (typoLive && !ev.ctrlKey && !ev.altKey && !ev.metaKey) {
-            // 1. Двойной дефис: если нажат '-' и предыдущий символ тоже '-'
-            if (ev.key === '-' && (value.endsWith('-') || /-\s*$/.test(value))) {
-              ev.preventDefault()
-              isFormatting = true
-              try {
-                if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
-                  const sStart = el.selectionStart || value.length
-                  const nextVal = value.slice(0, sStart).replace(/-$/, '—') + value.slice(sStart)
-                  setNativeInputValue(el, nextVal, sStart, sStart)
-                } else {
-                  document.execCommand('delete', false, null)
-                  document.execCommand('insertText', false, '—')
+            const isTextarea = el.tagName === 'TEXTAREA' || el.tagName === 'INPUT'
+            const host = isTextarea ? el : ((el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el)
+            const caretPos = isTextarea ? (el.selectionStart || 0) : getCaretCharacterOffset(host)
+
+            if (!isCaretInCode(el, value, caretPos)) {
+              const textBefore = caretPos >= 0 ? value.slice(0, caretPos) : value
+
+              // 1. Двойной дефис: если нажат '-' и предыдущий символ перед кареткой '-'
+              if (ev.key === '-' && textBefore.endsWith('-')) {
+                ev.preventDefault()
+                isFormatting = true
+                try {
+                  if (isTextarea) {
+                    const nextVal = value.slice(0, caretPos - 1) + '—' + value.slice(el.selectionEnd || caretPos)
+                    setNativeInputValue(el, nextVal, caretPos, caretPos)
+                  } else {
+                    document.execCommand('delete', false, null)
+                    document.execCommand('insertText', false, '—')
+                  }
+                } finally {
+                  isFormatting = false
                 }
-              } finally {
-                isFormatting = false
+                return
               }
-              return
-            }
-            // 3. Кавычки-ёлочки: если нажата клавиша '"'
-            if (ev.key === '"') {
-              ev.preventDefault()
-              isFormatting = true
-              try {
-                const lastChar = value.slice(-1)
-                if (lastChar === '«') {
-                  setComposerText(el, value + '»', value.length + 1, value.length + 1)
-                } else {
-                  const isOpening = !value || /[\s([{-]/.test(lastChar)
+
+              // 2. Кавычки-ёлочки: если нажата клавиша '"'
+              if (ev.key === '"') {
+                ev.preventDefault()
+                isFormatting = true
+                try {
+                  const prevChar = textBefore.slice(-1)
+                  const isOpening = !textBefore || /[\s([{-]/.test(prevChar)
                   const quoteChar = isOpening ? '«' : '»'
-                  setComposerText(el, value + quoteChar, value.length + 1, value.length + 1)
+                  if (isTextarea) {
+                    const nextVal = value.slice(0, caretPos) + quoteChar + value.slice(el.selectionEnd || caretPos)
+                    setNativeInputValue(el, nextVal, caretPos + 1, caretPos + 1)
+                  } else {
+                    document.execCommand('insertText', false, quoteChar)
+                  }
+                } finally {
+                  isFormatting = false
                 }
-              } finally {
-                isFormatting = false
+                return
               }
-              return
+
+              // 3. Неразрывный пробел (NBSP) после коротких предлогов/союзов
+              if (ev.key === ' ' && /(?:^|[\s([{-])([а-яёА-ЯЁ]{1,2})$/u.test(textBefore)) {
+                ev.preventDefault()
+                isFormatting = true
+                try {
+                  if (isTextarea) {
+                    const nextVal = value.slice(0, caretPos) + '\u00A0' + value.slice(el.selectionEnd || caretPos)
+                    setNativeInputValue(el, nextVal, caretPos + 1, caretPos + 1)
+                  } else {
+                    document.execCommand('insertText', false, '\u00A0')
+                  }
+                } finally {
+                  isFormatting = false
+                }
+                return
+              }
             }
           }
         } catch (e) {}
