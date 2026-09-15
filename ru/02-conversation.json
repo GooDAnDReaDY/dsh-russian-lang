@@ -260,7 +260,11 @@
     "input.send.steer": "Направить сообщение",
     "queue.file": "Файл в очереди: {name}",
     "queue.sending": "Отправка…",
-    "tool.title.readImage": "Просмотр изображения"
+    "tool.title.readImage": "Просмотр изображения",
+    "input.file": "Файл",
+    "tool.autoReviewRejected": "Отклонено автопроверкой",
+    "tool.autoReviewNotExecuted": "Инструмент не был выполнен. Причина: {reason}",
+    "tool.autoReviewReasonFallback": "Автопроверка не разрешила это действие"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -379,7 +383,8 @@
     "stats.dialog.title": "Статистика сессии",
     "stats.dialog.toolTime": "Время инструментов",
     "stats.dialog.ttft": "Среднее время до первого токена (TTFT)",
-    "stats.dialog.usageTitle": "Использование токенов"
+    "stats.dialog.usageTitle": "Использование токенов",
+    "duration.hours": "{hours} ч {minutes} мин {seconds} с"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
@@ -823,7 +828,14 @@
     "usage.thisRequest": "This request",
     "usage.tokens": "Токены",
     "view.trajectory": "Trajectory",
-    "layout.fileAttachments": "Файлы ×{count}"
+    "layout.fileAttachments": "Файлы ×{count}",
+    "code.copyOutput": "Скопировать вывод",
+    "code.copySource": "Скопировать код",
+    "code.originalJson": "Оригинальный JSON",
+    "code.output": "Вывод",
+    "code.running": "Выполняется…",
+    "code.source": "Код",
+    "record.wrapLines": "Переносить строки"
   },
   "slash.menu": {
     "crumbs.aria": "Навигация по папкам",
