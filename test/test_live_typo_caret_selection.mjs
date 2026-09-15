@@ -64,23 +64,25 @@ test('Issue #198: layoutOnInput не перезаписывает весь compo
   )
 })
 
-test('Issue #198: layoutOnKeydown содержит локальную замену тире, кавычек и NBSP у каретки', () => {
+test('Issue #198 / #202: layoutOnKeydown защищает contenteditable от перехвата ввода и сброса каретки', () => {
   const keydownIdx = clientCode.indexOf('const layoutOnKeydown = (ev) => {')
   assert.ok(keydownIdx !== -1, 'layoutOnKeydown найден')
   const effectIdx = clientCode.indexOf('ctx.effect(() => {', keydownIdx)
   const keydownBody = clientCode.slice(keydownIdx, effectIdx)
 
-  // Замена двойного дефиса на тире
+  // #202: Защита contenteditable - живая замена допустима ТОЛЬКО в нативных textarea/input
+  assert.ok(keydownBody.includes('if (isTextarea)'), 'подстановка строго ограничена нативными полями ввода')
+  assert.ok(!keydownBody.includes("document.execCommand('insertText', false, '\\u00A0')"), 'запрещен execCommand NBSP в contenteditable')
+  assert.ok(!keydownBody.includes("document.execCommand('insertText', false, quoteChar)"), 'запрещен execCommand кавычек в contenteditable')
+  assert.ok(!keydownBody.includes("document.execCommand('insertText', false, '—')"), 'запрещен execCommand тире в contenteditable')
+
+  // Замена двойного дефиса на тире в нативных textarea
   assert.ok(keydownBody.includes("ev.key === '-'"), 'обработка дефиса')
   assert.ok(keydownBody.includes("'—'"), 'вставка длинного тире')
 
-  // Замена кавычек на елочки
-  assert.ok(keydownBody.includes("ev.key === '\"'"), 'обработка кавычек')
+  // Замена кавычек на елочки в нативных textarea
+  assert.ok(keydownBody.includes('ev.key === \'"\''), 'обработка кавычек')
   assert.ok(keydownBody.includes("'«'") && keydownBody.includes("'»'"), 'кавычки-елочки')
-
-  // Неразрывный пробел
-  assert.ok(keydownBody.includes("ev.key === ' '"), 'обработка пробела')
-  assert.ok(keydownBody.includes('\\u00A0'), 'вставка неразрывного пробела')
 
   // Защита блоков кода
   assert.ok(keydownBody.includes('isCaretInCode'), 'проверка каретки внутри блоков кода')

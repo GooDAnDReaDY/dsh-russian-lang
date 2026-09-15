@@ -1064,71 +1064,52 @@ window.__ModuleLoader__.load({
           }
         }
 
-        // #198: Локальная типографика у каретки без перезаписи всего документа
+        // #198 / #202: Защита ввода в Lexical composer и нативных полях
         try {
           const snapVal = scope ? (scope.getSnapshot().value || {}) : {}
           const typoLive = snapVal.typography ? snapVal.typography.liveInput !== false : true
           if (typoLive && !ev.ctrlKey && !ev.altKey && !ev.metaKey) {
             const isTextarea = el.tagName === 'TEXTAREA' || el.tagName === 'INPUT'
-            const host = isTextarea ? el : ((el.closest && el.closest('[data-composer-input], [contenteditable="true"]')) || el)
-            const caretPos = isTextarea ? (el.selectionStart || 0) : getCaretCharacterOffset(host)
 
-            if (!isCaretInCode(el, value, caretPos)) {
-              const textBefore = caretPos >= 0 ? value.slice(0, caretPos) : value
+            // #202: В contenteditable (Lexical composer) КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО
+            // перехватывать нажатия клавиш клавиатуры (особенно Пробел!) и вызывать
+            // неконтролируемый document.execCommand во время keydown.
+            // Любая прямая мутация DOM ломает AST Lexical, вызывает сброс каретки
+            // в позицию 0, блокирует ввод пробелов и заставляет текст печататься задом наперёд.
+            // Живая подстановка символов у каретки допустима ТОЛЬКО в нативных textarea/input!
+            if (isTextarea) {
+              const caretPos = el.selectionStart || 0
+              if (!isCaretInCode(el, value, caretPos)) {
+                const textBefore = caretPos >= 0 ? value.slice(0, caretPos) : value
 
-              // 1. Двойной дефис: если нажат '-' и предыдущий символ перед кареткой '-'
-              if (ev.key === '-' && textBefore.endsWith('-')) {
-                ev.preventDefault()
-                isFormatting = true
-                try {
-                  if (isTextarea) {
+                // 1. Двойной дефис: если нажат '-' и предыдущий символ перед кареткой '-'
+                if (ev.key === '-' && textBefore.endsWith('-')) {
+                  ev.preventDefault()
+                  isFormatting = true
+                  try {
                     const nextVal = value.slice(0, caretPos - 1) + '—' + value.slice(el.selectionEnd || caretPos)
                     setNativeInputValue(el, nextVal, caretPos, caretPos)
-                  } else {
-                    document.execCommand('delete', false, null)
-                    document.execCommand('insertText', false, '—')
+                  } finally {
+                    isFormatting = false
                   }
-                } finally {
-                  isFormatting = false
+                  return
                 }
-                return
-              }
 
-              // 2. Кавычки-ёлочки: если нажата клавиша '"'
-              if (ev.key === '"') {
-                ev.preventDefault()
-                isFormatting = true
-                try {
-                  const prevChar = textBefore.slice(-1)
-                  const isOpening = !textBefore || /[\s([{-]/.test(prevChar)
-                  const quoteChar = isOpening ? '«' : '»'
-                  if (isTextarea) {
+                // 2. Кавычки-ёлочки: если нажата клавиша '"'
+                if (ev.key === '"') {
+                  ev.preventDefault()
+                  isFormatting = true
+                  try {
+                    const prevChar = textBefore.slice(-1)
+                    const isOpening = !textBefore || /[\s([{-]/.test(prevChar)
+                    const quoteChar = isOpening ? '«' : '»'
                     const nextVal = value.slice(0, caretPos) + quoteChar + value.slice(el.selectionEnd || caretPos)
                     setNativeInputValue(el, nextVal, caretPos + 1, caretPos + 1)
-                  } else {
-                    document.execCommand('insertText', false, quoteChar)
+                  } finally {
+                    isFormatting = false
                   }
-                } finally {
-                  isFormatting = false
+                  return
                 }
-                return
-              }
-
-              // 3. Неразрывный пробел (NBSP) после коротких предлогов/союзов
-              if (ev.key === ' ' && /(?:^|[\s([{-])([а-яёА-ЯЁ]{1,2})$/u.test(textBefore)) {
-                ev.preventDefault()
-                isFormatting = true
-                try {
-                  if (isTextarea) {
-                    const nextVal = value.slice(0, caretPos) + '\u00A0' + value.slice(el.selectionEnd || caretPos)
-                    setNativeInputValue(el, nextVal, caretPos + 1, caretPos + 1)
-                  } else {
-                    document.execCommand('insertText', false, '\u00A0')
-                  }
-                } finally {
-                  isFormatting = false
-                }
-                return
               }
             }
           }
