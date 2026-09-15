@@ -1385,7 +1385,7 @@ window.__ModuleLoader__.load({
       const [loading, setLoading] = React.useState(false)
       const [open, setOpen] = React.useState(false)
       const [upStatus, setUpStatus] = React.useState({
-        currentVersion: '0.2.17',
+        currentVersion: '__PKG_VERSION__',
         latestVersion: undefined,
         updateAvailable: false
       })
@@ -1786,7 +1786,7 @@ window.__ModuleLoader__.load({
                 React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' } },
                   React.createElement('div', null,
                     React.createElement('div', { style: { fontWeight: 600, color: 'var(--dsw-alias-label-primary)' } },
-                      t('updaterCurrent').replace('{version}', upStatus.currentVersion || '0.2.17')),
+                      t('updaterCurrent').replace('{version}', upStatus.currentVersion || '__PKG_VERSION__')),
                     upStatus.updateAvailable
                       ? React.createElement('div', { style: { color: 'var(--dsw-alias-color-warning, #eab308)', marginTop: '2px', fontWeight: 500 } },
                           t('updaterLatest').replace('{version}', upStatus.latestVersion || ''))

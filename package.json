@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.2.17",
-  "description": "Russian localization for DeepSeek Harness (DSH v0.1.5-rc.2+) web UI: adds Русский as the native language option in Settings - General - Language. 100.0% coverage across 7,149 keys (1,225 core UI keys + 5,924 keys across 45+ ecosystem plugins) with zero machine drafts. Features unified dsh-clinebot visual design standard for Settings Card, official One-click plugin updater (/api/dsh-russian-lang/update), full translations for updated ecosystem plugins (dsh-lanmode, dsh-moa, dsh-gitea, dsh-issue-reporter, dsh-messenger-gateway, dsh-usage-guard, dsh-cron, dsh-model-search, dsh-agent-orchestrator, dsh-model-sync, Live Canvas, dsh-goal, Skills Manager, Shadow Auditor, Kanban Epics, Key Rotation, Remote Workspace, Cost Meter, Vision Bridge, Time Machine), Smart Russian UX (localized Markdown export, turn translation, live typography, slash command aliases, Alt+L layout fix), expanded error humanizer (POSIX, HTTP 4xx/5xx), and runtime snapshot extension without modifying core files.",
+  "version": "0.2.18",
+  "description": "Russian localization for DeepSeek Harness (DSH v0.1.5-rc.2+) web UI: adds Русский as native language option. 100.0% coverage across 10,542 keys (116 namespaces). Features hotfix for live typography (issue #198: zero caret jump on contenteditable, native undo, streaming selection preservation), unified dsh-clinebot visual design, One-click plugin updater (/api/dsh-russian-lang/update) with safe Cordis 4 webServer injection, companion plugins, Markdown export, and Alt+L layout corrector.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
