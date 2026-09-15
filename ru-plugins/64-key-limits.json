@@ -1,0 +1,27 @@
+{
+  "dsh-key-limits": {
+    "accountOrder": "Очерёдность аккаунтов",
+    "activeOnTop": "Активный аккаунт всегда сверху",
+    "checkForUpdates": "Проверить обновления",
+    "checkingUpdates": "Проверка…",
+    "checkUpdateFailed": "Не удалось проверить обновления",
+    "composerBar": "Кнопка в строке ввода",
+    "floatChip": "Плавающий чип",
+    "moveDown": "Вниз",
+    "moveUp": "Вверх",
+    "refreshHours": "Интервал обновления (ч)",
+    "saved": "Сохранено",
+    "storageDir": "Директория хранилища",
+    "totalAccounts": "Всего аккаунтов",
+    "updateAvailable": "Доступно обновление: ",
+    "updateFailed": "Ошибка обновления: ",
+    "updateNow": "Обновить сейчас",
+    "updaterCurrent": "Текущая версия: v{version}",
+    "updaterLatest": "Новая версия: v{version}",
+    "updaterUpToDate": "Установлена актуальная версия",
+    "updating": "Обновление…",
+    "restartRequired": " (требуется перезапуск)",
+    "upToDate": "Актуальная версия",
+    "updateSuccess": "Обновлено до "
+  }
+}
