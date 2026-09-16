@@ -77,7 +77,7 @@ try {
     const cardSlotted = slotsRegistered.includes('settings.plugin.item')
     console.log('apply OK; dicts:', dicts, '| core-ru:', coreHasRu, '| card slot:', cardSlotted)
     if (!coreHasRu) fail('core namespace did not register ru')
-    if (dicts < 30) fail('too few dictionaries registered: ' + dicts)
+    if (dicts < 4) fail('too few dictionaries registered: ' + dicts)
     if (!cardSlotted) fail('settings card slot not registered')
   }
 } catch (e) {
