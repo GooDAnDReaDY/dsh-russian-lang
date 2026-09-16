@@ -1,7 +1,7 @@
 {
   "dsh-key-limits": {
-    "accountOrder": "Очерёдность аккаунтов",
-    "activeOnTop": "Активный аккаунт всегда сверху",
+    "accountOrder": "Порядок аккаунтов",
+    "activeOnTop": "Активный всегда сверху",
     "checkForUpdates": "Проверить обновления",
     "checkingUpdates": "Проверка…",
     "checkUpdateFailed": "Не удалось проверить обновления",
@@ -11,7 +11,7 @@
     "moveUp": "Вверх",
     "refreshHours": "Интервал обновления (ч)",
     "saved": "Сохранено",
-    "storageDir": "Директория хранилища",
+    "storageDir": "Каталог данных",
     "totalAccounts": "Всего аккаунтов",
     "updateAvailable": "Доступно обновление: ",
     "updateFailed": "Ошибка обновления: ",
@@ -21,7 +21,14 @@
     "updaterUpToDate": "Установлена актуальная версия",
     "updating": "Обновление…",
     "restartRequired": " (требуется перезапуск)",
-    "upToDate": "Актуальная версия",
-    "updateSuccess": "Обновлено до "
+    "upToDate": "Установлена последняя версия",
+    "updateSuccess": "Успешно обновлено до ",
+    "uiHint": "Float chip и кнопка в строке ввода — cordis ui.*",
+    "dataPath": "Данные: ~/.dsh/storages/dsh-key-limits/",
+    "errTitle": "Key Limits: ошибка UI",
+    "retry": "Повторить",
+    "balance": "Баланс",
+    "remaining": "остаток",
+    "pickDash": "— выбрать —"
   }
 }

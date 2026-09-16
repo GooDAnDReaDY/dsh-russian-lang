@@ -35,27 +35,44 @@ else:
     print('ПРЕДУПРЕЖДЕНИЕ: self-ru.json нет, используется резервный список '
           '(обновите: python3 tools/self_ru_scan.py <профиль>/node_modules --out self-ru.json)')
     SELF_RU = SELF_RU_FALLBACK
-merged = {}
-sources = (sorted(glob.glob(os.path.join(HERE, 'ru', '*.json')))
-           + sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json'))))
-for path in sources:
+core_dict = {}
+for path in sorted(glob.glob(os.path.join(HERE, 'ru', '*.json'))):
     part = json.load(open(path, encoding='utf-8'))
     for ns, entries in part.items():
         if ns in SELF_RU:
             continue
-        merged.setdefault(ns, {}).update(entries)
+        core_dict.setdefault(ns, {}).update(entries)
 
 mt_path = os.path.join(HERE, 'mt-registry.json')
-if os.path.exists(mt_path):
-    mt = json.load(open(mt_path, encoding='utf-8'))
-    for ns, entries in mt.items():
+mt = json.load(open(mt_path, encoding='utf-8')) if os.path.exists(mt_path) else {}
+for ns, entries in mt.items():
+    if ns in SELF_RU or ns not in core_dict:
+        continue
+    for key, rec in entries.items():
+        if key not in core_dict.get(ns, {}):
+            core_dict[ns][key] = rec.get('ru', '')
+
+payload = json.dumps(core_dict, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+
+# Сборка отдельных словарей плагинов в lib/locales/plugins/*.json
+locales_dir = os.path.join(HERE, 'lib', 'locales', 'plugins')
+os.makedirs(locales_dir, exist_ok=True)
+plugin_sources = sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json')))
+for path in plugin_sources:
+    part = json.load(open(path, encoding='utf-8'))
+    filtered = {}
+    for ns, entries in part.items():
         if ns in SELF_RU:
             continue
-        for key, rec in entries.items():
-            if key not in merged.get(ns, {}):
-                merged.setdefault(ns, {})[key] = rec.get('ru', '')
-
-payload = json.dumps(merged, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+        filtered[ns] = dict(entries)
+        if ns in mt:
+            for key, rec in mt[ns].items():
+                if key not in filtered[ns]:
+                    filtered[ns][key] = rec.get('ru', '')
+    base = os.path.basename(path)
+    out_file = os.path.join(locales_dir, base)
+    with open(out_file, 'w', encoding='utf-8', newline='\n') as f:
+        json.dump(filtered, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
 
 # Карта zh->ru для DOM-перевода панелей, игнорирующих locale-ядро (например
 # dsh-skill-hub выбирает свой словарь по documentElement.lang и умеет только
@@ -82,14 +99,19 @@ for ref_path in sorted(glob.glob(os.path.join(HERE, 'zh-refs', '*.json'))):
         ru_text = ru_entries.get(key)
         if isinstance(ru_text, str) and ru_text:
             zh_ru[zh_text] = ru_text
-zh_ru_json = json.dumps(zh_ru, ensure_ascii=False, sort_keys=True)
+zh_ru_file = os.path.join(HERE, 'lib', 'locales', 'zh-ru.json')
+os.makedirs(os.path.dirname(zh_ru_file), exist_ok=True)
+with open(zh_ru_file, 'w', encoding='utf-8', newline='\n') as f:
+    json.dump(zh_ru, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+zh_ru_json = "{}" 
 print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 
 # Частотный словарь для фикса раскладки (tools/ru-freq.json). Обновляется
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_json = json.dumps(freq_words, ensure_ascii=False)
+freq_bundle = freq_words[:1200]
+freq_json = json.dumps(freq_bundle, ensure_ascii=False)
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
 # «еще -> ещё», плюс ручной список ниже. yo по умолчанию выключен.
@@ -250,14 +272,35 @@ window.__ModuleLoader__.load({
       const runtime = ctx.locale
       const scope = ctx.settingsScope.bind({ namespace: SETTINGS_NS_NAME })
 
-      // 1. Словари: каждый namespace — свой эффект, словарь снимается вместе с
-      // плагином. Если namespace уже несёт ru (плагин локализовался сам) —
-      // не конфликтуем.
+      // 1. Словари ядра DSH: каждый namespace — свой эффект, снимается вместе с плагином
       for (const ns of Object.keys(RU)) {
         ctx.effect(() => {
           try { return ctx.locale.register(ns, 'ru', RU[ns]) }
           catch (err) { return () => {} }
         }, 'dsh-russian-lang: ' + ns)
+      }
+
+      // 1a. Асинхронная подгрузка словарей плагинов и zh-ru карты из хоста
+      if (typeof fetch === 'function') {
+        fetch('/api/dsh-russian-lang/dict/all', { headers: { 'Accept': 'application/json' } })
+          .then((res) => res.ok ? res.json() : null)
+          .then((data) => {
+            if (!data) return
+            const pluginDicts = data.plugins || data
+            if (data.zhRu && typeof ZH_RU === 'object') {
+              Object.assign(ZH_RU, data.zhRu)
+              if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
+            }
+            for (const ns of Object.keys(pluginDicts)) {
+              if (ns === 'zhRu' || ns === 'plugins' || RU[ns]) continue
+              RU[ns] = pluginDicts[ns]
+              ctx.effect(() => {
+                try { return ctx.locale.register(ns, 'ru', pluginDicts[ns]) }
+                catch (err) { return () => {} }
+              }, 'dsh-russian-lang: ' + ns)
+            }
+          })
+          .catch(() => {})
       }
 
       // 1b. Пользовательские переопределения + плюрализация.
@@ -495,17 +538,34 @@ window.__ModuleLoader__.load({
       const ZH_RE_ESC = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const ZH_EXACT = new Map()
       const ZH_PATTERNS = []
-      for (const [zhText, ruText] of Object.entries(ZH_RU)) {
-        if (typeof zhText !== 'string' || !ZH_CJK.test(zhText) || !ruText) continue
-        if (/\{[a-zA-Z_]\w*\}/.test(zhText)) {
-          const parts = zhText.split(/\{[a-zA-Z_]\w*\}/g)
-          if (parts.some((p) => p.length === 0)) continue // якорь на соседние {} ненадёжен
-          ZH_PATTERNS.push({ re: new RegExp(parts.map(ZH_RE_ESC).join('([\\s\\S]*?)')), ruParts: ruText.split(/\{[a-zA-Z_]\w*\}/g) })
-        } else {
-          ZH_EXACT.set(zhText, ruText)
-        }
+
+      // Встроенные переводы настроек и пресетов ядра / плагинов
+      const CORE_ZH_PRESETS = {
+        '请求批准': 'Запрашивать подтверждение',
+        '完全放开': 'Полный доступ',
+        '只读': 'Только чтение',
+        '只能读，任何写入都需要审批。': 'Только чтение, любая запись требует подтверждения.',
+        '工作区内可写；工作区外的操作请求人工审批。': 'Запись в рабочей области разрешена; операции вне рабочей области требуют подтверждения.',
+        '全放行，不弹审批。': 'Полный доступ, запросы на подтверждение не выводятся.',
+        '确定性规则 + 两阶段分类器自动决定；危险或故障时 fail-closed。': 'Детерминированные правила + двухэтапный классификатор; при рисках — безопасная блокировка.'
       }
-      ZH_PATTERNS.sort((a, b) => b.re.source.length - a.re.source.length)
+      for (const [k, v] of Object.entries(CORE_ZH_PRESETS)) ZH_EXACT.set(k, v)
+
+      const updateZhRu = (entries) => {
+        if (!entries || typeof entries !== 'object') return
+        for (const [zhText, ruText] of Object.entries(entries)) {
+          if (typeof zhText !== 'string' || !ZH_CJK.test(zhText) || !ruText) continue
+          if (/\{[a-zA-Z_]\w*\}/.test(zhText)) {
+            const parts = zhText.split(/\{[a-zA-Z_]\w*\}/g)
+            if (parts.some((p) => p.length === 0)) continue
+            ZH_PATTERNS.push({ re: new RegExp(parts.map(ZH_RE_ESC).join('([\\s\\S]*?)')), ruParts: ruText.split(/\{[a-zA-Z_]\w*\}/g) })
+          } else {
+            ZH_EXACT.set(zhText, ruText)
+          }
+        }
+        ZH_PATTERNS.sort((a, b) => b.re.source.length - a.re.source.length)
+      }
+      updateZhRu(ZH_RU)
       const zhTranslateText = (text) => {
         if (!ZH_CJK.test(text)) return null
         const exact = ZH_EXACT.get(text)
@@ -532,7 +592,10 @@ window.__ModuleLoader__.load({
         'Effort': 'Рассуждения',
         'Search engine (ModSearch)': 'Поисковая система (ModSearch)',
         'Search engine provider configuration.': 'Настройка провайдера поисковой системы.',
-        'X search only': 'Только поиск в X'
+        'X search only': 'Только поиск в X',
+        'Auto mode': 'Автоматический режим',
+        'Full access': 'Полный доступ',
+        'Read only': 'Только чтение'
       }
       const ZH_WALKER = (root) => {
         try {
@@ -545,7 +608,7 @@ window.__ModuleLoader__.load({
               const trimmed = node.nodeValue.trim()
               if (DOM_EN_TEXT[trimmed]) {
                 const p = node.parentElement
-                if (p && (p.closest('[class*="effort"], [class*="slider"], [class*="reasoning"]') || p.getAttribute('role') === 'option')) {
+                if (p && (p.closest('[class*="effort"], [class*="slider"], [class*="reasoning"], [class*="selector"], [class*="Menu"], [class*="menu"], [role="menu"]') || p.getAttribute('role') === 'option' || p.getAttribute('role') === 'menuitem')) {
                   node.nodeValue = node.nodeValue.replace(trimmed, DOM_EN_TEXT[trimmed])
                 }
               }
@@ -1587,13 +1650,21 @@ window.__ModuleLoader__.load({
         ? ''
         : (status === 'unavailable' ? t('statusUnavailable') : t('statusLoading'))
 
-      const Chevron = () => React.createElement('svg', {
+      let ChevronIcon = null
+      try {
+        const primitives = require('@deepseek-ai/dsh-client-ui-primitives')
+        ChevronIcon = primitives && primitives.IconChevronDownOutline14
+      } catch (_) { ChevronIcon = null }
+
+      const FallbackChevron = () => React.createElement('svg', {
         width: 14, height: 14, viewBox: '0 0 14 14', fill: 'none',
         'aria-hidden': 'true',
       }, React.createElement('path', {
         d: 'M3.5 5.25 7 8.75l3.5-3.5', stroke: 'currentColor',
         strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
       }))
+
+      const Chevron = ChevronIcon || FallbackChevron
 
       const presetKey = value.agentPromptPreset || 'technical_expert'
       const presetInfo = typeof SYSTEM_PROMPT_PRESETS !== 'undefined' ? SYSTEM_PROMPT_PRESETS[presetKey] : null
@@ -1891,8 +1962,11 @@ window.__ModuleLoader__.load({
       '.rl-export-md-btn{appearance:none;border:1px solid var(--dsw-alias-border-l2);height:32px;color:var(--dsw-alias-label-primary);cursor:pointer;background:transparent;border-radius:18px;justify-content:center;align-items:center;gap:4px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;white-space:nowrap;margin-left:6px;transition:all .15s ease}',
       '.rl-export-md-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}',
     ].join('\n')
-    if (typeof document !== 'undefined' && !document.querySelector('style[data-plugin-css="rl-card"]')) {
+    const STYLE_ID = 'dsh-russian-lang-styles'
+    if (typeof document !== 'undefined' && (document.getElementById && !document.getElementById(STYLE_ID))) {
       const tag = document.createElement('style')
+      tag.id = STYLE_ID
+      tag.dataset.dshPlugin = 'dsh-russian-lang'
       tag.dataset.plugin = '@goodandready/dsh-russian-lang'
       tag.dataset.pluginCss = 'rl-card'
       tag.textContent = RL_CSS
@@ -1922,8 +1996,29 @@ client = client.replace('__PKG_VERSION__', pkg['version'])
 # Перевод строки задаём явно: в текстовом режиме Windows пишет CRLF, Linux —
 # LF, и один и тот же исходник даёт разные байты бандла. Сверка собранного
 # файла с закоммиченным (CI, #134) от этого становится нестабильной.
+# Очистка однострочных комментариев для компактности production-бандла
+lines = client.split('\n')
+cleaned_lines = []
+for l in lines:
+    s = l.strip()
+    if s.startswith('//') and not s.startswith('//__PURE_JS__'):
+        continue
+    cleaned_lines.append(l)
+client = '\n'.join(cleaned_lines)
+
 with open(os.path.join(HERE, 'lib', 'client.js'), 'w',
           encoding='utf-8', newline='\n') as fh:
     fh.write(client)
-print('namespace-ов: %d, ключей: %d -> lib/client.js'
-      % (len(merged), sum(len(v) for v in merged.values())))
+print('Core namespace-ов: %d, ключей: %d -> lib/client.js'
+      % (len(core_dict), sum(len(v) for v in core_dict.values())))
+
+# Валидация размера файлов пакета по стандарту DSH Store (262144 байта / 256 KiB)
+MAX_FILE_BYTES = 262144
+for root, _, files in os.walk(os.path.join(HERE, 'lib')):
+    for f in files:
+        fpath = os.path.join(root, f)
+        sz = os.path.getsize(fpath)
+        rel = os.path.relpath(fpath, HERE)
+        if sz > MAX_FILE_BYTES:
+            raise SystemExit(f"BLOCKED: {rel} size is {sz} bytes (> {MAX_FILE_BYTES})")
+print('Проверка лимита размера DSH Store: все файлы в lib/ меньше 256 KiB — OK')

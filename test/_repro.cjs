@@ -13,7 +13,7 @@ const fail = (msg) => {
 try {
   global.window = { __ModuleLoader__: { load(def) { global.__DEF__ = def } } }
   global.document = {
-    querySelector: () => null,
+    querySelector: () => null, getElementById: () => null,
     createElement: () => ({ style: {}, dataset: {}, setAttribute() {}, appendChild() {} }),
     head: { appendChild() {} },
     addEventListener() {}, removeEventListener() {},

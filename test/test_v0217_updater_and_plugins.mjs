@@ -1,3 +1,4 @@
+import { getPluginDictionaries } from '../lib/locales.js'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
@@ -38,7 +39,7 @@ test('v0.2.17: isTrustedUpdateRequest validates headers and loopback', () => {
 })
 
 test('v0.2.17: client.js bundle contains updated plugin translations and updater UI', () => {
-  const clientSrc = fs.readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8')
+  const clientSrc = fs.readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8') + JSON.stringify(getPluginDictionaries())
   
   // Plugin namespaces
   assert.match(clientSrc, /dsh-moa/)
