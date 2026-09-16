@@ -206,6 +206,9 @@
     "messengerNotInstalledTitle": "Required plugin @goodandready/dsh-messenger-gateway is not installed",
     "messengerInstallHint": "To enable voice replies in messengers, install the plugin with",
     "messengerTtsEnabled": "Voice replies in messengers",
-    "messengerTtsEnabledHint": "Allow the messenger gateway to deliver replies as voice notes."
+    "messengerTtsEnabledHint": "Allow the messenger gateway to deliver replies as voice notes.",
+    "exportJson": "📥 Экспорт JSON",
+    "importJson": "📤 Импорт JSON",
+    "invalidJsonFormat": "Неверный формат JSON словаря"
   }
 }

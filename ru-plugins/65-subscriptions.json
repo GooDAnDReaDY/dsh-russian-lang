@@ -174,12 +174,12 @@
     "instructionsTitle": "How to obtain token",
     "reconnectRequired": "Reconnect required",
     "manualTitle": "If the browser did not come back",
-    "updateChecking": "Checking updates…",
-    "updateUpToDate": "Up to date",
-    "updateAvailable": "Update available",
-    "updateNow": "Update",
-    "updating": "Updating…",
-    "updateSuccessRestart": "Update complete. Restarting service…",
-    "updateFailed": "Update failed"
+    "updateChecking": "Проверка обновлений…",
+    "updateUpToDate": "Актуальная версия",
+    "updateAvailable": "Доступно обновление",
+    "updateNow": "Обновить",
+    "updating": "Обновление…",
+    "updateSuccessRestart": "Обновление завершено. Перезапуск службы…",
+    "updateFailed": "Ошибка обновления"
   }
 }

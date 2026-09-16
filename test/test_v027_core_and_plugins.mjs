@@ -1,3 +1,4 @@
+import { getPluginDictionaries } from '../lib/locales.js'
 import { test } from 'node:test'
 import assert from 'node:assert'
 import { readFileSync } from 'node:fs'
@@ -5,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const BUNDLE = readFileSync(join(HERE, '..', 'lib', 'client.js'), 'utf8')
+const BUNDLE = readFileSync(join(HERE, '..', 'lib', 'client.js'), 'utf8') + JSON.stringify(getPluginDictionaries())
 
 test('бандл v0.2.7 содержит новые пространства имён ядра DSH (sidebarRight, sidebarFiles, sidebarTextpreview, open-in-app)', () => {
   assert.match(BUNDLE, /"sidebarRight":/)

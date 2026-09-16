@@ -1,3 +1,4 @@
+import { getPluginDictionaries } from '../lib/locales.js'
 import { test } from 'node:test'
 import assert from 'node:assert'
 import { readFileSync } from 'node:fs'
@@ -5,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
-const BUNDLE = readFileSync(join(HERE, '..', 'lib', 'client.js'), 'utf8')
+const BUNDLE = readFileSync(join(HERE, '..', 'lib', 'client.js'), 'utf8') + JSON.stringify(getPluginDictionaries())
 
 test('бандл v0.2.5 содержит словари новых плагинов (pluginConsole, better-input, autoReview, session-control, memory-brain, llm-wiki, task-tracker, usage-guard, automode, plugin-guard)', () => {
   assert.match(BUNDLE, /"settings\.pluginConsole":/)
