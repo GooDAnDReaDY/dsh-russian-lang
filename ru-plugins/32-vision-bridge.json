@@ -167,7 +167,7 @@
     "modeLlm": "Только LLM (автоперезапись, инструменты доступны)",
     "modeTools": "Только инструменты (без перезаписи, вызов describe_image)",
     "modelInvalid": "Модель не принимает изображения",
-    "noVisionModels": "No vision models in the catalog (input: [text, image]) — add one in Настройки → Models.",
+    "noVisionModels": "В каталоге нет моделей со зрением (вход: [text, image]) — добавьте в Настройки → Модели.",
     "nsfwFilter": "Фильтр неприемлемого контента",
     "presetCloud": "Пресет: Облако",
     "presetLmStudio": "Пресет: LM Studio",
@@ -211,6 +211,15 @@
     "qualityAnalysis": "Анализ качества и детекция размытия",
     "qualityAnalysisHint": "Определение резкости (дисперсия Лапласа) и извлечение цветовой палитры.",
     "pixelDiff": "Попиксельное сравнение (Pixel Diff)",
-    "pixelDiffHint": "Точное отслеживание изменений интерфейса «до / после» на уровне пикселей."
+    "pixelDiffHint": "Точное отслеживание изменений интерфейса «до / после» на уровне пикселей.",
+    "strategyOcr": "Быстрый OCR",
+    "escalateOnFail": "Эскалация при сбое",
+    "escalateAuto": "Авто (быстрый OCR → LLM)",
+    "escalateLlm": "Всегда использовать Vision LLM",
+    "escalateOff": "Отключено (сразу ошибка)",
+    "routing": "Маршрутизация",
+    "routingBalanced": "Сбалансированная",
+    "routingSpeed": "Приоритет скорости",
+    "routingQuality": "Приоритет качества"
   }
 }
