@@ -221,6 +221,18 @@ card_ru = {
     'updaterFailed': '❌ Не удалось проверить/обновить плагин. Проверьте сеть или логи сервера.',
     'badgeUpdateAvailable': 'Доступно обновление',
     'badgeUpToDate': 'Актуальная версия',
+    'secTranslator': '🌐 Перевод сообщений ассистента',
+    'secTranslatorDesc': 'Настройка перевода ответов модели в чате на русский язык (локально в Docker или онлайн).',
+    'translateEngine': 'Движок перевода',
+    'engineOff': 'Выключен (по умолчанию, без сетевых вызовов)',
+    'engineLocal': 'Локальный LibreTranslate (приватно, ~600 МБ RAM)',
+    'engineGoogle': 'Google Translate (онлайн)',
+    'googleWarn': '⚠️ Внимание: при онлайн-переводе текст сообщений ассистента передаётся на публичные серверы Google для перевода на лету. Не используйте для конфиденциальных данных.',
+    'localStatusRunning': '🟢 Контейнер LibreTranslate активен',
+    'localStatusStopped': '⚪ Контейнер LibreTranslate не запущен',
+    'localStartBtn': 'Запустить LibreTranslate в Docker (~600 МБ RAM)',
+    'localStarting': 'Запуск контейнера…',
+    'localInfo': 'LibreTranslate запускается изолированно в Docker на сервере, потребляет ~500–700 МБ RAM и переводит на 100% локально.',
 'secSupport': '📊 Покрытие экосистемы и поддержка',
     'secSupportDesc': 'Словари синхронизированы с DSH v0.1.6-alpha.1. 100.0% UI-покрытие ядра и всех установленных плагинов (7,902 ключа) без черновых машинных переводов.',
     'statNamespaces': 'Пространств имён',
@@ -1363,67 +1375,24 @@ window.__ModuleLoader__.load({
     }
 
     async function translateTurnContent(text) {
-      if (!text || typeof text !== 'string') return ''
-      const cyr = (text.match(/[\u0430-\u044f\u0451]/gi) || []).length
-      const lat = (text.match(/[a-z]/gi) || []).length
-      if (cyr > lat && cyr > 15) return text
-
-      const parts = text.split(/(```[\s\S]*?```)/g)
-      for (let i = 0; i < parts.length; i += 2) {
-        const chunk = parts[i].trim()
-        if (!chunk) continue
-        const paragraphs = chunk.split(/\n\n+/)
-        const translatedParas = []
-        for (const para of paragraphs) {
-          const pTrim = para.trim()
-          if (!pTrim) continue
-
-          const sentences = pTrim.match(/[^.!?\n]+[.!?\n]*/g) || [pTrim]
-          const translatedSentences = []
-
-          for (const s of sentences) {
-            let translated = ''
-
-            // 1. Google translate web API (sl=auto -> tl=ru)
-            try {
-              const gurl = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=' + encodeURIComponent(s)
-              const gres = await fetch(gurl)
-              if (gres.ok) {
-                const gdata = await gres.json()
-                if (Array.isArray(gdata) && Array.isArray(gdata[0])) {
-                  translated = gdata[0].map((it) => it[0]).join('')
-                }
-              }
-            } catch (e1) {}
-
-            // 2. MyMemory fallback with valid ISO language pair
-            if (!translated) {
-              try {
-                const isZh = /[\u3400-\u9fff]/.test(s)
-                const langPair = isZh ? 'zh-CN|ru' : 'en|ru'
-                const murl = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(s.slice(0, 450)) + '&langpair=' + langPair
-                const mres = await fetch(murl)
-                if (mres.ok) {
-                  const mdata = await mres.json()
-                  if (mdata && mdata.responseData && mdata.responseData.translatedText) {
-                    const txtEl = document.createElement('textarea')
-                    txtEl.innerHTML = mdata.responseData.translatedText
-                    translated = txtEl.value
-                  }
-                }
-              } catch (e2) {}
-            }
-
-            translatedSentences.push(translated || s)
-          }
-          translatedParas.push(translatedSentences.join(' '))
+      if (!text || typeof text !== 'string') return { error: 'Текст для перевода пуст.' }
+      try {
+        const res = await fetch('/api/dsh-russian-lang/translate', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ text })
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          return { error: data.error || ('Ошибка перевода (HTTP ' + res.status + ')') }
         }
-        parts[i] = translatedParas.join('\n\n')
+        return { translatedText: data.translatedText || text }
+      } catch (err) {
+        return { error: 'Не удалось связаться с хостом DSH: ' + (err.message || err) }
       }
-      return parts.join('\n\n')
     }
 
-    // #158: Кнопка перевода реплики на русский
+    // #158: Кнопка перевода    // #158: Кнопка перевода реплики на русский
     function TranslateTurnAction(props) {
       const t = typeof props.t === 'function' ? props.t : ((k) => k)
       const [loading, setLoading] = React.useState(false)
@@ -1474,8 +1443,42 @@ window.__ModuleLoader__.load({
           })
       }
 
+      const [transStatus, setTransStatus] = React.useState(null)
+      const [transStarting, setTransStarting] = React.useState(false)
+      const [transMsg, setTransMsg] = React.useState(null)
+
+      const fetchTransStatus = () => {
+        fetch('/api/dsh-russian-lang/translator/status')
+          .then((r) => r.json())
+          .then((data) => setTransStatus(data))
+          .catch(() => setTransStatus(null))
+      }
+
+      const startLibreTranslate = () => {
+        setTransStarting(true)
+        setTransMsg(null)
+        fetch('/api/dsh-russian-lang/translator/setup', { method: 'POST' })
+          .then((r) => r.json())
+          .then((data) => {
+            setTransStarting(false)
+            if (data.ok) {
+              setTransMsg({ type: 'ok', text: data.message || 'Контейнер LibreTranslate запущен.' })
+              fetchTransStatus()
+            } else {
+              setTransMsg({ type: 'err', text: data.error || 'Ошибка запуска контейнера.' })
+            }
+          })
+          .catch((err) => {
+            setTransStarting(false)
+            setTransMsg({ type: 'err', text: 'Ошибка: ' + (err.message || err) })
+          })
+      }
+
       React.useEffect(() => {
-        if (open) checkUpdate()
+        if (open) {
+          checkUpdate()
+          fetchTransStatus()
+        }
       }, [open])
 
 
@@ -1538,29 +1541,36 @@ window.__ModuleLoader__.load({
               if (prose) rawText = prose.innerText.trim()
             }
 
-            const translated = rawText ? await translateTurnContent(rawText) : 'Не удалось обнаружить текст сообщения ассистента для перевода.'
+            let transResult = { error: 'Не удалось обнаружить текст сообщения ассистента для перевода.' }
+            if (rawText) {
+              transResult = await translateTurnContent(rawText)
+            }
+            const isErr = !!transResult.error
+            const displayText = transResult.translatedText || transResult.error || ''
 
             box = document.createElement('div')
             box.className = 'rl-turn-translation'
             const key = tailFlowItem.getAttribute('data-chat-flow-key')
             if (key) box.dataset.tailKey = key
             box.innerHTML = '<div class="rl-trans-head">' +
-              '<span class="rl-trans-title">🌐 Перевод на русский</span>' +
+              '<span class="rl-trans-title">' + (isErr ? '⚠️ Машинный перевод' : '🌐 Перевод на русский') + '</span>' +
               '<div class="rl-trans-tools">' +
-                '<button type="button" class="rl-trans-btn rl-btn-copy" title="Скопировать перевод">📋 Копировать</button>' +
+                (!isErr ? '<button type="button" class="rl-trans-btn rl-btn-copy" title="Скопировать перевод">📋 Копировать</button>' : '') +
                 '<button type="button" class="rl-trans-btn rl-btn-close" title="Закрыть">✕</button>' +
               '</div>' +
             '</div>' +
-            '<div class="rl-trans-body"></div>'
-            box.querySelector('.rl-trans-body').textContent = translated
+            '<div class="rl-trans-body"' + (isErr ? ' style="color: var(--dsw-alias-color-warning, #eab308); font-size: 13px;"' : '') + '></div>'
+            box.querySelector('.rl-trans-body').textContent = displayText
 
             const copyBtn = box.querySelector('.rl-btn-copy')
-            copyBtn.addEventListener('click', (e) => {
-              e.stopPropagation()
-              try { navigator.clipboard.writeText(translated) } catch (err) {}
-              copyBtn.textContent = '✓ Скопировано'
-              setTimeout(() => { copyBtn.textContent = '📋 Копировать' }, 2000)
-            })
+            if (copyBtn) {
+              copyBtn.addEventListener('click', (e) => {
+                e.stopPropagation()
+                try { navigator.clipboard.writeText(displayText) } catch (err) {}
+                copyBtn.textContent = '✓ Скопировано'
+                setTimeout(() => { copyBtn.textContent = '📋 Копировать' }, 2000)
+              })
+            }
 
             const closeBtn = box.querySelector('.rl-btn-close')
             closeBtn.addEventListener('click', (e) => {
@@ -1869,7 +1879,68 @@ window.__ModuleLoader__.load({
               )
             ),
 
-            // Секция 4: Покрытие экосистемы и поддержка
+            // Секция 4: Машинный перевод сообщений
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secTranslator')),
+                React.createElement('span', {
+                  className: 'rl-badge ' + (value.translateEngine === 'local' ? 'rl-badge-ok' : (value.translateEngine === 'google' ? 'rl-badge-warn' : 'rl-badge-dim'))
+                }, value.translateEngine === 'local' ? 'Локально' : (value.translateEngine === 'google' ? 'Google' : 'Выключен'))
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secTranslatorDesc')),
+              React.createElement('div', { className: 'rl-item-card' },
+                React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px' } },
+                  React.createElement('label', { className: 'rl-item-label', style: { fontWeight: 500 } }, t('translateEngine')),
+                  React.createElement('select', {
+                    className: 'rl-select',
+                    value: value.translateEngine || 'off',
+                    onChange: (ev) => {
+                      try {
+                        const val = ev.target.value
+                        scope.set('translateEngine', val)
+                        if (val === 'local') fetchTransStatus()
+                      } catch (err) { console.warn('dsh-russian-lang: set translateEngine failed', err) }
+                    }
+                  },
+                    React.createElement('option', { value: 'off' }, t('engineOff')),
+                    React.createElement('option', { value: 'local' }, t('engineLocal')),
+                    React.createElement('option', { value: 'google' }, t('engineGoogle'))
+                  )
+                ),
+                value.translateEngine === 'google' ? React.createElement('div', {
+                  style: {
+                    marginTop: '10px', padding: '8px 12px', borderRadius: '8px',
+                    background: 'rgba(234, 179, 8, 0.12)', border: '1px solid rgba(234, 179, 8, 0.3)',
+                    color: 'var(--dsw-alias-color-warning, #eab308)', fontSize: '12px', fontWeight: 500, lineHeight: 1.4
+                  }
+                }, t('googleWarn')) : null,
+                value.translateEngine === 'local' ? React.createElement('div', {
+                  style: { marginTop: '10px', display: 'flex', flexDirection: 'column', gap: '8px' }
+                },
+                  React.createElement('div', { style: { fontSize: '12px', color: 'var(--dsw-alias-label-secondary)' } }, t('localInfo')),
+                  React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' } },
+                    React.createElement('span', {
+                      className: 'rl-badge ' + (transStatus && transStatus.running ? 'rl-badge-ok' : 'rl-badge-dim')
+                    }, transStatus && transStatus.running ? t('localStatusRunning') : t('localStatusStopped')),
+                    (!transStatus || !transStatus.running) ? React.createElement('button', {
+                      type: 'button',
+                      className: 'rl-btn rl-btn-primary',
+                      disabled: transStarting,
+                      onClick: startLibreTranslate
+                    }, transStarting ? t('localStarting') : t('localStartBtn')) : null
+                  ),
+                  transMsg ? React.createElement('div', {
+                    style: {
+                      marginTop: '6px', padding: '8px 12px', borderRadius: '8px',
+                      background: transMsg.type === 'ok' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                      color: transMsg.type === 'ok' ? '#16a34a' : '#dc2626', fontSize: '12px', fontWeight: 500
+                    }
+                  }, transMsg.text) : null
+                ) : null
+              )
+            ),
+
+            // Секция 5: Покрытие экосистемы и поддержка
             React.createElement('div', { className: 'rl-section-card' },
               React.createElement('div', { className: 'rl-section-title' },
                 React.createElement('span', null, t('secSupport')),
