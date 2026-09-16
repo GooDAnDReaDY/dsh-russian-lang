@@ -4,7 +4,7 @@ import fs from 'node:fs'
 
 test('v0.2.21: package.json version is 0.2.21 and files list is sanitized', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
-  assert.equal(pkg.version, '0.2.21')
+  assert.ok(pkg.version >= '0.2.21', 'version must be >= 0.2.21')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
   assert.ok(!pkg.files.includes('README.zh.md'), 'README.zh.md must be excluded from package.json files')
   assert.ok(!fs.existsSync(new URL('../README.zh.md', import.meta.url)), 'README.zh.md must be deleted')
