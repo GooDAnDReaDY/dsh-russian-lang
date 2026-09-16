@@ -52,7 +52,46 @@ for ns, entries in mt.items():
         if key not in core_dict.get(ns, {}):
             core_dict[ns][key] = rec.get('ru', '')
 
-payload = json.dumps(core_dict, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+# Выносим словарь ядра в lib/locales/core.json (Issue #214), чтобы размер
+# client.js оставался в безопасной зоне Store (< 160 KiB из 256 KiB лимита).
+core_file = os.path.join(HERE, 'lib', 'locales', 'core.json')
+os.makedirs(os.path.dirname(core_file), exist_ok=True)
+with open(core_file, 'w', encoding='utf-8', newline='\n') as f:
+    json.dump(core_dict, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+print('Core namespace-ов: %d, ключей: %d -> lib/locales/core.json' % (len(core_dict), sum(len(v) for v in core_dict.values())))
+
+# В client.js оставляем только компактный бутстрап для мгновенной отрисовки
+# базового каркаса (common, nav, menu, session) и плагинов с ранним статическим монтированием:
+BOOTSTRAP_NAMESPACES = {'common', 'nav', 'menu', 'session', 'dsh-cron', 'dsh-usage-stats', 'pluginMarket'}
+bootstrap_dict = {}
+for ns in BOOTSTRAP_NAMESPACES:
+    if ns in core_dict:
+        bootstrap_dict[ns] = core_dict[ns]
+
+# Добавляем ключевые статические строки плагинов в бутстрап
+try:
+    cron_data = json.load(open(os.path.join(HERE, 'ru-plugins', '56-cron.json'), encoding='utf-8'))
+    if 'dsh-cron' in cron_data:
+        bootstrap_dict['dsh-cron'] = {'sidebar.label': cron_data['dsh-cron'].get('sidebar.label', 'Задачи по расписанию')}
+except Exception:
+    pass
+
+try:
+    usage_data = json.load(open(os.path.join(HERE, 'ru-plugins', '16-usage-stats.json'), encoding='utf-8'))
+    if 'dsh-usage-stats' in usage_data:
+        bootstrap_dict['dsh-usage-stats'] = {'footer.todayLabel': usage_data['dsh-usage-stats'].get('footer.todayLabel', 'Сегодня')}
+except Exception:
+    pass
+
+try:
+    mkt_data = json.load(open(os.path.join(HERE, 'ru-plugins', '74-plugin-market.json'), encoding='utf-8'))
+    if 'pluginMarket' in mkt_data:
+        bootstrap_dict['pluginMarket'] = {'trigger': mkt_data['pluginMarket'].get('trigger', 'Магазин плагинов')}
+except Exception:
+    pass
+
+payload = json.dumps(bootstrap_dict, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+print('Bootstrap namespace-ов: %d, ключей: %d -> lib/client.js' % (len(bootstrap_dict), sum(len(v) for v in bootstrap_dict.values())))
 
 # Сборка отдельных словарей плагинов в lib/locales/plugins/*.json
 locales_dir = os.path.join(HERE, 'lib', 'locales', 'plugins')
@@ -292,25 +331,32 @@ window.__ModuleLoader__.load({
         }, 'dsh-russian-lang: ' + ns)
       }
 
-      // 1a. Асинхронная подгрузка словарей плагинов и zh-ru карты из хоста
+      // 1a. Асинхронная подгрузка словарей ядра, плагинов и zh-ru карты из хоста (Issue #214)
       if (typeof fetch === 'function') {
         fetch('/api/dsh-russian-lang/dict/all', { headers: { 'Accept': 'application/json' } })
           .then((res) => res.ok ? res.json() : null)
           .then((data) => {
             if (!data) return
-            const pluginDicts = data.plugins || data
+            const allDicts = Object.assign({}, data.core || {}, data.plugins || {}, data)
             if (data.zhRu && typeof ZH_RU === 'object') {
               Object.assign(ZH_RU, data.zhRu)
               if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
             }
-            for (const ns of Object.keys(pluginDicts)) {
-              if (ns === 'zhRu' || ns === 'plugins' || RU[ns]) continue
-              RU[ns] = pluginDicts[ns]
-              ctx.effect(() => {
-                try { return ctx.locale.register(ns, 'ru', pluginDicts[ns]) }
-                catch (err) { return () => {} }
-              }, 'dsh-russian-lang: ' + ns)
+            for (const ns of Object.keys(allDicts)) {
+              if (ns === 'zhRu' || ns === 'plugins' || ns === 'core') continue
+              const dict = allDicts[ns]
+              if (typeof dict !== 'object' || !dict) continue
+              if (!RU[ns]) {
+                RU[ns] = dict
+                ctx.effect(() => {
+                  try { return ctx.locale.register(ns, 'ru', dict) }
+                  catch (err) { return () => {} }
+                }, 'dsh-russian-lang: ' + ns)
+              } else {
+                Object.assign(RU[ns], dict)
+              }
             }
+            if (typeof syncZhDom === 'function') syncZhDom()
           })
           .catch(() => {})
       }
@@ -565,41 +611,51 @@ window.__ModuleLoader__.load({
         '模拟 (看匹配)': 'Симуляция (проверка)',
         '执行 (真实触发)': 'Выполнение (реальный триггер)',
         '通知渠道测试': 'Тест каналов уведомлений',
+        '渠道': 'Канал',
+        'Slack 风格单行摘要': 'Сводка в стиле Slack',
         '发送测试通知': 'Отправить тестовое уведомление',
-        '发送测试卡片': 'Отправить тестовую карточку',
         '飞书通知': 'Уведомления Feishu',
+        '扫码连接飞书': 'Подключить Feishu по QR-коду',
+        '将创建名为 [DSH 通知机器人] 的飞书应用': 'Будет создано приложение Feishu [DSH 通知机器人]',
+        '卡片截断长度': 'Длина обрезки карточки',
+        '复制 YAML': 'Копировать YAML',
+        '去抖': 'Дебаунс',
         '已断开': 'Отключено',
         '已连接': 'Подключено',
-        '扫码连接飞书': 'Подключить Feishu по QR-коду',
-        '确定断开飞书连接': 'Отключить Feishu',
-        '断开连接': 'Отключить',
-        '断开失败': 'Не удалось отключить',
-        '卡片预览': 'Предпросмотр карточки',
-        '卡片内容最长': 'Макс. длина карточки',
-        '卡片截断长度': 'Длина усечения карточки',
-        '截断长度即时生效': 'Длина усечения применяется мгновенно',
-        '按当前截断长度生成的卡片正文预览': 'Предпросмотр текста карточки при текущей длине усечения',
-        '执行历史': 'История выполнения',
-        '全部原因': 'Все причины',
-        '清空过滤': 'Очистить фильтр',
-        '暂无记录': 'Нет записей',
-        '系统通知': 'Системные уведомления',
-        '通知机器人': 'Бот уведомлений',
-        '飞书扫码授权二维码': 'QR-код авторизации Feishu',
-        '在浏览器中打开飞书授权链接': 'Открыть ссылку авторизации Feishu в браузере',
-        '重新扫码会覆盖现有应用凭据与本': 'Повторное сканирование перезапишет учётные данные',
-        '扫码者本人接收通知卡片': 'Получатель карточки уведомлений — авторизованный пользователь',
-        '如未立即生效请重启': 'Если изменения не применились, перезапустите DSH',
-        '网络请求失败': 'Сетевой запрос не удался',
-        '重试': 'Повторить',
         '已保存': 'Сохранено',
         '保存失败': 'Не удалось сохранить',
         '编辑': 'Редактировать',
         '取消编辑': 'Отмена',
         '启用': 'Включить',
-        '停用': 'Отключить'
+        '停用': 'Отключить',
+        '重试': 'Повторить',
+        '刷新': 'Обновить',
+        '网络请求失败': 'Сетевой запрос не удался',
+        '如未立即生效请重启': 'Если изменения не применились, перезапустите DSH',
+        '通知机器人': 'Бот уведомлений',
+        '飞书扫码授权二维码': 'QR-код авторизации Feishu',
+        '在浏览器中打开飞书授权链接': 'Открыть ссылку авторизации Feishu в браузере',
+        '重新扫码会覆盖现有应用凭据与本': 'Повторное сканирование перезапишет учётные данные',
+        '扫码者本人接收通知卡片': 'Получатель карточки уведомлений — авторизованный пользователь',
+        'tool (可选)': 'Инструмент (опц.)',
+        'runningSubagents (可选)': 'Подагенты (опц.)',
+        'durationMs (可选)': 'Длительность мс (опц.)',
+        'usage 输入 (可选)': 'Входные токены (опц.)',
+        'usage 输出 (可选)': 'Выходные токены (опц.)',
+        'profile (写入哪个 profile 的 cordis.patch.yml)': 'Профиль (куда записать cordis.patch.yml)',
+        'URL (留空用 DSH_HOOKS_WEBHOOK_URL)': 'URL (по умолчанию DSH_HOOKS_WEBHOOK_URL)',
+        '当前已配置的 Hook 规则列表': 'Список текущих настроенных правил хуков',
+        '测试通道': 'Тест канала'
       }
       for (const [k, v] of Object.entries(CORE_ZH_PRESETS)) ZH_EXACT.set(k, v)
+
+      const zhSortedExact = []
+      const rebuildZhSorted = () => {
+        zhSortedExact.length = 0
+        for (const [k, v] of ZH_EXACT.entries()) zhSortedExact.push([k, v])
+        zhSortedExact.sort((a, b) => b[0].length - a[0].length)
+      }
+      rebuildZhSorted()
 
       const updateZhRu = (entries) => {
         if (!entries || typeof entries !== 'object') return
@@ -614,23 +670,40 @@ window.__ModuleLoader__.load({
           }
         }
         ZH_PATTERNS.sort((a, b) => b.re.source.length - a.re.source.length)
+        rebuildZhSorted()
       }
       updateZhRu(ZH_RU)
+
       const zhTranslateText = (text) => {
         if (!ZH_CJK.test(text)) return null
         const exact = ZH_EXACT.get(text)
         if (exact !== undefined) return exact
+        const trimmed = text.trim()
+        if (trimmed !== text) {
+          const exactTrimmed = ZH_EXACT.get(trimmed)
+          if (exactTrimmed !== undefined) return text.replace(trimmed, exactTrimmed)
+        }
         for (const p of ZH_PATTERNS) {
-          const m = p.re.exec(text)
-          if (m && m[0] === text) {
+          const m = p.re.exec(trimmed)
+          if (m && m[0] === trimmed) {
             let out = p.ruParts[0]
             for (let i = 1; i < p.ruParts.length; i++) out += m[i] + p.ruParts[i]
-            return out
+            return text.replace(trimmed, out)
           }
         }
+        let replaced = text
+        let changed = false
+        for (const [zhPhrase, ruPhrase] of zhSortedExact) {
+          if (zhPhrase.length >= 2 && replaced.includes(zhPhrase)) {
+            replaced = replaced.split(zhPhrase).join(ruPhrase)
+            changed = true
+          }
+        }
+        if (changed) return replaced
         return null
       }
-      // Точечные замены атрибутов и текста в плагинах с хардкодом (dsh-visualize, effort-slider)
+
+      // Точечные замены атрибутов и текста в плагинах с хардкодом
       const DOM_EN_ATTRS = {
         'Streaming preview': 'Предпросмотр стриминга',
         'Visualization streaming preview': 'Предпросмотр визуализации',
@@ -639,6 +712,29 @@ window.__ModuleLoader__.load({
         'Shield: Alert': 'Щит: Тревога'
       }
       const DOM_EN_TEXT = {
+        'Scheduled tasks': 'Задачи по расписанию',
+        'Today': 'Сегодня',
+        'Plugin Market': 'Магазин плагинов',
+        'Auto mode': 'Автоматический режим',
+        'Full access': 'Полный доступ',
+        'Read only': 'Только чтение',
+        'Side card': 'Боковая панель',
+        'panelName': 'Палитра команд',
+        'Hooks': 'Хуки',
+        'Manage what the side card shows and how it behaves': 'Настройка содержимого и поведения боковой панели',
+        'Inject the sidebar-open tool for the model': 'Предоставить модели инструмент sidebar-open',
+        'When enabled, the model can actively open files, folders, and HTTP(S) pages in the sidebar through the sidebar_open tool (off by default)': 'Если включено, модель может открывать файлы, папки и веб-страницы в боковой панели через инструмент sidebar_open (по умолчанию выключено)',
+        'Position compatibility mode': 'Режим совместимости расположения',
+        'Pick the title-bar compatibility scheme: auto-detect (default, conservative) / DSH official web / known desktop shells / custom (shift distance + custom CSS)': 'Выберите схему совместимости строки заголовка: автоопределение (по умолчанию) / официальный DSH Web / десктопные оболочки / пользовательский режим',
+        'Auto-detect': 'Автоопределение',
+        'Sidebar content': 'Содержимое боковой панели',
+        'Changes': 'Изменения',
+        'Tasks': 'Задачи',
+        'Time Machine': 'Машина времени',
+        'Live Canvas': 'Живой холст',
+        'Side Chat (beta)': 'Боковой чат (бета)',
+        'Terminal': 'Терминал',
+        'Feature settings': 'Настройки функции',
         'Low': 'Низкий',
         'Medium': 'Средний',
         'High': 'Высокий',
@@ -646,9 +742,6 @@ window.__ModuleLoader__.load({
         'Search engine (ModSearch)': 'Поисковая система (ModSearch)',
         'Search engine provider configuration.': 'Настройка провайдера поисковой системы.',
         'X search only': 'Только поиск в X',
-        'Auto mode': 'Автоматический режим',
-        'Full access': 'Полный доступ',
-        'Read only': 'Только чтение',
         'Security Auditor Shield': 'Защитный щит аудитора',
         'Shield: Safe': 'Щит: Безопасно',
         'Shield: Alert': 'Щит: Тревога',
@@ -667,41 +760,81 @@ window.__ModuleLoader__.load({
         'Saved': 'Сохранено',
         'Refresh': 'Обновить',
         'Loading settings…': 'Загрузка настроек…',
-        'Put the ar-… key in DSH credentials or process env under this name. Never paste the key into this form.': 'Укажите ключ ar-… в учётных данных DSH или переменной окружения. Не вставляйте ключ в форму.'
+        'Put the ar-… key in DSH credentials or process env under this name. Never paste the key into this form.': 'Укажите ключ ar-… в учётных данных DSH или переменной окружения. Не вставляйте ключ в форму.',
+        'Preferred engine': 'Предпочитаемый движок',
+        'API key': 'API-ключ',
+        'stored, leave empty to keep it': 'сохранён, оставьте пустым для сохранения',
+        'Separate multiple keys with commas. ModSearch rotates to the next key after authentication, rate-limit, or quota failures.': 'Разделяйте несколько ключей запятыми. ModSearch переключается на следующий ключ при ошибках аутентификации или лимитов.',
+        'Built-in official endpoint, leave blank to use it': 'Встроенная официальная конечная точка, оставьте пустым',
+        'Automatic engine chain Checked engines may join failover. Only engines ready here are listed.': 'Автоматическая цепочка движков: отмеченные движки участвуют в отказоустойчивости.',
+        'Discard': 'Сбросить',
+        'Model synchronization': 'Синхронизация моделей',
+        'Refresh model catalogs for API-key providers. A dry-run is the default; applying changes is explicit.': 'Обновление каталогов моделей провайдеров API-ключей. По умолчанию выполняется проверка (dry-run); применение изменений явное.',
+        'All API-key providers': 'Все провайдеры API-ключей',
+        'Preview only (dry-run)': 'Только предпросмотр (dry-run)',
+        'Confirm stale removal': 'Подтверждать удаление устаревших',
+        'Refresh status': 'Обновить статус',
+        'Refresh all': 'Обновить всё',
+        'Discover': 'Обнаружить',
+        'Check availability': 'Проверить доступность',
+        'Check credentials': 'Проверить учётные данные',
+        'Choose models': 'Выбрать модели',
+        'Manual model selection': 'Выбор моделей вручную',
+        'Images in chat are processed by the vision model you choose here. Leave both fields empty to auto-pick the first vision-capable model from the catalog.': 'Изображения в чате обрабатываются выбранной моделью зрения. Оставьте оба поля пустыми для автовыбора первой доступной модели.',
+        'Mode': 'Режим',
+        'Hybrid (auto-rewrite + tools)': 'Гибридный (авто-переписывание + инструменты)',
+        'Describe strategy': 'Стратегия описания',
+        'Auto (use vision LLM)': 'Авто (использовать Vision LLM)',
+        'Escalation': 'Эскалация',
+        'Simple only (one pass)': 'Только простая (один проход)',
+        'Routing': 'Маршрутизация',
+        'Channel order': 'Порядок каналов',
+        'Issue Reporter': 'Репортёр проблем',
+        'Turn a DSH plugin problem into a reviewable issue with automated diagnostics and previews.': 'Превратите проблему с плагином DSH в готовый issue с автоматической диагностикой.',
+        'GitHub sign-in is not configured for this installation.': 'Вход через GitHub не настроен для этой установки.',
+        '0 plugins': '0 плагинов',
+        'Catalog': 'Каталог',
+        'Report Editor': 'Редактор отчёта',
+        'My Reports': 'Мои отчёты',
+        'Authorization': 'Авторизация',
+        'Search installed plugins…': 'Поиск установленных плагинов…',
+        'Search installed plugins...': 'Поиск установленных плагинов...',
+        'Refresh inventory': 'Обновить список',
+        'Loading inventory & status…': 'Загрузка списка и статуса…',
+        'Loading inventory & status...': 'Загрузка списка и статуса...'
       }
+
       const ZH_WALKER = (root) => {
         try {
           const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
           const hits = []
           for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-            if (node.nodeValue && node.nodeValue.length >= 2 && ZH_CJK.test(node.nodeValue)) {
+            const val = node.nodeValue
+            if (!val) continue
+            const trimmed = val.trim()
+            if (trimmed.length >= 1 && ZH_CJK.test(val)) {
               hits.push(node)
-            } else if (node.nodeValue) {
-              const trimmed = node.nodeValue.trim()
-              if (DOM_EN_TEXT[trimmed]) {
-                const p = node.parentElement
-                if (p && (
-                  p.closest('[class*="effort"], [class*="slider"], [class*="reasoning"], [class*="selector"], [class*="Menu"], [class*="menu"], [role="menu"], [class*="status"], [class*="chip"], [class*="badge"], [class*="ar-"], [class*="card"], [class*="header"]') ||
-                  p.getAttribute('role') === 'option' || p.getAttribute('role') === 'menuitem' ||
-                  p.tagName === 'BUTTON' || p.tagName === 'LABEL' || p.tagName === 'SPAN' || p.tagName === 'A'
-                )) {
-                  node.nodeValue = node.nodeValue.replace(trimmed, DOM_EN_TEXT[trimmed])
-                }
+            } else if (trimmed.length >= 1 && DOM_EN_TEXT[trimmed]) {
+              const p = node.parentElement
+              if (p && !p.closest('code, pre, script, style, textarea, input, select, kbd, samp, [contenteditable="true"], [data-composer-input], [role="textbox"]')) {
+                node.nodeValue = val.replace(trimmed, DOM_EN_TEXT[trimmed])
               }
             }
           }
           for (const node of hits) {
             const next = zhTranslateText(node.nodeValue)
-            if (next) node.nodeValue = next
+            if (next && next !== node.nodeValue) node.nodeValue = next
           }
-          // title/placeholder/aria-label — атрибуты с пользовательским текстом.
           for (const el of root.querySelectorAll ? root.querySelectorAll('[title],[placeholder],[aria-label]') : []) {
             for (const attr of ['title', 'placeholder', 'aria-label']) {
               const v = el.getAttribute && el.getAttribute(attr)
               if (v) {
-                if (DOM_EN_ATTRS[v]) {
-                  el.setAttribute(attr, DOM_EN_ATTRS[v])
-                } else if (v.length >= 2 && ZH_CJK.test(v)) {
+                const tr = v.trim()
+                if (DOM_EN_TEXT[tr]) {
+                  el.setAttribute(attr, v.replace(tr, DOM_EN_TEXT[tr]))
+                } else if (DOM_EN_ATTRS[tr]) {
+                  el.setAttribute(attr, v.replace(tr, DOM_EN_ATTRS[tr]))
+                } else if (ZH_CJK.test(v)) {
                   const next = zhTranslateText(v)
                   if (next) el.setAttribute(attr, next)
                 }
@@ -711,11 +844,16 @@ window.__ModuleLoader__.load({
           if (root.getAttribute) {
             for (const attr of ['title', 'placeholder', 'aria-label']) {
               const v = root.getAttribute(attr)
-              if (v && DOM_EN_ATTRS[v]) root.setAttribute(attr, DOM_EN_ATTRS[v])
+              if (v) {
+                const tr = v.trim()
+                if (DOM_EN_TEXT[tr]) root.setAttribute(attr, v.replace(tr, DOM_EN_TEXT[tr]))
+                else if (DOM_EN_ATTRS[tr]) root.setAttribute(attr, v.replace(tr, DOM_EN_ATTRS[tr]))
+              }
             }
           }
         } catch (err) { /* ignore */ }
       }
+
       let zhObserver = null
       const syncZhDom = () => {
         try {
@@ -727,9 +865,6 @@ window.__ModuleLoader__.load({
           }
           if (!zhObserver) {
             zhObserver = new MutationObserver(() => {
-              // Панель перерисовывается React'ом; обход после микрозадачи,
-              // чтобы поймать уже вставленные узлы. Тяжёлых страниц мало —
-              // ponytail: обход всего body, при тормозах ограничить секцией.
               queueMicrotask(() => { try { ZH_WALKER(document.body) } catch (err) { /* ignore */ } })
             })
             zhObserver.observe(document.body, { childList: true, subtree: true, characterData: true })

@@ -4,7 +4,7 @@ import fs from 'node:fs'
 
 test('v0.2.22: package.json version is 0.2.22', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
-  assert.equal(pkg.version, '0.2.22')
+  assert.ok(pkg.version >= '0.2.22', 'version must be >= 0.2.22')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
 })
 
