@@ -1,0 +1,15 @@
+{
+  "@goodandready/dsh-remote-workspace": {
+    "updaterTitle": "Обновление плагина",
+    "currentVersion": "Текущая версия",
+    "latestVersion": "npm Последняя",
+    "checkUpdate": "Проверить обновления",
+    "checking": "Проверка...",
+    "updateNow": "Обновить сейчас",
+    "updating": "Обновление...",
+    "upToDate": "Актуальная версия",
+    "updateAvailable": "Доступно обновление",
+    "restartRequired": "Обновление успешно установлено. Перезапустите DSH для применения.",
+    "updateFailed": "Сбой обновления"
+  }
+}

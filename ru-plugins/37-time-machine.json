@@ -33,6 +33,16 @@
     "fileRestored": "Файл успешно восстановлен.",
     "filesChanged": "Изменённые файлы",
     "allFiles": "Все файлы",
-    "selectFile": "Выберите файл для просмотра различий"
+    "selectFile": "Выберите файл для просмотра различий",
+    "updaterCheck": "Проверить обновления",
+    "updaterChecking": "Проверка...",
+    "updaterCurrent": "Текущая: v{version}",
+    "updaterFailed": "Ошибка обновления: {error}",
+    "updaterLatest": "Доступна: v{version}",
+    "updaterSuccess": "Обновлено до v{version}! Перезапустите DSH.",
+    "updaterTitle": "Обновление плагина",
+    "updaterUpToDate": "Актуальная версия",
+    "updaterUpdating": "Обновление...",
+    "updaterUpdate": "Обновить сейчас"
   }
 }

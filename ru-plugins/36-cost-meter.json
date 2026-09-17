@@ -86,5 +86,14 @@
     "tokens.no_usage_yet": "Провайдер пока не передал статистику использования для этой сессии.",
     "tokens.not_priced": "Тариф не задан",
     "tz.invalid": "Недопустимый идентификатор часового пояса IANA"
+  },
+  "@goodandready/dsh-cost-meter": {
+    "update.available": "Доступно обновление",
+    "update.btn": "Обновить сейчас",
+    "update.checking": "Проверка...",
+    "update.done": "Обновлено успешно! Перезапустите DSH.",
+    "update.failed": "Ошибка обновления:",
+    "update.up_to_date": "Актуальная версия",
+    "update.updating": "Обновление..."
   }
 }

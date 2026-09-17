@@ -1,0 +1,15 @@
+{
+  "dsh-model-sync": {
+    "updaterTitle": "Обновление плагина",
+    "currentVersion": "Установлена: v{0}",
+    "latestVersion": "Доступна: v{0}",
+    "upToDate": "Актуальная версия",
+    "updateAvailable": "Доступно обновление",
+    "checkingUpdate": "Проверка...",
+    "updating": "Обновление...",
+    "updateNow": "Обновить сейчас",
+    "checkAgain": "Проверить обновления",
+    "restartNotice": "Обновлено до v{0}. Пожалуйста, перезапустите DeepSeek Harness для применения изменений.",
+    "updateFailed": "Ошибка обновления"
+  }
+}

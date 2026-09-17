@@ -91,7 +91,10 @@
     "readonly.title": "Пока этот субагент доступен только для чтения",
     "retry": "Повторить",
     "switcher.aria": "Переключить субагента: {title}",
-    "tree.aria": "Сессии субагентов"
+    "tree.aria": "Сессии субагентов",
+    "tokens.million": "{value} млн",
+    "tokens.thousand": "{value} тыс.",
+    "tokens.total": "{value} токенов"
   },
   "settings.pluginInventory": {
     "active": "Подключён",

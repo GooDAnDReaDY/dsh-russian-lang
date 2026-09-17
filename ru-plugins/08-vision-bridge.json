@@ -1,0 +1,12 @@
+{
+  "@goodandready/dsh-vision-bridge": {
+    "checkUpdates": "Проверить обновления",
+    "checking": "Проверка...",
+    "updateAvailable": "Доступно обновление",
+    "upToDate": "Актуальная версия",
+    "updateTo": "Обновить до",
+    "updating": "Обновление...",
+    "restartNotice": "Обновлено! Пожалуйста, перезапустите DeepSeek Harness.",
+    "updateFailed": "Сбой обновления:"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "@goodandready/dsh-context-lens": {
+    "update.available": "Доступно обновление: v{latestVersion} (текущая: v{currentVersion})",
+    "update.btn": "Обновить сейчас",
+    "update.updating": "Обновление…",
+    "update.done": "Успешно обновлено до v{version}! Пожалуйста, перезапустите DSH.",
+    "update.failed": "Ошибка обновления: {error}",
+    "update.checking": "Проверка обновлений…",
+    "update.up_to_date": "Актуальная версия"
+  }
+}
