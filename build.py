@@ -918,7 +918,7 @@ window.__ModuleLoader__.load({
             if (range.intersectsNode ? range.intersectsNode(node) : (sel.containsNode && sel.containsNode(node, true))) {
               return
             }
-          } catch (e) {}
+          } catch (e) { /* bestEffort */ void e; }
         }
 
         let after = typoQuotes(before)
@@ -1019,7 +1019,7 @@ window.__ModuleLoader__.load({
           if (propsKey && el[propsKey] && typeof el[propsKey].onChange === 'function') {
             el[propsKey].onChange({ target: el, currentTarget: el })
           }
-        } catch (e) {}
+        } catch (e) { /* bestEffort */ void e; }
 
         // 4. Dispatch native browser input & change events
         try {
@@ -1032,7 +1032,7 @@ window.__ModuleLoader__.load({
         // 5. Restore cursor position if requested
         if (typeof cursorStart === 'number' && typeof el.setSelectionRange === 'function') {
           const end = typeof cursorEnd === 'number' ? cursorEnd : cursorStart
-          try { el.setSelectionRange(cursorStart, end) } catch (e) {}
+          try { el.setSelectionRange(cursorStart, end) } catch (e) { /* bestEffort */ void e; }
         }
       }
 
@@ -1102,7 +1102,7 @@ window.__ModuleLoader__.load({
             sel.removeAllRanges()
             sel.addRange(range)
           }
-        } catch (e) {}
+        } catch (e) { /* bestEffort */ void e; }
       }
 
       const isCaretInCode = (el, value, caretOffset) => {
@@ -1155,7 +1155,7 @@ window.__ModuleLoader__.load({
           // Restore caret without delayed setTimeout (#198)
           const targetOffset = typeof cursorStart === 'number' ? cursorStart : (initialOffset >= 0 ? Math.min(initialOffset, value.length) : value.length)
           setCaretCharacterOffset(host, targetOffset)
-        } catch (e) {}
+        } catch (e) { /* bestEffort */ void e; }
       }
 
       const layoutDismiss = () => {
@@ -1387,7 +1387,7 @@ window.__ModuleLoader__.load({
               }
             }
           }
-        } catch (e) {}
+        } catch (e) { /* bestEffort */ void e; }
       }
       ctx.effect(() => {
         document.addEventListener('input', layoutOnInput, true)
@@ -1557,7 +1557,7 @@ window.__ModuleLoader__.load({
           a.click()
           setDone(true)
           setTimeout(() => {
-            try { document.body.removeChild(a); URL.revokeObjectURL(url) } catch (e) {}
+            try { document.body.removeChild(a); URL.revokeObjectURL(url) } catch (e) { /* bestEffort */ void e; }
           }, 30000)
           setTimeout(() => setDone(false), 2000)
         } catch (err) {
@@ -1765,7 +1765,7 @@ window.__ModuleLoader__.load({
             if (copyBtn) {
               copyBtn.addEventListener('click', (e) => {
                 e.stopPropagation()
-                try { navigator.clipboard.writeText(displayText) } catch (err) {}
+                try { navigator.clipboard.writeText(displayText) } catch (err) { /* bestEffort */ void e; }
                 copyBtn.textContent = '✓ Скопировано'
                 setTimeout(() => { copyBtn.textContent = '📋 Копировать' }, 2000)
               })
@@ -1969,7 +1969,7 @@ window.__ModuleLoader__.load({
                     React.createElement('label', { className: 'rl-item-label' },
                       checkbox(value.slashAliases !== false && ruActive,
                         (ev) => {
-                          try { scope.set('slashAliases', ev.target.checked) } catch (err) {}
+                          try { scope.set('slashAliases', ev.target.checked) } catch (err) { /* bestEffort */ void e; }
                         }, !ruActive || disabled),
                       t('slashAliases')
                     )

@@ -436,8 +436,8 @@
     "timeline.overviewAria": "Timeline overview; drag horizontally to focus events",
     "timeline.started": "Started {time}",
     "timeline.ttftDecoding": "TTFT {ttft} · Decoding {decoding}",
-    "timing.duration": "Длительность: {duration}",
-    "timing.durationTooShort": "Длительность: {duration}",
+    "timing.duration": "Длительность",
+    "timing.durationTooShort": "Слишком малое время",
     "timing.firstTokenUnavailable": "First token unavailable",
     "timing.generation": "Generation",
     "timing.notAvailable": "Not available",
@@ -452,7 +452,7 @@
     "timing.started": "Started",
     "timing.stepStartUnavailable": "Step start unavailable",
     "timing.throughput": "Throughput",
-    "timing.totalDuration": "Длительность: {duration}",
+    "timing.totalDuration": "Общая длительность",
     "timing.ttft": "TTFT",
     "timing.usageUnavailable": "Usage unavailable",
     "toolbar.actualTime": "Actual time",
@@ -494,7 +494,10 @@
     "code.source": "Код",
     "record.wrapLines": "Wrap lines",
     "empty.description": "Шаги выполнения и вызовы инструментов появятся здесь по мере работы агента.",
-    "filter.thinking": "Только размышления"
+    "filter.thinking": "Только размышления",
+    "attachment.list": "Вложения",
+    "attachment.imageName": "Изображение {index}",
+    "layout.imageCount": "Изображений: ×{count}"
   },
   "directory-browser": {
     "browser.cancel": "Отмена",
@@ -716,5 +719,25 @@
     "open.error": "Не удалось открыть",
     "open.title": "Открыть рабочую область в {app}",
     "open.tooltip": "Открыть локально"
+  },
+  "settings": {
+    "desktop.update.available": "Обновление",
+    "desktop.update.checking": "Проверка обновлений…",
+    "desktop.update.progress": "{percent}%…",
+    "desktop.update.verifying": "Проверка файлов обновления…",
+    "desktop.update.installing": "Подготовка к перезапуску…",
+    "desktop.update.ready": "Установить и перезапустить",
+    "desktop.update.retry": "Повторить обновление",
+    "desktop.update.versionDetail": "{label} — V{version}",
+    "desktop.update.downloadDetail": "Загрузка обновления: {percent}%\nЦелевая версия: V{version}",
+    "desktop.update.checkFailed": "Не удалось проверить обновления. Повторите попытку позже.",
+    "desktop.update.downloadFailed": "Не удалось загрузить обновление. Повторите попытку.",
+    "desktop.update.installFailed": "Не удалось установить обновление. Повторите попытку позже.",
+    "desktop.update.checkNetworkFailed": "Не удалось проверить обновления. Соединение прервано. Проверьте подключение к сети и повторите попытку.",
+    "desktop.update.downloadNetworkFailed": "Не удалось загрузить обновление. Соединение прервано. Проверьте подключение к сети и повторите попытку.",
+    "desktop.update.installNetworkFailed": "Не удалось установить обновление. Соединение прервано. Проверьте подключение к сети и повторите попытку.",
+    "desktop.update.stopFailed": "Не удалось безопасно остановить задачи. Обновление не установлено. Повторите попытку позже.",
+    "desktop.update.tasksChanged": "Запущены новые задачи. Проверьте подтверждение обновления ещё раз.",
+    "desktop.update.tasksUnavailable": "Статус задач недоступен. Повторите обновление, когда рабочая область будет готова."
   }
 }

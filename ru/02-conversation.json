@@ -264,7 +264,9 @@
     "input.file": "Файл",
     "tool.autoReviewRejected": "Отклонено автопроверкой",
     "tool.autoReviewNotExecuted": "Инструмент не был выполнен. Причина: {reason}",
-    "tool.autoReviewReasonFallback": "Автопроверка не разрешила это действие"
+    "tool.autoReviewReasonFallback": "Автопроверка не разрешила это действие",
+    "error.sessionInUse": "Эта сессия уже используется другим запущенным экземпляром DSH (например, dsh web или десктопным приложением). Завершите другие экземпляры DSH и повторите попытку.",
+    "terminal.noExitCode": "код завершения отсутствует"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",

@@ -102,7 +102,10 @@
     "customBaseUrlInvalid": "Введите корректный URL (HTTP или HTTPS).",
     "deepSeekChatBaseUrl": "https://api.deepseek.com",
     "deepSeekMessagesBaseUrl": "https://api.deepseek.com/anthropic",
-    "deepSeekEndpointHint": "Используйте эндпоинт, совместимый с настроенным подключением."
+    "deepSeekEndpointHint": "Используйте эндпоинт, совместимый с настроенным подключением.",
+    "modelInputTypes": "Типы входных данных",
+    "modelInputText": "Текст",
+    "modelInputImage": "Изображение"
   },
   "workspace": {
     "actions.newSession.aria": "Новая сессия в {name}",
@@ -173,7 +176,8 @@
     "time.years": "{n} г",
     "viewOptions.label": "Параметры отображения",
     "workspace.add": "Добавить рабочую папку",
-    "schedule.active": "Есть активная запланированная задача"
+    "schedule.active": "Есть активная запланированная задача",
+    "groupBy.workspaceTree": "Дерево рабочей области"
   },
   "settings.theme": {
     "fontSize.decrease": "Уменьшить размер шрифта",
@@ -189,5 +193,8 @@
     "connection.reconnect": "Отключено, переподключиться сейчас",
     "connection.restart": "Подключение, перезапустить сейчас",
     "connection.retry": "Переподключиться сейчас"
+  },
+  "model": {
+    "error.sessionInUse": "Эта сессия уже используется другим запущенным экземпляром DSH (например, dsh web или десктопным приложением). Завершите другие экземпляры DSH и повторите попытку."
   }
 }

@@ -43,6 +43,7 @@
     "updaterTitle": "Обновление плагина",
     "updaterUpToDate": "Актуальная версия",
     "updaterUpdating": "Обновление...",
-    "updaterUpdate": "Обновить сейчас"
+    "updaterUpdate": "Обновить сейчас",
+    "updaterUpdateNow": "Обновить до v{version}"
   }
 }

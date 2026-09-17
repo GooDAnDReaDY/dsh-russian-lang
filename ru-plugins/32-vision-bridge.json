@@ -220,6 +220,16 @@
     "routing": "Маршрутизация",
     "routingBalanced": "Сбалансированная",
     "routingSpeed": "Приоритет скорости",
-    "routingQuality": "Приоритет качества"
+    "routingQuality": "Приоритет качества",
+    "updater_title": "Версия плагина и обновления",
+    "updater_current": "Текущая версия",
+    "updater_latest": "Последняя версия",
+    "updater_checking": "Проверка…",
+    "updater_check": "Проверить обновления",
+    "updater_updating": "Обновление…",
+    "updater_update_now": "Обновить до v{version}",
+    "updater_up_to_date": "Установлена актуальная версия",
+    "updater_failed": "Не удалось проверить обновления",
+    "updater_success": "Обновление выполнено успешно. Перезапустите DSH."
   }
 }
