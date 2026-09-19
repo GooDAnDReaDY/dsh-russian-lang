@@ -160,7 +160,8 @@ def runtime_coverage():
 
     # эффективный ru: ручные словари + отгружаемые MT-строки
     ru_eff = load_dir('ru')
-    ru_eff.update(load_dir('ru-plugins'))
+    for ns, entries in load_dir('ru-plugins').items():
+        ru_eff.setdefault(ns, {}).update(entries)
     for ns, entries in (mt or {}).items():
         if ns in self_ru:
             continue
@@ -176,7 +177,8 @@ def runtime_coverage():
     # считались по своим источникам и пересекались на ключах, у которых есть и
     # ручной перевод, и запись в MT-реестре (#135).
     ru_manual = load_dir('ru')
-    ru_manual.update(load_dir('ru-plugins'))
+    for ns, entries in load_dir('ru-plugins').items():
+        ru_manual.setdefault(ns, {}).update(entries)
     manual = mt_reviewed = mt_draft = 0
     for ns, entries in en_eff.items():
         for k in entries:
@@ -225,5 +227,8 @@ if __name__ == '__main__':
     left += compare('ПЛАГИНЫ', strip_self_ru(load_file('plugins-en.json')),
                     strip_self_ru(load_dir('ru-plugins')), mt_all)
     left += check_mt_registry(en_all)
-    runtime_coverage()
+    cov = runtime_coverage()
+    if cov < 100.0:
+        print(f"FAIL: Эффективное покрытие {cov:.1f}% ниже требуемых 100.0%!", file=sys.stderr)
+        left += 1
     sys.exit(0 if left == 0 else 1)
