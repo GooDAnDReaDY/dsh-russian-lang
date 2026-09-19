@@ -318,6 +318,8 @@ window.__ModuleLoader__.load({
     RU['russian-lang'] = %s
 
     const SETTINGS_NS_NAME = 'russian-lang'
+    // Plugins page row seat (DSH 0.1.6-alpha.2): key = '<package name>#<row id>'.
+    const ROW_CONFIG_KEY = '@goodandready/dsh-russian-lang#russian-lang'
 
     function apply(ctx) {
       const runtime = ctx.locale
@@ -1414,7 +1416,17 @@ window.__ModuleLoader__.load({
       // Регистрируем карточку через inject: так слот объявляется родителю,
       // и карточка появляется в списке «Настройки → Плагины». Без inject
       // register бросает "slot is not declared" на новых ядрах.
+      // Посадка строки на странице «Плагины» идёт первой (её рендерит текущее
+      // ядро), прежняя settings.plugin.item сохранена фолбэком.
       try {
+        ctx.slots.inject('plugins.row.config', () =>
+          ctx.slots.register({
+            name: 'plugins.row.config',
+            key: ROW_CONFIG_KEY,
+            locale: SETTINGS_NS_NAME,
+            inject: () => ({ scope, runtime, toggleRu }),
+          }, SettingsCard),
+        )
         ctx.slots.inject('settings.plugin.item', () =>
           ctx.slots.register({
             name: 'settings.plugin.item',
@@ -1878,11 +1890,19 @@ window.__ModuleLoader__.load({
       const presetKey = value.agentPromptPreset || 'technical_expert'
       const presetInfo = typeof SYSTEM_PROMPT_PRESETS !== 'undefined' ? SYSTEM_PROMPT_PRESETS[presetKey] : null
 
-      return React.createElement('div', { className: 'rl-card' },
+      // Row seat (plugins.row.config): the host page draws title/icon/crumb and the
+      // padding, so the summary is a one-liner and the page drops our card chrome.
+      if (props && props.view === 'summary') {
+        return React.createElement('div', { className: 'rl-sub' }, statusLine || t('cardSub'))
+      }
+      const page = !!(props && props.view === 'page')
+
+      return React.createElement('div', { className: page ? 'rl-page-seat' : 'rl-card' },
         React.createElement('button', {
           type: 'button',
           className: 'rl-head',
-          'aria-expanded': String(open),
+          style: page ? { display: 'none' } : undefined,
+          'aria-expanded': page ? 'true' : String(open),
           onClick: () => setOpen(!open),
         },
           React.createElement('span', { className: 'rl-head-main' },
@@ -1897,7 +1917,7 @@ window.__ModuleLoader__.load({
           React.createElement('span', {
             className: 'rl-chev' + (open ? ' rl-chev-open' : ''),
           }, React.createElement(Chevron, null))),
-        open && React.createElement('div', { className: 'rl-body' },
+        (page || open) && React.createElement('div', { className: 'rl-body' },
           React.createElement('div', { className: 'rl-page' },
 
             // Секция 1: Язык интерфейса
