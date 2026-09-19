@@ -30,7 +30,7 @@
     "noPriceSpecified": "тариф не указан",
     "noUsageYet": "Провайдер ещё не передал данные об использовании для этой сессии.",
     "routeUnknown": "маршрут неизвестен",
-    "sessionTokens": "Токены сессии",
+    "sessionTokens": "ТОКЕНЫ СЕССИИ",
     "settings.loading": "Загрузка настроек…",
     "settings.save": "Сохранить",
     "settings.saveFailed": "Не удалось сохранить настройки: ",
@@ -92,7 +92,18 @@
     "update.btn": "Обновить сейчас",
     "update.updating": "Обновление…",
     "update.done": "Успешно обновлено до v{version}! Перезапустите DSH.",
-    "update.failed": "Ошибка обновления: {error}"
+    "update.failed": "Ошибка обновления: {error}",
+    "rate.offPeak": "непиковый",
+    "rate.peak": "пиковый",
+    "rate.discountedActive": "Действует сниженный тариф",
+    "cacheSaved": "Сэкономлено на кэше контекста:",
+    "spendByModel": "РАСХОД ПО МОДЕЛЯМ",
+    "sessionTotal": "Всего за сессию:",
+    "copySummary": "Скопировать сводку",
+    "inputCacheHit": "Ввод (попадание в кэш)",
+    "inputCacheMiss": "Ввод (промах кэша)",
+    "output": "Вывод",
+    "tokens": "Токены"
   },
   "@goodandready/dsh-cost-meter": {
     "update.available": "Доступно обновление",
