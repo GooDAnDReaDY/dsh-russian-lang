@@ -7,8 +7,26 @@
 import glob
 import json
 import os
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+
+CHECK_MODE = '--check' in sys.argv
+diff_files = []
+
+def write_or_check(file_path, content):
+    if CHECK_MODE:
+        if not os.path.exists(file_path):
+            diff_files.append(file_path + ' (файл отсутствует на диске)')
+            return
+        with open(file_path, 'r', encoding='utf-8') as f:
+            disk_content = f.read()
+        if disk_content != content:
+            diff_files.append(file_path)
+    else:
+        with open(file_path, 'w', encoding='utf-8', newline='\n') as f:
+            f.write(content)
+
 
 # ru/         — словари ядра DSH
 # ru-plugins/ — словари сторонних плагинов; механизм тот же, разделение нужно
@@ -56,8 +74,8 @@ for ns, entries in mt.items():
 # client.js оставался в безопасной зоне Store (< 160 KiB из 256 KiB лимита).
 core_file = os.path.join(HERE, 'lib', 'locales', 'core.json')
 os.makedirs(os.path.dirname(core_file), exist_ok=True)
-with open(core_file, 'w', encoding='utf-8', newline='\n') as f:
-    json.dump(core_dict, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+core_content = json.dumps(core_dict, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+write_or_check(core_file, core_content)
 print('Core namespace-ов: %d, ключей: %d -> lib/locales/core.json' % (len(core_dict), sum(len(v) for v in core_dict.values())))
 
 # В client.js оставляем только компактный бутстрап для мгновенной отрисовки
@@ -110,8 +128,8 @@ for path in plugin_sources:
                     filtered[ns][key] = rec.get('ru', '')
     base = os.path.basename(path)
     out_file = os.path.join(locales_dir, base)
-    with open(out_file, 'w', encoding='utf-8', newline='\n') as f:
-        json.dump(filtered, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+    plugin_content = json.dumps(filtered, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+    write_or_check(out_file, plugin_content)
 
 # Карта zh->ru для DOM-перевода панелей, игнорирующих locale-ядро (например
 # dsh-skill-hub выбирает свой словарь по documentElement.lang и умеет только
@@ -140,8 +158,8 @@ for ref_path in sorted(glob.glob(os.path.join(HERE, 'zh-refs', '*.json'))):
             zh_ru[zh_text] = ru_text
 zh_ru_file = os.path.join(HERE, 'lib', 'locales', 'zh-ru.json')
 os.makedirs(os.path.dirname(zh_ru_file), exist_ok=True)
-with open(zh_ru_file, 'w', encoding='utf-8', newline='\n') as f:
-    json.dump(zh_ru, f, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+zh_ru_content = json.dumps(zh_ru, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+write_or_check(zh_ru_file, zh_ru_content)
 zh_ru_json = "{}" 
 print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 
@@ -2385,9 +2403,8 @@ for l in lines:
     cleaned_lines.append(l)
 client = '\n'.join(cleaned_lines)
 
-with open(os.path.join(HERE, 'lib', 'client.js'), 'w',
-          encoding='utf-8', newline='\n') as fh:
-    fh.write(client)
+client_target = os.path.join(HERE, 'lib', 'client.js')
+write_or_check(client_target, client)
 print('Core namespace-ов: %d, ключей: %d -> lib/client.js'
       % (len(core_dict), sum(len(v) for v in core_dict.values())))
 
@@ -2401,3 +2418,15 @@ for root, _, files in os.walk(os.path.join(HERE, 'lib')):
         if sz > MAX_FILE_BYTES:
             raise SystemExit(f"BLOCKED: {rel} size is {sz} bytes (> {MAX_FILE_BYTES})")
 print('Проверка лимита размера DSH Store: все файлы в lib/ меньше 256 KiB — OK')
+
+
+if CHECK_MODE:
+    if diff_files:
+        print(f"FAIL: {len(diff_files)} файлов не синхронизированы со словарями ru/ и кодом build.py:", file=sys.stderr)
+        for df in diff_files:
+            print(f"  - {df}", file=sys.stderr)
+        print("Запустите `python3 build.py` для обновления сборки.", file=sys.stderr)
+        sys.exit(1)
+    else:
+        print("OK: Режим --check: все сгенерированные файлы полностью синхронизированы.")
+        sys.exit(0)
