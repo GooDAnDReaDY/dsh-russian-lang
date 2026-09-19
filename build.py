@@ -1256,9 +1256,10 @@ window.__ModuleLoader__.load({
         layoutHintEl = document.createElement('div')
         layoutHintEl.dataset.russianLangLayout = '1'
         Object.assign(layoutHintEl.style, {
-          position: 'fixed', zIndex: '99999', background: '#fff', color: '#000',
-          border: '1px solid #888', borderRadius: '8px', padding: '6px 10px',
-          fontSize: '13px', boxShadow: '0 2px 8px rgba(0,0,0,.2)', cursor: 'pointer'
+          position: 'fixed', zIndex: '99999', background: 'var(--dsw-alias-bg-layer-3)',
+          color: 'var(--dsw-alias-label-primary)',
+          border: '1px solid var(--dsw-alias-border-l2)', borderRadius: '8px', padding: '6px 10px',
+          fontSize: '13px', boxShadow: 'var(--dsw-alias-shadow-l2)', cursor: 'pointer'
         })
         const label = direction === 'cyr2lat' ? 'Команда, не та раскладка' : 'Не та раскладка'
         layoutHintEl.textContent = label + ': ' + converted
@@ -1289,8 +1290,8 @@ window.__ModuleLoader__.load({
           layoutBadgeEl.type = 'button'
           layoutBadgeEl.dataset.russianLangLayoutBadge = '1'
           Object.assign(layoutBadgeEl.style, {
-            position: 'fixed', zIndex: '99998', background: 'var(--dsw-alias-bg-layer-3, #fff)',
-            color: 'var(--dsw-alias-label-secondary, #666)', border: '1px solid var(--dsw-alias-border-l2, #888)',
+            position: 'fixed', zIndex: '99998', background: 'var(--dsw-alias-bg-layer-3)',
+            color: 'var(--dsw-alias-label-secondary)', border: '1px solid var(--dsw-alias-border-l2)',
             borderRadius: '6px', padding: '1px 6px', fontSize: '11px', cursor: 'pointer',
             fontFamily: 'monospace', lineHeight: '1.4', fontWeight: '600'
           })
@@ -1858,7 +1859,7 @@ window.__ModuleLoader__.load({
                 '<button type="button" class="rl-trans-btn rl-btn-close" title="Закрыть">✕</button>' +
               '</div>' +
             '</div>' +
-            '<div class="rl-trans-body"' + (isErr ? ' style="color: var(--dsw-alias-color-warning, #eab308); font-size: 13px;"' : '') + '></div>'
+            '<div class="rl-trans-body"' + (isErr ? ' style="color: var(--dsw-alias-state-warning-primary); font-size: 13px;"' : '') + '></div>'
             box.querySelector('.rl-trans-body').textContent = displayText
 
             const copyBtn = box.querySelector('.rl-btn-copy')
@@ -2157,7 +2158,7 @@ window.__ModuleLoader__.load({
                     React.createElement('div', { style: { fontWeight: 600, color: 'var(--dsw-alias-label-primary)' } },
                       t('updaterCurrent').replace('{version}', upStatus.currentVersion || '__PKG_VERSION__')),
                     upStatus.updateAvailable
-                      ? React.createElement('div', { style: { color: 'var(--dsw-alias-color-warning, #eab308)', marginTop: '2px', fontWeight: 500 } },
+                      ? React.createElement('div', { style: { color: 'var(--dsw-alias-state-warning-primary)', marginTop: '2px', fontWeight: 500 } },
                           t('updaterLatest').replace('{version}', upStatus.latestVersion || ''))
                       : React.createElement('div', { style: { color: 'var(--dsw-alias-label-secondary)', marginTop: '2px' } },
                           t('updaterUpToDate'))
@@ -2179,8 +2180,8 @@ window.__ModuleLoader__.load({
                 upMsg ? React.createElement('div', {
                   style: {
                     marginTop: '10px', padding: '8px 12px', borderRadius: '8px',
-                    background: upMsg.type === 'ok' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-                    color: upMsg.type === 'ok' ? '#16a34a' : '#dc2626', fontSize: '12px', fontWeight: 500
+                    background: upMsg.type === 'ok' ? 'color-mix(in srgb, var(--dsw-alias-state-success-primary) 12%%, transparent)' : 'color-mix(in srgb, var(--dsw-alias-state-error-primary) 12%%, transparent)',
+                    color: upMsg.type === 'ok' ? 'var(--dsw-alias-state-success-primary)' : 'var(--dsw-alias-state-error-primary)', fontSize: '12px', fontWeight: 500
                   }
                 }, upMsg.text) : null
               )
@@ -2217,8 +2218,8 @@ window.__ModuleLoader__.load({
                 value.translateEngine === 'google' ? React.createElement('div', {
                   style: {
                     marginTop: '10px', padding: '8px 12px', borderRadius: '8px',
-                    background: 'rgba(234, 179, 8, 0.12)', border: '1px solid rgba(234, 179, 8, 0.3)',
-                    color: 'var(--dsw-alias-color-warning, #eab308)', fontSize: '12px', fontWeight: 500, lineHeight: 1.4
+                    background: 'color-mix(in srgb, var(--dsw-alias-state-warning-primary) 12%%, transparent)', border: '1px solid color-mix(in srgb, var(--dsw-alias-state-warning-primary) 30%%, transparent)',
+                    color: 'var(--dsw-alias-state-warning-primary)', fontSize: '12px', fontWeight: 500, lineHeight: 1.4
                   }
                 }, t('googleWarn')) : null,
                 value.translateEngine === 'local' ? React.createElement('div', {
@@ -2239,8 +2240,8 @@ window.__ModuleLoader__.load({
                   transMsg ? React.createElement('div', {
                     style: {
                       marginTop: '6px', padding: '8px 12px', borderRadius: '8px',
-                      background: transMsg.type === 'ok' ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
-                      color: transMsg.type === 'ok' ? '#16a34a' : '#dc2626', fontSize: '12px', fontWeight: 500
+                      background: transMsg.type === 'ok' ? 'color-mix(in srgb, var(--dsw-alias-state-success-primary) 12%%, transparent)' : 'color-mix(in srgb, var(--dsw-alias-state-error-primary) 12%%, transparent)',
+                      color: transMsg.type === 'ok' ? 'var(--dsw-alias-state-success-primary)' : 'var(--dsw-alias-state-error-primary)', fontSize: '12px', fontWeight: 500
                     }
                   }, transMsg.text) : null
                 ) : null
@@ -2302,8 +2303,8 @@ window.__ModuleLoader__.load({
       '.rl-grid-2{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:10px}',
       '.rl-grid-3{display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:10px}',
       '.rl-badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--dsw-alias-border-l2);display:inline-flex;align-items:center;gap:4px;font-weight:500}',
-      '.rl-badge-ok{border-color:var(--dsw-alias-state-success-primary);color:var(--dsw-alias-state-success-primary);background:rgba(16,185,129,0.08)}',
-      '.rl-badge-warn{border-color:var(--dsw-alias-state-warning-primary);color:var(--dsw-alias-state-warning-primary);background:rgba(245,158,11,0.08)}',
+      '.rl-badge-ok{border-color:var(--dsw-alias-state-success-primary);color:var(--dsw-alias-state-success-primary);background:color-mix(in srgb, var(--dsw-alias-state-success-primary) 8%%, transparent)}',
+      '.rl-badge-warn{border-color:var(--dsw-alias-state-warning-primary);color:var(--dsw-alias-state-warning-primary);background:color-mix(in srgb, var(--dsw-alias-state-warning-primary) 8%%, transparent)}',
       '.rl-badge-dim{border-color:var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);background:var(--dsw-alias-bg-layer-3)}',
       '.rl-item-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}',
       '.rl-item-head{display:flex;align-items:center;justify-content:space-between;gap:8px}',
