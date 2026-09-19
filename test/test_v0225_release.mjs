@@ -3,9 +3,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import { getCoreDictionaries, getAllDictionaries } from '../lib/locales.js'
 
-test('v0.2.25: package.json version is 0.2.25', () => {
+test('release: package.json version matches the released line', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
-  assert.equal(pkg.version, '0.2.25')
+  // Pinned to the current release; bump it together with package.json.
+  assert.equal(pkg.version, '0.2.26')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
 })
 
