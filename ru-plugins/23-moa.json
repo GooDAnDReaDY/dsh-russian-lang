@@ -209,6 +209,17 @@
     "actions.saved": "Сохранено!",
     "actions.retry": "Повторить",
     "badge.disabled": "Отключено",
-    "config.enabled_label": "Включить модуль Mixture of Agents"
+    "config.enabled_label": "Включить модуль Mixture of Agents",
+    "updater.available": "Доступно обновление: v{version}",
+    "updater.btnCheck": "Проверить обновления",
+    "updater.btnUpdate": "Обновить до v{version}",
+    "updater.checkFailed": "Ошибка проверки реестра",
+    "updater.checking": "Проверка реестра...",
+    "updater.current": "Текущая версия: v{version}",
+    "updater.desc": "Проверка npm-реестра на новые версии и обновление в один клик.",
+    "updater.success": "Успешно обновлено до v{version}. Перезапустите DSH для применения.",
+    "updater.title": "Обновление плагина",
+    "updater.upToDate": "Актуальная версия",
+    "updater.updating": "Обновление плагина..."
   }
 }

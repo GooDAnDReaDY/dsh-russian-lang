@@ -59,6 +59,16 @@
     "templateDocs": "📚 Документация и контракт",
     "templateUpgrade": "📦 Обновление зависимостей",
     "templateCleanup": "🧹 Мёртвый код",
-    "templatePerf": "⚙️ Производительность"
+    "templatePerf": "⚙️ Производительность",
+    "cardSubtitle": "Отслеживание целей с контрольными точками и подцелями",
+    "checkUpdate": "Проверить обновление",
+    "checking": "Проверка…",
+    "upToDate": "Актуальная версия",
+    "updateAvailable": "доступно",
+    "updateBtn": "Обновить",
+    "updateDone": "Обновлено! Перезапустите DSH.",
+    "updateFailed": "Ошибка обновления",
+    "updating": "Обновление…",
+    "version": "Версия"
   }
 }

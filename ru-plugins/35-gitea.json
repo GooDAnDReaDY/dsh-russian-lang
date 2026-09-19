@@ -169,6 +169,20 @@
     "activePr": "Активный Pull Request: #{number}",
     "viewInGitea": "Открыть в Gitea ↗",
     "recentEvents": "Недавние события репозитория",
-    "noEvents": "События не зафиксированы"
+    "noEvents": "События не зафиксированы",
+    "badgeOffline": "Не в сети",
+    "badgeOnline": "В сети",
+    "eventsTitle": "События",
+    "updaterAvailable": "Доступно обновление: v{version}",
+    "updaterBtnCheck": "Проверить обновления",
+    "updaterBtnUpdate": "Обновить до v{version}",
+    "updaterCheckFailed": "Ошибка проверки реестра",
+    "updaterChecking": "Проверка реестра...",
+    "updaterCurrent": "Текущая версия: v{version}",
+    "updaterDesc": "Проверка npm-реестра на новые версии и обновление в один клик.",
+    "updaterSuccess": "Успешно обновлено до v{version}. Перезапустите DSH для применения.",
+    "updaterTitle": "Обновление плагина",
+    "updaterUpToDate": "Актуальная версия",
+    "updaterUpdating": "Обновление плагина..."
   }
 }

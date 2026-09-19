@@ -159,6 +159,7 @@
     "secAccess": "Политика авторизации и LAN PIN",
     "secAccessDesc": "Требование ввода PIN-кода для новых устройств в локальной сети",
     "lanPinRefLabel": "Ссылка на секрет LAN PIN",
-    "lanPinRefPh": "LAN_PIN или имя секрета в Credentials"
+    "lanPinRefPh": "LAN_PIN или имя секрета в Credentials",
+    "subtitle": "Доступ по локальной сети и управление подключением"
   }
 }

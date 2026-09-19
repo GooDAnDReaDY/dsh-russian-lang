@@ -7,7 +7,18 @@
     "placeholder": "Поиск модели или провайдера…",
     "empty": "Модели не найдены",
     "clear": "Очистить поиск",
-    "recent": "Недавние"
+    "recent": "Недавние",
+    "dms.desc": "Поиск и быстрый выбор моделей для WebUI DeepSeek Harness",
+    "dms.title": "Поиск моделей",
+    "dms.updater.check": "Проверить обновления",
+    "dms.updater.checking": "Проверка…",
+    "dms.updater.current": "Текущая версия",
+    "dms.updater.failed": "Ошибка",
+    "dms.updater.restart_notice": "Обновление установлено. Перезапустите DSH для применения.",
+    "dms.updater.up_to_date": "Актуальная версия",
+    "dms.updater.update_available": "Доступна новая версия: v{version}",
+    "dms.updater.update_now": "Обновить сейчас",
+    "dms.updater.updating": "Обновление…"
   },
   "dsh-model-search": {
     "dms.placeholder": "Поиск модели или провайдера…",
@@ -17,6 +28,17 @@
     "placeholder": "Поиск модели или провайдера…",
     "empty": "Модели не найдены",
     "clear": "Очистить поиск",
-    "recent": "Недавние"
+    "recent": "Недавние",
+    "dms.desc": "Поиск и быстрый выбор моделей для WebUI DeepSeek Harness",
+    "dms.title": "Поиск моделей",
+    "dms.updater.check": "Проверить обновления",
+    "dms.updater.checking": "Проверка…",
+    "dms.updater.current": "Текущая версия",
+    "dms.updater.failed": "Ошибка",
+    "dms.updater.restart_notice": "Обновление установлено. Перезапустите DSH для применения.",
+    "dms.updater.up_to_date": "Актуальная версия",
+    "dms.updater.update_available": "Доступна новая версия: v{version}",
+    "dms.updater.update_now": "Обновить сейчас",
+    "dms.updater.updating": "Обновление…"
   }
 }
