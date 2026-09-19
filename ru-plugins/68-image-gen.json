@@ -138,6 +138,26 @@
     "p.pruneDays": "0",
     "f.cacheTtlDays": "Cache Retention (Legacy)",
     "f.cacheTtlDaysHint": "Legacy name for retention period in days.",
-    "p.cacheTtlDays": "0"
+    "p.cacheTtlDays": "0",
+    "card.responsiveTabs": "Адаптивные экраны",
+    "diagnostics.desc": "Быстрая проверка статуса подключения и задержки выбранного API сервиса генерации.",
+    "diagnostics.ready": "В норме",
+    "diagnostics.test": "Проверить подключение",
+    "diagnostics.testing": "Проверка...",
+    "diagnostics.title": "Диагностика подключения провайдера",
+    "f.inherit": "По умолчанию / Наследовать",
+    "gallery.copy_link": "Копировать Markdown-ссылку",
+    "gallery.copy_prompt": "Копировать промпт",
+    "gallery.inspector": "Детали записи генерации",
+    "settings.description": "Генерация изображений с помощью ИИ, дорисовка, вариации, апскейл и векторизация.",
+    "settings.discard": "Сбросить изменения",
+    "settings.invalidNumber": "Пожалуйста, введите корректное число",
+    "settings.overridden": "переопределено",
+    "settings.reset": "Сбросить по умолчанию",
+    "settings.saveFailed": "Не удалось сохранить настройки. Пожалуйста, проверьте учетные данные и попробуйте снова.",
+    "settings.title": "Студия изображений",
+    "settings.unavailable": "Настройки плагина инициализируются. Они появятся автоматически через несколько секунд.",
+    "settings.unsaved": "Несохраненные изменения",
+    "tab.gallery": "Галерея"
   }
 }

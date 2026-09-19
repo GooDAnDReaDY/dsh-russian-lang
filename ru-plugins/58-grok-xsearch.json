@@ -75,6 +75,14 @@
     "enabled_plugin": "Включить плагин Grok X Search",
     "cache_hits": "Попаданий",
     "cache_misses": "Промахов",
-    "cache_hit_rate": "Эффективность кэша"
+    "cache_hit_rate": "Эффективность кэша",
+    "updater_check": "Проверить обновления",
+    "updater_checking": "Проверка…",
+    "updater_failed": "Ошибка проверки обновлений: ",
+    "updater_success": "Плагин успешно обновлен! Пожалуйста, перезапустите сервис DSH.",
+    "updater_title": "Обновление плагина",
+    "updater_up_to_date": "Актуальная версия",
+    "updater_update_now": "Обновить сейчас",
+    "updater_updating": "Обновление…"
   }
 }
