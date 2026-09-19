@@ -1523,9 +1523,21 @@ window.__ModuleLoader__.load({
       // Регистрируем карточку через inject: так слот объявляется родителю,
       // и карточка появляется в списке «Настройки → Плагины». Без inject
       // register бросает "slot is not declared" на новых ядрах.
-      // Посадка строки на странице «Плагины» идёт первой (её рендерит текущее
-      // ядро), прежняя settings.plugin.item сохранена фолбэком.
+      // Посадка в списке плагинов (`plugins.item`) идёт первой: именно её текущее
+      // ядро (0.1.6-alpha.2) рендерит как страницу плагина с настройками. label —
+      // статичная строка: он резолвится во время рендера страницы, и обращение к
+      // локали там роняет весь клиентский батч. Прежние посадки сохранены фолбэками.
       try {
+        ctx.slots.inject('plugins.item', () =>
+          ctx.slots.register({
+            name: 'plugins.item',
+            id: SETTINGS_NS_NAME,
+            order: 60,
+            label: () => 'Russian language',
+            locale: SETTINGS_NS_NAME,
+            inject: () => ({ scope, runtime, toggleRu }),
+          }, SettingsCard),
+        )
         ctx.slots.inject('plugins.row.config', () =>
           ctx.slots.register({
             name: 'plugins.row.config',
