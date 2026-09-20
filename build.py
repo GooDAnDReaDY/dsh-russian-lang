@@ -167,7 +167,7 @@ print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_bundle = freq_words[:750]
+freq_bundle = freq_words[:600]
 freq_json = json.dumps(freq_bundle, ensure_ascii=False)
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
@@ -265,6 +265,9 @@ card_ru = {
     'presetExpert': 'Технический эксперт (строгая терминология, чистый код)',
     'presetWriter': 'Технический писатель (Markdown, таблицы, ГОСТ)',
     'presetConcise': 'Лаконичный режим (кратко, без лишней воды)',
+    'presetReviewer': 'Код-ревьюер (поиск багов, безопасность, аудит)',
+    'presetArchitect': 'Системный архитектор (контракты, масштабируемость)',
+    'presetTutor': 'Наставник (понятные объяснения, пошаговый разбор)',
         'secUpdater': '🔄 Обновление языкового пакета',
     'secUpdaterDesc': 'Проверка наличия новых релизов в реестре npm и обновление в один клик.',
     'updaterCurrent': 'Текущая версия: v{version}',
@@ -2303,7 +2306,10 @@ window.__ModuleLoader__.load({
                   },
                     React.createElement('option', { value: 'technical_expert' }, t('presetExpert')),
                     React.createElement('option', { value: 'tech_writer' }, t('presetWriter')),
-                    React.createElement('option', { value: 'concise' }, t('presetConcise'))
+                    React.createElement('option', { value: 'concise' }, t('presetConcise')),
+                    React.createElement('option', { value: 'code_reviewer' }, t('presetReviewer')),
+                    React.createElement('option', { value: 'architect' }, t('presetArchitect')),
+                    React.createElement('option', { value: 'tutor' }, t('presetTutor'))
                   )
                 ),
                 presetInfo ? React.createElement('div', { className: 'rl-preview-box' },
