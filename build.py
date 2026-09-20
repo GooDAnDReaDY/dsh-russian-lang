@@ -167,7 +167,7 @@ print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_bundle = freq_words[:1200]
+freq_bundle = freq_words[:900]
 freq_json = json.dumps(freq_bundle, ensure_ascii=False)
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
@@ -351,7 +351,7 @@ window.__ModuleLoader__.load({
         }, 'dsh-russian-lang: ' + ns)
       }
 
-      // 1a. Двухфазная быстрая загрузка словарей: ядро -> плагины по требованию (Issue #284)
+      // 1a. Двухфазная быстрая загрузка и клиентский кэш словарей (CacheStorage / localStorage) (Issue #284, #285)
       const registerDictMap = (dictMap) => {
         if (!dictMap || typeof dictMap !== 'object') return
         for (const ns of Object.keys(dictMap)) {
@@ -370,6 +370,84 @@ window.__ModuleLoader__.load({
         }
       }
 
+      const CACHE_NAME = 'dsh-ru-cache-v1'
+      const loadLocalDict = (key) => {
+        try {
+          const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('dsh_ru_' + key) : null
+          return raw ? JSON.parse(raw) : null
+        } catch (_) { return null }
+      }
+      const saveLocalDict = (key, etag, data) => {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('dsh_ru_' + key, JSON.stringify({ etag, data }))
+          }
+        } catch (_) {}
+      }
+
+      // Мгновенная синхронная гидратация ядра из кэша (zero FOUT при перезагрузке)
+      try {
+        const cachedCore = loadLocalDict('core')
+        if (cachedCore && cachedCore.data && cachedCore.data.core) {
+          registerDictMap(cachedCore.data.core)
+          if (cachedCore.data.zhRu && typeof ZH_RU === 'object') {
+            Object.assign(ZH_RU, cachedCore.data.zhRu)
+          }
+        }
+      } catch (_) {}
+
+      const fetchCachedResource = async (url, cacheKey, onData) => {
+        let etag = null
+        let delivered = false
+
+        if (typeof caches !== 'undefined') {
+          try {
+            const cache = await caches.open(CACHE_NAME)
+            const matched = await cache.match(url)
+            if (matched) {
+              etag = matched.headers.get('etag')
+              const parsed = await matched.json()
+              if (parsed) {
+                delivered = true
+                onData(parsed)
+              }
+            }
+          } catch (_) {}
+        }
+
+        if (!delivered && cacheKey) {
+          const local = loadLocalDict(cacheKey)
+          if (local && local.data) {
+            etag = local.etag
+            delivered = true
+            onData(local.data)
+          }
+        }
+
+        if (typeof fetch !== 'function') return
+        try {
+          const headers = { 'Accept': 'application/json' }
+          if (etag) headers['If-None-Match'] = etag
+          const res = await fetch(url, { headers })
+          if (res.status === 304) return
+          if (res.ok) {
+            const newEtag = res.headers.get('etag')
+            const cloned = res.clone()
+            const data = await res.json()
+            if (data) {
+              onData(data)
+              if (typeof caches !== 'undefined') {
+                try {
+                  const cache = await caches.open(CACHE_NAME)
+                  await cache.put(url, cloned)
+                } catch (_) {}
+              }
+              if (cacheKey) saveLocalDict(cacheKey, newEtag, data)
+            }
+          }
+        } catch (_) {}
+      }
+
       const loadedPluginNames = new Set()
       const pendingPluginLoads = new Set()
       let pluginBatchTimer = null
@@ -384,18 +462,17 @@ window.__ModuleLoader__.load({
           pendingPluginLoads.add(n)
         }
         const qs = toLoad.length > 0 ? ('?names=' + encodeURIComponent(toLoad.join(','))) : ''
-        fetch('/api/dsh-russian-lang/dict/plugins' + qs, { headers: { 'Accept': 'application/json' } })
-          .then((res) => res.ok ? res.json() : null)
-          .then((data) => {
-            if (data && data.plugins) {
-              registerDictMap(data.plugins)
-              for (const n of toLoad) loadedPluginNames.add(n)
-            }
-          })
-          .catch(() => {})
-          .finally(() => {
-            for (const n of toLoad) pendingPluginLoads.delete(n)
-          })
+        const url = '/api/dsh-russian-lang/dict/plugins' + qs
+        const cacheKey = toLoad.length > 0 ? ('plugins_' + toLoad.sort().join('_')) : 'plugins_all'
+
+        fetchCachedResource(url, cacheKey, (data) => {
+          if (data && data.plugins) {
+            registerDictMap(data.plugins)
+            for (const n of toLoad) loadedPluginNames.add(n)
+          }
+        }).catch(() => {}).finally(() => {
+          for (const n of toLoad) pendingPluginLoads.delete(n)
+        })
       }
 
       const schedulePluginLoad = (name) => {
@@ -408,40 +485,34 @@ window.__ModuleLoader__.load({
         }, 50)
       }
 
-      if (typeof fetch === 'function') {
-        fetch('/api/dsh-russian-lang/dict/core', { headers: { 'Accept': 'application/json' } })
-          .then((res) => {
-            if (!res.ok) throw new Error('core endpoint not ok')
-            return res.json()
-          })
-          .then((data) => {
-            if (!data) return
-            if (data.core) registerDictMap(data.core)
-            if (data.zhRu && typeof ZH_RU === 'object') {
-              Object.assign(ZH_RU, data.zhRu)
-              if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
-            }
-            if (typeof syncZhDom === 'function') syncZhDom()
+      fetchCachedResource('/api/dsh-russian-lang/dict/core', 'core', (data) => {
+        if (!data) return
+        if (data.core) registerDictMap(data.core)
+        if (data.zhRu && typeof ZH_RU === 'object') {
+          Object.assign(ZH_RU, data.zhRu)
+          if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
+        }
+        if (typeof syncZhDom === 'function') syncZhDom()
 
-            // Фоновая дозагрузка установленных плагинов
-            setTimeout(() => { loadPluginDictionaries([]) }, 100)
-          })
-          .catch(() => {
-            fetch('/api/dsh-russian-lang/dict/all', { headers: { 'Accept': 'application/json' } })
-              .then((res) => res.ok ? res.json() : null)
-              .then((data) => {
-                if (!data) return
-                const allDicts = Object.assign({}, data.core || {}, data.plugins || {}, data)
-                if (data.zhRu && typeof ZH_RU === 'object') {
-                  Object.assign(ZH_RU, data.zhRu)
-                  if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
-                }
-                registerDictMap(allDicts)
-                if (typeof syncZhDom === 'function') syncZhDom()
-              })
-              .catch(() => {})
-          })
-      }
+        // Фоновая дозагрузка установленных плагинов
+        setTimeout(() => { loadPluginDictionaries([]) }, 100)
+      }).catch(() => {
+        if (typeof fetch === 'function') {
+          fetch('/api/dsh-russian-lang/dict/all', { headers: { 'Accept': 'application/json' } })
+            .then((res) => res.ok ? res.json() : null)
+            .then((data) => {
+              if (!data) return
+              const allDicts = Object.assign({}, data.core || {}, data.plugins || {}, data)
+              if (data.zhRu && typeof ZH_RU === 'object') {
+                Object.assign(ZH_RU, data.zhRu)
+                if (typeof updateZhRu === 'function') updateZhRu(data.zhRu)
+              }
+              registerDictMap(allDicts)
+              if (typeof syncZhDom === 'function') syncZhDom()
+            })
+            .catch(() => {})
+        }
+      })
 
       // 1b. Пользовательские переопределения + плюрализация.
       // Overrides: пользовательский слой поверх словарей (russian-lang.overrides).
@@ -2468,7 +2539,8 @@ client = client.replace('__PKG_VERSION__', pkg['version'])
 # Перевод строки задаём явно: в текстовом режиме Windows пишет CRLF, Linux —
 # LF, и один и тот же исходник даёт разные байты бандла. Сверка собранного
 # файла с закоммиченным (CI, #134) от этого становится нестабильной.
-# Очистка однострочных комментариев для компактности production-бандла
+# Очистка комментариев для компактности production-бандла
+
 lines = client.split('\n')
 cleaned_lines = []
 for l in lines:
