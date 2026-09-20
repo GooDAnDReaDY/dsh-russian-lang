@@ -167,7 +167,7 @@ print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_bundle = freq_words[:900]
+freq_bundle = freq_words[:750]
 freq_json = json.dumps(freq_bundle, ensure_ascii=False)
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
@@ -527,6 +527,9 @@ window.__ModuleLoader__.load({
       const getPluginLocalizationStatus = makePluginLocalizationStatus(RU)
       try {
         runtime.formatNumber = formatNumber
+        runtime.formatCompactNumber = formatCompactNumber
+        runtime.formatDate = formatDate
+        runtime.formatTokens = formatTokens
         runtime.formatRelativeTime = formatRelativeTime
         runtime.formatCurrency = formatCurrency
         runtime.inflect = inflect
