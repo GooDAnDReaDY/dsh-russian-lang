@@ -6843,6 +6843,8 @@
     "saved": "Saved",
     "savedPartial": "Saved, except: ",
     "noChanges": "Nothing to change.",
-    "invalidNumber": "Enter a positive number."
+    "invalidNumber": "Enter a positive number.",
+    "approvalMode": "Write approval",
+    "approvalModeHint": "\"auto\" lets agreed non-destructive writes through without a prompt; deleting a release, tag, secret, variable, ruleset, branch protection or cancelling a run always asks. \"ask\" asks for every write; \"off\" leaves approvals to the host."
   }
 }

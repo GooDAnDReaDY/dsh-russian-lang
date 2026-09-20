@@ -7,7 +7,7 @@ import { getPluginDictionariesByNames } from '../lib/locales.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-test('v0.3.1 (#287, #311): dsh-github-ops словарь содержит все 26 требуемых ключей', () => {
+test('v0.3.1 (#287, #311): dsh-github-ops словарь содержит все 28 требуемых ключей', () => {
   const dictPath = path.join(__dirname, '..', 'ru-plugins', '77-github-ops.json')
   const content = JSON.parse(fs.readFileSync(dictPath, 'utf-8'))
   const dict = content['dsh-github-ops']
@@ -22,7 +22,7 @@ test('v0.3.1 (#287, #311): dsh-github-ops словарь содержит все
     'reviewRules', 'reviewRulesHint',
     'statusLoading', 'statusUnavailable', 'statusReadOnly',
     'save', 'saving', 'saved', 'savedPartial',
-    'noChanges', 'invalidNumber'
+    'noChanges', 'invalidNumber', 'approvalMode', 'approvalModeHint'
   ]
 
   for (const k of expectedKeys) {
@@ -35,6 +35,7 @@ test('v0.3.1 (#287, #311): dsh-github-ops словарь содержит все
   assert.equal(dict.reviewRules, 'Переопределение правил ревью (JSON)')
   assert.equal(dict.save, 'Сохранить')
   assert.equal(dict.saved, 'Сохранено')
+  assert.equal(dict.approvalMode, 'Подтверждение записи')
 })
 
 test('v0.3.1 (#287): getPluginDictionariesByNames возвращает dsh-github-ops', () => {

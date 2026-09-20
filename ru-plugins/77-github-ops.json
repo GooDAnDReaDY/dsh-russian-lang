@@ -25,6 +25,8 @@
     "maxRetries": "Повторы при ошибке чтения",
     "maxRetriesHint": "Повтор чтения (GET/HEAD) при сетевом сбое, таймауте или 5xx. Запись никогда не повторяется автоматически.",
     "reviewRules": "Переопределение правил ревью (JSON)",
-    "reviewRulesHint": "Необязательно. sensitivePaths, sensitiveSeverity, attentionPaths, migrationPaths, testsRequired, sourcePatterns, testPatterns, largeDiffLines. Пример: {\"largeDiffLines\": 400, \"sensitivePaths\": [\".env\", \"private/**\"]}"
+    "reviewRulesHint": "Необязательно. sensitivePaths, sensitiveSeverity, attentionPaths, migrationPaths, testsRequired, sourcePatterns, testPatterns, largeDiffLines. Пример: {\"largeDiffLines\": 400, \"sensitivePaths\": [\".env\", \"private/**\"]}",
+    "approvalMode": "Подтверждение записи",
+    "approvalModeHint": "\"auto\" разрешает согласованные неразрушающие операции записи без запроса; удаление релиза, тега, секрета, переменной, набора правил, защиты ветки или отмена запуска всегда запрашивают подтверждение. \"ask\" запрашивает каждое действие записи; \"off\" передаёт контроль хосту."
   }
 }
