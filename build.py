@@ -903,9 +903,7 @@ window.__ModuleLoader__.load({
 'Hooks': 'Хуки',
 'Manage what the side card shows and how it behaves': 'Настройка содержимого и поведения боковой панели',
 'Inject the sidebar-open tool for the model': 'Предоставить модели инструмент sidebar-open',
-'When enabled, the model can actively open files, folders, and HTTP(S) pages in the sidebar through the sidebar_open tool (off by default)': 'Если включено, модель может открывать файлы, папки и веб-страницы в боковой панели через инструмент sidebar_open (по умолчанию выключено)',
 'Position compatibility mode': 'Режим совместимости расположения',
-'Pick the title-bar compatibility scheme: auto-detect (default, conservative) / DSH official web / known desktop shells / custom (shift distance + custom CSS)': 'Выберите схему совместимости строки заголовка: автоопределение (по умолчанию) / официальный DSH Web / десктопные оболочки / пользовательский режим',
 'Auto-detect': 'Автоопределение',
 'Sidebar content': 'Содержимое боковой панели',
 'Changes': 'Изменения',
@@ -1023,16 +1021,12 @@ window.__ModuleLoader__.load({
 'Saved': 'Сохранено',
 'Refresh': 'Обновить',
 'Loading settings…': 'Загрузка настроек…',
-'Put the ar-… key in DSH credentials or process env under this name. Never paste the key into this form.': 'Укажите ключ ar-… в учётных данных DSH или переменной окружения. Не вставляйте ключ в форму.',
 'Preferred engine': 'Предпочитаемый движок',
 'API key': 'API-ключ',
 'stored, leave empty to keep it': 'сохранён, оставьте пустым для сохранения',
-'Separate multiple keys with commas. ModSearch rotates to the next key after authentication, rate-limit, or quota failures.': 'Разделяйте несколько ключей запятыми. ModSearch переключается на следующий ключ при ошибках аутентификации или лимитов.',
 'Built-in official endpoint, leave blank to use it': 'Встроенная официальная конечная точка, оставьте пустым',
-'Automatic engine chain Checked engines may join failover. Only engines ready here are listed.': 'Автоматическая цепочка движков: отмеченные движки участвуют в отказоустойчивости.',
 'Discard': 'Сбросить',
 'Model synchronization': 'Синхронизация моделей',
-'Refresh model catalogs for API-key providers. A dry-run is the default; applying changes is explicit.': 'Обновление каталогов моделей провайдеров API-ключей. По умолчанию выполняется проверка (dry-run); применение изменений явное.',
 'All API-key providers': 'Все провайдеры API-ключей',
 'Preview only (dry-run)': 'Только предпросмотр (dry-run)',
 'Confirm stale removal': 'Подтверждать удаление устаревших',
@@ -1043,7 +1037,6 @@ window.__ModuleLoader__.load({
 'Check credentials': 'Проверить учётные данные',
 'Choose models': 'Выбрать модели',
 'Manual model selection': 'Выбор моделей вручную',
-'Images in chat are processed by the vision model you choose here. Leave both fields empty to auto-pick the first vision-capable model from the catalog.': 'Изображения в чате обрабатываются выбранной моделью зрения. Оставьте оба поля пустыми для автовыбора первой доступной модели.',
 'Mode': 'Режим',
 'Hybrid (auto-rewrite + tools)': 'Гибридный (авто-переписывание + инструменты)',
 'Describe strategy': 'Стратегия описания',
@@ -1053,7 +1046,6 @@ window.__ModuleLoader__.load({
 'Routing': 'Маршрутизация',
 'Channel order': 'Порядок каналов',
 'Issue Reporter': 'Репортёр проблем',
-'Turn a DSH plugin problem into a reviewable issue with automated diagnostics and previews.': 'Превратите проблему с плагином DSH в готовый issue с автоматической диагностикой.',
 'GitHub sign-in is not configured for this installation.': 'Вход через GitHub не настроен для этой установки.',
 '0 plugins': '0 плагинов',
 'Catalog': 'Каталог',
@@ -1730,6 +1722,34 @@ window.__ModuleLoader__.load({
       runtime.translationRegistry = translationRegistry
       runtime.bilingualCommandMatch = (query, cmd, opts) => (typeof bilingualCommandMatch === 'function' ? bilingualCommandMatch(query, cmd, opts) : { matched: false, score: 0 })
       runtime.filterCommands = (query, cmds, opts) => (typeof filterCommands === 'function' ? filterCommands(query, cmds, opts) : cmds)
+      runtime.humanizeError = (err) => (typeof humanizeError === 'function' ? humanizeError(err) : null)
+      runtime.formatErrorToast = (err) => (typeof formatErrorToast === 'function' ? formatErrorToast(err) : null)
+
+      // 7.6. Локализация сетевых ошибок и тостов (#302)
+      const toastObserver = typeof MutationObserver !== 'undefined' ? new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          for (const node of m.addedNodes) {
+            if (!node || node.nodeType !== 1) continue
+            if (node.matches && (node.matches('.dsw-toast, [role="alert"], .toast, .ant-message-notice'))) {
+              const text = (node.innerText || node.textContent || '').trim()
+              if (/failed to fetch|network error|econnrefused|etimedout/i.test(text)) {
+                const h = typeof humanizeError === 'function' ? humanizeError(text) : null
+                if (h && h.title) {
+                  const targetEl = node.querySelector('.toast-body, .ant-message-custom-content') || node
+                  targetEl.textContent = h.title + ': ' + h.message
+                }
+              }
+            }
+          }
+        }
+      }) : null
+
+      ctx.effect(() => {
+        if (toastObserver && typeof document !== 'undefined' && document.body) {
+          toastObserver.observe(document.body, { childList: true, subtree: true })
+        }
+        return () => { if (toastObserver) toastObserver.disconnect() }
+      }, 'dsh-russian-lang: toast-humanizer')
 
       ctx.effect(() => {
         document.addEventListener('input', layoutOnInput, true)
