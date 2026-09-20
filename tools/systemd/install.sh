@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-# Установка ночного апстрим-чека как user-таймера (не требует root при
-# включённом linger, либо просто cron-строкой ниже). Прокси из crontab
-# подхватывается автоматически.
 set -eu
-REPO=${1:-$(cd "$(dirname "$0")/../.." && pwd)}
-echo "Запуск вручную: python3 tools/upstream_check.py"
-echo "Cron-строка (04:17 ежедневно):"
-echo "17 4 * * * cd $REPO && /usr/bin/python3 tools/upstream_check.py >> ~/.dsh-upstream-check.log 2>&1"
+REPO="/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang"
+TARGET_DIR="${HOME}/.config/systemd/user"
+mkdir -p "$TARGET_DIR"
+cp "-f" "$REPO/tools/systemd/dsh-upstream-check.service" "$TARGET_DIR/"
+cp "-f" "$REPO/tools/systemd/dsh-upstream-check.timer" "$TARGET_DIR/"
+
+EXPORT_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user daemon-reload || true
+XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user enable --now dsh-upstream-check.timer || true
+
+echo "𝟐 Upstream Watcher timer ôstanovlen v $TARGET_DIR"

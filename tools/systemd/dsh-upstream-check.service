@@ -1,0 +1,13 @@
+[Unit]
+Description=dsh-russian-lang: upstream dictionary drift check
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang
+Environment=GITEA_CREDENTIALS=/mnt/external/Project/DEV/.gitea-agent-credentials.json
+Environment=GITEA_API_BASE=http://127.0.0.1:3005/api/v1/repos/goodandready/dsh-russian-lang
+Environment=https_proxy=http://127.0.0.1:8118
+Environment=http_proxy=http://127.0.0.1:8118
+ExecStart=/usr/bin/python3 /mnt/external/Project/DEV/dhsplugins/dsh-russian-lang/tools/upstream_check.py
+TimeoutStartSec=1800

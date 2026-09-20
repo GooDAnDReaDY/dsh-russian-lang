@@ -126,7 +126,17 @@ def report_md(version, added, removed, untranslated):
 def gitea(method, path, data=None):
     if not CRED or not os.path.exists(CRED):
         raise RuntimeError('GITEA_CREDENTIALS не задан — алерт отключён')
-    token = json.load(open(CRED))['agents']['opencode']['token']
+    creds = json.load(open(CRED))
+    token = None
+    agents = creds.get('agents', {})
+    for a in ('antigravity', 'opencode', 'admin'):
+        if a in agents and isinstance(agents[a], dict) and 'token' in agents[a]:
+            token = agents[a]['token']
+            break
+    if not token and 'token' in creds:
+        token = creds['token']
+    if not token:
+        raise RuntimeError('Токен не найден в ' + CRED)
     body = json.dumps(data, ensure_ascii=False).encode('utf-8') if data is not None else None
     r = urllib.request.Request(GITEA_BASE + path, data=body, method=method)
     r.add_header('Authorization', 'token ' + token)
@@ -186,6 +196,12 @@ def git_commit_local():
 
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='DSH upstream dictionary drift check')
+    parser.add_argument('--dry-run', action='store_true', help='Не коммитить снапшот и не создавать issue')
+    parser.add_argument('--skip-alert', action='store_true', help='Пропустить отправку issue в Gitea')
+    args = parser.parse_args()
+
     os.makedirs(os.path.dirname(SNAPSHOT), exist_ok=True)
     prev = load_json(SNAPSHOT)
     first_run = not prev
@@ -195,18 +211,24 @@ def main():
     added, removed, untranslated = diff(prev, curr, merged_ru())
     has_drift = bool((added or removed or untranslated) and not first_run)
     text = report_md(version, added, removed, untranslated)
-    with open(REPORT, 'w', encoding='utf-8') as f:
-        f.write(text)
+    if not args.dry_run:
+        with open(REPORT, 'w', encoding='utf-8') as f:
+            f.write(text)
+        if first_run:
+            print('первый запуск: снапшот принят за базу, алерт не нужен')
+        json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
+    if not args.dry_run:
+        print('снапшот:', git_commit_local())
+    else:
+        print('снапшот: dry-run (пропущен коммит)')
 
-    if first_run:
-        print('первый запуск: снапшот принят за базу, алерт не нужен')
-    json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-    print('снапшот:', git_commit_local())
-
-    try:
-        alert(version, text, has_drift)
-    except Exception as err:
-        print('alert failed: %s' % err)
+    if not args.dry_run and not args.skip_alert:
+        try:
+            alert(version, text, has_drift)
+        except Exception as err:
+            print('alert failed: %s' % err)
+    else:
+        print('алерт: dry-run или skip-alert')
     print('готово: drift=%s' % has_drift)
 
 
