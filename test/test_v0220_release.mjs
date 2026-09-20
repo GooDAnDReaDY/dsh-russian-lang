@@ -12,7 +12,7 @@ test('v0.2.20: modular decomposition, permission presets and size compliance', (
   const clientSrc = fs.readFileSync(new URL('../lib/client.js', import.meta.url), 'utf8')
   
   // Version presence
-  assert.match(clientSrc, /currentVersion:\s*['"]0\.2\./)
+  assert.match(clientSrc, /currentVersion:\s*['"]0\.[23]\./)
   
   // Modular architecture and dynamic primitives
   assert.match(clientSrc, /IconChevronDownOutline14/)

@@ -50,7 +50,7 @@ def _ru_plural(ru_key):
     return m.group(1) if m else None
 
 
-def compare(title, en, ru, extra=None):
+def compare(title, en, ru, extra=None, ecosystem=None):
     """extra — дополнительные покрытия (MT-реестр): ключ считается переведённым,
     если есть в ru ИЛИ в extra."""
     missing = stale = bad = 0
@@ -61,7 +61,13 @@ def compare(title, en, ru, extra=None):
         if absent:
             missing += len(absent)
             print('  НЕТ ПЕРЕВОДА  %-26s %3d: %s' % (ns, len(absent), ', '.join(absent[:8])))
+    eco_ns = 0
+    eco_keys = 0
     for ns in sorted(ru):
+        if ecosystem and ns in ecosystem:
+            eco_ns += 1
+            eco_keys += len(ru[ns])
+            continue
         extra = []
         for k in ru[ns]:
             if k in en.get(ns, {}):
@@ -95,6 +101,8 @@ def compare(title, en, ru, extra=None):
                 bad += 1
                 print('  ЛИШНИЙ PH     %-26s %-24s ru с {%s} (en {%s})'
                       % (ns, k, ', '.join(sorted(extra_ph)), ', '.join(sorted(en_ph))))
+    if eco_ns:
+        print("  экосистема DSH: %d пространств имён (%d ключей)" % (eco_ns, eco_keys))
     total = sum(len(v) for v in en.values())
     done = total - missing
     print('  ключей: %d | переведено: %d | не переведено: %d | лишних: %d | плохих PH: %d | покрытие: %.1f%%'
@@ -223,9 +231,10 @@ if __name__ == '__main__':
     for ns, entries in load_file('mt-registry.json').items():
         mt_all[ns] = {k: (r.get('ru', '') if isinstance(r, dict) else r)
                       for k, r in entries.items()}
+    eco_plugins = set(load_file('ecosystem-plugins.json'))
     left = compare('ЯДРО', load_file('core-en.json'), load_dir('ru'), mt_all)
     left += compare('ПЛАГИНЫ', strip_self_ru(load_file('plugins-en.json')),
-                    strip_self_ru(load_dir('ru-plugins')), mt_all)
+                    strip_self_ru(load_dir('ru-plugins')), mt_all, ecosystem=eco_plugins)
     left += check_mt_registry(en_all)
     cov = runtime_coverage()
     if cov < 100.0:

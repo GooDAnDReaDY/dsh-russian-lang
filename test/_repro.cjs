@@ -53,7 +53,7 @@ try {
       emit() {},
       slots: {
         inject(name, fn) {
-          if (name !== 'settings.plugin.item' && name !== 'plugins.row.config') throw new Error('slot "' + name + '" is not declared')
+          if (name !== 'settings.plugin.item' && name !== 'plugins.row.config' && name !== 'plugins.item') throw new Error('slot "' + name + '" is not declared')
           return fn()
         },
         register(entry) { slotsRegistered.push(entry.name) },
@@ -74,7 +74,7 @@ try {
     exp.apply(ctx)
     const dicts = registered.length
     const coreHasRu = registered.some(r => r.ns === 'common' && r.loc === 'ru')
-    const cardSlotted = slotsRegistered.includes('settings.plugin.item') || slotsRegistered.includes('plugins.row.config')
+    const cardSlotted = slotsRegistered.includes('settings.plugin.item') || slotsRegistered.includes('plugins.row.config') || slotsRegistered.includes('plugins.item')
     console.log('apply OK; dicts:', dicts, '| core-ru:', coreHasRu, '| card slot:', cardSlotted)
     if (!coreHasRu) fail('core namespace did not register ru')
     if (dicts < 4) fail('too few dictionaries registered: ' + dicts)
