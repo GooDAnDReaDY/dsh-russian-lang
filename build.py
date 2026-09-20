@@ -534,6 +534,8 @@ window.__ModuleLoader__.load({
         runtime.stemRussian = stemRussian
         runtime.fuzzyMatchRu = fuzzyMatchRu
         runtime.humanizeError = humanizeError
+        runtime.plural = plural
+        runtime.pluralForm = pluralForm
       } catch (err) { /* ignore */ }
       // lookup: в ядре 0.1.2 lookup(ns, key, chain) требует третий довод —
       // цепочку языков; в старых ядрах его два. Спрашиваем у самого метода
