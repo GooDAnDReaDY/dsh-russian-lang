@@ -167,8 +167,8 @@ print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_bundle = freq_words[:250]
-freq_json = json.dumps(freq_bundle, ensure_ascii=False)
+freq_bundle = freq_words[:30]
+freq_json = json.dumps(freq_bundle, ensure_ascii=False, separators=(',', ':'))
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
 # «еще -> ещё», плюс ручной список ниже. yo по умолчанию выключен.
@@ -230,7 +230,7 @@ for e, y in YO_CURATED:
 for w in freq_words:
     if 'ё' in w:
         add_yo(w.replace('ё', 'е'), w, 3)
-yo_json = json.dumps(yo_pairs, ensure_ascii=False)
+yo_json = json.dumps(yo_pairs, ensure_ascii=False, separators=(',', ':'))
 print('ё-пар (ручных + корпусных): %d' % len(yo_pairs))
 
 # Подписи карточки настроек (namespace russian-lang — наш собственный).
@@ -300,6 +300,7 @@ card_ru = {
     'overrideAddBtn': 'Добавить',
     'overrideEmpty': 'Переопределений пока нет.',
     'overrideDelete': 'Удалить',
+    'overrideTip': '💡 Совет: зажмите Alt и кликните на любой переведённый элемент интерфейса, чтобы открыть всплывающий инспектор перевода и сразу изменить формулировку.',
     'secSupport': '📊 Покрытие экосистемы и поддержка',
     'secSupportDesc': 'Словари синхронизированы с DSH v0.1.6-alpha.1. 100.0% UI-покрытие ядра и всех установленных плагинов (7,902 ключа) без черновых машинных переводов.',
     'statNamespaces': 'Пространств имён',
@@ -313,7 +314,7 @@ card_ru = {
     'exportMdHint': 'Экспорт диалога в Markdown доступен по кнопке [ 📥 MD ] в шапке сессии.',
     'translateTurnHint': 'Перевод ответов ассистента на русский доступен по кнопке [ RU ↗ ] на блоках сообщений.',
 }
-card_json = json.dumps(card_ru, ensure_ascii=False)
+card_json = json.dumps(card_ru, ensure_ascii=False, separators=(',', ':'))
 
 client = r'''// dsh-russian-lang — браузерная половина. ФАЙЛ СГЕНЕРИРОВАН, правьте ru/*.json
 // и ru-plugins/*.json и запускайте build.py.
@@ -562,6 +563,7 @@ window.__ModuleLoader__.load({
         } catch (err) { /* ignore */ }
         return [runtime.getLocale().active]
       }
+      const translationRegistry = new Map()
       const lookup = (ns, key) => {
         const chain = lookupChain()
         return runtime.lookup.length >= 3 ? runtime.lookup(ns, key, chain) : runtime.lookup(ns, key)
@@ -599,7 +601,11 @@ window.__ModuleLoader__.load({
             }
           }
         }
-        return origTranslate(ns, key, params)
+        const res = origTranslate(ns, key, params)
+        if (typeof res === 'string' && res && res.length < 300) {
+          translationRegistry.set(res.trim(), { ns, key, params, value: res })
+        }
+        return res
       }
 
       // 2. <html lang>: в таблице DOCUMENT_LANGUAGE ядра нет "ru", без нас там
@@ -1647,6 +1653,82 @@ window.__ModuleLoader__.load({
           }
         } catch (e) { /* bestEffort */ void e; }
       }
+      // 7.5. Внутриконтекстный инспектор переводов (Alt+Click) (#298)
+      const openInspectorModal = (meta, rawText) => {
+        if (typeof document === 'undefined') return
+        const old = document.getElementById('dsh-ru-inspector-modal')
+        if (old) old.remove()
+        const modal = document.createElement('div')
+        modal.id = 'dsh-ru-inspector-modal'
+        modal.className = 'rl-modal-mask'
+        const k = meta ? (meta.key || (meta.ns ? meta.ns + '.' + meta.key : '')) : ''
+        const src = meta ? (meta.source === 'override' ? 'Оверрайд' : meta.source === 'dom_zh' ? 'DOM ZH' : 'Словарь ' + (meta.ns || '')) : 'Текст'
+        const v = (meta && meta.value) || rawText
+        modal.innerHTML = '<div class="rl-modal-box">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+            '<div style="font-weight:600;font-size:14px;">🔍 Инспектор перевода</div>' +
+            '<button type="button" class="rl-btn-close" style="background:none;border:none;color:var(--dsw-alias-label-secondary);font-size:18px;cursor:pointer;">&times;</button>' +
+          '</div>' +
+          '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;">' +
+            '<span style="color:var(--dsw-alias-label-secondary);">Ключ:</span>' +
+            '<code style="background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-state-brand-primary);padding:2px 6px;border-radius:4px;">' + (k || '(не опознан)') + '</code>' +
+            '<span style="padding:1px 6px;border-radius:4px;font-size:10px;background:var(--dsw-alias-bg-layer-3);">' + src + '</span>' +
+          '</div>' +
+          '<div style="font-size:12px;color:var(--dsw-alias-label-secondary);word-break:break-word;">Текущий текст: <b class="rl-raw-text" style="color:var(--dsw-alias-label-primary)"></b></div>' +
+          '<div style="display:flex;flex-direction:column;gap:6px;">' +
+            '<label style="font-size:12px;color:var(--dsw-alias-label-secondary);">Новый перевод (оверрайд):</label>' +
+            '<textarea class="rl-edit-val rl-select" style="min-height:50px;font-family:inherit;width:100%%;resize:vertical;"></textarea>' +
+          '</div>' +
+          '<div style="display:flex;justify-content:flex-end;gap:8px;">' +
+            '<button type="button" class="rl-btn rl-cancel-btn">Отмена</button>' +
+            '<button type="button" class="rl-btn rl-btn-primary rl-save-btn">Сохранить оверрайд</button>' +
+          '</div>' +
+        '</div>'
+        modal.querySelector('.rl-raw-text').textContent = rawText
+        const textarea = modal.querySelector('.rl-edit-val')
+        textarea.value = v
+        modal.querySelector('.rl-btn-close').onclick = () => modal.remove()
+        modal.querySelector('.rl-cancel-btn').onclick = () => modal.remove()
+        modal.onclick = (e) => { if (e.target === modal) modal.remove() }
+        const saveBtn = modal.querySelector('.rl-save-btn')
+        saveBtn.onclick = () => {
+          const val = textarea.value.trim()
+          const targetKey = k || rawText
+          if (!targetKey || !val) return
+          const cur = getOverrides()
+          try { scope.set('overrides', Object.assign({}, cur, { [targetKey]: val })) } catch (_) {}
+          saveBtn.textContent = '✓ Сохранено'
+          saveBtn.disabled = true
+          setTimeout(() => modal.remove(), 600)
+        }
+        document.body.appendChild(modal)
+        setTimeout(() => textarea.focus(), 50)
+      }
+
+      const inspectorOnClick = (e) => {
+        if (!e.altKey) return
+        if (e.target && e.target.closest && e.target.closest('#dsh-ru-inspector-modal')) return
+        const raw = (e.target && (e.target.innerText || e.target.textContent) || '').trim()
+        if (!raw) return
+        e.preventDefault()
+        e.stopPropagation()
+        const meta = translationRegistry.get(raw) || (typeof findTranslationKey === 'function' ? findTranslationKey(raw, RU, getOverrides(), ZH_RU) : null)
+        openInspectorModal(meta, raw)
+      }
+
+      ctx.effect(() => {
+        document.addEventListener('click', inspectorOnClick, true)
+        return () => {
+          document.removeEventListener('click', inspectorOnClick, true)
+          const m = document.getElementById('dsh-ru-inspector-modal')
+          if (m) m.remove()
+        }
+      }, 'dsh-russian-lang: inspector')
+
+      runtime.findTranslationKey = (text) => (typeof findTranslationKey === 'function' ? findTranslationKey(text, RU, getOverrides(), ZH_RU) : null)
+      runtime.openInspector = openInspectorModal
+      runtime.translationRegistry = translationRegistry
+
       ctx.effect(() => {
         document.addEventListener('input', layoutOnInput, true)
         document.addEventListener('keydown', layoutOnKeydown, true)
@@ -2496,7 +2578,8 @@ window.__ModuleLoader__.load({
                         }, t('overrideDelete'))
                       )
                     )
-                  )
+                  ),
+              React.createElement('div', { className: 'rl-hint-text', style: { marginTop: '8px' } }, t('overrideTip'))
             ),
 
             // Секция 5: Покрытие экосистемы и поддержка
@@ -2538,6 +2621,8 @@ window.__ModuleLoader__.load({
     }
 
     const RL_CSS = [
+      '.rl-modal-mask{position:fixed;top:0;left:0;width:100vw;height:100vh;background:var(--dsw-alias-bg-mask);display:flex;align-items:center;justify-content:center;z-index:99999;backdrop-filter:blur(2px)}',
+      '.rl-modal-box{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);border:1px solid var(--dsw-alias-border-l1);border-radius:10px;width:calc(100vw - 40px);max-width:500px;box-shadow:var(--dsw-alias-shadow-l3);display:flex;flex-direction:column;gap:12px;padding:18px}',
       '.rl-card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-3);border-radius:12px;list-style:none;overflow:hidden;transition:border-color .15s ease}',
       '.rl-head{appearance:none;width:100%%;font:inherit;color:inherit;text-align:left;cursor:pointer;background:0 0;border:0;border-radius:12px;display:flex;align-items:center;gap:12px;padding:14px 18px}',
       '.rl-head:hover{background:var(--dsw-alias-bg-layer-2)}',
@@ -2628,10 +2713,13 @@ client = client.replace('__PKG_VERSION__', pkg['version'])
 # файла с закоммиченным (CI, #134) от этого становится нестабильной.
 # Очистка комментариев для компактности production-бандла
 
+client = _re.sub(r'^\s*/\*\*[\s\S]*?\*/\s*\n?', '', client, flags=_re.M)
 lines = client.split('\n')
 cleaned_lines = []
 for l in lines:
     s = l.strip()
+    if not s:
+        continue
     if s.startswith('//') and not s.startswith('//__PURE_JS__'):
         continue
     cleaned_lines.append(l)
