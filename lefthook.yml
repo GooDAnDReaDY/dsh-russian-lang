@@ -1,0 +1,13 @@
+pre-commit:
+  parallel: false
+  commands:
+    build-check:
+      run: python3 build.py --check
+    coverage:
+      run: python3 check-coverage.py
+    lint:
+      run: python3 tools/lint_translations.py
+    terms:
+      run: python3 tools/term_check.py --ci
+    pack-size:
+      run: python3 tools/check_pack_size.py
