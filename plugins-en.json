@@ -6803,5 +6803,33 @@
     "time.justNow": "just now",
     "time.minutesAgo": "{n} min ago",
     "view.usage": "Stats"
+  },
+  "dsh-github-ops": {
+    "title": "GitHub ops",
+    "sub": "Releases, tags, a guarded API pass-through, mirror publication and repository settings.",
+    "cardHint": "Token from DSH credentials; settings keep only its name.",
+    "tokenEnv": "Access name",
+    "tokenSource": "Access source",
+    "tokenSourceHint": "\"auto\" tries the DSH credential, then the environment variable, then the gh CLI session. Pin it to use one source only.",
+    "tokenEnvHint": "Name looked up in the DSH credentials, then the environment, then the gh CLI. The value is never stored here.",
+    "defaultRepository": "Default repository",
+    "defaultRepositoryHint": "owner/repo used when a tool call omits the repository. Leave empty to always pass it explicitly.",
+    "baseUrl": "API base URL",
+    "baseUrlHint": "Change it for GitHub Enterprise; the default is the public API.",
+    "timeoutMs": "Request timeout, ms",
+    "maxRetries": "Retries for a failed read",
+    "maxRetriesHint": "A read (GET/HEAD) is retried on a network failure, a timeout or a 5xx. Writes are never retried automatically.",
+    "reviewRules": "Review rule overrides (JSON)",
+    "reviewRulesHint": "Optional. sensitivePaths, sensitiveSeverity, attentionPaths, migrationPaths, testsRequired, sourcePatterns, testPatterns, largeDiffLines. Example: {\"largeDiffLines\": 400, \"sensitivePaths\": [\".env\", \"private/**\"]}",
+    "timeoutMsHint": "How long one GitHub request may take before it is aborted.",
+    "statusLoading": "Reading settings…",
+    "statusUnavailable": "Settings service is not available in this build: values cannot be edited here.",
+    "statusReadOnly": "Settings are read-only for this session.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Saved",
+    "savedPartial": "Saved, except: ",
+    "noChanges": "Nothing to change.",
+    "invalidNumber": "Enter a positive number."
   }
 }

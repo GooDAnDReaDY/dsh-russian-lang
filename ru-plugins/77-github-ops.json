@@ -19,6 +19,12 @@
     "saved": "Сохранено",
     "savedPartial": "Сохранено, за исключением: ",
     "noChanges": "Нет изменений для сохранения.",
-    "invalidNumber": "Введите положительное число."
+    "invalidNumber": "Введите положительное число.",
+    "tokenSource": "Источник доступа",
+    "tokenSourceHint": "\"auto\" проверяет учётные данные DSH, затем переменную окружения, затем сессию gh CLI. Зафиксируйте значение, чтобы использовать только один источник.",
+    "maxRetries": "Повторы при ошибке чтения",
+    "maxRetriesHint": "Повтор чтения (GET/HEAD) при сетевом сбое, таймауте или 5xx. Запись никогда не повторяется автоматически.",
+    "reviewRules": "Переопределение правил ревью (JSON)",
+    "reviewRulesHint": "Необязательно. sensitivePaths, sensitiveSeverity, attentionPaths, migrationPaths, testsRequired, sourcePatterns, testPatterns, largeDiffLines. Пример: {\"largeDiffLines\": 400, \"sensitivePaths\": [\".env\", \"private/**\"]}"
   }
 }

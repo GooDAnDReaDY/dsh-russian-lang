@@ -20,7 +20,8 @@
   - `dsh-clinebot` (+3 ключа): нотификации апдейтера (`update.available`, `update.done`, `update.failed`).
   - `dsh-gitea` (+1 ключ): подсказка вебхуков событий (`eventsEmptyHint`).
   - `dsh-messenger-gateway` (+1 ключ): индикатор сбоев API Telegram (`badge.api_degraded`).
-  - Эффективное покрытие UI достигло 7 999 ключей (100.0%).
+  - `dsh-github-ops` (+6 ключей, Issue #311): параметры `tokenSource`, `maxRetries`, `reviewRules` и DOM-перевод кнопки и заголовка «Операции с GitHub».
+  - Эффективное покрытие UI достигло 8 025 ключей (100.0%).
 
 ### 2. Пользовательский опыт и интерактивные инструменты
 - **2.1 Интерактивное управление переопределениями (Custom Overrides UI)** (Issue #296, PR #297):

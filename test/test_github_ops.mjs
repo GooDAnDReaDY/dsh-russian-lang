@@ -7,7 +7,7 @@ import { getPluginDictionariesByNames } from '../lib/locales.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-test('v0.3.1 (#287): dsh-github-ops словарь содержит все 20 требуемых ключей', () => {
+test('v0.3.1 (#287, #311): dsh-github-ops словарь содержит все 26 требуемых ключей', () => {
   const dictPath = path.join(__dirname, '..', 'ru-plugins', '77-github-ops.json')
   const content = JSON.parse(fs.readFileSync(dictPath, 'utf-8'))
   const dict = content['dsh-github-ops']
@@ -16,9 +16,12 @@ test('v0.3.1 (#287): dsh-github-ops словарь содержит все 20 т
 
   const expectedKeys = [
     'title', 'sub', 'cardHint', 'tokenEnv', 'tokenEnvHint',
+    'tokenSource', 'tokenSourceHint',
     'defaultRepository', 'defaultRepositoryHint', 'baseUrl', 'baseUrlHint',
-    'timeoutMs', 'timeoutMsHint', 'statusLoading', 'statusUnavailable',
-    'statusReadOnly', 'save', 'saving', 'saved', 'savedPartial',
+    'timeoutMs', 'timeoutMsHint', 'maxRetries', 'maxRetriesHint',
+    'reviewRules', 'reviewRulesHint',
+    'statusLoading', 'statusUnavailable', 'statusReadOnly',
+    'save', 'saving', 'saved', 'savedPartial',
     'noChanges', 'invalidNumber'
   ]
 
@@ -27,6 +30,9 @@ test('v0.3.1 (#287): dsh-github-ops словарь содержит все 20 т
     assert.match(dict[k], /[\u0400-\u04FF]/, `значение ${k} должно содержать кириллицу`)
   }
   assert.equal(dict.title, 'Операции с GitHub')
+  assert.equal(dict.tokenSource, 'Источник доступа')
+  assert.equal(dict.maxRetries, 'Повторы при ошибке чтения')
+  assert.equal(dict.reviewRules, 'Переопределение правил ревью (JSON)')
   assert.equal(dict.save, 'Сохранить')
   assert.equal(dict.saved, 'Сохранено')
 })

@@ -895,6 +895,7 @@ window.__ModuleLoader__.load({
 'Scheduled tasks': 'Задачи по расписанию',
 'Today': 'Сегодня',
 'Plugin Market': 'Магазин плагинов',
+'GitHub ops': 'Операции с GitHub',
 'Auto mode': 'Автоматический режим',
 'Full access': 'Полный доступ',
 'Read only': 'Только чтение',
@@ -2721,6 +2722,7 @@ window.__ModuleLoader__.load({
 # пришлось бы удваивать, и первый же забытый `%` ронял бы сборку.
 pure_src = open(os.path.join(HERE, 'lib', 'pure.js'), encoding='utf-8').read()
 pure_inline = _re.sub(r'^export (const|function|class) ', r'\1 ', pure_src, flags=_re.M)
+pure_inline = '\n'.join(l for l in pure_inline.split('\n') if l.strip() and not l.strip().startswith('//'))
 if '//__PURE_JS__' not in client:
     raise SystemExit('в шаблоне нет маркера //__PURE_JS__ — вставлять pure.js некуда')
 client = client.replace('//__PURE_JS__', pure_inline)
