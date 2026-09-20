@@ -116,6 +116,12 @@
     "addAlias": "Сохранить алиас",
     "removeAlias": "Удалить алиас",
     "noAliases": "Алиасы моделей не заданы.",
-    "targetProvider": "Провайдер"
+    "targetProvider": "Провайдер",
+    "hideSettings": "Скрыть настройки",
+    "checkForUpdates": "Проверить обновления",
+    "checkingUpdates": "Проверка…",
+    "updateSuccess": "Обновлено до ",
+    "restartRequired": " (требуется перезапуск)",
+    "checkUpdateFailed": "Не удалось проверить обновления"
   }
 }

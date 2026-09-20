@@ -160,6 +160,27 @@
     "secAccessDesc": "Требование ввода PIN-кода для новых устройств в локальной сети",
     "lanPinRefLabel": "Ссылка на секрет LAN PIN",
     "lanPinRefPh": "LAN_PIN или имя секрета в Credentials",
-    "subtitle": "Доступ по локальной сети и управление подключением"
+    "subtitle": "Доступ по локальной сети и управление подключением",
+    "deviceSetNickname": "Задать псевдоним",
+    "deviceNicknamePrompt": "Введите псевдоним устройства:",
+    "devicePlatformIos": "iOS",
+    "devicePlatformAndroid": "Android",
+    "devicePlatformMacos": "macOS",
+    "devicePlatformWindows": "Windows",
+    "devicePlatformLinux": "Linux",
+    "settingsUnavailable": "Сервис настроек недоступен или не готов",
+    "updaterTitle": "Обновления плагина",
+    "updaterDesc": "Проверка и обновление @goodandready/dsh-lanmode до актуального релиза",
+    "updaterCurrentVersion": "Текущая версия:",
+    "updaterLatestVersion": "Последняя версия:",
+    "updaterUpToDate": "Актуальная версия ✔",
+    "updaterUpdateAvailable": "Доступно обновление!",
+    "updaterCheckBtn": "Проверить обновления",
+    "updaterChecking": "Проверка…",
+    "updaterUpdateBtn": "Обновить сейчас",
+    "updaterUpdating": "Обновление…",
+    "updaterSuccess": "Успешно обновлено! Перезапустите DSH для применения.",
+    "updaterError": "Сбой проверки/установки обновления: ",
+    "updaterRestartNote": "Перезапустите dsh-web (или процесс хоста DSH) для активации."
   }
 }

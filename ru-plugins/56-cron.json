@@ -329,6 +329,16 @@
     "form.targetSessionResetNever": "Непрерывно (без ротации)",
     "form.targetSessionResetDaily": "Ежедневная ротация (новая сессия каждый день)",
     "form.targetSessionResetWeekly": "Еженедельная ротация (новая сессия каждую неделю)",
-    "form.targetSessionResetHint": "Автоматически меняет идентификатор сессии, предотвращая разрастание контекстного окна при долгосрочной работе."
+    "form.targetSessionResetHint": "Автоматически меняет идентификатор сессии, предотвращая разрастание контекстного окна при долгосрочной работе.",
+    "updater.title": "Автообновление плагина",
+    "updater.btnCheck": "Проверить обновления",
+    "updater.checking": "Проверка…",
+    "updater.btnUpdate": "Обновить до v{version}",
+    "updater.updating": "Обновление…",
+    "updater.desc": "Проверка реестра npm и установка обновлений плагина на месте без SSH-доступа.",
+    "updater.current": "Текущая версия: v{version}",
+    "updater.available": "Доступно обновление: v{version}",
+    "updater.upToDate": "Актуальная версия",
+    "updater.success": "Успешно обновлено до v{version}. Перезапустите DSH или перезагрузите профиль для применения изменений."
   }
 }

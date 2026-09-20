@@ -4320,9 +4320,9 @@
   },
   "f.customBaseURLHint": {
    "at": "2026-08-25T19:05:35",
-   "en": "API root without a trailing slash. The request goes to {base}/images/generations.",
+   "en": "OpenAI-compatible image endpoint root (e.g. https://api.openai.com/v1).",
    "model": "deepseek/deepseek-chat",
-   "ru": "Корень API без завершающего слеша. Запрос отправляется на {base}/images/generations.",
+   "ru": "Корень OpenAI-совместимого эндпоинта изображений (например https://api.openai.com/v1).",
    "status": "reviewed"
   },
   "f.customKeyEnv": {
@@ -4425,9 +4425,9 @@
   },
   "f.modelHint": {
    "at": "2026-08-25T19:06:47",
-   "en": "FAL model id, called as {baseURL}/{model}. Used when provider is fal.",
+   "en": "Target model on FAL endpoint (e.g. fal-ai/flux-2/klein/9b).",
    "model": "deepseek/deepseek-chat",
-   "ru": "Идентификатор модели FAL, вызывается как {baseURL}/{model}. Используется, когда провайдер — fal.",
+   "ru": "Целевая модель на эндпоинте FAL (например fal-ai/flux-2/klein/9b).",
    "status": "reviewed"
   },
   "f.outputDir": {

@@ -39,6 +39,17 @@
     "dms.updater.up_to_date": "Актуальная версия",
     "dms.updater.update_available": "Доступна новая версия: v{version}",
     "dms.updater.update_now": "Обновить сейчас",
-    "dms.updater.updating": "Обновление…"
+    "dms.updater.updating": "Обновление…",
+    "title": "Поиск моделей",
+    "desc": "Селектор моделей с поиском для WebUI DeepSeek Harness",
+    "updater_current": "Текущая версия",
+    "updater_check": "Проверить обновления",
+    "updater_checking": "Проверка…",
+    "updater_update_now": "Обновить сейчас",
+    "updater_updating": "Обновление…",
+    "updater_up_to_date": "Актуальная версия",
+    "updater_update_available": "Доступен новый релиз: v{version}",
+    "updater_restart_notice": "Обновление установлено. Перезапустите DSH для применения.",
+    "updater_failed": "Не удалось проверить или установить обновление"
   }
 }

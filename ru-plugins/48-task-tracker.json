@@ -79,6 +79,15 @@
     "updater.updateNow": "Обновить сейчас",
     "updater.updated": "Успешно обновлено до v{v}. Перезапустите DSH для применения.",
     "updater.updating": "Обновление…",
-    "updater.version": "Версия"
+    "updater.version": "Версия",
+    "board.back": "В чат",
+    "board.backHint": "Закрыть трекер задач и вернуться в чат",
+    "tasks.taskDetails": "Детали задачи",
+    "tasks.status": "Статус",
+    "tasks.statusCompleted": "Выполнено",
+    "tasks.statusActive": "Активно",
+    "tasks.promptTemplate": "Шаблон промпта",
+    "tasks.openAgentChat": "💬 Обсудить задачу с агентом",
+    "tasks.confirmDelete": "Удалить эту задачу?"
   }
 }

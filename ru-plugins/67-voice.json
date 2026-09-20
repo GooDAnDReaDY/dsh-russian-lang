@@ -237,6 +237,19 @@
     "whisperBinHint": "используется при включенном автозапуске",
     "whisperEndpoint": "Локальный whisper: эндпоинт",
     "whisperEndpointHint": "POST /inference сервера whisper.cpp",
-    "whisperModel": "Локальный whisper: модель"
+    "whisperModel": "Локальный whisper: модель",
+    "noRecorder": "MediaRecorder не поддерживается этим браузером",
+    "browserHint": "распознавание выполняет браузер, ключ не требуется",
+    "openaiHint": "whisper-1 · ключ OPENAI_API_KEY",
+    "siliconflowHint": "FunAudioLLM/SenseVoiceSmall · ключ SILICONFLOW_API_KEY",
+    "deepinfraHint": "openai/whisper-large-v3-turbo · ключ DEEPINFRA_API_KEY",
+    "fireworksHint": "whisper-v3-turbo · ключ FIREWORKS_API_KEY",
+    "mistralHint": "voxtral-mini-latest · ключ MISTRAL_API_KEY",
+    "openrouterHint": "google/gemini-2.5-flash · ключ OPENROUTER_API_KEY",
+    "localHint": "задаётся при запуске сервера",
+    "general": "Общие",
+    "updatePrompt": "Доступна новая версия в npm. Нажмите «Обновить» для установки.",
+    "jargonFrom": "Разговорный сленг",
+    "jargonTo": "Корректное написание"
   }
 }

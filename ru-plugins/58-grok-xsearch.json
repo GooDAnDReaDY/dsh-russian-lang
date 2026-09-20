@@ -83,6 +83,8 @@
     "updater_title": "Обновление плагина",
     "updater_up_to_date": "Актуальная версия",
     "updater_update_now": "Обновить сейчас",
-    "updater_updating": "Обновление…"
+    "updater_updating": "Обновление…",
+    "updater_current": "Текущая версия",
+    "updater_latest": "Последняя версия"
   }
 }
