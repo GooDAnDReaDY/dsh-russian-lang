@@ -274,6 +274,7 @@
     "slackDefaultChannelHint": "Канал или ID участника для исходящих сообщений (напр. #general или C12345).",
     "badge.cron_count": "Cron: {count}",
     "webhookSecretConfigured": "Секретный ключ вебхука настроен",
-    "webhookSecretRequired": "Требуется секретный ключ вебхука"
+    "webhookSecretRequired": "Требуется секретный ключ вебхука",
+    "badge.api_degraded": "Сбои Telegram API ({count})"
   }
 }

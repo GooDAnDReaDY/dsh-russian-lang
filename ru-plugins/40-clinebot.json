@@ -141,6 +141,9 @@
     "update.btn": "Обновить сейчас",
     "update.checking": "Проверка обновлений…",
     "update.up_to_date": "Актуальная версия",
-    "update.updating": "Обновление…"
+    "update.updating": "Обновление…",
+    "update.available": "Доступно обновление: v{latestVersion} (текущая: v{currentVersion})",
+    "update.done": "Успешно обновлено до v{version}! Перезапустите DSH для применения.",
+    "update.failed": "Ошибка обновления: {error}"
   }
 }
