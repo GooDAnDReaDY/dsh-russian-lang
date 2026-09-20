@@ -167,7 +167,7 @@ print('zh->ru пар для DOM-перевода: %d' % len(zh_ru))
 # tools/freq_refresh.py и встраивается в бандл для детектора.
 freq_path = os.path.join(HERE, 'tools', 'ru-freq.json')
 freq_words = json.load(open(freq_path, encoding='utf-8')) if os.path.exists(freq_path) else []
-freq_bundle = freq_words[:600]
+freq_bundle = freq_words[:250]
 freq_json = json.dumps(freq_bundle, ensure_ascii=False)
 
 # ё-пары для типографики: слова с ё из частотного корпуса дают пары
@@ -293,7 +293,14 @@ card_ru = {
     'localStartBtn': 'Запустить LibreTranslate в Docker (~600 МБ RAM)',
     'localStarting': 'Запуск контейнера…',
     'localInfo': 'LibreTranslate запускается изолированно в Docker на сервере, потребляет ~500–700 МБ RAM и переводит на 100% локально.',
-'secSupport': '📊 Покрытие экосистемы и поддержка',
+    'secOverrides': '✍️ Пользовательские переопределения (Custom Overrides)',
+    'secOverridesDesc': 'Возможность заменить любую формулировку интерфейса DSH на собственную. Переопределения сохраняются в настройках и имеют наивысший приоритет.',
+    'overrideKeyPlaceholder': 'Ключ (например, common.back или settings.title)',
+    'overrideValuePlaceholder': 'Ваш русский перевод',
+    'overrideAddBtn': 'Добавить',
+    'overrideEmpty': 'Переопределений пока нет.',
+    'overrideDelete': 'Удалить',
+    'secSupport': '📊 Покрытие экосистемы и поддержка',
     'secSupportDesc': 'Словари синхронизированы с DSH v0.1.6-alpha.1. 100.0% UI-покрытие ядра и всех установленных плагинов (7,902 ключа) без черновых машинных переводов.',
     'statNamespaces': 'Пространств имён',
     'statCoreKeys': 'Ключей ядра',
@@ -2105,7 +2112,10 @@ window.__ModuleLoader__.load({
       const status = snap.status || 'loading'
       const value = snap.value || {}
       const typography = typo
-      const overridesCount = Object.keys(value.overrides || {}).length
+      const overrides = value.overrides || {}
+      const overridesCount = Object.keys(overrides).length
+      const [newKey, setNewKey] = React.useState('')
+      const [newVal, setNewVal] = React.useState('')
 
       const setTypo = (patch) => {
         const next = Object.assign({}, typo, patch)
@@ -2421,6 +2431,72 @@ window.__ModuleLoader__.load({
                   }, transMsg.text) : null
                 ) : null
               )
+            ),
+
+            // Секция 4.5: Пользовательские переопределения (Custom Overrides)
+            React.createElement('div', { className: 'rl-section-card' },
+              React.createElement('div', { className: 'rl-section-title' },
+                React.createElement('span', null, t('secOverrides')),
+                React.createElement('span', { className: 'rl-badge rl-badge-dim' },
+                  String(overridesCount) + ' ' + (typeof plural === 'function' ? plural(overridesCount, ['запись', 'записи', 'записей']) : 'записей'))
+              ),
+              React.createElement('div', { className: 'rl-section-desc' }, t('secOverridesDesc')),
+              React.createElement('div', { style: { display: 'flex', gap: '8px', flexWrap: 'wrap' } },
+                React.createElement('input', {
+                  className: 'rl-select',
+                  style: { flex: '1 1 180px', maxWidth: 'none' },
+                  placeholder: t('overrideKeyPlaceholder'),
+                  value: newKey,
+                  onChange: (e) => setNewKey(e.target.value),
+                }),
+                React.createElement('input', {
+                  className: 'rl-select',
+                  style: { flex: '2 1 240px', maxWidth: 'none' },
+                  placeholder: t('overrideValuePlaceholder'),
+                  value: newVal,
+                  onChange: (e) => setNewVal(e.target.value),
+                }),
+                React.createElement('button', {
+                  type: 'button',
+                  className: 'rl-btn rl-btn-primary',
+                  disabled: !newKey.trim() || !newVal.trim(),
+                  onClick: () => {
+                    const k = newKey.trim()
+                    const v = newVal.trim()
+                    if (!k || !v) return
+                    const next = Object.assign({}, overrides, { [k]: v })
+                    try { scope.set('overrides', next) } catch (_) {}
+                    setNewKey('')
+                    setNewVal('')
+                  },
+                }, t('overrideAddBtn'))
+              ),
+              overridesCount === 0
+                ? React.createElement('div', { className: 'rl-hint-text', style: { fontStyle: 'italic', padding: '4px 0' } }, t('overrideEmpty'))
+                : React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '6px' } },
+                    Object.keys(overrides).map((k) =>
+                      React.createElement('div', {
+                        key: k,
+                        style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 10px', background: 'var(--dsw-alias-bg-layer-3)', borderRadius: '6px', border: '1px solid var(--dsw-alias-border-l2)', fontSize: '12px' },
+                      },
+                        React.createElement('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', overflow: 'hidden' } },
+                          React.createElement('code', { style: { color: 'var(--dsw-alias-state-brand-primary)', fontWeight: 600 } }, k),
+                          React.createElement('span', { style: { color: 'var(--dsw-alias-label-secondary)' } }, '→'),
+                          React.createElement('span', { style: { color: 'var(--dsw-alias-label-primary)' } }, overrides[k])
+                        ),
+                        React.createElement('button', {
+                          type: 'button',
+                          className: 'rl-btn',
+                          style: { padding: '2px 8px', height: '24px', fontSize: '11px', color: 'var(--dsw-alias-state-error-primary)' },
+                          onClick: () => {
+                            const next = Object.assign({}, overrides)
+                            delete next[k]
+                            try { scope.set('overrides', next) } catch (_) {}
+                          },
+                        }, t('overrideDelete'))
+                      )
+                    )
+                  )
             ),
 
             // Секция 5: Покрытие экосистемы и поддержка
