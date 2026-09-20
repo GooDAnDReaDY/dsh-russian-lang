@@ -69,6 +69,19 @@
     "updateDone": "Обновлено! Перезапустите DSH.",
     "updateFailed": "Ошибка обновления",
     "updating": "Обновление…",
-    "version": "Версия"
+    "version": "Версия",
+    "compactDock": "Свернуть в компактную капсулу",
+    "expandDock": "Развернуть панель цели",
+    "saveArtifact": "Сохранить артефакт выполнения",
+    "artifactSaved": "✅ Артефакт сохранён (.dsh/goals/)",
+    "saveArtifactFailed": "Не удалось сохранить артефакт",
+    "extendBudgetBtn": "+50k токенов и продолжить",
+    "budgetExceededBadge": "Лимит токенов исчерпан",
+    "budgetLabel": "Лимит токенов (0 — без ограничений):",
+    "budgetWarnLabel": "Порог предупреждения (%):",
+    "autoCheckpointLabel": "Создавать Git-чекпоинт при завершении этапа",
+    "rollbackBtn": "Откатить к чекпоинту",
+    "rollbackConfirm": "Откатить рабочую копию к этому чекпоинту?",
+    "rollbackSuccess": "Успешный откат к чекпоинту"
   }
 }

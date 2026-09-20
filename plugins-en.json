@@ -3016,7 +3016,20 @@
     "tokens": "Tokens",
     "toolFailHint": "Auto-pause goal if N consecutive turns hit tool execution errors (0 to disable)",
     "toolFailLabel": "Tool-Failure Breaker Limit:",
-    "unavailable": "Settings unavailable"
+    "unavailable": "Settings unavailable",
+    "compactDock": "Collapse to compact pill",
+    "expandDock": "Expand goal banner",
+    "saveArtifact": "Save Run Artifact",
+    "artifactSaved": "✅ Artifact Saved (.dsh/goals/)",
+    "saveArtifactFailed": "Artifact save failed",
+    "extendBudgetBtn": "+50k Tokens & Resume",
+    "budgetExceededBadge": "Budget Limit Reached",
+    "budgetLabel": "Token Budget (0 for unlimited):",
+    "budgetWarnLabel": "Budget Warning Threshold (%):",
+    "autoCheckpointLabel": "Auto-create Git checkpoint on milestone completed",
+    "rollbackBtn": "Rollback to Checkpoint",
+    "rollbackConfirm": "Rollback working tree to this checkpoint?",
+    "rollbackSuccess": "Rolled back to checkpoint"
   },
   "dsh-grok-xsearch": {
     "advanced_settings": "Advanced Settings",
