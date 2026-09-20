@@ -12,6 +12,7 @@
   },
   "files": [
     "lib",
+    "bin",
     "cordis.patch.yml",
     "README.md",
     "README.ru.md",
@@ -65,5 +66,8 @@
   "homepage": "https://github.com/GooDAnDReaDY/dsh-russian-lang#readme",
   "bugs": {
     "url": "https://github.com/GooDAnDReaDY/dsh-russian-lang/issues"
+  },
+  "bin": {
+    "dsh-i18n": "./bin/dsh-i18n.mjs"
   }
 }
