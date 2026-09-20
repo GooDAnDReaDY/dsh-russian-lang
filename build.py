@@ -393,7 +393,7 @@ window.__ModuleLoader__.load({
           if (typeof localStorage !== 'undefined') {
             localStorage.setItem('dsh_ru_' + key, JSON.stringify({ etag, data }))
           }
-        } catch (_) {}
+        } catch (_e) { /* noop */ }
       }
 
       // Мгновенная синхронная гидратация ядра из кэша (zero FOUT при перезагрузке)
@@ -405,7 +405,7 @@ window.__ModuleLoader__.load({
             Object.assign(ZH_RU, cachedCore.data.zhRu)
           }
         }
-      } catch (_) {}
+      } catch (_e) { /* noop */ }
 
       const fetchCachedResource = async (url, cacheKey, onData) => {
         let etag = null
@@ -423,7 +423,7 @@ window.__ModuleLoader__.load({
                 onData(parsed)
               }
             }
-          } catch (_) {}
+          } catch (_e) { /* noop */ }
         }
 
         if (!delivered && cacheKey) {
@@ -451,12 +451,12 @@ window.__ModuleLoader__.load({
                 try {
                   const cache = await caches.open(CACHE_NAME)
                   await cache.put(url, cloned)
-                } catch (_) {}
+                } catch (_e) { /* noop */ }
               }
               if (cacheKey) saveLocalDict(cacheKey, newEtag, data)
             }
           }
-        } catch (_) {}
+        } catch (_e) { /* noop */ }
       }
 
       const loadedPluginNames = new Set()
@@ -1689,7 +1689,7 @@ window.__ModuleLoader__.load({
           const targetKey = k || rawText
           if (!targetKey || !val) return
           const cur = getOverrides()
-          try { scope.set('overrides', Object.assign({}, cur, { [targetKey]: val })) } catch (_) {}
+          try { scope.set('overrides', Object.assign({}, cur, { [targetKey]: val })) } catch (_e) { /* noop */ }
           saveBtn.textContent = '✓ Сохранено'
           saveBtn.disabled = true
           setTimeout(() => modal.remove(), 600)
@@ -2570,7 +2570,7 @@ window.__ModuleLoader__.load({
                     const v = newVal.trim()
                     if (!k || !v) return
                     const next = Object.assign({}, overrides, { [k]: v })
-                    try { scope.set('overrides', next) } catch (_) {}
+                    try { scope.set('overrides', next) } catch (_e) { /* noop */ }
                     setNewKey('')
                     setNewVal('')
                   },
@@ -2596,7 +2596,7 @@ window.__ModuleLoader__.load({
                           onClick: () => {
                             const next = Object.assign({}, overrides)
                             delete next[k]
-                            try { scope.set('overrides', next) } catch (_) {}
+                            try { scope.set('overrides', next) } catch (_e) { /* noop */ }
                           },
                         }, t('overrideDelete'))
                       )
