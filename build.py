@@ -850,10 +850,13 @@ window.__ModuleLoader__.load({
       updateZhRu(ZH_RU)
 
       const zhTranslateText = (text) => {
+        const overrides = getOverrides()
+        if (overrides[text] !== undefined) return overrides[text]
+        const trimmed = text.trim()
+        if (overrides[trimmed] !== undefined) return text.replace(trimmed, overrides[trimmed])
         if (!ZH_CJK.test(text)) return null
         const exact = ZH_EXACT.get(text)
         if (exact !== undefined) return exact
-        const trimmed = text.trim()
         if (trimmed !== text) {
           const exactTrimmed = ZH_EXACT.get(trimmed)
           if (exactTrimmed !== undefined) return text.replace(trimmed, exactTrimmed)
@@ -1064,10 +1067,15 @@ window.__ModuleLoader__.load({
         try {
           const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT)
           const hits = []
+          const curOverrides = getOverrides()
           for (let node = walker.nextNode(); node; node = walker.nextNode()) {
             const val = node.nodeValue
             if (!val) continue
             const trimmed = val.trim()
+            if (curOverrides[trimmed] !== undefined) {
+              node.nodeValue = val.replace(trimmed, curOverrides[trimmed])
+              continue
+            }
             if (trimmed.length >= 1 && ZH_CJK.test(val)) {
               hits.push(node)
             } else if (trimmed.length >= 1 && DOM_EN_TEXT[trimmed]) {
@@ -1674,75 +1682,245 @@ window.__ModuleLoader__.load({
           }
         } catch (e) { /* bestEffort */ void e; }
       }
-      // 7.5. Внутриконтекстный инспектор переводов (Alt+Click) (#298)
-      const openInspectorModal = (meta, rawText) => {
+      // 7.5. Внутриконтекстный инспектор переводов и живые оверрайды (Alt+Click / Alt+I) (#298, #330)
+      let isInspectorActive = false
+      let hoverBoxEl = null
+      let pillEl = null
+
+      const getHoverBox = () => {
+        if (typeof document === 'undefined') return null
+        if (!hoverBoxEl) {
+          hoverBoxEl = document.createElement('div')
+          hoverBoxEl.id = 'dsh-ru-inspector-hover'
+          hoverBoxEl.className = 'rl-inspector-hover'
+          hoverBoxEl.innerHTML = '<span class="rl-inspector-badge"></span>'
+          document.body.appendChild(hoverBoxEl)
+        }
+        return hoverBoxEl
+      }
+
+      const updateInspectorPill = () => {
         if (typeof document === 'undefined') return
+        if (!pillEl) {
+          pillEl = document.createElement('div')
+          pillEl.id = 'dsh-ru-inspector-pill'
+          pillEl.className = 'rl-inspector-pill'
+          pillEl.innerHTML = '<span>🔍 Инспектор</span>' +
+            '<button type="button" class="rl-btn rl-pill-exit" style="padding:2px 8px;font-size:11px;height:22px;">✕ Выйти (Alt+I)</button>'
+          pillEl.querySelector('.rl-pill-exit').onclick = () => {
+            isInspectorActive = false
+            updateInspectorPill()
+            if (hoverBoxEl) hoverBoxEl.style.display = 'none'
+          }
+          document.body.appendChild(pillEl)
+        }
+        pillEl.style.display = isInspectorActive ? 'flex' : 'none'
+        if (isInspectorActive) pillEl.classList.add('rl-inspector-pill-active')
+      }
+
+      const openInspectorModal = (meta, rawText, targetElement) => {
+        if (typeof document === 'undefined') return
+        if (hoverBoxEl) hoverBoxEl.style.display = 'none'
         const old = document.getElementById('dsh-ru-inspector-modal')
         if (old) old.remove()
         const modal = document.createElement('div')
         modal.id = 'dsh-ru-inspector-modal'
         modal.className = 'rl-modal-mask'
+
         const k = meta ? (meta.key || (meta.ns ? meta.ns + '.' + meta.key : '')) : ''
-        const src = meta ? (meta.source === 'override' ? 'Оверрайд' : meta.source === 'dom_zh' ? 'DOM ZH' : 'Словарь ' + (meta.ns || '')) : 'Текст'
-        const v = (meta && meta.value) || rawText
+        const ns = meta && meta.ns ? meta.ns : ''
+        const origText = meta ? (meta.zh || meta.en || '') : ''
+        let srcLabel = 'Текст'
+        if (meta) {
+          if (meta.source === 'override') srcLabel = '✍️ Оверрайд'
+          else if (meta.source === 'dictionary') srcLabel = '🟢 Словарь' + (ns ? ' ' + ns : '')
+          else if (meta.source === 'dom_zh') srcLabel = '🟡 DOM ZH'
+          else if (meta.source === 'dom_zh_original') srcLabel = '🟡 DOM ZH (Оригинал)'
+          else if (meta.source === 'dom_en') srcLabel = '🟡 DOM EN'
+          else if (meta.source === 'dom_en_original') srcLabel = '🟡 DOM EN (Оригинал)'
+          else if (meta.source === 'untranslated_zh') srcLabel = '🔴 Не переведено (ZH)'
+          else if (meta.source === 'untranslated_en') srcLabel = '🔴 Не переведено (EN)'
+        }
+        const currentTranslation = (meta && meta.value) || rawText
+
         modal.innerHTML = '<div class="rl-modal-box">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;">' +
-            '<div style="font-weight:600;font-size:14px;">🔍 Инспектор перевода</div>' +
+            '<div style="font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px;">' +
+              '<span>🔍 Инспектор перевода</span>' +
+              '<span class="rl-badge rl-badge-dim" style="font-size:11px;">' + srcLabel + '</span>' +
+            '</div>' +
             '<button type="button" class="rl-btn-close" style="background:none;border:none;color:var(--dsw-alias-label-secondary);font-size:18px;cursor:pointer;">&times;</button>' +
           '</div>' +
-          '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;">' +
-            '<span style="color:var(--dsw-alias-label-secondary);">Ключ:</span>' +
-            '<code style="background:var(--dsw-alias-bg-layer-3);color:var(--dsw-alias-state-brand-primary);padding:2px 6px;border-radius:4px;">' + (k || '(не опознан)') + '</code>' +
-            '<span style="padding:1px 6px;border-radius:4px;font-size:10px;background:var(--dsw-alias-bg-layer-3);">' + src + '</span>' +
+          '<div style="display:flex;flex-direction:column;gap:8px;font-size:12px;background:var(--dsw-alias-bg-layer-3);padding:10px;border-radius:8px;border:1px solid var(--dsw-alias-border-l2);">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">' +
+              '<span style="color:var(--dsw-alias-label-secondary);">Ключ:</span>' +
+              '<div style="display:flex;gap:6px;align-items:center;">' +
+                '<code class="rl-modal-key" style="color:var(--dsw-alias-state-brand-primary);font-weight:600;font-size:12px;">' + (k || '(текстовый узел)') + '</code>' +
+                '<button type="button" class="rl-btn rl-copy-key-btn" style="padding:1px 6px;height:20px;font-size:10px;" title="Скопировать ключ">📋</button>' +
+              '</div>' +
+            '</div>' +
+            (origText ? '<div style="color:var(--dsw-alias-label-secondary);word-break:break-word;">Оригинал: <b style="color:var(--dsw-alias-label-primary);">' + origText + '</b></div>' : '') +
+            '<div style="color:var(--dsw-alias-label-secondary);word-break:break-word;">Текущий текст: <b class="rl-raw-text" style="color:var(--dsw-alias-label-primary)"></b></div>' +
           '</div>' +
-          '<div style="font-size:12px;color:var(--dsw-alias-label-secondary);word-break:break-word;">Текущий текст: <b class="rl-raw-text" style="color:var(--dsw-alias-label-primary)"></b></div>' +
           '<div style="display:flex;flex-direction:column;gap:6px;">' +
-            '<label style="font-size:12px;color:var(--dsw-alias-label-secondary);">Новый перевод (оверрайд):</label>' +
-            '<textarea class="rl-edit-val rl-select" style="min-height:50px;font-family:inherit;width:100%%;resize:vertical;"></textarea>' +
+            '<label style="font-size:12px;font-weight:500;color:var(--dsw-alias-label-primary);">Ваш вариант перевода (оверрайд):</label>' +
+            '<textarea class="rl-edit-val rl-select" placeholder="Ваш перевод..." style="min-height:60px;font-family:inherit;width:100%%;resize:vertical;"></textarea>' +
           '</div>' +
-          '<div style="display:flex;justify-content:flex-end;gap:8px;">' +
-            '<button type="button" class="rl-btn rl-cancel-btn">Отмена</button>' +
-            '<button type="button" class="rl-btn rl-btn-primary rl-save-btn">Сохранить оверрайд</button>' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">' +
+            '<button type="button" class="rl-btn rl-copy-report-btn" style="font-size:11px;">📋 Скопировать репорт</button>' +
+            '<div style="display:flex;gap:6px;">' +
+              (meta && meta.source === 'override' ? '<button type="button" class="rl-btn rl-reset-override-btn" style="color:var(--dsw-alias-state-error-primary);font-size:11px;">Сбросить</button>' : '') +
+              '<button type="button" class="rl-btn rl-cancel-btn">Отмена</button>' +
+              '<button type="button" class="rl-btn rl-btn-primary rl-save-btn">✓ Применить оверрайд</button>' +
+            '</div>' +
           '</div>' +
         '</div>'
+
         modal.querySelector('.rl-raw-text').textContent = rawText
         const textarea = modal.querySelector('.rl-edit-val')
-        textarea.value = v
+        textarea.value = currentTranslation
+
         modal.querySelector('.rl-btn-close').onclick = () => modal.remove()
         modal.querySelector('.rl-cancel-btn').onclick = () => modal.remove()
         modal.onclick = (e) => { if (e.target === modal) modal.remove() }
+
+        const copyKeyBtn = modal.querySelector('.rl-copy-key-btn')
+        if (copyKeyBtn) {
+          copyKeyBtn.onclick = () => {
+            try { navigator.clipboard.writeText(k || rawText) } catch (err) { /* bestEffort */ void err; }
+            copyKeyBtn.textContent = '✓'
+            setTimeout(() => { copyKeyBtn.textContent = '📋' }, 1500)
+          }
+        }
+
+        const copyReportBtn = modal.querySelector('.rl-copy-report-btn')
+        if (copyReportBtn) {
+          copyReportBtn.onclick = () => {
+            const snippet = typeof generateBugReportSnippet === 'function'
+              ? generateBugReportSnippet({ key: k, ns, original: origText || rawText, current: rawText, override: textarea.value.trim(), pkgVersion: '__PKG_VERSION__' })
+              : ('### Репорт: ' + (k || rawText) + '\n- Исходный: ' + (origText || rawText) + '\n- Перевод: ' + textarea.value.trim())
+            try { navigator.clipboard.writeText(snippet) } catch (err) { /* bestEffort */ void err; }
+            copyReportBtn.textContent = '✓ Скопировано'
+            setTimeout(() => { copyReportBtn.textContent = '📋 Скопировать репорт' }, 2000)
+          }
+        }
+
+        const resetBtn = modal.querySelector('.rl-reset-override-btn')
+        if (resetBtn) {
+          resetBtn.onclick = () => {
+            const targetKey = k || rawText
+            const cur = getOverrides()
+            const updated = Object.assign({}, cur)
+            delete updated[targetKey]
+            try { scope.set('overrides', updated) } catch (err) { /* bestEffort */ void err; }
+            modal.remove()
+            if (typeof queueZhWalk === 'function') queueZhWalk()
+          }
+        }
+
         const saveBtn = modal.querySelector('.rl-save-btn')
         saveBtn.onclick = () => {
           const val = textarea.value.trim()
           const targetKey = k || rawText
           if (!targetKey || !val) return
           const cur = getOverrides()
-          try { scope.set('overrides', Object.assign({}, cur, { [targetKey]: val })) } catch (_e) { /* noop */ }
-          saveBtn.textContent = '✓ Сохранено'
+          const updated = Object.assign({}, cur, { [targetKey]: val })
+          try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
+          if (targetElement) {
+            try {
+              if (targetElement.childNodes && targetElement.childNodes.length === 1 && targetElement.childNodes[0].nodeType === 3) {
+                targetElement.childNodes[0].nodeValue = val
+              } else {
+                targetElement.textContent = val
+              }
+            } catch (err) { /* bestEffort */ void err; }
+          }
+          saveBtn.textContent = '✓ Применено'
           saveBtn.disabled = true
-          setTimeout(() => modal.remove(), 600)
+          if (typeof queueZhWalk === 'function') queueZhWalk()
+          setTimeout(() => modal.remove(), 500)
         }
+
         document.body.appendChild(modal)
         setTimeout(() => textarea.focus(), 50)
       }
 
       const inspectorOnClick = (e) => {
-        if (!e.altKey) return
-        if (e.target && e.target.closest && e.target.closest('#dsh-ru-inspector-modal')) return
+        if (!e.altKey && !isInspectorActive) return
+        if (e.target && e.target.closest && (e.target.closest('#dsh-ru-inspector-modal') || e.target.closest('#dsh-ru-inspector-pill'))) return
         const raw = (e.target && (e.target.innerText || e.target.textContent) || '').trim()
         if (!raw) return
         e.preventDefault()
         e.stopPropagation()
-        const meta = translationRegistry.get(raw) || (typeof findTranslationKey === 'function' ? findTranslationKey(raw, RU, getOverrides(), ZH_RU) : null)
-        openInspectorModal(meta, raw)
+        const meta = translationRegistry.get(raw) || (typeof findTranslationKey === 'function' ? findTranslationKey(raw, RU, getOverrides(), ZH_RU, DOM_EN_TEXT, { detectUntranslated: true }) : null)
+        openInspectorModal(meta, raw, e.target)
+      }
+
+      const inspectorOnMouseMove = (e) => {
+        if (!isInspectorActive && !e.altKey) {
+          if (hoverBoxEl && hoverBoxEl.style.display !== 'none') hoverBoxEl.style.display = 'none'
+          return
+        }
+        if (!e.target || (e.target.closest && (e.target.closest('#dsh-ru-inspector-modal') || e.target.closest('#dsh-ru-inspector-pill') || e.target.closest('#dsh-ru-inspector-hover')))) return
+        const raw = (e.target.innerText || e.target.textContent || '').trim()
+        if (!raw || raw.length > 200) {
+          if (hoverBoxEl) hoverBoxEl.style.display = 'none'
+          return
+        }
+        const box = getHoverBox()
+        if (!box) return
+        const rect = e.target.getBoundingClientRect()
+        box.style.top = (rect.top + window.scrollY) + 'px'
+        box.style.left = (rect.left + window.scrollX) + 'px'
+        box.style.width = rect.width + 'px'
+        box.style.height = rect.height + 'px'
+        box.style.display = 'block'
+
+        const badge = box.querySelector('.rl-inspector-badge')
+        if (badge) {
+          const meta = translationRegistry.get(raw) || (typeof findTranslationKey === 'function' ? findTranslationKey(raw, RU, getOverrides(), ZH_RU, DOM_EN_TEXT, { detectUntranslated: true }) : null)
+          let title = '🔍 Клик: инспекция'
+          if (meta) {
+            if (meta.source === 'override') title = '✍️ ' + meta.key
+            else if (meta.source === 'dictionary') title = '🟢 ' + (meta.ns ? meta.ns + '.' : '') + meta.key
+            else if (meta.source === 'dom_zh') title = '🟡 ' + meta.zh
+            else if (meta.source === 'dom_en') title = '🟡 ' + meta.en
+            else if (meta.source === 'untranslated_zh') title = '🔴 ZH'
+            else if (meta.source === 'untranslated_en') title = '🔴 EN'
+          }
+          badge.textContent = title
+        }
+      }
+
+      const inspectorOnKeyDown = (e) => {
+        if (e.altKey && (e.key === 'i' || e.key === 'I' || e.code === 'KeyI')) {
+          e.preventDefault()
+          isInspectorActive = !isInspectorActive
+          updateInspectorPill()
+          if (!isInspectorActive && hoverBoxEl) hoverBoxEl.style.display = 'none'
+        }
+      }
+
+      const inspectorOnKeyUp = (e) => {
+        if (e.key === 'Alt' && !isInspectorActive) {
+          if (hoverBoxEl) hoverBoxEl.style.display = 'none'
+        }
       }
 
       ctx.effect(() => {
         document.addEventListener('click', inspectorOnClick, true)
+        document.addEventListener('mousemove', inspectorOnMouseMove, true)
+        document.addEventListener('keydown', inspectorOnKeyDown, true)
+        document.addEventListener('keyup', inspectorOnKeyUp, true)
         return () => {
           document.removeEventListener('click', inspectorOnClick, true)
+          document.removeEventListener('mousemove', inspectorOnMouseMove, true)
+          document.removeEventListener('keydown', inspectorOnKeyDown, true)
+          document.removeEventListener('keyup', inspectorOnKeyUp, true)
           const m = document.getElementById('dsh-ru-inspector-modal')
           if (m) m.remove()
+          if (hoverBoxEl) { hoverBoxEl.remove(); hoverBoxEl = null }
+          if (pillEl) { pillEl.remove(); pillEl = null }
         }
       }, 'dsh-russian-lang: inspector')
 
@@ -2598,7 +2776,7 @@ window.__ModuleLoader__.load({
                     const v = newVal.trim()
                     if (!k || !v) return
                     const next = Object.assign({}, overrides, { [k]: v })
-                    try { scope.set('overrides', next) } catch (_e) { /* noop */ }
+                    try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
                     setNewKey('')
                     setNewVal('')
                   },
@@ -2624,13 +2802,50 @@ window.__ModuleLoader__.load({
                           onClick: () => {
                             const next = Object.assign({}, overrides)
                             delete next[k]
-                            try { scope.set('overrides', next) } catch (_e) { /* noop */ }
+                            try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
                           },
                         }, t('overrideDelete'))
                       )
                     )
                   ),
-              React.createElement('div', { className: 'rl-hint-text', style: { marginTop: '8px' } }, t('overrideTip'))
+              React.createElement('div', { className: 'rl-hint-text', style: { marginTop: '8px' } }, t('overrideTip')),
+              React.createElement('div', { style: { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', marginTop: '10px' } },
+                React.createElement('button', {
+                  type: 'button',
+                  className: 'rl-btn' + (isInspectorActive ? ' rl-btn-primary' : ''),
+                  onClick: () => {
+                    isInspectorActive = !isInspectorActive
+                    updateInspectorPill()
+                  },
+                }, isInspectorActive ? '🔍 Инспектор перевода (включён)' : '🔍 Включить инспектор перевода (Alt+I)'),
+                React.createElement('button', {
+                  type: 'button',
+                  className: 'rl-btn',
+                  style: { fontSize: '11px' },
+                  onClick: () => {
+                    try {
+                      navigator.clipboard.writeText(JSON.stringify(overrides, null, 2))
+                      alert('Оверрайды скопированы в буфер обмена как JSON!')
+                    } catch (err) { /* bestEffort */ void err; }
+                  }
+                }, '📤 Экспорт JSON'),
+                React.createElement('button', {
+                  type: 'button',
+                  className: 'rl-btn',
+                  style: { fontSize: '11px' },
+                  onClick: () => {
+                    const input = prompt('Вставьте JSON с оверрайдами:')
+                    if (!input) return
+                    try {
+                      const parsed = JSON.parse(input)
+                      if (parsed && typeof parsed === 'object') {
+                        const merged = Object.assign({}, overrides, parsed)
+                        scope.set('overrides', merged)
+                      }
+                    } catch (err) { alert('Ошибка разбора JSON: ' + (err && err.message || err)) }
+                  }
+                }, '📥 Импорт JSON')
+              )
             ),
 
             // Секция 5: Покрытие экосистемы и поддержка
@@ -2727,7 +2942,11 @@ window.__ModuleLoader__.load({
       '.rl-trans-body{color:var(--dsw-alias-label-primary);white-space:pre-wrap;word-break:break-word;user-select:text}',
       '.rl-export-md-btn{appearance:none;border:1px solid var(--dsw-alias-border-l2);height:32px;color:var(--dsw-alias-label-primary);cursor:pointer;background:transparent;border-radius:18px;justify-content:center;align-items:center;gap:4px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;white-space:nowrap;margin-left:6px;transition:all .15s ease}',
       '.rl-export-md-btn:hover{background:var(--dsw-alias-interactive-bg-hover)}',
-    ].join('\n')
+      '.rl-inspector-hover{position:absolute;pointer-events:none;border:2px solid var(--dsw-alias-state-brand-primary);border-radius:4px;background:color-mix(in srgb,var(--dsw-alias-state-brand-primary) 12%%,transparent);box-shadow:0 0 10px color-mix(in srgb,var(--dsw-alias-state-brand-primary) 30%%,transparent);z-index:99998;transition:all .06s ease;display:none}',
+      '.rl-inspector-badge{position:absolute;bottom:calc(100%% + 4px);left:0;background:var(--dsw-alias-state-brand-primary);color:var(--dsw-alias-label-inverse);font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;white-space:nowrap;box-shadow:var(--dsw-alias-shadow-l2);pointer-events:none}',
+      '.rl-inspector-pill{position:fixed;bottom:18px;right:18px;background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);border:1px solid var(--dsw-alias-border-l1);border-radius:20px;padding:6px 12px;box-shadow:var(--dsw-alias-shadow-l3);display:none;align-items:center;gap:8px;font-size:12px;z-index:99990;user-select:none}',
+      '.rl-inspector-pill-active{border-color:var(--dsw-alias-state-brand-primary);box-shadow:0 0 12px color-mix(in srgb,var(--dsw-alias-state-brand-primary) 35%%,transparent)}',
+    ].join('')
     const STYLE_ID = 'dsh-russian-lang-styles'
     if (typeof document !== 'undefined' && (document.getElementById && !document.getElementById(STYLE_ID))) {
       const tag = document.createElement('style')
@@ -2775,8 +2994,7 @@ for l in lines:
         continue
     if s.startswith('//') and not s.startswith('//__PURE_JS__'):
         continue
-    indent = '  ' if l.startswith('  ') else ''
-    cleaned_lines.append(indent + s)
+    cleaned_lines.append(s)
 client = '\n'.join(cleaned_lines)
 
 client_target = os.path.join(HERE, 'lib', 'client.js')
