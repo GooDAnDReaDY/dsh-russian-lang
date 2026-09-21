@@ -1111,21 +1111,48 @@ window.__ModuleLoader__.load({
       }
 
       let zhObserver = null
+      let zhDebounceTimer = null
+      let zhWalking = false
+      const queueZhWalk = (target) => {
+        if (zhDebounceTimer) return
+        zhDebounceTimer = setTimeout(() => {
+          zhDebounceTimer = null
+          if (zhWalking) return
+          zhWalking = true
+          try {
+            ZH_WALKER(target || document.body)
+          } finally {
+            zhWalking = false
+          }
+        }, 120)
+      }
+
       const syncZhDom = () => {
         try {
           if (typeof document === 'undefined') return
           const ru = runtime.getLocale().active === 'ru'
           if (!ru) {
             if (zhObserver) { zhObserver.disconnect(); zhObserver = null }
+            if (zhDebounceTimer) { clearTimeout(zhDebounceTimer); zhDebounceTimer = null }
             return
           }
           if (!zhObserver) {
-            zhObserver = new MutationObserver(() => {
-              queueMicrotask(() => { try { ZH_WALKER(document.body) } catch (err) { /* ignore */ } })
+            zhObserver = new MutationObserver((records) => {
+              for (const record of records) {
+                if (record.type === 'childList') {
+                  for (const node of record.addedNodes) {
+                    if (node.nodeType === 1) {
+                      if (node.closest && node.closest('.chat-message, .markdown-body, pre, code, [data-stream]')) continue
+                      queueZhWalk(node)
+                      return
+                    }
+                  }
+                }
+              }
             })
-            zhObserver.observe(document.body, { childList: true, subtree: true, characterData: true })
+            zhObserver.observe(document.body, { childList: true, subtree: true })
           }
-          ZH_WALKER(document.body)
+          queueZhWalk(document.body)
         } catch (err) { /* ignore */ }
       }
       const unsubscribeZh = runtime.subscribe(syncZhDom)
@@ -1133,6 +1160,7 @@ window.__ModuleLoader__.load({
         return () => {
           unsubscribeZh()
           if (zhObserver) zhObserver.disconnect()
+          if (zhDebounceTimer) { clearTimeout(zhDebounceTimer); zhDebounceTimer = null }
         }
       }, 'dsh-russian-lang: zh-dom')
       syncZhDom()
@@ -2721,7 +2749,8 @@ window.__ModuleLoader__.load({
 # Подставляем ПОСЛЕ %-форматирования: иначе каждый процент внутри pure.js
 # пришлось бы удваивать, и первый же забытый `%` ронял бы сборку.
 pure_src = open(os.path.join(HERE, 'lib', 'pure.js'), encoding='utf-8').read()
-pure_inline = _re.sub(r'^export (const|function|class) ', r'\1 ', pure_src, flags=_re.M)
+pure_clean = _re.sub(r'/\*\*[\s\S]*?\*/', '', pure_src)
+pure_inline = _re.sub(r'^export (const|function|class) ', r'\1 ', pure_clean, flags=_re.M)
 pure_inline = '\n'.join(l for l in pure_inline.split('\n') if l.strip() and not l.strip().startswith('//'))
 if '//__PURE_JS__' not in client:
     raise SystemExit('в шаблоне нет маркера //__PURE_JS__ — вставлять pure.js некуда')
@@ -2746,13 +2775,14 @@ for l in lines:
         continue
     if s.startswith('//') and not s.startswith('//__PURE_JS__'):
         continue
-    cleaned_lines.append(l)
+    indent = '  ' if l.startswith('  ') else ''
+    cleaned_lines.append(indent + s)
 client = '\n'.join(cleaned_lines)
 
 client_target = os.path.join(HERE, 'lib', 'client.js')
 write_or_check(client_target, client)
-print('Core namespace-ов: %d, ключей: %d -> lib/client.js'
-      % (len(core_dict), sum(len(v) for v in core_dict.values())))
+print('Bootstrap namespace-ов: %d, ключей: %d -> lib/client.js'
+      % (len(bootstrap_dict), sum(len(v) for v in bootstrap_dict.values())))
 
 # Валидация размера файлов пакета по стандарту DSH Store (262144 байта / 256 KiB)
 MAX_FILE_BYTES = 262144
