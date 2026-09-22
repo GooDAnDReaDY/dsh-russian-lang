@@ -352,7 +352,19 @@ window.__ModuleLoader__.load({
 
     function apply(ctx) {
       const runtime = ctx.locale
-      const scope = ctx.settingsScope.bind({ namespace: SETTINGS_NS_NAME })
+      const resolveScope = (c) => {
+        try {
+          if (c && c.configForms) return c.configForms.get(SETTINGS_NS_NAME)
+          if (c && c.settingsScope) return c.settingsScope.bind({ namespace: SETTINGS_NS_NAME })
+        } catch (err) { void err }
+        return null
+      }
+      const rawScope = resolveScope(ctx)
+      const scope = (rawScope && typeof rawScope.getSnapshot === 'function') ? rawScope : {
+        getSnapshot: () => ({ status: 'ready', value: {} }),
+        subscribe: () => () => {},
+        set: () => Promise.resolve()
+      }
 
       // 1. Словари ядра DSH: каждый namespace — свой эффект, снимается вместе с плагином
       for (const ns of Object.keys(RU)) {
@@ -393,7 +405,7 @@ window.__ModuleLoader__.load({
           if (typeof localStorage !== 'undefined') {
             localStorage.setItem('dsh_ru_' + key, JSON.stringify({ etag, data }))
           }
-        } catch (_e) { /* noop */ }
+        } catch (_e) { void _e }
       }
 
       // Мгновенная синхронная гидратация ядра из кэша (zero FOUT при перезагрузке)
@@ -405,7 +417,7 @@ window.__ModuleLoader__.load({
             Object.assign(ZH_RU, cachedCore.data.zhRu)
           }
         }
-      } catch (_e) { /* noop */ }
+      } catch (_e) { void _e }
 
       const fetchCachedResource = async (url, cacheKey, onData) => {
         let etag = null
@@ -423,7 +435,7 @@ window.__ModuleLoader__.load({
                 onData(parsed)
               }
             }
-          } catch (_e) { /* noop */ }
+          } catch (_e) { void _e }
         }
 
         if (!delivered && cacheKey) {
@@ -451,12 +463,12 @@ window.__ModuleLoader__.load({
                 try {
                   const cache = await caches.open(CACHE_NAME)
                   await cache.put(url, cloned)
-                } catch (_e) { /* noop */ }
+                } catch (_e) { void _e }
               }
               if (cacheKey) saveLocalDict(cacheKey, newEtag, data)
             }
           }
-        } catch (_e) { /* noop */ }
+        } catch (_e) { void _e }
       }
 
       const loadedPluginNames = new Set()
@@ -1825,7 +1837,7 @@ window.__ModuleLoader__.load({
           if (!targetKey || !val) return
           const cur = getOverrides()
           const updated = Object.assign({}, cur, { [targetKey]: val })
-          try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
+          try { scope.set('overrides', updated) } catch (_e) { void _e }
           if (targetElement) {
             try {
               if (targetElement.childNodes && targetElement.childNodes.length === 1 && targetElement.childNodes[0].nodeType === 3) {
@@ -2776,7 +2788,7 @@ window.__ModuleLoader__.load({
                     const v = newVal.trim()
                     if (!k || !v) return
                     const next = Object.assign({}, overrides, { [k]: v })
-                    try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
+                    try { scope.set('overrides', updated) } catch (_e) { void _e }
                     setNewKey('')
                     setNewVal('')
                   },
@@ -2802,7 +2814,7 @@ window.__ModuleLoader__.load({
                           onClick: () => {
                             const next = Object.assign({}, overrides)
                             delete next[k]
-                            try { scope.set('overrides', updated) } catch (_e) { /* noop */ }
+                            try { scope.set('overrides', updated) } catch (_e) { void _e }
                           },
                         }, t('overrideDelete'))
                       )
@@ -2958,7 +2970,7 @@ window.__ModuleLoader__.load({
       document.head.appendChild(tag)
     }
 
-    module.exports = { apply, inject: ['locale', 'connection', 'remote', 'settingsScope', 'slots'] }
+    module.exports = { apply, inject: ['slots', 'locale', 'configForms'] }
     return module.exports
   },
 })
@@ -2985,7 +2997,6 @@ client = client.replace('__PKG_VERSION__', pkg['version'])
 # файла с закоммиченным (CI, #134) от этого становится нестабильной.
 # Очистка комментариев для компактности production-бандла
 
-client = _re.sub(r'^\s*/\*\*[\s\S]*?\*/\s*\n?', '', client, flags=_re.M)
 lines = client.split('\n')
 cleaned_lines = []
 for l in lines:
@@ -2996,6 +3007,7 @@ for l in lines:
         continue
     cleaned_lines.append(s)
 client = '\n'.join(cleaned_lines)
+client = _re.sub(r'/\*[\s\S]*?\*/', '', client)
 
 client_target = os.path.join(HERE, 'lib', 'client.js')
 write_or_check(client_target, client)

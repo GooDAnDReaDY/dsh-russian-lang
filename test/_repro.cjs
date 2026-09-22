@@ -48,6 +48,7 @@ try {
         setLocale(l) { localeState.active = l },
         host: { getSnapshot: () => ({ value: {} }), subscribe() { return () => {} }, set() { return Promise.resolve() }, unset() { return Promise.resolve() } },
       },
+      configForms: { get() { return { getSnapshot: () => ({ status: "ready", value: { enabled: true, overrides: {}, typography: {} } }), subscribe() { return () => {} }, set() {} } } },
       settingsScope: { bind() { return { getSnapshot: () => ({ status: 'ready', value: { enabled: true, overrides: {}, typography: {} } }), subscribe() { return () => {} }, set() {} } } },
       effect(cb) { const d = cb(); void d; return d },
       emit() {},
