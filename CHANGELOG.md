@@ -1,3 +1,34 @@
+## 0.3.3 — 2026-09-22
+
+Совместимость клиентского модуля с рантаймом DSH Core v0.1.7-alpha.1 (инъекция configForms), пакетная русская локализация новых пространств имён ядра и плагинов экосистемы GoodAndReady, оптимизация размера клиентского бандла.
+
+### 1. Совместимость с DSH Core v0.1.7-alpha.1 (Issue #335, PR #338)
+- **Миграция инъекций клиентского файбера**:
+  - Заменена устаревшая зависимость settingsScope на официальный сервис configForms (@deepseek-ai/dsh-client-ui-settings).
+  - Очищены неиспользуемые инъекции connection и remote.
+  - Синхронизированы декларации пакетов в package.json (dsh.client.inject = ["@deepseek-ai/dsh-client-locale", "@deepseek-ai/dsh-client-ui-settings", "@deepseek-ai/dsh-client-ui-slots"]) и клиентском рантайме (module.exports = { apply, inject: ['slots', 'locale', 'configForms'] }).
+- **Безопасное разрешение области настроек (resolveScope)**:
+  - Функция resolveScope(ctx) обращается к ctx.configForms.get('russian-lang') с обратной совместимостью через ctx.settingsScope.bind(...) для предыдущих версий ядра.
+  - Предоставлен безопасный fallback stub-объект { getSnapshot, subscribe, set }, исключающий падения при запуске в изолированных тестовых средах без UI-сервисов.
+- **Оптимизация бандла**:
+  - Очистка однострочных комментариев перед обработкой регулярными выражениями устранила перехват обёртки загрузчика модулей.
+  - Размер lib/client.js снижен до 153.4 KiB (запас более 10.4 KiB от лимита 160 KiB).
+- **Регрессионные тесты**:
+  - Добавлен тестовый набор test/client-activation.test.mjs (4 теста), верифицирующий регистрацию инъекций, активацию с configForms, фолбэк на старые ядра и безопасную работу при отсутствии сервиса.
+
+### 2. Пакетная локализация DSH Core 0.1.7-alpha.1 и экосистемы плагинов (Issue #336, PR #337)
+- **Локализация новых пространств имён ядра DSH**:
+  - Полный перевод новых и расширенных модулей: trajectory, schedule, timeline, trajectory.catalog, sidebarFiles, sidebarTextpreview, context.
+- **Локализация экосистемных плагинов GoodAndReady (10 плагинов)**:
+  - dsh-cron — русские подписи задач, расписаний и истории запусков.
+  - dsh-key-rotation — карточка ротации API-ключей, валидация и мониторинг.
+  - dsh-auto-mode — подтверждения и диалоги автономного режима.
+  - dsh-hooks — пресеты хуков, китайские системные шаблоны.
+  - better-sidebar, dsh-model-search, dsh-kanban, dsh-session-control, dsh-context-lens, dsh-task-tracker.
+- **100% покрытие интерфейса**:
+  - 56 core namespaces (2 767 ключей) и 65 plugin namespaces (4 695 ключей).
+  - 100.0% эффективное runtime-покрытие пользовательского интерфейса (7 574 ключа).
+
 ## 0.3.2 — 2026-09-21
 
 Интерактивный Инспектор перевода и быстрые оверрайды на лету (Alt+Click / Alt+I), оптимизация производительности MutationObserver (debouncing & batching), защита HTTP-маршрутов словарей (405 Method Not Allowed) и оптимизация размера клиентского бандла.
