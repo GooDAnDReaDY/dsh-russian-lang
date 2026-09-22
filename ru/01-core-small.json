@@ -59,7 +59,11 @@
     "connection.error": "Отключено",
     "connection.reconnect": "Отключено, переподключиться сейчас",
     "connection.restart": "Автоматическое переподключение, переподключиться сейчас",
-    "connection.retry": "Переподключиться сейчас"
+    "connection.retry": "Переподключиться сейчас",
+    "developerTools.description": "Инструменты и сведения для отладки и устранения неполадок",
+    "developerTools.error": "Не удалось сохранить. Пожалуйста, повторите попытку.",
+    "developerTools.title": "Инструменты разработчика",
+    "general.currentVersion": "Текущая версия: {version}"
   },
   "settings.theme": {
     "appearance.dark": "Тёмная",

@@ -221,7 +221,8 @@
     "updateRunning": "Обновление…",
     "updateFailed": "Сбой обновления",
     "currentVersion": "Текущая версия",
-    "latestVersion": "Последняя версия"
+    "latestVersion": "Последняя версия",
+    "providerCatalogUnavailable": "Список провайдеров недоступен"
   },
   "keyRotation": {
     "updateCheck": "Проверить обновления",

@@ -41,7 +41,31 @@
     "status.failed": "ошибка",
     "status.killed": "отменена",
     "status.running": "выполняется",
-    "status.stopping": "останавливается"
+    "status.stopping": "останавливается",
+    "kill.confirm": "Нажмите снова для подтверждения",
+    "kill.confirmAction": "Подтвердить остановку",
+    "kill.failed": "Сбой остановки",
+    "kill.stop": "Остановить задачу {label}",
+    "output.error": "поток вывода в реальном времени прерван: {error}",
+    "output.gap": "… более ранний вывод пропущен …",
+    "row.collapseAria": "Скрыть вывод задачи {label}",
+    "row.expandAria": "Показать вывод задачи {label}",
+    "section.clear": "Очистить",
+    "section.live": "Выполняются",
+    "section.settledCount": "Завершено {count}",
+    "terminal.collapse": "Свернуть",
+    "terminal.collapseAria": "Свернуть вывод",
+    "terminal.copied": "Скопировано",
+    "terminal.copy": "Копировать",
+    "terminal.done": "завершено",
+    "terminal.exitCode": "код завершения {code}",
+    "terminal.expand": "Показать ещё {n} строк",
+    "terminal.expandAria": "Развернуть {n} скрытых строк вывода",
+    "terminal.failed": "сбой",
+    "terminal.noExitCode": "нет кода завершения",
+    "terminal.noOutput": "(нет вывода)",
+    "terminal.running": "выполняется",
+    "terminal.signal": "сигнал {signal}"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
@@ -718,7 +742,14 @@
     "menu.toggle": "Выберите приложение для открытия",
     "open.error": "Не удалось открыть",
     "open.title": "Открыть рабочую область в {app}",
-    "open.tooltip": "Открыть локально"
+    "open.tooltip": "Открыть локально",
+    "path.appDefault": "{app} (по умолчанию)",
+    "path.appsError": "Не удалось загрузить приложения",
+    "path.more": "Другие способы открытия",
+    "path.open": "Открыть",
+    "path.openError": "Не удалось открыть. Повторите попытку.",
+    "path.reveal": "Показать расположение файла",
+    "path.revealError": "Не удалось показать расположение файла. Повторите попытку."
   },
   "settings": {
     "desktop.update.available": "Обновление",
@@ -739,5 +770,8 @@
     "desktop.update.stopFailed": "Не удалось безопасно остановить задачи. Обновление не установлено. Повторите попытку позже.",
     "desktop.update.tasksChanged": "Запущены новые задачи. Проверьте подтверждение обновления ещё раз.",
     "desktop.update.tasksUnavailable": "Статус задач недоступен. Повторите обновление, когда рабочая область будет готова."
+  },
+  "session-log-download": {
+    "menu.feedback": "Обратная связь"
   }
 }

@@ -2867,9 +2867,9 @@
   },
   "detail.step": {
    "at": "2026-08-25T19:00:57",
-   "en": "Turn {t} · Step {s}",
+   "en": "Turn {t} · Step {s} of {n}",
    "model": "deepseek/deepseek-chat",
-   "ru": "Поверните {t} · Шаг {s}",
+   "ru": "Ход {t} · Шаг {s} из {n}",
    "status": "reviewed"
   },
   "detail.turn": {
@@ -3959,9 +3959,9 @@
   },
   "tip.step": {
    "at": "2026-08-25T19:03:33",
-   "en": "Turn {t} · Step {s}",
+   "en": "Turn {t} · Step {s} of {n}",
    "model": "deepseek/deepseek-chat",
-   "ru": "Повернуть {t} · Шаг {s}",
+   "ru": "Ход {t} · Шаг {s} из {n}",
    "status": "reviewed"
   },
   "tip.total": {

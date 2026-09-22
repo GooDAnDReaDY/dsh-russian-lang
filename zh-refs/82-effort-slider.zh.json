@@ -1,0 +1,6 @@
+{
+  "effort_level": "推理等级",
+  "not_supported": "当前模型不支持思考强度调节",
+  "loading_models": "模型目录加载中…",
+  "close": "关闭"
+}
