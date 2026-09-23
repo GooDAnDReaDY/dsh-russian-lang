@@ -44,6 +44,7 @@ EXTRA_ALLOW=(
   "CHANGELOG.md"
   "package.json"
   "cordis.patch.yml"
+  "docs/media"
 )
 
 # Never publish these, even if they sneak into the allowlist.
