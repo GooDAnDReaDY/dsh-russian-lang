@@ -50,6 +50,9 @@
     "history.kind.snapshot-prune": "Snapshot retention",
     "history.result.success": "Success",
     "history.result.failed": "Failed",
-    "history.result.skipped": "Skipped"
+    "history.result.skipped": "Skipped",
+    "history.kind.backup-manual": "Ручной бэкап",
+    "history.kind.profile-create": "Создан профиль",
+    "history.kind.profile-select": "Задан профиль для следующего запуска"
   }
 }

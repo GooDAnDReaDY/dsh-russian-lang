@@ -482,6 +482,16 @@
     "updater.title": "Обновления плагина",
     "updater.upToDate": "Актуальная версия",
     "updater.updateNow": "Обновить до v{version}",
-    "updater.updating": "Обновление…"
+    "updater.updating": "Обновление…",
+    "field.gitProvider": "Git-провайдер",
+    "field.githubOwner": "Организация или пользователь GitHub",
+    "field.githubTokenRef": "Токен учётных данных GitHub",
+    "field.githubWebhookSecretRef": "Секрет вебхука GitHub",
+    "group.forge": "Git-кузница",
+    "group.github": "GitHub",
+    "hint.gitProvider": "Активная кузница: «auto» (определять по учётным данным), «gitea» или «github».",
+    "hint.githubOwner": "Основная учётная запись GitHub для отслеживания. Если пусто, используется авторизованный пользователь.",
+    "hint.githubTokenRef": "Имя учётных данных DSH, содержащих токен PAT или GitHub App. Никогда не вводите сам токен открытым текстом.",
+    "hint.githubWebhookSecretRef": "Имя учётных данных DSH, содержащих секрет вебхука GitHub (HMAC-SHA256)."
   }
 }

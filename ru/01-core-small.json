@@ -38,7 +38,10 @@
     "markdown.footnotes": "Сноски",
     "markdown.truncatedCharacters": "… обрезано на {total} символах",
     "number.million": "{value}M",
-    "number.thousand": "{value}K"
+    "number.thousand": "{value}K",
+    "codeBlock.title": "Блок кода",
+    "codeBlock.wrap": "Переносить строки",
+    "codeBlock.unwrap": "Не переносить строки"
   },
   "sidebar": {
     "session.new": "Новая сессия",
