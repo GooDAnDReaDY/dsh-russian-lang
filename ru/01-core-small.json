@@ -97,7 +97,8 @@
     "row.running": "Загрузка скилла",
     "row.stopped": "Загрузка скилла остановлена",
     "row.inspect": "Инспектировать",
-    "row.title": "Навык"
+    "row.title": "Навык",
+    "row.preparing": "Подготовка к загрузке навыка"
   },
   "slash.menu": {
     "command": "Команды",

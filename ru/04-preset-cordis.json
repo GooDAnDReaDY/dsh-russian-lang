@@ -112,7 +112,8 @@
     "status.idle": "Готов",
     "status.removed": "Удалён",
     "status.running": "Работает",
-    "status.superseded": "Есть более свежий запуск"
+    "status.superseded": "Есть более свежий запуск",
+    "a11y.preparing": "Подготовка вызова инструмента Cordis"
   },
   "schedule.catalog": {
     "frequency.every": "Каждые {value} {unit}",

@@ -114,7 +114,8 @@
     "sidebar.chat": "Чат",
     "activity.completed": "завершено",
     "mode.unknown": "неизвестный режим",
-    "readonly.unknown.body": "Прочитайте дочернюю сессию, чтобы определить, можно ли её продолжить."
+    "readonly.unknown.body": "Прочитайте дочернюю сессию, чтобы определить, можно ли её продолжить.",
+    "open.sidebar.aria": "Открыть «{label}» на боковой панели"
   },
   "settings.pluginInventory": {
     "active": "Подключён",
@@ -368,7 +369,14 @@
     "registryListSeparator": ", ",
     "registryNpmmirror": "Зеркало для материкового Китая (npmmirror)",
     "registryToggle": "Реестр",
-    "registryWithHost": "{name} ({host})"
+    "registryWithHost": "{name} ({host})",
+    "installGithubFailedDescription": "Попробуйте другой источник установки.",
+    "installGithubFailedTitle": "Нет доступа к GitHub",
+    "installGithubTimeoutTitle": "Превышено время ожидания ответа GitHub",
+    "installPackageLabel": "Имя пакета плагина",
+    "installUseGithubMirror": "Использовать зеркало в континентальном Китае",
+    "reasonIncompatibleVersion": "{plugin} несовместим с DSH {runtime} (требует {peers}); запуск может вызвать сбои или потерю данных. Установите версию плагина, совместимую с этой версией DSH.",
+    "reasonIncompatibleVersionUnnamed": "Этот плагин несовместим с текущей версией DSH; запуск может вызвать сбои или потерю данных."
   },
   "settings.subagent": {
     "allowOverride": "Разрешить перезапись настроек сессии",

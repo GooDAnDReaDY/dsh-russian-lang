@@ -80,6 +80,11 @@
     "memberStatus.failed": "Ошибка",
     "status.pending": "В очереди",
     "status.in_progress": "В работе",
-    "status.completed": "Завершено"
+    "status.completed": "Завершено",
+    "current": "Текущий чат",
+    "failure": "Некорректная сохранённая запись команды: {message}",
+    "task.collapse": "Показать меньше",
+    "task.expand": "Показать больше",
+    "unavailable": "Команда недоступна"
   }
 }

@@ -458,7 +458,9 @@
     "tool.title.updateGoal": "Обновить цель",
     "tool.title.updateTeamTask": "Обновить задачу команды",
     "tool.title.waitAgent": "Ожидать участников команды",
-    "tool.title.workflow": "Запустить рабочий процесс"
+    "tool.title.workflow": "Запустить рабочий процесс",
+    "row.preparing": "Подготовка вызова инструмента",
+    "tool.preparing.content": "Подготовка содержимого ({kilobytes} КБ)"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -631,7 +633,31 @@
     "settings.performance.detailed": "Подробный",
     "settings.performance.title": "Производительность и использование",
     "settings.transcript.detailed": "Подробный",
-    "settings.transcript.expanded": "Развёрнутый"
+    "settings.transcript.expanded": "Развёрнутый",
+    "image.close": "Закрыть просмотр изображения",
+    "image.dialog": "Просмотр изображения",
+    "image.failed": "Предпросмотр изображения недоступен",
+    "image.loading": "Загрузка изображения…",
+    "image.open": "Открыть исходное изображение",
+    "message.stepProcess.done.readImage": "Изображения прочитаны",
+    "message.stepProcess.done.write": "Файлы записаны",
+    "message.stepProcess.prepare.code": "Подготовка к выполнению кода",
+    "message.stepProcess.prepare.commands": "Подготовка к выполнению команд",
+    "message.stepProcess.prepare.edit": "Подготовка к редактированию файлов",
+    "message.stepProcess.prepare.plan": "Подготовка к обновлению плана",
+    "message.stepProcess.prepare.questions": "Подготовка вопросов",
+    "message.stepProcess.prepare.read": "Подготовка к чтению файлов",
+    "message.stepProcess.prepare.readImage": "Подготовка к чтению изображений",
+    "message.stepProcess.prepare.search": "Подготовка к поиску в коде",
+    "message.stepProcess.prepare.subagents": "Подготовка к координации субагентов",
+    "message.stepProcess.prepare.tools": "Подготовка к вызову инструментов",
+    "message.stepProcess.prepare.webFetch": "Подготовка к загрузке веб-страниц",
+    "message.stepProcess.prepare.webSearch": "Подготовка к поиску в интернете",
+    "message.stepProcess.prepare.write": "Подготовка к записи файлов",
+    "message.stepProcess.readImage": "Чтение изображений",
+    "message.stepProcess.write": "Запись файлов",
+    "settings.transcript.standard": "Стандартный",
+    "settings.transcript.verbose": "Подробный"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
