@@ -39,7 +39,6 @@ EXTRA_ALLOW=(
   ".gitignore"
   "LICENSE"
   "README.md"
-  "README.ru.md"
   "README.zh.md"
   "CHANGELOG.md"
   "package.json"

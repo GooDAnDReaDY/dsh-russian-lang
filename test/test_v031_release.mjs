@@ -16,13 +16,13 @@ import {
 
 test('release v0.3.1: package.json and CHANGELOG consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
-  assert.equal(pkg.version, '0.3.7')
+  assert.equal(pkg.version, '0.3.8')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
   assert.ok(pkg.bin && pkg.bin['dsh-i18n'] === './bin/dsh-i18n.mjs')
 
   const changelog = fs.readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8')
   const head = changelog.split('\n').find((line) => line.startsWith('## ')) || ''
-  assert.ok(head.includes('0.3.7'), `CHANGELOG head must mention 0.3.3, got: ${head}`)
+  assert.ok(head.includes('0.3.8'), `CHANGELOG head must mention 0.3.3, got: ${head}`)
 })
 
 test('release v0.3.1: pure.js linguistics and formatters', () => {

@@ -1,0 +1,63 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Сборка бандла + синтаксис
+        run: |
+          python3 build.py --check
+          node --check lib/client.js
+
+      - name: Бандл в коммите совпадает со сборкой
+        run: git diff --exit-code lib/client.js
+
+      - name: Node-тесты (все)
+        run: node --test test/*.mjs
+
+      - name: Репро загрузки бандла (mock ctx)
+        run: node test/_repro.cjs
+
+      - name: Тесты инструментов
+        run: |
+          python3 test/test_tools.py
+          python3 test/test_extract.py
+          python3 test/test_overflow.py
+
+      - name: Линтер словарей
+        run: python3 tools/lint_translations.py
+
+      - name: Coverage gate
+        run: python3 check-coverage.py
+
+      - name: Проверка размера npm-пакета (< 256 KiB Store limit)
+        run: python3 tools/check_pack_size.py
+
+      - name: Терминология (предупреждение, не блокер)
+        run: python3 tools/term_check.py || true
+
+      - name: Обезличенность исходников
+        run: |
+          ! grep -rniP --exclude-dir=__pycache__ --binary-files=without-match \
+            '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' \
+            README.md lib/ tools/*.py tools/systemd/ test/
+
+      - name: Сборка npm-пакета (.tgz) для test server
+        run: |
+          mkdir -p /tmp/pkg
+          npm pack --pack-destination /tmp/pkg
+
+      - name: Загрузить артефакт
+        uses: actions/upload-artifact@v3
+        with:
+          name: dsh-russian-lang-tgz
+          path: /tmp/pkg/*.tgz

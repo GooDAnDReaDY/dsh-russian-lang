@@ -562,9 +562,8 @@
     "row.failed": "Ошибка",
     "row.running": "Выполняется",
     "settings.transcript.compact": "Компактный",
-    "settings.transcript.description": "Управляет отображением процесса выполнения в завершённых шагах",
-    "settings.transcript.normal": "Обычный",
-    "settings.transcript.title": "Отображение диалога",
+    "settings.transcript.description": "Сколько подробностей работы агента показывать: рассуждения и вызовы инструментов",
+    "settings.transcript.title": "Детали работы",
     "stats.cacheHit": "Кэш {percent}%",
     "stats.counts": "{turns} шагов • {steps} действий",
     "stats.llm": "LLM {duration}",
@@ -633,7 +632,6 @@
     "settings.performance.detailed": "Подробный",
     "settings.performance.title": "Производительность и использование",
     "settings.transcript.detailed": "Подробный",
-    "settings.transcript.expanded": "Развёрнутый",
     "image.close": "Закрыть просмотр изображения",
     "image.dialog": "Просмотр изображения",
     "image.failed": "Предпросмотр изображения недоступен",
@@ -657,7 +655,7 @@
     "message.stepProcess.readImage": "Чтение изображений",
     "message.stepProcess.write": "Запись файлов",
     "settings.transcript.standard": "Стандартный",
-    "settings.transcript.verbose": "Подробный"
+    "settings.transcript.verbose": "Полностью развёрнутый"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",

@@ -8,35 +8,75 @@ import { makeTypoYo } from '../lib/pure.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-test('Issue #325: isTrustedTranslatorRequest protects translator endpoints', () => {
-  // 1. Valid local request (loopback, same-origin)
+test('Issue #325 / #359: isTrustedTranslatorRequest protects translator endpoints', () => {
+  // 1. Valid local request (loopback, same-origin, custom header)
   assert.equal(isTrustedTranslatorRequest({
     socket: { remoteAddress: '127.0.0.1' },
-    headers: { 'sec-fetch-site': 'same-origin', origin: 'http://127.0.0.1:3000', host: '127.0.0.1:3000' }
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://127.0.0.1:3000',
+      host: '127.0.0.1:3000'
+    }
   }), true)
 
   // 2. IPv6 loopback
   assert.equal(isTrustedTranslatorRequest({
     socket: { remoteAddress: '::1' },
-    headers: { 'sec-fetch-site': 'same-origin', origin: 'http://localhost:3000', host: 'localhost:3000' }
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://localhost:3000',
+      host: 'localhost:3000'
+    }
   }), true)
 
-  // 3. Rejected: external remote IP
+  // 3. Rejected: missing x-dsh-translator header
+  assert.equal(isTrustedTranslatorRequest({
+    socket: { remoteAddress: '127.0.0.1' },
+    headers: {
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://127.0.0.1:3000',
+      host: '127.0.0.1:3000'
+    }
+  }), false)
+
+  // 4. Rejected: external remote IP
   assert.equal(isTrustedTranslatorRequest({
     socket: { remoteAddress: '192.168.1.150' },
-    headers: { 'sec-fetch-site': 'same-origin' }
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://127.0.0.1:3000',
+      host: '127.0.0.1:3000'
+    }
   }), false)
 
-  // 4. Rejected: cross-site request (CSRF)
+  // 5. Rejected: cross-site request (CSRF)
   assert.equal(isTrustedTranslatorRequest({
     socket: { remoteAddress: '127.0.0.1' },
-    headers: { 'sec-fetch-site': 'cross-site', origin: 'http://evil-site.com', host: '127.0.0.1:3000' }
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'cross-site',
+      origin: 'http://evil-site.com',
+      host: '127.0.0.1:3000'
+    }
   }), false)
 
-  // 5. Rejected: cross-origin with external origin
+  // 6. Rejected: cross-origin with external origin
   assert.equal(isTrustedTranslatorRequest({
     socket: { remoteAddress: '127.0.0.1' },
-    headers: { origin: 'http://malicious.org', host: '127.0.0.1:3000' }
+    headers: {
+      'x-dsh-translator': '1',
+      origin: 'http://malicious.org',
+      host: '127.0.0.1:3000'
+    }
+  }), false)
+
+  // 7. Rejected: missing origin or host (#359)
+  assert.equal(isTrustedTranslatorRequest({
+    socket: { remoteAddress: '127.0.0.1' },
+    headers: { 'x-dsh-translator': '1' }
   }), false)
 })
 

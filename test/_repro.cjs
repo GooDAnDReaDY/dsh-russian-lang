@@ -30,6 +30,7 @@ try {
     const localeState = { active: 'en', locales: [{ id: 'en', label: 'English' }], revision: 1 }
     const registered = []
     const slotsRegistered = []
+    const slotEntries = []
     const ctx = {
       locale: {
         register(ns, loc) {
@@ -54,20 +55,33 @@ try {
       emit() {},
       slots: {
         inject(name, fn) {
-          if (name !== 'settings.plugin.item' && name !== 'plugins.row.config' && name !== 'plugins.item') throw new Error('slot "' + name + '" is not declared')
+          if (name !== 'settings.plugin.item' && name !== 'plugins.row.config' && name !== 'plugins.item' && name !== 'conversation.session.header.utilities' && name !== 'conversation.chat.assistant-actions') {
+            throw new Error('slot "' + name + '" is not declared')
+          }
           return fn()
         },
-        register(entry) { slotsRegistered.push(entry.name) },
+        register(entry, Component) {
+          slotsRegistered.push(entry.name)
+          slotEntries.push({ entry, Component })
+        },
       },
     }
+
+    let customUseState = null
     const exp = def.factory((name) => {
-      // Минимальный React-стаб: карточка настроек регистрируется и компонент
-      // рендерится без хуков рантайма. В реальном DSH React доступен.
       if (name === 'react') {
         return {
-          useState: (init) => [typeof init === 'function' ? init() : init, () => {}],
+          useState: (init) => {
+            if (customUseState) return customUseState(init)
+            return [typeof init === 'function' ? init() : init, () => {}]
+          },
           useEffect: () => {},
-          createElement: (type, props, ...children) => ({ type, props, children }),
+          createElement: (type, props, ...children) => {
+            if (typeof type === 'function') {
+              return type(Object.assign({}, props, { children }))
+            }
+            return { type, props, children }
+          },
         }
       }
       return {}
@@ -80,6 +94,28 @@ try {
     if (!coreHasRu) fail('core namespace did not register ru')
     if (dicts < 4) fail('too few dictionaries registered: ' + dicts)
     if (!cardSlotted) fail('settings card slot not registered')
+
+    // #354 Регрессионный тест: рендерим каждую зарегистрированную карточку в свёрнутом И РАСКРЫТОМ состоянии
+    console.log('Testing slots render (guard against #354 upStatus ReferenceError)...')
+    for (const { entry, Component } of slotEntries) {
+      if (typeof Component !== 'function') continue
+      const props = Object.assign({}, entry, { inject: entry.inject })
+
+      // 1. Collapsed render
+      customUseState = (init) => [typeof init === 'function' ? init() : init, () => {}]
+      const collapsed = Component(props)
+      if (!collapsed) fail('Collapsed render returned empty for ' + entry.name)
+
+      // 2. Expanded render (force open = true)
+      customUseState = (init) => {
+        if (typeof init === 'boolean') return [true, () => {}]
+        return [typeof init === 'function' ? init() : init, () => {}]
+      }
+      const expanded = Component(props)
+      if (!expanded) fail('Expanded render returned empty for ' + entry.name)
+      console.log('  OK slot render:', entry.name)
+    }
+    console.log('All slot components rendered successfully in expanded state!')
   }
 } catch (e) {
   fail(e.message)

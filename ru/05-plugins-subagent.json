@@ -110,7 +110,7 @@
     "tokens.million": "{value} млн",
     "tokens.thousand": "{value} тыс.",
     "tokens.total": "{value} токенов",
-    "open.sidebar": "Открыть {label} в боковой панели",
+    "open.sidebar": "Открыть в боковой панели",
     "sidebar.chat": "Чат",
     "activity.completed": "завершено",
     "mode.unknown": "неизвестный режим",
