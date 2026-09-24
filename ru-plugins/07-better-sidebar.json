@@ -485,7 +485,11 @@
     "guideDescBrowser": "Встроенный браузер для открытия ссылок непосредственно из чата",
     "terminalShellNotFound": "Настроенный командный шелл не найден: {name} — проверьте путь к шеллу в Настройки → Боковая карточка → Терминал",
     "terminalWaitBanner": "Агент ожидает {needle}",
-    "terminalSkipWait": "Пропустить ожидание"
+    "terminalSkipWait": "Пропустить ожидание",
+    "codeBlockTitle": "Блок кода",
+    "codeBlockWrap": "Переносить строки",
+    "codeBlockUnwrap": "Не переносить строки",
+    "sideChatBlockNoExitCode": "Завершено без кода возврата"
   },
   "dsh-better-sidebar": {
     "settingsOpenToolsTitle": "Внедрять инструмент открытия сайдбара для модели",

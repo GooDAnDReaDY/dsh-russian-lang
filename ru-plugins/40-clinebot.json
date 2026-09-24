@@ -144,6 +144,13 @@
     "update.updating": "Обновление…",
     "update.available": "Доступно обновление: v{latestVersion} (текущая: v{currentVersion})",
     "update.done": "Успешно обновлено до v{version}! Перезапустите DSH для применения.",
-    "update.failed": "Ошибка обновления: {error}"
+    "update.failed": "Ошибка обновления: {error}",
+    "key.verifying": "Проверка ключа в сервисе Cline…",
+    "key.verified": "✓ Ключ подтверждён: {email} ({plan})",
+    "key.invalid": "✗ Ошибка проверки ключа: {error}",
+    "models.reasoning_tooltip": "Выбор интенсивности рассуждений в меню модели (Откл. / Низкая / Средняя / Высокая / Макс.)",
+    "models.verified": "Подтверждено тарифом",
+    "models.unverified": "Не синхронизировано (резервный каталог)",
+    "models.synced_at": "Синхронизировано: {date}"
   }
 }

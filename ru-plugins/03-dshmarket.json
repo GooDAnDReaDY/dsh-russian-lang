@@ -589,6 +589,26 @@
     "groupThemeRemove": "Удалить тему",
     "groupThemeTaken": "Уже содержит тему",
     "groupThemeTitle": "Выберите тему для «{0}»",
-    "groupThemeUse": "Применить"
+    "groupThemeUse": "Применить",
+    "brokenPluginAction": "Найти этот плагин",
+    "brokenPluginBody": "Работающий DSH заблокировал обновление, а заменяемая версия уже была повреждена. Маркет удалил плагин из профиля во избежание сбоя при следующем запуске. Директория не затронута — завершите DSH и установите плагин снова.",
+    "brokenPluginTitle": "Плагин {0} удалён после неудачного обновления",
+    "catalogVersionDated": "версия npm на момент последнего обновления каталога ({0}); опубликованные позже релизы появятся после следующего обновления",
+    "catalogVersionUndated": "версия npm на момент последнего обновления каталога — каталог обновляется ежедневно, поэтому может отставать от актуальной версии в npm",
+    "checkResidualIncomplete": "неполный пакет (нет package.json)",
+    "checkResidualTmp": "временная директория pnpm",
+    "checkResiduals": "Остаточные директории",
+    "checkResidualsEmpty": "Неполных директорий пакетов или временных папок pnpm не найдено.",
+    "checkResidualsHint": "Ничто в профиле не ссылается на эти папки, и они не мешают запуску: это остатки прерванного обновления. Завершите DSH и удалите их либо установите плагин заново.",
+    "heldReleaseAction": "Всё равно установить {0}",
+    "heldReleaseNotice": "Установлено, но не самое новое: параметр minimumReleaseAge для этого профиля удерживает релиз {0}, поэтому была установлена версия {1}.",
+    "hostIncompatibleFoundInstall": "Вы можете установить {version} — в ней заявлена поддержка этой версии DSH.",
+    "hostIncompatibleFoundUpdate": "Вы можете обновить до {version} — в ней заявлена поддержка этой версии DSH.",
+    "hostIncompatibleInstallCompat": "Установить {version}",
+    "hostIncompatibleNoCompat": "Ни в одной версии не заявлена поддержка этой версии DSH.",
+    "hostIncompatibleRetry": "Повторить попытку",
+    "hostIncompatibleSearchFailed": "Не удалось найти совместимые версии.",
+    "hostIncompatibleSearching": "Поиск версии с поддержкой текущей версии DSH…",
+    "hostIncompatibleUpdateCompat": "Обновить до {version}"
   }
 }

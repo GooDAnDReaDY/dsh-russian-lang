@@ -77,7 +77,15 @@
     "researchMaxChars": "Макс. символов сводки исследования",
     "researchMaxLimit": "Макс. источников для исследования",
     "searchProviderOrder": "Порядок провайдеров поиска",
-    "searchProviderOrderDesc": "Порядок через запятую. Допустимо: tavily, firecrawl, exa, searxng."
+    "searchProviderOrderDesc": "Порядок через запятую. Допустимо: tavily, firecrawl, exa, searxng.",
+    "braveApiKeyEnv": "Имя учётных данных Brave",
+    "circuitBreakerThreshold": "Порог срабатывания предохранителя",
+    "circuitBreakerThresholdDesc": "Количество последовательных ошибок до временной приостановки провайдера (0 отключает).",
+    "compactExtract": "Компактное извлечение контента",
+    "compactExtractDesc": "Удалять уведомления о cookies, навигационный мусор и избыточное форматирование для экономии токенов.",
+    "dailyCapBrave": "Дневной лимит: Brave",
+    "dailyCapDuckduckgo": "Дневной лимит: DuckDuckGo",
+    "health_circuit_breaker": "Состояние предохранителя (Circuit Breaker)"
   },
   "@goodandready/dsh-web-gateway": {
     "title": "Веб-шлюз (Web Gateway)",
