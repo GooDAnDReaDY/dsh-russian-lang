@@ -353,7 +353,7 @@ client = client.replace('/*__FREQ_JSON__*/[]', freq_json)
 # Подставляем ПОСЛЕ %-форматирования: иначе каждый процент внутри pure.js
 # пришлось бы удваивать, и первый же забытый `%` ронял бы сборку.
 pure_src = open(os.path.join(HERE, 'lib', 'pure.js'), encoding='utf-8').read()
-pure_clean = _re.sub(r'/\*\*[\s\S]*?\*/', '', pure_src)
+pure_clean = _re.sub(r'/\*[\s\S]*?\*/', '', pure_src)
 pure_inline = _re.sub(r'^export (const|function|class) ', r'\1 ', pure_clean, flags=_re.M)
 pure_inline = '\n'.join(l for l in pure_inline.split('\n') if l.strip() and not l.strip().startswith('//'))
 if '//__PURE_JS__' not in client:
@@ -383,12 +383,19 @@ for l in client.split('\n'):
     if s:
         cleaned_lines.append(s)
 
-# Шаг 4: компактное объединение строк после запятой и открывающей фигурной скобки
-# (сохраняя запас безопасности < 160 KiB и перевод строки для TYPO_YO_PAIRS)
+# Шаг 4: компактное объединение строк (сохраняя запас безопасности < 160 KiB и перевод строки для TYPO_YO_PAIRS)
 compact_lines = []
 for l in cleaned_lines:
-    if compact_lines and (compact_lines[-1].endswith('{') or compact_lines[-1].endswith(',')) and not compact_lines[-1].startswith('const TYPO_YO_PAIRS'):
-        compact_lines[-1] = compact_lines[-1] + l
+    if not compact_lines:
+        compact_lines.append(l)
+        continue
+    prev = compact_lines[-1]
+    if (prev.endswith('{') or prev.endswith(',') or prev.endswith('(') or prev.endswith('[')) and not prev.startswith('const TYPO_YO_PAIRS'):
+        compact_lines[-1] = prev + l
+    elif prev.endswith('}') and l.startswith(('catch', 'else', 'finally', ')', '}', ';', ',')):
+        compact_lines[-1] = (prev + ' ' + l) if l.startswith(('catch', 'else', 'finally')) else (prev + l)
+    elif prev.endswith(')') and l.startswith((')', ',', '.', ';')):
+        compact_lines[-1] = prev + l
     else:
         compact_lines.append(l)
 client = '\n'.join(compact_lines)
