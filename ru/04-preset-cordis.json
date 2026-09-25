@@ -61,7 +61,9 @@
     "showPickerBeta": "Бета",
     "showPickerDescription": "Если включено, для новых задач можно выбирать режимы: Стандартный, PTC, Creator, Минимальный и пользовательские. Если выключено, все новые задачи используют режим по умолчанию (по умолчанию Стандартный; настраивается). Влияет только на новые задачи.",
     "enablePickerToSetDefault": "Включите выбор режимов агента, чтобы задать режим по умолчанию",
-    "enablePickerToCreate": "Включите выбор режимов агента, чтобы запустить режим Creator"
+    "enablePickerToCreate": "Включите выбор режимов агента, чтобы запустить режим Creator",
+    "enableDevToolsToSetDefault": "Включите инструменты разработки в основных настройках, чтобы выбрать значение по умолчанию",
+    "enableDevToolsToCreate": "Включите инструменты разработки в основных настройках, чтобы запустить режим создания"
   },
   "cordis": {
     "a11y.defining": "Определение плагина",
@@ -133,7 +135,18 @@
     "unit.minute.one": "минуту",
     "unit.minute.other": "минут",
     "unit.second.one": "секунду",
-    "unit.second.other": "секунд"
+    "unit.second.other": "секунд",
+    "trigger.label": "Напоминания",
+    "list.loading": "Загрузка напоминаний…",
+    "list.error": "Не удалось загрузить напоминания.",
+    "list.retry": "Повторить",
+    "delete.action": "Удалить",
+    "delete.pending": "Удаление…",
+    "delete.label": "Удалить напоминание: {title}",
+    "list.open": "Открыть сведения о напоминании: {title}",
+    "list.nextRun": "Следующий запуск",
+    "mark.aria": "Запланированных задач: {count}",
+    "hover.more": "Еще {count}"
   },
   "settings.permission": {
     "preset.fullAccess": "Полный доступ",

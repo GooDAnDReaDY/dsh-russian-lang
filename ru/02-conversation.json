@@ -460,7 +460,23 @@
     "tool.title.waitAgent": "Ожидать участников команды",
     "tool.title.workflow": "Запустить рабочий процесс",
     "row.preparing": "Подготовка вызова инструмента",
-    "tool.preparing.content": "Подготовка содержимого ({kilobytes} КБ)"
+    "tool.preparing.content": "Подготовка содержимого ({kilobytes} КБ)",
+    "shortcut.newline": "Новая строка",
+    "shortcut.complementary": "Использовать вспомогательное действие: Очередь / Направить",
+    "shortcut.slash": "Открыть меню команд",
+    "shortcut.mention": "Открыть меню ссылок",
+    "tool.title.updateSchedule": "Обновить напоминание",
+    "detail.schedule.daily": "Каждый день в {time} ({zone})",
+    "detail.schedule.weekly": "Еженедельно ({days}) в {time} ({zone})",
+    "detail.schedule.cron": "Cron {expression} ({zone})",
+    "detail.weekday.1": "Пн",
+    "detail.weekday.2": "Вт",
+    "detail.weekday.3": "Ср",
+    "detail.weekday.4": "Чт",
+    "detail.weekday.5": "Пт",
+    "detail.weekday.6": "Сб",
+    "detail.weekday.7": "Вс",
+    "detail.weekday.join": ", "
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -655,7 +671,19 @@
     "message.stepProcess.readImage": "Чтение изображений",
     "message.stepProcess.write": "Запись файлов",
     "settings.transcript.standard": "Стандартный",
-    "settings.transcript.verbose": "Полностью развёрнутый"
+    "settings.transcript.verbose": "Полностью развёрнутый",
+    "message.toolAdded": "Инструмент добавлен: {name}",
+    "message.toolRemoved": "Инструмент удален: {name}",
+    "message.toolsAdded": "Добавлено: {names}",
+    "message.toolsAddedCount": "Добавлено: {count}",
+    "message.toolsChanged": "Добавлено: {added}, удалено: {removed}",
+    "message.toolsRemoved": "Удалено: {names}",
+    "message.toolsRemovedCount": "Удалено: {count}",
+    "message.toolsUpdated": "Инструменты обновлены",
+    "message.accountStopped": "Задача остановлена",
+    "message.failure.accountSignedOut": "Остановлено, так как вы вышли из аккаунта DeepSeek.",
+    "message.failure.accountSignInRequired": "Войдите в DeepSeek и убедитесь, что целевой сервис поддерживает аутентификацию по аккаунту.",
+    "message.failure.quota": "Квота запросов исчерпана."
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
@@ -1106,7 +1134,15 @@
     "code.output": "Вывод",
     "code.running": "Выполняется…",
     "code.source": "Код",
-    "record.wrapLines": "Переносить строки"
+    "record.wrapLines": "Переносить строки",
+    "layout.toolAdded": "Инструмент добавлен: {name}",
+    "layout.toolRemoved": "Инструмент удален: {name}",
+    "layout.toolUpdateNotice": "Инструменты обновлены",
+    "layout.toolsAdded": "Добавлено: {names}",
+    "layout.toolsAddedCount": "Добавлено: {count}",
+    "layout.toolsChanged": "Добавлено: {added}, удалено: {removed}",
+    "layout.toolsRemoved": "Удалено: {names}",
+    "layout.toolsRemovedCount": "Удалено: {count}"
   },
   "slash.menu": {
     "crumbs.aria": "Навигация по папкам",

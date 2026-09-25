@@ -117,7 +117,8 @@
     "deepSeekBaseUrl": "https://api.deepseek.com/anthropic",
     "protocolAnthropicMessages": "Anthropic Messages",
     "protocolOpenAiCompletions": "OpenAI Chat Completions",
-    "protocolOpenAiResponses": "OpenAI Responses"
+    "protocolOpenAiResponses": "OpenAI Responses",
+    "deepSeekAccount": "Аккаунт DeepSeek"
   },
   "workspace": {
     "actions.newSession.aria": "Новая сессия в {name}",
@@ -231,7 +232,15 @@
     "toast.stoppedAndArchived": "Сессия остановлена и архивирована. Вы можете ",
     "toast.unpinFailed": "Не удалось открепить. Попробуйте позже.",
     "viewOptions.onlyArchived": "Только архивные",
-    "viewOptions.showArchived": "Показать архив"
+    "viewOptions.showArchived": "Показать архив",
+    "shortcut.noSession": "Сначала выберите сессию",
+    "shortcut.noPicker": "Диалог выбора папки недоступен",
+    "shortcut.directoryBusy": "Выбор или добавление рабочего пространства",
+    "shortcut.noCompletedTurn": "В этой сессии нет завершенных ответов",
+    "shortcut.forkFailed": "Не удалось ответвить сессию. Попробуйте еще раз.",
+    "viewOptions.hideArchived": "Скрыть архивированные",
+    "empty.noneArchived": "Архивированных сессий пока нет",
+    "empty.viewOthers": "Просмотреть другие сессии"
   },
   "settings.theme": {
     "fontSize.decrease": "Уменьшить размер шрифта",

@@ -104,10 +104,14 @@ print('Core namespace-ов: %d, ключей: %d -> lib/locales/core.json' % (le
 # В client.js оставляем только компактный бутстрап для мгновенной отрисовки
 # базового каркаса (common, nav, menu, session) и плагинов с ранним статическим монтированием:
 BOOTSTRAP_NAMESPACES = {'common', 'nav', 'menu', 'session', 'dsh-cron', 'dsh-usage-stats', 'pluginMarket'}
+BOOTSTRAP_COMMON_KEYS = {'ok', 'cancel', 'close', 'save', 'loading', 'retry', 'delete', 'edit', 'more', 'back', 'next', 'search', 'copy', 'copied', 'expand', 'collapse', 'submit'}
 bootstrap_dict = {}
 for ns in BOOTSTRAP_NAMESPACES:
     if ns in core_dict:
-        bootstrap_dict[ns] = core_dict[ns]
+        if ns == 'common':
+            bootstrap_dict[ns] = {k: v for k, v in core_dict[ns].items() if k in BOOTSTRAP_COMMON_KEYS}
+        else:
+            bootstrap_dict[ns] = core_dict[ns]
 
 # Добавляем ключевые статические строки плагинов в бутстрап
 try:

@@ -95,6 +95,10 @@
     "sourceChoice": "Источник загрузки моделей",
     "sourceHuggingFace": "Hugging Face",
     "sourceManualHelp": "Загружать только из выбранного источника. Проверенные ранее загруженные файлы используются повторно.",
-    "sourceMirror": "HF-Mirror (зеркало в Китае)"
+    "sourceMirror": "HF-Mirror (зеркало в Китае)",
+    "setupPrompt.trigger": "Настроить голосовой ввод",
+    "setupPrompt.details": "Открыть настройки плагина голосового ввода",
+    "setupPrompt.unavailableTitle": "Распознавание речи не готово",
+    "setupPrompt.unavailableBody": "Откройте сведения о плагине голосового ввода, чтобы проверить статус распознавания речи, ход подготовки или ошибки."
   }
 }

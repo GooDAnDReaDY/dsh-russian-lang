@@ -376,7 +376,9 @@
     "installPackageLabel": "Имя пакета плагина",
     "installUseGithubMirror": "Использовать зеркало в континентальном Китае",
     "reasonIncompatibleVersion": "{plugin} несовместим с DSH {runtime} (требует {peers}); запуск может вызвать сбои или потерю данных. Установите версию плагина, совместимую с этой версией DSH.",
-    "reasonIncompatibleVersionUnnamed": "Этот плагин несовместим с текущей версией DSH; запуск может вызвать сбои или потерю данных."
+    "reasonIncompatibleVersionUnnamed": "Этот плагин несовместим с текущей версией DSH; запуск может вызвать сбои или потерю данных.",
+    "registryOfficial": "Официальный реестр npm",
+    "installTryAnotherWay": "Попробовать другой способ"
   },
   "settings.subagent": {
     "allowOverride": "Разрешить перезапись настроек сессии",

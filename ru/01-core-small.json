@@ -41,7 +41,8 @@
     "number.thousand": "{value}K",
     "codeBlock.title": "Блок кода",
     "codeBlock.wrap": "Переносить строки",
-    "codeBlock.unwrap": "Не переносить строки"
+    "codeBlock.unwrap": "Не переносить строки",
+    "workspace.defaultName": "Рабочее пространство по умолчанию"
   },
   "sidebar": {
     "session.new": "Новая сессия",
@@ -66,7 +67,8 @@
     "developerTools.description": "Инструменты и сведения для отладки и устранения неполадок",
     "developerTools.error": "Не удалось сохранить. Пожалуйста, повторите попытку.",
     "developerTools.title": "Инструменты разработчика",
-    "general.currentVersion": "Текущая версия: {version}"
+    "general.currentVersion": "Текущая версия: {version}",
+    "shortcut.open": "Открыть настройки"
   },
   "settings.theme": {
     "appearance.dark": "Тёмная",
@@ -150,7 +152,8 @@
     "row.ok": "Результаты подготовлены",
     "row.running": "Подготовка результатов",
     "row.stopped": "Прервано",
-    "row.title": "Предоставление файлов"
+    "row.title": "Предоставление файлов",
+    "changes.singleTitle": "Изменено: {name}"
   },
   "command": {
     "listbox.aria": "Совпадения /{command}",
@@ -264,7 +267,8 @@
     "trigger.loading": "Загрузка моделей…",
     "option.deepseekV4Flash.description": "Быстрая, эффективная и экономичная; подходит для типовых, повседневных или параллельных задач.",
     "option.deepseekV4Pro.description": "Улучшенное агентное написание кода, глубокие знания и сложное мышление; подходит для комплексных задач с высокими требованиями к качеству при более высокой стоимости.",
-    "command.label": "Модель"
+    "command.label": "Модель",
+    "provider.account": "Аккаунт DeepSeek"
   },
   "permission.access": {
     "preset.fullAccess": "Полный доступ",

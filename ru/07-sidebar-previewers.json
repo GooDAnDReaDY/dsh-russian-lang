@@ -137,7 +137,8 @@
     "load.failed": "Не удалось загрузить страницу; обновите её или откройте в системном браузере.",
     "load.failed.detail": "Сбой загрузки страницы ({code}): {description}",
     "restore.action": "Восстановить страницу",
-    "restore.previous": "Ранее открытая"
+    "restore.previous": "Ранее открытая",
+    "shortcut.noSession": "Сначала откройте сессию"
   },
   "sidebarOffice": {
     "title": "Офисный документ",
