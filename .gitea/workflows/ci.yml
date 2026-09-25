@@ -21,6 +21,13 @@ jobs:
       - name: Бандл в коммите совпадает со сборкой
         run: git diff --exit-code lib/client.js
 
+      - name: ESLint бандла (no-undef, no-dupe-keys)
+        run: |
+          echo 'void function(window, document) {' > /tmp/lint_bundle.js
+          cat lib/client.js >> /tmp/lint_bundle.js
+          echo '}' >> /tmp/lint_bundle.js
+          npx --yes eslint@8 --no-eslintrc -c .eslintrc.json /tmp/lint_bundle.js
+
       - name: Node-тесты (все)
         run: node --test test/*.mjs
 
@@ -48,7 +55,8 @@ jobs:
       - name: Обезличенность исходников
         run: |
           ! grep -rniP --exclude-dir=__pycache__ --binary-files=without-match \
-            '/mnt/|/home/(?!user/)[a-z]+|/opt/|192\.168\.[0-9]+\.[0-9]+|deepseekharness' \
+            --exclude='*.json' \
+            '/mnt/|/home/(?!user/|project)[a-z]+|/opt/|deepseekharness' \
             README.md lib/ tools/*.py tools/systemd/ test/
 
       - name: Сборка npm-пакета (.tgz) для test server

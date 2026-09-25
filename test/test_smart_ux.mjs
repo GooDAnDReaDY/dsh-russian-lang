@@ -91,3 +91,21 @@ test('expandSlashAlias: разворачивает новые алиасы /сп
   assert.strictEqual(expandSlashAlias('/задача рефакторинг'), '/task рефакторинг')
   assert.strictEqual(expandSlashAlias('/контекст'), '/context')
 })
+
+test('Issue #371: formatInputLive не портит команды, флаги и кавычки с латиницей', () => {
+  // Флаги и разделитель аргументов остаются нетронутыми
+  assert.strictEqual(
+    formatInputLive('запусти npm test -- --watch'),
+    'запусти npm test -- --watch'
+  )
+  // Прямые кавычки с командами/латиницей не превращаются в ёлочки
+  assert.strictEqual(
+    formatInputLive('сделай "git commit -m x" и всё'),
+    'сделай "git commit -m x" и\u00A0всё'
+  )
+  // Код в бэктиках остаётся без изменений
+  assert.strictEqual(
+    formatInputLive('выполни `ls -la - /tmp`'),
+    'выполни `ls -la - /tmp`'
+  )
+})

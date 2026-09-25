@@ -70,7 +70,30 @@ for ns, entries in mt.items():
         if key not in core_dict.get(ns, {}):
             core_dict[ns][key] = rec.get('ru', '')
 
-# Выносим словарь ядра в lib/locales/core.json (Issue #214), чтобы размер
+# #358: Фильтрация мёртвых ключей перед записью в lib/locales/core.json.
+# В бандл/раздачу попадают только ключи, присутствующие в актуальном срезе апстрима (core-en.json).
+upstream_core_path = os.path.join(HERE, 'core-en.json')
+if not os.path.exists(upstream_core_path):
+    upstream_core_path = os.path.join(HERE, 'upstream', 'core-en.json')
+if os.path.exists(upstream_core_path):
+    up_core = json.load(open(upstream_core_path, encoding='utf-8'))
+    filtered_core = {}
+    for ns, entries in core_dict.items():
+        if ns not in up_core:
+            # Сохраняем пространства имён для обратной совместимости (sidebarTextpreview и др.)
+            filtered_core[ns] = entries
+            continue
+        up_ns = up_core[ns]
+        f_entries = {}
+        for k, v in entries.items():
+            base_k = k[:-4] if k.endswith('.few') or k.endswith('.many') else k
+            if k in up_ns or base_k in up_ns:
+                f_entries[k] = v
+        if f_entries:
+            filtered_core[ns] = f_entries
+    core_dict = filtered_core
+
+# Выносим словарь ядра в lib/locales/core.json (Issue #214, #358), чтобы размер
 # client.js оставался в безопасной зоне Store (< 160 KiB из 256 KiB лимита).
 core_file = os.path.join(HERE, 'lib', 'locales', 'core.json')
 os.makedirs(os.path.dirname(core_file), exist_ok=True)
@@ -253,7 +276,7 @@ card_ru = {
     'yo': 'Буква «ё»',
     'yoDesc': 'Восстанавливать «ё» в частых словах (ещё, чёрный, идёт и др.), написанных через «е». Неоднозначные слова (все/всё) не трогаются.',
     'liveInput': 'Живая типографика инпута',
-    'liveInputDesc': 'Автоматически заменять "" на «» и -- на — прямо во время набора промпта (код в бэктиках игнорируется).',
+    'liveInputDesc': 'Форматировать текст сообщения перед отправкой: кавычки «», тире — и неразрывные пробелы. Внимание: изменяет отправляемый агенту текст (команды и флаги с латиницей защищены).',
     'slashAliases': 'Русские алиасы команд',
     'slashAliasesDesc': 'Поддержка русских команд: /цель -> /goal, /сжать -> /compact, /план -> /plan, /справка -> /help, /память -> /memory.',
     'altLHintText': 'Мгновенная конвертация раскладки текущего поля (ghbdtn ⇄ привет, /vjltkm ⇄ /model). В углу поля ввода также отображается метка раскладки.',

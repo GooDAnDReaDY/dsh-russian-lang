@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eu
-REPO="/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang"
+REPO="$(cd "$(dirname "$0")/../.." && pwd)"
 TARGET_DIR="${HOME}/.config/systemd/user"
 mkdir -p "$TARGET_DIR"
 cp "-f" "$REPO/tools/systemd/dsh-upstream-check.service" "$TARGET_DIR/"

@@ -41,14 +41,36 @@ test('Issue #325 / #359: isTrustedTranslatorRequest protects translator endpoint
     }
   }), false)
 
-  // 4. Rejected: external remote IP
+  // 4. Allowed: external remote IP but Origin matches Host (LAN/Tailscale)
   assert.equal(isTrustedTranslatorRequest({
-    socket: { remoteAddress: '192.168.1.150' },
+    socket: { remoteAddress: '198.51.100.150' },
     headers: {
       'x-dsh-translator': '1',
       'sec-fetch-site': 'same-origin',
       origin: 'http://127.0.0.1:3000',
       host: '127.0.0.1:3000'
+    }
+  }), true)
+
+  // 4b. Allowed: LAN IP in Origin matching Host (Tailscale/LAN use case)
+  assert.equal(isTrustedTranslatorRequest({
+    socket: { remoteAddress: '198.51.100.50' },
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://192.168.1.100:3000',
+      host: '192.168.1.100:3000'
+    }
+  }), true)
+
+  // 4c. Rejected: Origin host doesn't match Host header
+  assert.equal(isTrustedTranslatorRequest({
+    socket: { remoteAddress: '198.51.100.50' },
+    headers: {
+      'x-dsh-translator': '1',
+      'sec-fetch-site': 'same-origin',
+      origin: 'http://192.168.1.100:3000',
+      host: '192.168.1.200:3000'
     }
   }), false)
 

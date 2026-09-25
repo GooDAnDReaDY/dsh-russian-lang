@@ -16,7 +16,7 @@ test('v0.2.17: isNewerVersion compares semantic versions correctly', () => {
 test('v0.2.17: isTrustedUpdateRequest validates headers and loopback', () => {
   const untrusted = {
     headers: {},
-    socket: { remoteAddress: '192.168.1.50' }
+    socket: { remoteAddress: '198.51.100.50' }
   }
   assert.equal(isTrustedUpdateRequest(untrusted), false)
 
