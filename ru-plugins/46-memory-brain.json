@@ -62,7 +62,14 @@
     "settings.saved": "Настройки сохранены",
     "settings.saveFailed": "Ошибка сохранения: ",
     "save": "Сохранить",
-    "saved": "Настройки сохранены"
+    "saved": "Настройки сохранены",
+    "memory.chip": "память",
+    "memory.chip.title": "Память, использованная в этом ответе",
+    "memory.chip.unavailable": "память недоступна",
+    "memory.chip.copy": "Копировать",
+    "memory.chip.copied": "Скопировано",
+    "memory.chip.close": "Закрыть",
+    "field.showMemoryIndicator": "Показывать индикатор памяти в ответах"
   },
   "dsh-memory-brain": {
     "title": "Memory Brain",
@@ -86,6 +93,13 @@
     "settings.saved": "Настройки сохранены",
     "settings.saveFailed": "Ошибка сохранения: ",
     "save": "Сохранить",
-    "saved": "Настройки сохранены"
+    "saved": "Настройки сохранены",
+    "memory.chip": "память",
+    "memory.chip.title": "Память, использованная в этом ответе",
+    "memory.chip.unavailable": "память недоступна",
+    "memory.chip.copy": "Копировать",
+    "memory.chip.copied": "Скопировано",
+    "memory.chip.close": "Закрыть",
+    "field.showMemoryIndicator": "Показывать индикатор памяти в ответах"
   }
 }

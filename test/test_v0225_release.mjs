@@ -7,7 +7,7 @@ test('release: package.json version matches the released line', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../package.json', import.meta.url), 'utf8'))
   // Pinned to the current release; bump it together with package.json. The head of
   // CHANGELOG.md must name the same version, so a forgotten changelog entry fails here.
-  assert.equal(pkg.version, '0.3.11')
+  assert.equal(pkg.version, '0.3.12')
   const changelog = fs.readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8')
   const head = changelog.split('\n').find((line) => line.startsWith('## ')) || ''
   assert.ok(head.includes(pkg.version), `CHANGELOG head must mention ${pkg.version}, got: ${head}`)
