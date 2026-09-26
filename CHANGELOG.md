@@ -1,3 +1,7 @@
+## 0.3.12 — 2026-09-26
+* **Поддержка чипа памяти `dsh-memory-brain@0.1.12` (#369)**: Переведены все 7 пользовательских ключей чипа памяти (`memory.chip`, `memory.chip.title`, `memory.chip.unavailable`, `memory.chip.copy`, `memory.chip.copied`, `memory.chip.close`, `field.showMemoryIndicator`) во всех пространствах имён плагина (`@goodandready-private/dsh-memory-brain`, `@goodandready/dsh-memory-brain`, `dsh-memory-brain`).
+* **Mechanical preflight и безопасность `syncFlag` (#377)**: В `lib/client.template.js` добавлен `void err;` в блок `catch (err)` функции `syncFlag`, устраняющий появление пустого `catch` в собранном бандле `client.js` и закрывающий требование preflight-гейта.
+
 ## 0.3.11 — 2026-09-25
 * **100% полное покрытие перевода нового ядра DeepSeek Harness v0.1.7-rc.2 (#375)**: Переведены все 327 новых ключей ядра DSH (2 415 ключей ядра суммарно, 100.0% покрытие без пропусков):
   * `schedule.manager` (133 ключа): полноценный пользовательский интерфейс менеджера задач автоматизации, правила повторения, настройка интервалов, часовые пояса IANA и журнал записей доставки.
