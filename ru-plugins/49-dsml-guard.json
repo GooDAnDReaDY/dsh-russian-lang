@@ -24,7 +24,14 @@
     "saving": "Сохранение…",
     "ready": "Сохранить настройки",
     "saved": "Настройки сохранены",
-    "saveError": "Ошибка сохранения: {msg}"
+    "saveError": "Ошибка сохранения: {msg}",
+    "modelPattern": "Регулярное выражение модели (RegExp)",
+    "modelPatternHint": "Регистронезависимое регулярное выражение для сопоставления с ID моделей (например, deepseek, deepseek-v4.*). По умолчанию: deepseek.",
+    "providers": "Целевые провайдеры (опционально)",
+    "providersHint": "Список ID провайдеров через запятую. Оставьте пустым для защиты всех провайдеров.",
+    "providersPlaceholder": "все провайдеры (через запятую, например commandcode, deepseek-official)",
+    "legacyDetected": "Обнаружены устаревшие поля providerId / modelId: действуют как дополнительное правило.",
+    "legacyClear": "Очистить устаревшие поля"
   },
   "dsh-dsml-artifact-guard": {
     "checkUpdateFailed": "Не удалось проверить обновления",
@@ -51,6 +58,13 @@
     "updateNow": "Обновить сейчас",
     "updateSuccess": "Обновлено до v{v}. Перезапустите службу DSH для применения.",
     "updating": "Обновление...",
-    "version": "Версия"
+    "version": "Версия",
+    "modelPattern": "Регулярное выражение модели (RegExp)",
+    "modelPatternHint": "Регистронезависимое регулярное выражение для сопоставления с ID моделей (например, deepseek, deepseek-v4.*). По умолчанию: deepseek.",
+    "providers": "Целевые провайдеры (опционально)",
+    "providersHint": "Список ID провайдеров через запятую. Оставьте пустым для защиты всех провайдеров.",
+    "providersPlaceholder": "все провайдеры (через запятую, например commandcode, deepseek-official)",
+    "legacyDetected": "Обнаружены устаревшие поля providerId / modelId: действуют как дополнительное правило.",
+    "legacyClear": "Очистить устаревшие поля"
   }
 }

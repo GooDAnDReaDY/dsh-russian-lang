@@ -3,7 +3,6 @@
   "@dsh-external/dsh-token-dashboard",
   "@dsh-external/dsh-visualize",
   "@goodandready-private/dsh-memory-meter",
-  "@goodandready/dsh-agent-orchestrator",
   "@goodandready/dsh-approval-gate",
   "@goodandready/dsh-cost-meter",
   "@goodandready/dsh-dsml-artifact-guard",

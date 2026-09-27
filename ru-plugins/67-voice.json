@@ -250,6 +250,7 @@
     "general": "Общие",
     "updatePrompt": "Доступна новая версия в npm. Нажмите «Обновить» для установки.",
     "jargonFrom": "Разговорный сленг",
-    "jargonTo": "Корректное написание"
+    "jargonTo": "Корректное написание",
+    "jargonPlaceholder": "k8s -> kubernetes\npr -> pull request"
   }
 }

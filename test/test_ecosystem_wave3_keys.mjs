@@ -18,7 +18,6 @@ test('v0.3.1 (#316): Wave 3 ecosystem keys are loaded and translated', () => {
     'dsh-task-tracker',
     'dsh-issue-reporter',
     'dsh-model-sync',
-    'dsh-agent-orchestrator',
     'dsh-grok-xsearch'
   ])
 
@@ -57,8 +56,6 @@ test('v0.3.1 (#316): Wave 3 ecosystem keys are loaded and translated', () => {
   // dsh-model-sync
   assert.equal(plugins['dsh-model-sync']['checkForUpdates'], 'Проверить обновления')
 
-  // dsh-agent-orchestrator
-  assert.equal(plugins['dsh-agent-orchestrator']['badge.accepted'], '🟢 Результат субагента принят оркестратором')
 
   // dsh-grok-xsearch
   assert.equal(plugins['dsh-grok-xsearch']['updater_current'], 'Текущая версия')

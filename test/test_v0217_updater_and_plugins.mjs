@@ -56,8 +56,6 @@ test('v0.2.17: client.js bundle contains updated plugin translations and updater
   assert.match(clientSrc, /ID постоянной сессии \(Target Session ID\)/)
   assert.match(clientSrc, /dsh-issue-reporter/)
   assert.match(clientSrc, /Сменить аккаунт/)
-  assert.match(clientSrc, /dsh-agent-orchestrator/)
-  assert.match(clientSrc, /Мульти-агентный оркестратор/)
   
   // Updater UI in SettingsCard
   assert.match(clientSrc, /secUpdater/)

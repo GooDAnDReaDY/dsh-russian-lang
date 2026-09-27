@@ -207,6 +207,19 @@
     "verifyAccount": "Подтвердить аккаунт",
     "verifyLink": "Открыть ссылку для подтверждения",
     "verifyPrefix": "Google требует однократного подтверждения аккаунта. ",
-    "verifySuffix": " затем выполните повторное подключение."
+    "verifySuffix": " затем выполните повторное подключение.",
+    "healthMatrix": "Матрица здоровья и прогноз квоты",
+    "healthAccount": "Аккаунт",
+    "healthStatus": "Статус",
+    "healthScore": "Здоровье",
+    "healthLatency": "Задержка",
+    "healthQuota": "Квота / Запас",
+    "healthActive": "Активен",
+    "healthIdle": "В ожидании",
+    "healthWarmup": "Прогрев",
+    "healthQuarantine": "Карантин",
+    "cacheAnalyze": "Анализ кэша сессии",
+    "cacheHitRate": "Коэффициент попадания в кэш",
+    "tokensSaved": "Сэкономлено токенов"
   }
 }
