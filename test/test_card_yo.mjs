@@ -39,9 +39,12 @@ const HOMOGRAPHS = [
   ['он нем от рождения', 'нем']
 ]
 
-test('карточка настроек: слот plugin.item зарегистрирован с namespace настроек', () => {
-  assert.match(BUNDLE, /name:\s*'settings\.plugin\.item'/)
-  assert.match(BUNDLE, /key: SETTINGS_NS_NAME/)
+test('карточка настроек: слоты plugins.item и plugins.row.config зарегистрированы (Issue #387, #388, #389)', () => {
+  assert.match(BUNDLE, /name:\s*'plugins\.item'/)
+  assert.match(BUNDLE, /id:\s*FORM_NS/)
+  assert.match(BUNDLE, /name:\s*'plugins\.row\.config'/)
+  assert.match(BUNDLE, /key:\s*ROW_CONFIG_KEY/)
+  assert.doesNotMatch(BUNDLE, /name:\s*'settings\.plugin\.item'/)
 })
 
 test('карточка настроек: свёрнута по умолчанию, форма под статусом снимка', () => {
