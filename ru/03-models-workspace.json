@@ -240,7 +240,8 @@
     "shortcut.forkFailed": "Не удалось ответвить сессию. Попробуйте еще раз.",
     "viewOptions.hideArchived": "Скрыть архивированные",
     "empty.noneArchived": "Архивированных сессий пока нет",
-    "empty.viewOthers": "Просмотреть другие сессии"
+    "empty.viewOthers": "Просмотреть другие сессии",
+    "session.untitled": "Новый чат"
   },
   "settings.theme": {
     "fontSize.decrease": "Уменьшить размер шрифта",

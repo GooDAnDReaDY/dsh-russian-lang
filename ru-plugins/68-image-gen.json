@@ -267,6 +267,16 @@
     "vault.copiedPrompt": "Промпт и сид скопированы в буфер обмена!",
     "vault.noPrompt": "Без промпта",
     "vault.seed": "Сид",
-    "vault.provider": "Провайдер"
+    "vault.provider": "Провайдер",
+    "f.toolsetCreative": "Творческий набор",
+    "f.toolsetCreativeHint": "Инструменты генерации: spritesheet, seamless_pattern, sketch_to_image, image_pack.",
+    "f.toolsetDesign": "Дизайн-набор",
+    "f.toolsetDesignHint": "Инструменты проектирования: style_matrix, theme_pair, ui_asset, character_sheet, beautify_diagram, anchor.",
+    "f.toolsetFrontend": "Фронтенд-набор",
+    "f.toolsetFrontendHint": "Инструменты веб-интерфейса: extract_design_tokens, image_to_css_gradient, check_image_contrast, responsive_mockups.",
+    "f.toolsetProcessing": "Набор постобработки",
+    "f.toolsetProcessingHint": "Инструменты обработки изображений: remove_background, upscale, vectorize, convert, grid, smart_crop, asset_pack, replace_image_text.",
+    "f.toolsetProfile": "Профиль инструментов",
+    "f.toolsetProfileHint": "Выберите набор инструментов в контексте: минимальный (до 3 основных инструментов, экономит ~8k токенов промпта), полный (30 инструментов) или пользовательский."
   }
 }
