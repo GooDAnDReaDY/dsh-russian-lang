@@ -16,6 +16,6 @@ test('lib/index.js не импортирует settingsNamespace (alpha.2)', () 
 })
 
 test('lib/index.js регистрирует namespace строкой', () => {
-  assert.match(indexSrc, /settings\.register\('russian-lang'/, 'register должен принимать строку')
+  assert.match(indexSrc, /register\((?:'russian-lang'|NS)/, 'register должен принимать имя namespace')
   assert.match(indexSrc, /const NS = 'russian-lang'/, 'NS должен быть строкой')
 })

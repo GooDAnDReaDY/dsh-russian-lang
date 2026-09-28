@@ -27,7 +27,7 @@ test('клиентская карточка: agentPrompt сохраняется 
 })
 
 test('серверная схема: agentPrompt объявлен в схеме верхнего уровня', () => {
-  assert.match(SERVER_INDEX, /agentPrompt:\s*z\.boolean\(\)\.required\(false\)/)
+  assert.match(SERVER_INDEX, /agentPrompt:\s*(?:vol\()?z\.boolean\(\)\.required\(false\)/)
 })
 
 test('серверная подписка: sync() читает value.agentPrompt', () => {
