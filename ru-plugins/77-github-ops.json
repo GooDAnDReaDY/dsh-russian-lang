@@ -98,6 +98,7 @@
     "statusRefresh": "Проверить снова",
     "statusScopes": "Области доступа (Scopes)",
     "statusSource": "Источник",
-    "statusTitle": "Доступ"
+    "statusTitle": "Доступ",
+    "scmWorktrees": "Рабочие деревья"
   }
 }

@@ -385,6 +385,21 @@
     "ov.range.24h": "За последние 24 часа",
     "timing.tps": "{tps} ток/с",
     "timing.tpsTip": "Скорость генерации (TPS): сумма декодированных токенов вывода к суммарному времени декодирования — так же, как в статистике сессий harness.",
-    "timing.blockTimes": "{n} блоков"
+    "timing.blockTimes": "{n} блоков",
+    "ov.heat.less": "Меньше",
+    "ov.heat.metric": "Метрика",
+    "ov.heat.metric.sessions": "Сессии",
+    "ov.heat.metric.steps": "Шаги",
+    "ov.heat.more": "Больше",
+    "ov.heat.steps": "{n} шагов",
+    "ov.kpi.pricedSub": "Оценено {n} из {total} сессий",
+    "ov.stats.empty": "Нет тарифицируемых токенов за выбранный период",
+    "ov.usage.cost": "Стоимость (только модели с тарифом)",
+    "ov.usage.costTip": "Стоимость",
+    "ov.usage.empty": "Нет активности за последние 7 дней — токены и стоимость отобразятся после запросов к моделям",
+    "ov.usage.title": "Последние 7 дней",
+    "ov.usage.tokens": "Токены",
+    "stats.costPriceBy": "Тариф по данным models.dev для {p} · {m}.",
+    "stats.costTipCny": "Значение в CNY пересчитывается по курсу 1 CNY = 0.15 USD."
   }
 }
