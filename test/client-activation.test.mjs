@@ -100,7 +100,7 @@ test('Issue #335: client fiber activates with configForms present', () => {
       },
       configForms: {
         get: (ns) => {
-          if (ns === 'russian-lang') configFormsQueried = true;
+          if (ns === 'russian-lang' || ns === 'dsh-russian-lang') configFormsQueried = true;
           return {
             getSnapshot: () => ({ status: 'ready', value: { enabled: true, overrides: {}, typography: {} } }),
             subscribe: () => () => {},
