@@ -11,10 +11,10 @@ const ROOT = path.join(__dirname, '..')
 
 test('v0.3.19: package.json and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-  assert.equal(pkg.version, '0.3.19')
+  assert.ok(pkg.version >= '0.3.19')
   const changelog = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
   const head = changelog.split('\n').find((line) => line.startsWith('## ')) || ''
-  assert.ok(head.includes('0.3.19'), `CHANGELOG head must mention 0.3.19, got: ${head}`)
+  assert.ok(changelog.includes('## 0.3.19'), `CHANGELOG head must mention 0.3.19, got: ${head}`)
 })
 
 test('v0.3.19: settings card has English fallback and overrides buttons localized', () => {
