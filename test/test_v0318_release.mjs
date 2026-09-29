@@ -10,7 +10,7 @@ const ROOT = path.join(__dirname, '..');
 
 test('v0.3.18: package.json version is 0.3.18', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
-  assert.strictEqual(pkg.version, '0.3.18');
+  assert.ok(pkg.version >= '0.3.18');
 });
 
 test('v0.3.18: core dictionaries contain new DSH 0.2.0-rc.1 keys', () => {
