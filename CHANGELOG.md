@@ -1,3 +1,10 @@
+## 0.3.22 — 2026-09-29
+
+### Исправления совместимости (Hotfix)
+
+- **Устранение двойного вызова `.volatile()` в `Config`**: исправлена фатальная ошибка инициализации плагина в Cordis (`failed to import: TypeError: volatile schema is already wrapped`). Хелпер `vol(...)` уже активирует свойство volatile в поддерживаемых версиях `@deepseek-ai/schemastery`, повторный чейнинг `.volatile()` приводил к падению при импорте `lib/index.js` в среде DSH v0.1.7+ / Node v24.
+- **Интеграционные тесты импорта**: добавлен тест `test/test_v0322_release.mjs`, валидирующий чистую загрузку `lib/index.js`, экспортированные символы (`Config`, `apply`, `name`, `plainConfig`) и целостность схемы Schemastery.
+
 ## 0.3.21 — 2026-09-29
 
 ### Улучшения перевода
