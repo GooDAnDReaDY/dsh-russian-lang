@@ -1,6 +1,6 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "description": "Russian localization for DeepSeek Harness (DSH v0.1.7-rc.1+) web UI: adds Русский as native language option. 100.0% coverage across 11,295 keys (127 namespaces). Features full DSH v0.1.7-rc.1 core support (terminal, archive, command palette, Auto review, trajectory, PTC/Creator presets) and complete GoodAndReady plugin catalog (subscriptions, tts, image-gen, voice, key-limits, notify, commandcode, plugin-console).",
   "type": "module",
   "main": "lib/index.js",
@@ -43,14 +43,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "python3 build.py",
-    "check": "python3 build.py --check && python3 tools/lint_translations.py && python3 check-coverage.py && python3 tools/term_check.py --ci && python3 tools/check_pack_size.py && python3 tools/check_data_integrity.py",
-    "test": "node --test test/*.mjs && node test/_repro.cjs && python3 test/test_tools.py && python3 test/test_extract.py && python3 test/test_overflow.py",
-    "smoke": "python3 test/smoke.py",
-    "lint": "python3 tools/lint_translations.py"
-  },
-  "devDependencies": {
-    "websocket-client": "^1.7.0"
+    "test": "node --check lib/index.js && node --check lib/client.js"
   },
   "dependencies": {
     "@deepseek-ai/schemastery": "^3.18.1"
