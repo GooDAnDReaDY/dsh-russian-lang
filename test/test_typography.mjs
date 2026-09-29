@@ -46,6 +46,18 @@ test('nbsp: список коротких слов не пуст и состои
   for (const w of TYPO_SHORT) assert.match(w, /^[а-яё]{1,2}$/)
 })
 
+test('тире: маркеры списков markdown не превращаются в тире', () => {
+  assert.equal(typoDash('- пункт один'), '- пункт один')
+  assert.equal(typoDash('строка\n- пункт два'), 'строка\n- пункт два')
+})
+
+test('nbsp: числа связываются с единицами измерения и символами валют', () => {
+  assert.equal(typoNbsp('вес 10 кг'), 'вес 10' + NBSP + 'кг')
+  assert.equal(typoNbsp('скидка 15 %'), 'скидка 15' + NBSP + '%')
+  assert.equal(typoNbsp('цена 100 ₽'), 'цена 100' + NBSP + '₽')
+  assert.equal(typoNbsp('память 16 ГБ'), 'память 16' + NBSP + 'ГБ')
+})
+
 test('типографика идемпотентна: повторный проход ничего не меняет', () => {
   const pass = (s) => typoNbsp(typoPunct(typoDash(typoQuotes(s))))
   const once = pass('он сказал "стоп - хватит" , и вышел из дома')

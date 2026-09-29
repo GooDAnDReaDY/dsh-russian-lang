@@ -329,7 +329,7 @@ card_ru = {
     'overrideDelete': 'Удалить',
     'overrideTip': '💡 Зажмите Alt и кликните на элемент UI для быстрой правки.',
     'secSupport': '📊 Покрытие экосистемы и поддержка',
-    'secSupportDesc': '100% UI-покрытие ядра и плагинов DSH v0.1.6-alpha.1.',
+    'secSupportDesc': '100% UI-покрытие ядра и плагинов DSH.',
     'statNamespaces': 'Пространств имён',
     'statCoreKeys': 'Ключей ядра',
     'statPluginKeys': 'Ключей плагинов',
@@ -340,6 +340,13 @@ card_ru = {
     'reportIssue': 'Сообщить о неточности перевода',
     'exportMdHint': 'Экспорт диалога в Markdown доступен по кнопке [ 📥 MD ] в шапке сессии.',
     'translateTurnHint': 'Перевод ответов ассистента на русский доступен по кнопке [ RU ↗ ] на блоках сообщений.',
+    'inspectorToggleOff': '🔍 Включить инспектор перевода (Alt+I)',
+    'inspectorToggleOn': '🔍 Инспектор перевода (включён)',
+    'exportJsonBtn': '📤 Экспорт JSON',
+    'importJsonBtn': '📥 Импорт JSON',
+    'overridesCopied': 'Оверрайды скопированы в буфер обмена как JSON!',
+    'overridesImportPrompt': 'Вставьте JSON с оверрайдами:',
+    'overridesImportError': 'Ошибка разбора JSON: ',
 }
 card_json = json.dumps(card_ru, ensure_ascii=False, separators=(',', ':'))
 

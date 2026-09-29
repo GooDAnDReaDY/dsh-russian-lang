@@ -168,7 +168,19 @@ echo
 # --cacheinfo` builds the intermediate trees for us.
 GIT_INDEX_FILE="$tmp_index" git read-tree --empty
 while IFS= read -r path; do
-  blob="$(git rev-parse "$gitea_ref:$path")"
+  if [ "$path" = "package.json" ]; then
+    blob="$(git show "$gitea_ref:package.json" | node -e '
+      let s = ""; process.stdin.on("data", d => s += d).on("end", () => {
+        try {
+          const pkg = JSON.parse(s);
+          pkg.scripts = { "test": "node --check lib/index.js && node --check lib/client.js" };
+          delete pkg.devDependencies;
+          process.stdout.write(JSON.stringify(pkg, null, 2) + "\n");
+        } catch(e) { process.exit(1); }
+      });' | git hash-object -w --stdin)"
+  else
+    blob="$(git rev-parse "$gitea_ref:$path")"
+  fi
   GIT_INDEX_FILE="$tmp_index" git update-index --add --cacheinfo "100644,$blob,$path"
 done < "$sanitized_list"
 new_tree="$(GIT_INDEX_FILE="$tmp_index" git write-tree)"
