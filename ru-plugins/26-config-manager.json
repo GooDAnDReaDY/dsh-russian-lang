@@ -826,6 +826,9 @@
     "runs.status.running": "Выполняется",
     "runs.unsupported": "Эта задача не поддерживает ручное прерывание",
     "shell.drawer.runs": "Задачи",
-    "shell.status.runningAction": "Посмотреть активные задачи"
+    "shell.status.runningAction": "Посмотреть активные задачи",
+    "overview.empty.step1": "Создайте резервную копию",
+    "overview.empty.step2": "Экспортируйте ZIP",
+    "overview.empty.step3": "Импортируйте на новой машине"
   }
 }

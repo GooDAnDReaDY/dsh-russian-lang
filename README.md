@@ -5,16 +5,16 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.18-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.23-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/DSH-v0.2.0--rc.1%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.1.7-rc.2+">
+  <img src="https://img.shields.io/badge/DSH-v0.2.0--rc.2%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.1.7-rc.2+">
   <img src="https://img.shields.io/badge/Покрытие-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="Покрытие 100%">
-  <img src="https://img.shields.io/badge/Ключей_UI-8523-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="8110 ключей">
+  <img src="https://img.shields.io/badge/Ключей_UI-8576-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="8576 ключей">
   <img src="https://img.shields.io/badge/Ручная_вычитка-100%25-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="100% ручная вычитка">
 </p>
 
@@ -52,9 +52,9 @@ graph LR
         DSH[Web UI Интерфейс] --> Loader[Загрузчик локализации dsh-russian-lang]
     end
 
-    subgraph TranslationLayer [Слой перевода и адаптации — 8523 ключа / 100% вычитано]
-        Loader --> CoreDict[59 Пространств имён ядра DSH / 2421 ключ]
-        Loader --> PluginDict[65+ Плагинов экосистемы DSH / 6102 ключа]
+    subgraph TranslationLayer [Слой перевода и адаптации — 8576 ключей / 100% вычитано]
+        Loader --> CoreDict[58 Пространств имён ядра DSH / 2442 ключа]
+        Loader --> PluginDict[64 Плагина экосистемы DSH / 6134 ключа]
         Loader --> PluralEngine[Движок грамматических Plural-форм: 1/2/5]
     end
 

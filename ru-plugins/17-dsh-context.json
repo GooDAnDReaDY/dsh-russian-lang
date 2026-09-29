@@ -400,6 +400,14 @@
     "ov.usage.title": "Последние 7 дней",
     "ov.usage.tokens": "Токены",
     "stats.costPriceBy": "Тариф по данным models.dev для {p} · {m}.",
-    "stats.costTipCny": "Значение в CNY пересчитывается по курсу 1 CNY = 0.15 USD."
+    "stats.costTipCny": "Значение в CNY пересчитывается по курсу 1 CNY = 0.15 USD.",
+    "browser.base.step": "пред. шаг",
+    "browser.base.tip": "База сравнения: предыдущий шаг или последний шаг предыдущего раунда (без предшественника всё считается изменением)",
+    "browser.base.turn": "пред. раунд",
+    "browser.kind.answer": "Ответ",
+    "browser.kind.think": "Размышления",
+    "browser.kind.tool": "Инструменты",
+    "browser.kindTip": "Фильтр ответов по типу контента: размышления, вызовы инструментов или текст ответа",
+    "settings.deltaBase": "Обозреватель контекста · База сравнения diff"
   }
 }

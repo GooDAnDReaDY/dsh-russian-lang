@@ -476,7 +476,13 @@
     "detail.weekday.5": "Пт",
     "detail.weekday.6": "Сб",
     "detail.weekday.7": "Вс",
-    "detail.weekday.join": ", "
+    "detail.weekday.join": ", ",
+    "ask.closed": "закрыт",
+    "ask.closedDetail": "Этот вопрос закрыт; результат зафиксирован в диалоге ниже.",
+    "ask.pending": "продолжено; ответ по-прежнему доступен",
+    "ask.pendingDetail": "На эти ожидающие вопросы всё ещё можно ответить из строки ввода.",
+    "ask.reopen": "Ответить",
+    "ask.review": "Посмотреть ответы"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -637,7 +643,7 @@
     "message.trigger.webhook": "Получено внешнее событие",
     "message.turnProcess.deepDivingFor": "Глубокое погружение: {duration}",
     "message.turnProcess.failed": "Сбой",
-    "message.turnProcess.took": "Заняло {duration}",
+    "message.turnProcess.took": "Выполнено за ",
     "message.turnProcess.worked": "Выполнено",
     "settings.links.description": "Выберите, где открывать ссылки HTTP(S) из чата",
     "settings.links.newTab": "Новая вкладка браузера",
@@ -684,7 +690,10 @@
     "message.failure.accountSignedOut": "Остановлено, так как вы вышли из аккаунта DeepSeek.",
     "message.failure.accountSignInRequired": "Войдите в DeepSeek и убедитесь, что целевой сервис поддерживает аутентификацию по аккаунту.",
     "message.failure.quota": "Квота запросов исчерпана.",
-    "chat.deepDivingFor": "Глубокий анализ: {duration}..."
+    "chat.deepDivingFor": "Глубокий анализ: {duration}...",
+    "duration.hourUnit": "ч ",
+    "duration.minuteUnit": "м ",
+    "duration.secondUnit": "с"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
