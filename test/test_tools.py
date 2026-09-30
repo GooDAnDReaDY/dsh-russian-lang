@@ -370,6 +370,14 @@ check('settings.models.advanced' in xlf_dotted_parsed, 'export/import XLIFF: с�
 check(xlf_dotted_parsed.get('settings.models.advanced', {}).get('api.timeout') == 'Таймаут (с)', 'export/import XLIFF: сохраняет ключ с точками во вложенном namespace')
 
 
+# Issue #420: Multiline values in CSV import
+multiline_en = {'ns_multi': {'key_nl': 'First line\nSecond line with {param}'}}
+multiline_ru = {'ns_multi': {'key_nl': 'Первая строка\nВторая строка с {param}'}}
+csv_multi = exp.export_csv(multiline_en, multiline_ru)
+csv_multi_parsed = imp.parse_csv(csv_multi)
+check(csv_multi_parsed.get('ns_multi', {}).get('key_nl') == 'Первая строка\nВторая строка с {param}', 'export/import CSV: сохраняет многострочные значения с переносом строк')
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 

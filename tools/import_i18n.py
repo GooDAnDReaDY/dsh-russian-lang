@@ -9,6 +9,7 @@
 """
 import argparse
 import csv
+import io
 import json
 import re
 import sys
@@ -134,10 +135,10 @@ def parse_xliff(text, validate=True):
 
 
 def parse_csv(text, validate=True):
-    """Парсинг CSV с проверкой плейсхолдеров."""
+    """Парсинг CSV с поддержкой многострочных значений и проверкой плейсхолдеров."""
     result = {}
     errors = []
-    reader = csv.DictReader(text.splitlines())
+    reader = csv.DictReader(io.StringIO(text))
     for row in reader:
         ns = row.get('namespace')
         key = row.get('key')
