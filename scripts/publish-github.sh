@@ -58,6 +58,7 @@ FORBIDDEN=(
   ".ruff_cache"
   ".venv"
   "node_modules"
+  "lib/client.template.js"
 )
 
 mode=""
@@ -88,7 +89,7 @@ while IFS= read -r entry; do
   [ -n "$entry" ] && ALLOW+=("${entry%/}" )
 done < <(git show "${gitea_ref:-origin/main}:package.json" | node -e '
   let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{
-    try{const p=JSON.parse(s);for(const f of (p.files||[])) console.log(f.replace(/\/\*\*$/,""));}catch(e){}
+    try{const p=JSON.parse(s);for(const f of (p.files||[])) if(!f.startsWith("!")) console.log(f.replace(/\/\*\*$/,""));}catch(e){}
   });')
 
 is_allowed() {
