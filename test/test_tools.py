@@ -416,6 +416,60 @@ with tempfile.TemporaryDirectory() as tmpsystemd:
     check(f'WorkingDirectory={repo_root}' in svc_content, 'tools/systemd/install.sh: содержит абсолютный путь к репозиторию')
 
 
+# Issue #431: Translation metadata export and import
+sample_meta = {
+    'ns_meta': {
+        'action_key': {
+            'status': 'reviewed',
+            'model': 'deepseek/deepseek-chat',
+            'at': '2026-09-30T12:00:00'
+        }
+    }
+}
+sample_en_meta = {'ns_meta': {'action_key': 'Save file'}}
+sample_ru_meta = {'ns_meta': {'action_key': 'Сохранить файл'}}
+
+# PO roundtrip with meta
+po_meta_out = exp.export_po(sample_en_meta, sample_ru_meta, sample_meta)
+check('# dsh-status: reviewed' in po_meta_out, 'export_po: экспортирует статус проверки в комментарии')
+po_trans, po_m = imp.parse_po(po_meta_out, return_meta=True)
+check(po_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_po: восстанавливает статус проверки')
+check(po_m.get('ns_meta', {}).get('action_key', {}).get('model') == 'deepseek/deepseek-chat', 'import_po: восстанавливает модель')
+
+# XLIFF roundtrip with meta
+xlf_meta_out = exp.export_xliff(sample_en_meta, sample_ru_meta, sample_meta)
+check('<note from="dsh-status">reviewed</note>' in xlf_meta_out, 'export_xliff: экспортирует статус проверки в note')
+xlf_trans, xlf_m = imp.parse_xliff(xlf_meta_out, return_meta=True)
+check(xlf_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_xliff: восстанавливает статус проверки')
+
+# CSV roundtrip with meta
+csv_meta_out = exp.export_csv(sample_en_meta, sample_ru_meta, sample_meta)
+check('reviewed' in csv_meta_out, 'export_csv: экспортирует статус проверки в колонку')
+csv_trans, csv_m = imp.parse_csv(csv_meta_out, return_meta=True)
+check(csv_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_csv: восстанавливает статус проверки')
+
+# CLI registry update test
+with tempfile.TemporaryDirectory() as tmpdir:
+    po_f = os.path.join(tmpdir, 'meta.po')
+    out_j = os.path.join(tmpdir, 'out.json')
+    reg_j = os.path.join(tmpdir, 'reg.json')
+    with open(po_f, 'w', encoding='utf-8') as f:
+        f.write(po_meta_out)
+
+    res_cli = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'po',
+        '--input', po_f,
+        '--out-json', out_j,
+        '--registry', reg_j
+    ], capture_output=True, text=True)
+    check(res_cli.returncode == 0, 'import_i18n CLI: успешно импортирует PO с метаданными')
+    check(os.path.exists(reg_j), 'import_i18n CLI: создаёт/обновляет файл реестра')
+    reg_loaded = json.load(open(reg_j, encoding='utf-8'))
+    check(reg_loaded.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_i18n CLI: реестр содержит статус reviewed')
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 
