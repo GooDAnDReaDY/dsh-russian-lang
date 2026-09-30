@@ -54,8 +54,9 @@ if __name__ == '__main__':
         num = sys.argv[2]
         mtitle = sys.argv[3] if len(sys.argv) > 3 else ''
         mmsg = sys.argv[4] if len(sys.argv) > 4 else ''
-        data = {'Do': 'squash'}
+        style = sys.argv[5] if len(sys.argv) > 5 else 'merge'
+        data = {'Do': style}
         if mtitle: data['MergeTitleField'] = mtitle
         if mmsg: data['MergeMessageField'] = mmsg
         res = api_call('/pulls/' + num + '/merge', method='POST', data=data)
-        print('Merged PR #' + num)
+        print('Merged PR #' + num + ' with style ' + style)
