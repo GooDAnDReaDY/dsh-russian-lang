@@ -76,3 +76,37 @@ test('dsh-i18n CLI: extract извлекает ключи локализации
     fs.rmSync(tmpSrc, { recursive: true, force: true })
   }
 })
+
+test('dsh-i18n CLI: validate отклоняет некорректную структуру JSON (#421)', () => {
+  const tmpFile = path.join(rootDir, 'test', '_tmp_struct.json')
+
+  // 1. Root is array
+  fs.writeFileSync(tmpFile, JSON.stringify([1, 2, 3]), 'utf8')
+  try {
+    assert.throws(() => {
+      execFileSync(process.execPath, [binPath, 'validate', tmpFile], { encoding: 'utf8', stdio: 'pipe' })
+    })
+  } finally {
+    fs.rmSync(tmpFile, { force: true })
+  }
+
+  // 2. Namespace is scalar or null
+  fs.writeFileSync(tmpFile, JSON.stringify({ 'broken-ns': null }), 'utf8')
+  try {
+    assert.throws(() => {
+      execFileSync(process.execPath, [binPath, 'validate', tmpFile], { encoding: 'utf8', stdio: 'pipe' })
+    })
+  } finally {
+    fs.rmSync(tmpFile, { force: true })
+  }
+
+  // 3. Key value is null
+  fs.writeFileSync(tmpFile, JSON.stringify({ 'valid-ns': { key: null } }), 'utf8')
+  try {
+    assert.throws(() => {
+      execFileSync(process.execPath, [binPath, 'validate', tmpFile], { encoding: 'utf8', stdio: 'pipe' })
+    })
+  } finally {
+    fs.rmSync(tmpFile, { force: true })
+  }
+})

@@ -88,6 +88,11 @@ function validateDict(filePath, glossaryPath) {
     return false
   }
 
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    console.error(`Ошибка структуры JSON в ${filePath}: корневой элемент должен быть объектом`)
+    return false
+  }
+
   let errors = []
   let warnings = []
   let totalKeys = 0
@@ -103,7 +108,7 @@ function validateDict(filePath, glossaryPath) {
   function checkString(ns, key, val) {
     totalKeys++
     if (typeof val !== 'string') {
-      errors.push(`[${ns}:${key}] Значение должно быть строкой, получено: ${typeof val}`)
+      errors.push(`[${ns}:${key}] Значение должно быть строкой, получено: ${val === null ? 'null' : Array.isArray(val) ? 'массив' : typeof val}`)
       return
     }
 
@@ -134,10 +139,12 @@ function validateDict(filePath, glossaryPath) {
 
   for (const ns of Object.keys(data)) {
     const section = data[ns]
-    if (typeof section === 'object' && section !== null) {
-      for (const [k, v] of Object.entries(section)) {
-        checkString(ns, k, v)
-      }
+    if (!section || typeof section !== 'object' || Array.isArray(section)) {
+      errors.push(`[${ns}] Пространство имён должно быть объектом, получено: ${section === null ? 'null' : Array.isArray(section) ? 'массив' : typeof section}`)
+      continue
+    }
+    for (const [k, v] of Object.entries(section)) {
+      checkString(ns, k, v)
     }
   }
 
