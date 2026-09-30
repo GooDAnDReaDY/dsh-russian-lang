@@ -330,3 +330,48 @@ check(len(delta['ph_mismatches']) == 1 and delta['ph_mismatches'][0][1] == 'key2
 rep = uw.generate_markdown_report(delta)
 check('### Новые ключи для перевода' in rep and 'key_new' in rep, 'upstream_watch: генерирует markdown отчёт')
 
+# ---------- upstream_check git isolation (#407) ----------
+import upstream_check as uc
+
+with tempfile.TemporaryDirectory() as tmpgit:
+    # 1. Initialize dummy git repo with initial commit
+    subprocess.run(['git', 'init'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'config', 'user.name', 'Tester'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'config', 'user.email', 'test@example.com'], cwd=tmpgit, capture_output=True, check=True)
+    with open(os.path.join(tmpgit, 'base.txt'), 'w') as f:
+        f.write('initial')
+    subprocess.run(['git', 'add', 'base.txt'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'commit', '-m', 'init'], cwd=tmpgit, capture_output=True, check=True)
+
+    # 2. Add foreign file and stage it
+    with open(os.path.join(tmpgit, 'foreign.js'), 'w') as f:
+        f.write('console.log("foreign")')
+    subprocess.run(['git', 'add', 'foreign.js'], cwd=tmpgit, capture_output=True, check=True)
+
+    # 3. Add upstream change
+    os.makedirs(os.path.join(tmpgit, 'upstream'), exist_ok=True)
+    with open(os.path.join(tmpgit, 'upstream', 'report.md'), 'w') as f:
+        f.write('# Report')
+
+    # Foreign staged file must cause git_commit_local to abort cleanly
+    res_abort = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check('отменено: обнаружены сторонние изменения' in res_abort, 'upstream_check: отменяет коммит при наличии сторонних staged файлов')
+
+    # Foreign file must still NOT be in git log
+    log_check = subprocess.run(['git', 'log', '-1', '--name-only'], cwd=tmpgit, capture_output=True, text=True)
+    check('foreign.js' not in log_check.stdout, 'upstream_check: чужой файл не попал в коммит')
+
+    # 4. Clean foreign file from index and working tree
+    subprocess.run(['git', 'reset', 'HEAD', 'foreign.js'], cwd=tmpgit, capture_output=True, check=True)
+    os.remove(os.path.join(tmpgit, 'foreign.js'))
+
+    # Clean scenario: only upstream exists
+    res_ok = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check(res_ok == 'закоммичено локально (push отключен)', 'upstream_check: чистый сценарий успешно коммитит upstream')
+
+    log_after = subprocess.run(['git', 'log', '-1', '--name-only'], cwd=tmpgit, capture_output=True, text=True)
+    check('upstream/report.md' in log_after.stdout, 'upstream_check: только upstream пути попадают в коммит')
+
+    # 5. Calling again when clean returns "без изменений"
+    res_nochange = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check(res_nochange == 'без изменений', 'upstream_check: повторный запуск без изменений возвращает "без изменений"')

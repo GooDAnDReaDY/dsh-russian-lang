@@ -168,28 +168,65 @@ def alert(version, text, has_drift):
         print('issue #%d создан' % i['number'])
 
 
-def git_commit_local():
+def get_dirty_paths(repo_path=REPO):
+    """Возвращает список изменённых или staged путей вне upstream/."""
+    r = subprocess.run(['git', 'status', '--porcelain'], cwd=repo_path,
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return ['[git-error: %s]' % r.stderr.strip()]
+    dirty_foreign = []
+    for line in r.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        parts = line[2:].strip().split(' -> ')
+        path = parts[-1].strip()
+        if not (path.startswith('upstream/') or path == 'upstream'):
+            dirty_foreign.append(path)
+    return dirty_foreign
+
+
+def git_commit_local(repo_path=REPO, push=True):
     """Коммитит снапшот и отчёт в локальную ветку БЕЗ пуша в main.
 
-    main защищён (прямой push запрещён), поэтому авто-пуш HEAD:main —
-    обход правил. Коммитим локально, пуши в отдельную ветку upstream/snapshot
-    и печатаем подсказку: изменения надо влить через PR (или вручную).
+    Изолирует изменения строго в upstream/ с pathspec.
+    При наличии сторонних изменений в индексе или рабочей копии прерывает работу с диагностикой.
     """
-    if not subprocess.run(['git', 'status', '--porcelain'], cwd=REPO,
-                          capture_output=True).stdout.strip():
+    foreign = get_dirty_paths(repo_path)
+    if foreign:
+        return 'отменено: обнаружены сторонние изменения в рабочей копии (dirty tree): %s' % ', '.join(foreign[:5])
+
+    r_up = subprocess.run(['git', 'status', '--porcelain', '--', 'upstream'], cwd=repo_path,
+                          capture_output=True, text=True)
+    if r_up.returncode != 0:
+        return 'git status failed: %s' % r_up.stderr.strip()[:160]
+    if not r_up.stdout.strip():
         return 'без изменений'
-    subprocess.run(['git', 'add', 'upstream'], cwd=REPO, check=False)
-    r = subprocess.run(['git', 'status', '--porcelain'], cwd=REPO,
-                       capture_output=True, text=True)
-    if not r.stdout.strip():
-        return 'чисто'
-    c = subprocess.run(['git', 'commit', '-m', 'chore(upstream): refresh snapshot + report'],
-                       cwd=REPO, capture_output=True, text=True)
+
+    add_res = subprocess.run(['git', 'add', '--', 'upstream'], cwd=repo_path,
+                             capture_output=True, text=True)
+    if add_res.returncode != 0:
+        return 'git add failed: %s' % add_res.stderr.strip()[:160]
+
+    cached = subprocess.run(['git', 'diff', '--cached', '--name-only'], cwd=repo_path,
+                            capture_output=True, text=True)
+    if cached.returncode != 0:
+        return 'git diff --cached failed: %s' % cached.stderr.strip()[:160]
+    staged_files = [f.strip() for f in cached.stdout.splitlines() if f.strip()]
+    non_upstream_staged = [f for f in staged_files if not (f.startswith('upstream/') or f == 'upstream')]
+    if non_upstream_staged:
+        return 'отменено: в staging обнаружены посторонние файлы: %s' % ', '.join(non_upstream_staged[:5])
+
+    c = subprocess.run(['git', 'commit', '-m', 'chore(upstream): refresh snapshot + report', '--', 'upstream'],
+                       cwd=repo_path, capture_output=True, text=True)
     if c.returncode != 0:
         return 'commit failed: %s' % c.stderr.strip()[:200]
-    # пуш в отдельную ветку (не main) — её можно влить PR'ом
+
+    if not push:
+        return 'закоммичено локально (push отключен)'
+
     p = subprocess.run(['git', 'push', 'origin', 'HEAD:upstream/snapshot'],
-                       cwd=REPO, capture_output=True, text=True)
+                       cwd=repo_path, capture_output=True, text=True)
     if p.returncode != 0:
         return 'закоммичено локально, push в upstream/snapshot не удался: %s' % p.stderr.strip()[:160]
     return 'закоммичено и запушено в upstream/snapshot (влить PR)'
