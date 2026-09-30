@@ -6,7 +6,7 @@
 ## Product / Purpose
 - **Проект**: `@goodandready/dsh-russian-lang`
 - **Путь в DEV**: `/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang`
-- **Профиль DSH**: `/home/vadim/.dsh/profiles/web` (устанавливается и тестируется вживую на MiniPC `mini111-lan`)
+- **Профиль DSH**: `/home/vadim/.dsh/profiles/web` (устанавливается и тестируется вживую на MiniAI `mini111-lan`)
 - **Назначение**: Полная русская локализация, экранная типографика, исправление раскладки клавиатуры и инспектор перевода для DeepSeek Harness.
 - **Дизайн-контракт**: `docs/design/DESIGN.md` (обязателен к соблюдению перед любыми изменениями UI/UX/API).
 
@@ -25,7 +25,7 @@
 
 ## Development Workflow & Rules
 1. **Строгая изоляция и разрешения**:
-   - Все файловые операции и git-команды на MiniPC выполнять под пользователем `sudo -u vadim`.
+   - Все файловые операции и git-команды на MiniAI выполнять под пользователем `sudo -u vadim`.
 2. **Сборка и лимиты**:
    - После изменения `lib/client.template.js` или словарей `ru/*.json` обязательно запускать `python3 build.py`.
    - Проверять размер `lib/client.js` (< 160 KiB). Никаких тяжелых зависимостей в браузере.

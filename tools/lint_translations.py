@@ -18,15 +18,16 @@ import json
 import os
 import re
 import sys
+from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 
-PH_RE = re.compile(r'\{([a-zA-Z0-9_]+)\}')
+PH_RE = re.compile(r'\{[a-zA-Z0-9_]+\}|%(?:[0-9]+\$)?[+-]?\d*(?:\.\d+)?[hlLzjt]*[sdfiuoxXcp]')
 
 
 def ph_set(s):
-    return set(PH_RE.findall(s or ''))
+    return Counter(PH_RE.findall(s or ''))
 
 
 def lint_json_files():
@@ -60,7 +61,7 @@ def lint_placeholders(en_dict, ru_dict):
                 en_ph = ph_set(en_text)
                 ru_ph = ph_set(ru_text)
                 if en_ph != ru_ph:
-                    errors.append(('PH_MISMATCH', '%s.%s' % (ns, key), 'EN %s != RU %s' % (en_ph, ru_ph)))
+                    errors.append(('PH_MISMATCH', '%s.%s' % (ns, key), 'EN %s != RU %s' % (dict(en_ph), dict(ru_ph))))
     return errors
 
 

@@ -9,87 +9,175 @@
 """
 import argparse
 import csv
+import glob
 import io
 import json
 import os
 import re
 import sys
 import xml.etree.ElementTree as ET
+from collections import Counter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-PH_RE = re.compile(r'\{([a-zA-Z0-9_]+)\}|%([0-9]+\$)?[sdf]')
+
+PH_RE = re.compile(r'\{[a-zA-Z0-9_]+\}|%(?:[0-9]+\$)?[+-]?\d*(?:\.\d+)?[hlLzjt]*[sdfiuoxXcp]')
 
 
 def ph_set(s):
-    return set(PH_RE.findall(s))
+    return set(PH_RE.findall(s or ''))
+
+
+def ph_counter(s):
+    return Counter(PH_RE.findall(s or ''))
 
 
 def ph_ok(en_str, ru_str):
-    return ph_set(en_str) == ph_set(ru_str)
+    if not en_str:
+        return True
+    return ph_counter(en_str) == ph_counter(ru_str)
+
+
+def get_known_namespaces():
+    ns_set = set()
+    for d in ('ru', 'ru-plugins'):
+        for p in glob.glob(os.path.join(REPO, d, '*.json')):
+            try:
+                for k in json.load(open(p, encoding='utf-8')).keys():
+                    ns_set.add(k)
+            except Exception:
+                pass
+    return sorted(ns_set, key=len, reverse=True)
+
+
+KNOWN_NS = None
+
+
+def resolve_legacy_ref(ref):
+    global KNOWN_NS
+    if KNOWN_NS is None:
+        KNOWN_NS = get_known_namespaces()
+    for ns in KNOWN_NS:
+        if ref.startswith(ns + '.'):
+            return ns, ref[len(ns) + 1:]
+    if '.' in ref:
+        return ref.split('.', 1)
+    return 'common', ref
+
+
+def unescape_po_string(s):
+    try:
+        return json.loads(s)
+    except Exception:
+        return s[1:-1] if len(s) >= 2 and s[0] == '"' and s[-1] == '"' else s
 
 
 def parse_po(text, validate=True, return_meta=False):
-    """Парсинг простого PO файла с поддержкой msgctxt, метаданных и проверкой плейсхолдеров."""
     result = {}
     meta_result = {}
     errors = []
+
     current_ref = None
     current_ctxt = None
     current_msgid = None
     current_msgstr = None
     current_meta = {}
+    is_no_en = False
 
-    for line in text.splitlines():
-        line = line.strip()
-        if line.startswith('# dsh-status:'):
-            current_meta['status'] = line.split(':', 1)[1].strip()
-        elif line.startswith('# dsh-model:'):
-            current_meta['model'] = line.split(':', 1)[1].strip()
-        elif line.startswith('# dsh-at:'):
-            current_meta['at'] = line.split(':', 1)[1].strip()
-        elif line.startswith('msgctxt'):
-            raw = line[7:].strip()
-            if raw.startswith('"') and raw.endswith('"'):
-                try: current_ctxt = json.loads(raw)
-                except Exception: current_ctxt = raw[1:-1]
-        elif line.startswith('#:'):
-            current_ref = line[2:].strip()
-        elif line.startswith('msgid'):
-            raw = line[5:].strip()
-            if raw.startswith('"') and raw.endswith('"'):
-                try: current_msgid = json.loads(raw)
-                except Exception: current_msgid = raw[1:-1]
-        elif line.startswith('msgstr'):
-            raw = line[6:].strip()
-            if raw.startswith('"') and raw.endswith('"'):
-                try: current_msgstr = json.loads(raw)
-                except Exception: current_msgstr = raw[1:-1]
+    active_field = None  # 'msgctxt', 'msgid', 'msgstr'
 
-            ns = None
-            key = None
-            if current_ctxt:
-                ns = current_ctxt
-                if current_ref and current_ref.startswith(ns + '.'):
-                    key = current_ref[len(ns) + 1:]
-                elif current_ref:
-                    key = current_ref
-            elif current_ref and '.' in current_ref:
-                ns, key = current_ref.split('.', 1)
+    def commit_entry():
+        nonlocal current_ref, current_ctxt, current_msgid, current_msgstr, current_meta, is_no_en
+        if current_msgstr is None:
+            return
 
-            if ns and key and current_msgstr is not None:
-                if validate and current_msgid and not ph_ok(current_msgid, current_msgstr):
-                    missing = ph_set(current_msgid) - ph_set(current_msgstr)
-                    extra = ph_set(current_msgstr) - ph_set(current_msgid)
-                    errors.append((ns, key, current_msgid, current_msgstr, missing, extra))
-                result.setdefault(ns, {})[key] = current_msgstr
-                if current_meta:
-                    meta_result.setdefault(ns, {})[key] = dict(current_meta)
-                current_ref = None
-                current_ctxt = None
-                current_msgid = None
-                current_msgstr = None
-                current_meta = {}
+        ns = None
+        key = None
+        if current_ctxt:
+            ns = current_ctxt
+            if current_ref and current_ref.startswith(ns + '.'):
+                key = current_ref[len(ns) + 1:]
+            elif current_ref:
+                key = current_ref
+        elif current_ref:
+            ns, key = resolve_legacy_ref(current_ref)
+
+        if ns and key and current_msgstr is not None:
+            has_en = bool(current_msgid) and not is_no_en
+            if validate and has_en and not ph_ok(current_msgid, current_msgstr):
+                en_c = ph_counter(current_msgid)
+                ru_c = ph_counter(current_msgstr)
+                missing = en_c - ru_c
+                extra = ru_c - en_c
+                errors.append((ns, key, current_msgid, current_msgstr, dict(missing), dict(extra)))
+
+            result.setdefault(ns, {})[key] = current_msgstr
+            if has_en and 'en' not in current_meta:
+                current_meta['en'] = current_msgid
+            if current_meta:
+                meta_result.setdefault(ns, {})[key] = dict(current_meta)
+
+        current_ref = None
+        current_ctxt = None
+        current_msgid = None
+        current_msgstr = None
+        current_meta = {}
+        is_no_en = False
+
+    lines = text.splitlines(True)
+    for raw_line in lines:
+        line_clean = raw_line.rstrip('\r\n')
+        s = line_clean.strip()
+        if not s:
+            commit_entry()
+            active_field = None
+            continue
+
+        if s.startswith('#'):
+            active_field = None
+            if s.startswith('#:'):
+                ref_part = line_clean[2:]
+                if ref_part.startswith(' '):
+                    ref_part = ref_part[1:]
+                current_ref = ref_part
+            elif s.startswith('# dsh-status:'):
+                current_meta['status'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-model:'):
+                current_meta['model'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-at:'):
+                current_meta['at'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-comment:') or s.startswith('# comment:'):
+                current_meta['comment'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-context:') or s.startswith('# context:'):
+                current_meta['context'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-en:'):
+                current_meta['en'] = s.split(':', 1)[1].strip()
+            elif s.startswith('# dsh-no-en:'):
+                is_no_en = True
+            continue
+
+        if s.startswith('msgctxt'):
+            active_field = 'msgctxt'
+            raw = s[7:].strip()
+            current_ctxt = unescape_po_string(raw)
+        elif s.startswith('msgid'):
+            active_field = 'msgid'
+            raw = s[5:].strip()
+            current_msgid = unescape_po_string(raw)
+        elif s.startswith('msgstr'):
+            active_field = 'msgstr'
+            raw = s[6:].strip()
+            current_msgstr = unescape_po_string(raw)
+        elif s.startswith('"') and s.endswith('"') and active_field:
+            part = unescape_po_string(s)
+            if active_field == 'msgid':
+                current_msgid = (current_msgid or '') + part
+            elif active_field == 'msgstr':
+                current_msgstr = (current_msgstr or '') + part
+            elif active_field == 'msgctxt':
+                current_ctxt = (current_ctxt or '') + part
+
+    commit_entry()
 
     if validate and errors:
         err_lines = [
@@ -103,8 +191,8 @@ def parse_po(text, validate=True, return_meta=False):
     return result
 
 
+
 def parse_xliff(text, validate=True, return_meta=False):
-    """Парсинг XLIFF 1.2 с поддержкой context-group, метаданных и проверкой плейсхолдеров."""
     result = {}
     meta_result = {}
     errors = []
@@ -114,6 +202,7 @@ def parse_xliff(text, validate=True, return_meta=False):
             unit_id = unit.attrib.get('id', '')
             ns_context = None
             meta = {}
+            is_no_en = False
             for elem in unit.iter():
                 if elem.tag.endswith('context') and elem.attrib.get('context-type') == 'namespace' and elem.text:
                     ns_context = elem.text.strip()
@@ -125,6 +214,12 @@ def parse_xliff(text, validate=True, return_meta=False):
                         meta['model'] = elem.text.strip()
                     elif from_attr == 'dsh-at' and elem.text:
                         meta['at'] = elem.text.strip()
+                    elif from_attr in ('dsh-comment', 'comment') and elem.text:
+                        meta['comment'] = elem.text.strip()
+                    elif from_attr in ('dsh-context', 'context') and elem.text:
+                        meta['context'] = elem.text.strip()
+                    elif from_attr == 'dsh-no-en':
+                        is_no_en = True
 
             if ns_context:
                 ns = ns_context
@@ -133,23 +228,30 @@ def parse_xliff(text, validate=True, return_meta=False):
                 else:
                     key = unit_id
             elif '.' in unit_id:
-                ns, key = unit_id.split('.', 1)
+                ns, key = resolve_legacy_ref(unit_id)
             else:
                 continue
 
             source = None
             target = None
             for child in unit:
-                if child.tag.endswith('source') and child.text:
-                    source = child.text
-                elif child.tag.endswith('target') and child.text:
-                    target = child.text
+                if child.tag.endswith('source'):
+                    source = child.text or ''
+                elif child.tag.endswith('target'):
+                    target = child.text or ''
+
             if target is not None:
-                if validate and source and not ph_ok(source, target):
-                    missing = ph_set(source) - ph_set(target)
-                    extra = ph_set(target) - ph_set(source)
-                    errors.append((ns, key, source, target, missing, extra))
+                has_en = bool(source) and not is_no_en
+                if validate and has_en and not ph_ok(source, target):
+                    en_c = ph_counter(source)
+                    ru_c = ph_counter(target)
+                    missing = en_c - ru_c
+                    extra = ru_c - en_c
+                    errors.append((ns, key, source, target, dict(missing), dict(extra)))
+
                 result.setdefault(ns, {})[key] = target
+                if has_en and 'en' not in meta:
+                    meta['en'] = source
                 if meta:
                     meta_result.setdefault(ns, {})[key] = dict(meta)
 
@@ -165,8 +267,8 @@ def parse_xliff(text, validate=True, return_meta=False):
     return result
 
 
+
 def parse_csv(text, validate=True, return_meta=False):
-    """Парсинг CSV с поддержкой многострочных значений, метаданных и проверкой плейсхолдеров."""
     result = {}
     meta_result = {}
     errors = []
@@ -178,18 +280,17 @@ def parse_csv(text, validate=True, return_meta=False):
         ru = row.get('ru')
         if ns and key and ru is not None:
             if validate and en and not ph_ok(en, ru):
-                missing = ph_set(en) - ph_set(ru)
-                extra = ph_set(ru) - ph_set(en)
-                errors.append((ns, key, en, ru, missing, extra))
+                en_c = ph_counter(en)
+                ru_c = ph_counter(ru)
+                missing = en_c - ru_c
+                extra = ru_c - en_c
+                errors.append((ns, key, en, ru, dict(missing), dict(extra)))
             result.setdefault(ns, {})[key] = ru
 
             meta = {}
-            if row.get('status'):
-                meta['status'] = row['status'].strip()
-            if row.get('model'):
-                meta['model'] = row['model'].strip()
-            if row.get('at'):
-                meta['at'] = row['at'].strip()
+            for col in ('status', 'model', 'at', 'comment', 'context', 'en'):
+                if row.get(col):
+                    meta[col] = row[col].strip()
             if meta:
                 meta_result.setdefault(ns, {})[key] = meta
 
@@ -205,12 +306,14 @@ def parse_csv(text, validate=True, return_meta=False):
     return result
 
 
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--format', choices=['po', 'xliff', 'csv'], required=True)
     ap.add_argument('--input', required=True)
     ap.add_argument('--out-json', required=True)
-    ap.add_argument('--registry', default=os.path.join(REPO, 'mt-registry.json'), help='Путь к mt-registry.json для сохранения метаданных')
+    ap.add_argument('--registry', default=None, help='Путь к mt-registry.json для сохранения метаданных')
     ap.add_argument('--dry-run', action='store_true', help='Только проверить синтаксис без записи файла')
     args = ap.parse_args()
 

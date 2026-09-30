@@ -6,94 +6,144 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientPath = path.join(__dirname, '..', 'lib', 'client.js')
-const clientCode = fs.readFileSync(clientPath, 'utf-8')
+const bundle = fs.readFileSync(clientPath, 'utf-8')
 
-test('Issue #415: typography effect subscribes to scope settings changes and cancels RAF', () => {
-  assert.ok(
-    clientCode.includes('unsubscribeScope = typeof scope?.subscribe === \'function\' ? scope.subscribe(syncTypo) :'),
-    'typography effect must subscribe to scope settings changes'
-  )
-  assert.ok(
-    clientCode.includes('if (typoQueued) { cancelAnimationFrame(typoQueued); typoQueued = null }'),
-    'typography effect must cancel pending RAF on disposal or disable'
-  )
-})
+test('Issue #439 / #415: Actual typography effect in client.js subscribes to scope settings and toggles observer/RAF', () => {
+  let loadedDef = null
+  const mockWindow = {
+    __ModuleLoader__: { load(def) { loadedDef = def } }
+  }
 
-test('Issue #415: Simulation of dynamic typography enable/disable on settings update', () => {
-  let observerActive = false
-  let observedRoots = []
+  const allObservers = []
+
+  class MockMutationObserver {
+    constructor(cb) {
+      this.cb = cb
+      this.active = false
+      this.target = null
+      allObservers.push(this)
+    }
+    observe(target) {
+      this.active = true
+      this.target = target
+    }
+    disconnect() {
+      this.active = false
+      this.target = null
+    }
+  }
+
+  global.MutationObserver = MockMutationObserver
   let rafPending = null
+  global.requestAnimationFrame = (fn) => {
+    rafPending = fn
+    return 123
+  }
+  global.cancelAnimationFrame = () => {
+    rafPending = null
+  }
 
-  let config = { typography: { enabled: false } }
-  let activeLocale = 'ru'
+  const mockBody = { nodeType: 1, tagName: 'BODY', childNodes: [], querySelectorAll: () => [] }
+  const mockDoc = {
+    head: { appendChild() {} },
+    body: mockBody,
+    documentElement: { getAttribute: () => 'ru-RU', lang: 'ru' },
+    createElement: () => ({ style: {}, dataset: {}, appendChild() {} }),
+    getElementById: () => null,
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    addEventListener() {},
+    removeEventListener() {},
+    createTreeWalker: () => ({ nextNode: () => null })
+  }
 
+  global.NodeFilter = { SHOW_TEXT: 4 }
+
+  new Function('window', 'document', bundle)(mockWindow, mockDoc)
+  const def = mockWindow.__DEF__ || loadedDef
+  assert.ok(def && typeof def.factory === 'function')
+
+  const mod = def.factory(() => ({}))
+
+  let currentConfig = { typography: { enabled: false } }
   const scopeListeners = []
   const localeListeners = []
 
   const scope = {
-    getSnapshot: () => ({ value: config }),
+    getSnapshot: () => ({ status: 'ready', value: currentConfig }),
     subscribe: (fn) => {
       scopeListeners.push(fn)
       return () => {
         const idx = scopeListeners.indexOf(fn)
         if (idx >= 0) scopeListeners.splice(idx, 1)
       }
-    }
+    },
+    set: async () => true
   }
 
   const runtime = {
-    getLocale: () => ({ active: activeLocale }),
+    translate: (ns, key) => key,
+    getLocale: () => ({ active: 'ru', locales: [{ id: 'ru', label: 'Russian' }] }),
+    lookup: () => undefined,
+    register: () => () => {},
     subscribe: (fn) => {
       localeListeners.push(fn)
       return () => {
         const idx = localeListeners.indexOf(fn)
         if (idx >= 0) localeListeners.splice(idx, 1)
       }
-    }
+    },
+    addLanguage: () => () => {},
+    setLocale: () => {},
+    host: { getSnapshot: () => ({ value: {} }), subscribe: () => () => {}, set: () => Promise.resolve(), unset: () => Promise.resolve() }
   }
 
-  const getTypoConf = () => {
-    const t = scope.getSnapshot().value?.typography
-    if (!t || t.enabled === false) return null
-    return { yo: t.yo === true }
-  }
-
-  const syncTypo = () => {
-    const conf = getTypoConf()
-    const isRu = runtime.getLocale().active === 'ru'
-    if (!isRu || !conf) {
-      if (observerActive) {
-        observerActive = false
+  let typoDisposer = null
+  const ctx = {
+    locale: runtime,
+    configForms: { get: () => scope },
+    slots: { inject: (n, f) => f(), register: () => {} },
+    effect: (cb, name) => {
+      if (name === 'dsh-russian-lang: typography') {
+        typoDisposer = cb()
+        return typoDisposer
       }
-      if (rafPending) {
-        rafPending = null
-      }
-      return
-    }
-    observerActive = true
+      return cb()
+    },
+    emit: () => {}
   }
 
-  // Setup effect
-  const unsubscribeLocale = runtime.subscribe(syncTypo)
-  const unsubscribeScope = scope.subscribe(syncTypo)
-  syncTypo()
+  // 1. Initial execution with typography: { enabled: false }
+  mod.apply(ctx)
 
-  // 1. Initially disabled
-  assert.equal(observerActive, false, 'Observer must be inactive initially')
+  assert.ok(typeof typoDisposer === 'function', 'Typography effect must return disposer function')
 
-  // 2. User enables typography via settings -> scope listener fires -> observer becomes active immediately!
-  config = { typography: { enabled: true, yo: true } }
-  for (const l of scopeListeners) l()
-  assert.equal(observerActive, true, 'Observer must become active immediately when enabled in settings')
+  // Baseline observers exist on startup (spellcheck, zhDom), but typoObserver is NOT yet created
+  const baselineCount = allObservers.length
+  assert.ok(baselineCount > 0, 'Baseline observers exist on apply')
 
-  // 3. User disables typography via settings -> observer disconnects immediately!
-  config = { typography: { enabled: false } }
-  for (const l of scopeListeners) l()
-  assert.equal(observerActive, false, 'Observer must disconnect immediately when disabled in settings')
+  // 2. User enables typography via settings -> trigger scope listeners
+  currentConfig = { typography: { enabled: true, yo: true } }
+  for (const fn of scopeListeners) fn()
 
-  // 4. Dispose cleans up listeners
-  unsubscribeLocale()
-  unsubscribeScope()
-  assert.equal(scopeListeners.length, 0)
-  assert.equal(localeListeners.length, 0)
+  assert.equal(allObservers.length, baselineCount + 1, 'Enabling typography must create a new typoObserver instance')
+  const typoObserver = allObservers[allObservers.length - 1]
+  assert.equal(typoObserver.active, true, 'typoObserver must be active')
+  assert.equal(typoObserver.target, mockBody, 'typoObserver must observe document.body')
+
+  // 3. User disables typography via settings -> trigger scope listeners
+  currentConfig = { typography: { enabled: false } }
+  for (const fn of scopeListeners) fn()
+
+  assert.equal(typoObserver.active, false, 'typoObserver must be disconnected immediately when disabled')
+
+  // 4. Dispose effect cleans up all listeners and cancels pending work
+  const scopeCountBefore = scopeListeners.length
+  const localeCountBefore = localeListeners.length
+
+  typoDisposer()
+
+  // Listener cleanup
+  assert.equal(scopeListeners.length, scopeCountBefore - 1, 'Typography scope listener must be unsubscribed on disposal')
+  assert.equal(localeListeners.length, localeCountBefore - 1, 'Typography locale listener must be unsubscribed on disposal')
 })

@@ -14,8 +14,8 @@ cp -f "$REPO/tools/systemd/dsh-upstream-check.timer" "$TARGET_DIR/"
 
 EXPORT_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
 if [ -z "${SYSTEMD_USER_DIR:-}" ]; then
-  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user daemon-reload 2>/dev/null || true
-  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user enable --now dsh-upstream-check.timer 2>/dev/null || true
+  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user daemon-reload
+  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user enable --now dsh-upstream-check.timer
 fi
 
 echo "✓ Upstream Watcher timer установлен в $TARGET_DIR"
