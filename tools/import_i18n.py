@@ -25,9 +25,10 @@ def ph_ok(en_str, ru_str):
     return ph_set(en_str) == ph_set(ru_str)
 
 
-def parse_po(text):
-    """Парсинг простого PO файла."""
+def parse_po(text, validate=True):
+    """Парсинг простого PO файла с проверкой плейсхолдеров."""
     result = {}
+    errors = []
     current_ns = None
     current_key = None
     current_msgid = None
@@ -51,41 +52,82 @@ def parse_po(text):
             if raw.startswith('"') and raw.endswith('"'):
                 try: current_msgstr = json.loads(raw)
                 except Exception: current_msgstr = raw[1:-1]
-            if current_ns and current_key and current_msgstr:
+            if current_ns and current_key and current_msgstr is not None:
+                if validate and current_msgid and not ph_ok(current_msgid, current_msgstr):
+                    missing = ph_set(current_msgid) - ph_set(current_msgstr)
+                    extra = ph_set(current_msgstr) - ph_set(current_msgid)
+                    errors.append((current_ns, current_key, current_msgid, current_msgstr, missing, extra))
                 result.setdefault(current_ns, {})[current_key] = current_msgstr
                 current_ns = None
                 current_key = None
+                current_msgid = None
+                current_msgstr = None
+
+    if validate and errors:
+        err_lines = [
+            f"Placeholder mismatch in {ns}.{k}: missing={missing}, extra={extra} (source={src!r}, target={tgt!r})"
+            for ns, k, src, tgt, missing, extra in errors
+        ]
+        raise ValueError("\n".join(err_lines))
     return result
 
 
-def parse_xliff(text):
-    """Парсинг XLIFF 1.2."""
+def parse_xliff(text, validate=True):
+    """Парсинг XLIFF 1.2 с проверкой плейсхолдеров."""
     result = {}
+    errors = []
     root = ET.fromstring(text)
     for unit in root.iter():
         if unit.tag.endswith('trans-unit'):
             unit_id = unit.attrib.get('id', '')
             if '.' in unit_id:
                 ns, key = unit_id.split('.', 1)
+                source = None
                 target = None
                 for child in unit:
-                    if child.tag.endswith('target') and child.text:
+                    if child.tag.endswith('source') and child.text:
+                        source = child.text
+                    elif child.tag.endswith('target') and child.text:
                         target = child.text
-                if target:
+                if target is not None:
+                    if validate and source and not ph_ok(source, target):
+                        missing = ph_set(source) - ph_set(target)
+                        extra = ph_set(target) - ph_set(source)
+                        errors.append((ns, key, source, target, missing, extra))
                     result.setdefault(ns, {})[key] = target
+
+    if validate and errors:
+        err_lines = [
+            f"Placeholder mismatch in {ns}.{k}: missing={missing}, extra={extra} (source={src!r}, target={tgt!r})"
+            for ns, k, src, tgt, missing, extra in errors
+        ]
+        raise ValueError("\n".join(err_lines))
     return result
 
 
-def parse_csv(text):
-    """Парсинг CSV."""
+def parse_csv(text, validate=True):
+    """Парсинг CSV с проверкой плейсхолдеров."""
     result = {}
+    errors = []
     reader = csv.DictReader(text.splitlines())
     for row in reader:
         ns = row.get('namespace')
         key = row.get('key')
+        en = row.get('en')
         ru = row.get('ru')
-        if ns and key and ru:
+        if ns and key and ru is not None:
+            if validate and en and not ph_ok(en, ru):
+                missing = ph_set(en) - ph_set(ru)
+                extra = ph_set(ru) - ph_set(en)
+                errors.append((ns, key, en, ru, missing, extra))
             result.setdefault(ns, {})[key] = ru
+
+    if validate and errors:
+        err_lines = [
+            f"Placeholder mismatch in {ns}.{k}: missing={missing}, extra={extra} (source={src!r}, target={tgt!r})"
+            for ns, k, src, tgt, missing, extra in errors
+        ]
+        raise ValueError("\n".join(err_lines))
     return result
 
 
@@ -98,12 +140,16 @@ def main():
     args = ap.parse_args()
 
     content = open(args.input, encoding='utf-8').read()
-    if args.format == 'po':
-        parsed = parse_po(content)
-    elif args.format == 'xliff':
-        parsed = parse_xliff(content)
-    elif args.format == 'csv':
-        parsed = parse_csv(content)
+    try:
+        if args.format == 'po':
+            parsed = parse_po(content, validate=True)
+        elif args.format == 'xliff':
+            parsed = parse_xliff(content, validate=True)
+        elif args.format == 'csv':
+            parsed = parse_csv(content, validate=True)
+    except ValueError as err:
+        print(f"Ошибка валидации плейсхолдеров ({args.format}):\n{err}", file=sys.stderr)
+        sys.exit(1)
 
     total_keys = sum(len(v) for v in parsed.values())
     print('Успешно распарсено: %d namespace, %d ключей' % (len(parsed), total_keys))

@@ -311,6 +311,50 @@ with tempfile.TemporaryDirectory() as tmpdir:
     check(loaded.get('ns1', {}).get('greeting') == 'Привет, {name}', 'import_i18n: запись без --dry-run сохраняет валидный JSON')
 
 
+# Issue #418: import_i18n placeholder validation
+bad_ru = {'ns1': {'greeting': 'Привет, {wrong}', 'farewell': 'До свидания'}}
+bad_po = exp.export_po(sample_en, bad_ru)
+po_val_failed = False
+try:
+    imp.parse_po(bad_po, validate=True)
+except ValueError as e:
+    po_val_failed = True
+check(po_val_failed, 'import_i18n: parse_po выбрасывает ValueError при несовпадении плейсхолдеров')
+
+bad_xlf = exp.export_xliff(sample_en, bad_ru)
+xlf_val_failed = False
+try:
+    imp.parse_xliff(bad_xlf, validate=True)
+except ValueError as e:
+    xlf_val_failed = True
+check(xlf_val_failed, 'import_i18n: parse_xliff выбрасывает ValueError при несовпадении плейсхолдеров')
+
+bad_csv = exp.export_csv(sample_en, bad_ru)
+csv_val_failed = False
+try:
+    imp.parse_csv(bad_csv, validate=True)
+except ValueError as e:
+    csv_val_failed = True
+check(csv_val_failed, 'import_i18n: parse_csv выбрасывает ValueError при несовпадении плейсхолдеров')
+
+with tempfile.TemporaryDirectory() as tmpdir:
+    bad_po_file = os.path.join(tmpdir, 'bad.po')
+    out_target = os.path.join(tmpdir, 'out_fail.json')
+    with open(bad_po_file, 'w', encoding='utf-8') as f:
+        f.write(bad_po)
+
+    res_fail = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'po',
+        '--input', bad_po_file,
+        '--out-json', out_target
+    ], capture_output=True, text=True)
+    check(res_fail.returncode != 0, 'import_i18n CLI: ненулевой код возврата при битых плейсхолдерах')
+    check(not os.path.exists(out_target), 'import_i18n CLI: целевой файл не создаётся при ошибке валидации')
+    check('Placeholder mismatch in ns1.greeting' in res_fail.stderr, 'import_i18n CLI: имя ключа и ns выведены в stderr')
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 
