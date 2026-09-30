@@ -399,6 +399,23 @@ finally:
         os.remove(orphan_dummy)
 
 
+# Issue #426: systemd install.sh replaces __REPO__ with actual repo path
+with tempfile.TemporaryDirectory() as tmpsystemd:
+    res_inst = subprocess.run(
+        ['bash', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'systemd', 'install.sh')],
+        env=dict(os.environ, SYSTEMD_USER_DIR=tmpsystemd),
+        capture_output=True,
+        text=True
+    )
+    check(res_inst.returncode == 0, 'tools/systemd/install.sh: завершается успешно')
+    installed_service = os.path.join(tmpsystemd, 'dsh-upstream-check.service')
+    check(os.path.exists(installed_service), 'tools/systemd/install.sh: устанавливает service файл')
+    svc_content = open(installed_service, 'r', encoding='utf-8').read()
+    check('__REPO__' not in svc_content, 'tools/systemd/install.sh: заменяет плейсхолдер __REPO__')
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+    check(f'WorkingDirectory={repo_root}' in svc_content, 'tools/systemd/install.sh: содержит абсолютный путь к репозиторию')
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 

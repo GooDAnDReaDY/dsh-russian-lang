@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
 set -eu
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
-TARGET_DIR="${HOME}/.config/systemd/user"
+TARGET_DIR="${SYSTEMD_USER_DIR:-${HOME}/.config/systemd/user}"
 mkdir -p "$TARGET_DIR"
-cp "-f" "$REPO/tools/systemd/dsh-upstream-check.service" "$TARGET_DIR/"
-cp "-f" "$REPO/tools/systemd/dsh-upstream-check.timer" "$TARGET_DIR/"
+
+SOURCE_SERVICE="$REPO/tools/systemd/dsh-upstream-check.service.template"
+if [ ! -f "$SOURCE_SERVICE" ]; then
+  SOURCE_SERVICE="$REPO/tools/systemd/dsh-upstream-check.service"
+fi
+
+sed "s|__REPO__|$REPO|g" "$SOURCE_SERVICE" > "$TARGET_DIR/dsh-upstream-check.service"
+cp -f "$REPO/tools/systemd/dsh-upstream-check.timer" "$TARGET_DIR/"
 
 EXPORT_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
-XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user daemon-reload || true
-XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user enable --now dsh-upstream-check.timer || true
+if [ -z "${SYSTEMD_USER_DIR:-}" ]; then
+  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user daemon-reload 2>/dev/null || true
+  XDG_RUNTIME_DIR="$EXPORT_RUNTIME" systemctl --user enable --now dsh-upstream-check.timer 2>/dev/null || true
+fi
 
-echo "𝟐 Upstream Watcher timer ôstanovlen v $TARGET_DIR"
+echo "✓ Upstream Watcher timer установлен в $TARGET_DIR"
