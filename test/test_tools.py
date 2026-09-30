@@ -260,6 +260,56 @@ csv_data = exp.export_csv(sample_en, sample_ru)
 csv_parsed = imp.parse_csv(csv_data)
 check(csv_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import CSV: сохраняет плейсхолдеры и строки')
 
+# Issue #406: import_i18n --dry-run does not overwrite or create output file
+import tempfile, subprocess
+with tempfile.TemporaryDirectory() as tmpdir:
+    in_csv = os.path.join(tmpdir, 'in.csv')
+    with open(in_csv, 'w', encoding='utf-8') as f:
+        f.write(csv_data)
+
+    # 1. Non-existent output with --dry-run must NOT be created
+    out_nonexistent = os.path.join(tmpdir, 'out_dry.json')
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--dry-run',
+        '--out-json', out_nonexistent
+    ], capture_output=True, text=True)
+    check(res.returncode == 0, 'import_i18n --dry-run завершается с кодом 0')
+    check(not os.path.exists(out_nonexistent), 'import_i18n: --dry-run не создаёт несуществующий файл')
+
+    # 2. Existing output with --dry-run must retain exact byte content
+    out_existing = os.path.join(tmpdir, 'out_exist.json')
+    original_bytes = b'{"pre_existing": true, "untouched": 123}'
+    with open(out_existing, 'wb') as f:
+        f.write(original_bytes)
+
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--dry-run',
+        '--out-json', out_existing
+    ], capture_output=True, text=True)
+    with open(out_existing, 'rb') as f:
+        current_bytes = f.read()
+    check(current_bytes == original_bytes, 'import_i18n: --dry-run не изменяет существующий файл (байт-в-байт)')
+
+    # 3. Regular run without --dry-run writes valid json
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--out-json', out_existing
+    ], capture_output=True, text=True)
+    with open(out_existing, 'r', encoding='utf-8') as f:
+        loaded = json.load(f)
+    check(loaded.get('ns1', {}).get('greeting') == 'Привет, {name}', 'import_i18n: запись без --dry-run сохраняет валидный JSON')
+
 
 # ---------- upstream_watch ----------
 import upstream_watch as uw
