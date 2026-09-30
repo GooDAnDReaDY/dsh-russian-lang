@@ -190,6 +190,17 @@
         "Контрольный пункт"
       ],
       "description": "Точка сохранения состояния сессии или памяти"
+    },
+    "command_code": {
+      "canonical": "Command Code",
+      "allowed": [
+        "Command Code"
+      ],
+      "forbidden": [
+        "Код команды",
+        "Командный код"
+      ],
+      "description": "Название провайдера и расширения Command Code (commandcode.ai)"
     }
   }
 }

@@ -12407,10 +12407,10 @@
    "status": "reviewed"
   },
   "cardLoadingHint": {
-   "at": "2026-08-29T22:58:09",
+   "at": "2026-09-30T10:25:00",
    "en": "Loading the Command Code configuration…",
-   "model": "deepseek/deepseek-chat",
-   "ru": "Загрузка конфигурации командного кода…",
+   "model": "manual",
+   "ru": "Загрузка конфигурации Command Code…",
    "status": "reviewed"
   },
   "cardRegistrationHint": {
@@ -12428,10 +12428,10 @@
    "status": "reviewed"
   },
   "cardTitle": {
-   "at": "2026-08-29T22:58:15",
-   "en": "Command Code connection",
-   "model": "deepseek/deepseek-chat",
-   "ru": "Подключение командного кода",
+   "at": "2026-09-30T10:25:00",
+   "en": "Command Code",
+   "model": "manual",
+   "ru": "Command Code",
    "status": "reviewed"
   },
   "discard": {
@@ -12589,10 +12589,10 @@
    "status": "reviewed"
   },
   "nav": {
-   "at": "2026-08-25T19:26:29",
+   "at": "2026-09-30T10:25:00",
    "en": "Command Code",
-   "model": "deepseek/deepseek-chat",
-   "ru": "Код команды",
+   "model": "manual",
+   "ru": "Command Code",
    "status": "reviewed"
   },
   "numberTooLarge": {
@@ -12694,10 +12694,10 @@
    "status": "reviewed"
   },
   "title": {
-   "at": "2026-08-25T19:26:58",
+   "at": "2026-09-30T10:25:00",
    "en": "Command Code",
-   "model": "deepseek/deepseek-chat",
-   "ru": "Код команды",
+   "model": "manual",
+   "ru": "Command Code",
    "status": "reviewed"
   },
   "unsaved": {
