@@ -109,9 +109,12 @@ def main():
     print('Успешно распарсено: %d namespace, %d ключей' % (len(parsed), total_keys))
 
     if args.out_json:
-        with open(args.out_json, 'w', encoding='utf-8') as f:
-            json.dump(parsed, f, indent=2, ensure_ascii=False)
-        print('Сохранено в %s' % args.out_json)
+        if args.dry_run:
+            print('[DRY-RUN] Режим проверки: запись в %s пропущена' % args.out_json)
+        else:
+            with open(args.out_json, 'w', encoding='utf-8') as f:
+                json.dump(parsed, f, indent=2, ensure_ascii=False)
+            print('Сохранено в %s' % args.out_json)
 
 
 if __name__ == '__main__':

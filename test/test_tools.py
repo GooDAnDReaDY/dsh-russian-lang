@@ -260,6 +260,56 @@ csv_data = exp.export_csv(sample_en, sample_ru)
 csv_parsed = imp.parse_csv(csv_data)
 check(csv_parsed.get('ns1', {}).get('greeting') == 'Привет, {name}', 'export/import CSV: сохраняет плейсхолдеры и строки')
 
+# Issue #406: import_i18n --dry-run does not overwrite or create output file
+import tempfile, subprocess
+with tempfile.TemporaryDirectory() as tmpdir:
+    in_csv = os.path.join(tmpdir, 'in.csv')
+    with open(in_csv, 'w', encoding='utf-8') as f:
+        f.write(csv_data)
+
+    # 1. Non-existent output with --dry-run must NOT be created
+    out_nonexistent = os.path.join(tmpdir, 'out_dry.json')
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--dry-run',
+        '--out-json', out_nonexistent
+    ], capture_output=True, text=True)
+    check(res.returncode == 0, 'import_i18n --dry-run завершается с кодом 0')
+    check(not os.path.exists(out_nonexistent), 'import_i18n: --dry-run не создаёт несуществующий файл')
+
+    # 2. Existing output with --dry-run must retain exact byte content
+    out_existing = os.path.join(tmpdir, 'out_exist.json')
+    original_bytes = b'{"pre_existing": true, "untouched": 123}'
+    with open(out_existing, 'wb') as f:
+        f.write(original_bytes)
+
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--dry-run',
+        '--out-json', out_existing
+    ], capture_output=True, text=True)
+    with open(out_existing, 'rb') as f:
+        current_bytes = f.read()
+    check(current_bytes == original_bytes, 'import_i18n: --dry-run не изменяет существующий файл (байт-в-байт)')
+
+    # 3. Regular run without --dry-run writes valid json
+    res = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'csv',
+        '--input', in_csv,
+        '--out-json', out_existing
+    ], capture_output=True, text=True)
+    with open(out_existing, 'r', encoding='utf-8') as f:
+        loaded = json.load(f)
+    check(loaded.get('ns1', {}).get('greeting') == 'Привет, {name}', 'import_i18n: запись без --dry-run сохраняет валидный JSON')
+
 
 # ---------- upstream_watch ----------
 import upstream_watch as uw
@@ -280,3 +330,48 @@ check(len(delta['ph_mismatches']) == 1 and delta['ph_mismatches'][0][1] == 'key2
 rep = uw.generate_markdown_report(delta)
 check('### Новые ключи для перевода' in rep and 'key_new' in rep, 'upstream_watch: генерирует markdown отчёт')
 
+# ---------- upstream_check git isolation (#407) ----------
+import upstream_check as uc
+
+with tempfile.TemporaryDirectory() as tmpgit:
+    # 1. Initialize dummy git repo with initial commit
+    subprocess.run(['git', 'init'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'config', 'user.name', 'Tester'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'config', 'user.email', 'test@example.com'], cwd=tmpgit, capture_output=True, check=True)
+    with open(os.path.join(tmpgit, 'base.txt'), 'w') as f:
+        f.write('initial')
+    subprocess.run(['git', 'add', 'base.txt'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run(['git', 'commit', '-m', 'init'], cwd=tmpgit, capture_output=True, check=True)
+
+    # 2. Add foreign file and stage it
+    with open(os.path.join(tmpgit, 'foreign.js'), 'w') as f:
+        f.write('console.log("foreign")')
+    subprocess.run(['git', 'add', 'foreign.js'], cwd=tmpgit, capture_output=True, check=True)
+
+    # 3. Add upstream change
+    os.makedirs(os.path.join(tmpgit, 'upstream'), exist_ok=True)
+    with open(os.path.join(tmpgit, 'upstream', 'report.md'), 'w') as f:
+        f.write('# Report')
+
+    # Foreign staged file must cause git_commit_local to abort cleanly
+    res_abort = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check('отменено: обнаружены сторонние изменения' in res_abort, 'upstream_check: отменяет коммит при наличии сторонних staged файлов')
+
+    # Foreign file must still NOT be in git log
+    log_check = subprocess.run(['git', 'log', '-1', '--name-only'], cwd=tmpgit, capture_output=True, text=True)
+    check('foreign.js' not in log_check.stdout, 'upstream_check: чужой файл не попал в коммит')
+
+    # 4. Clean foreign file from index and working tree
+    subprocess.run(['git', 'reset', 'HEAD', 'foreign.js'], cwd=tmpgit, capture_output=True, check=True)
+    os.remove(os.path.join(tmpgit, 'foreign.js'))
+
+    # Clean scenario: only upstream exists
+    res_ok = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check(res_ok == 'закоммичено локально (push отключен)', 'upstream_check: чистый сценарий успешно коммитит upstream')
+
+    log_after = subprocess.run(['git', 'log', '-1', '--name-only'], cwd=tmpgit, capture_output=True, text=True)
+    check('upstream/report.md' in log_after.stdout, 'upstream_check: только upstream пути попадают в коммит')
+
+    # 5. Calling again when clean returns "без изменений"
+    res_nochange = uc.git_commit_local(repo_path=tmpgit, push=False)
+    check(res_nochange == 'без изменений', 'upstream_check: повторный запуск без изменений возвращает "без изменений"')

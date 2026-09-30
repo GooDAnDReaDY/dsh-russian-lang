@@ -13,6 +13,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Установка зависимостей (npm ci)
+        run: npm ci
+
       - name: Сборка бандла + синтаксис
         run: |
           python3 build.py --check
