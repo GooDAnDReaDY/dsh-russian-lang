@@ -7,7 +7,7 @@
 
 ## User Surfaces
 - **DSH UI / слоты и точки монтирования**:
-  1. `settings.plugin.item`: Карточка настроек плагина во вкладке «Настройки → Плагины → Настройки плагинов» (`id: 'dsh-russian-lang'`).
+  1. `plugins.item` и `plugins.row.config`: Карточка настроек (`id: 'dsh-russian-lang'`) и встроенная строка настроек (`key: '@goodandready/dsh-russian-lang#dsh-russian-lang'`) во вкладке «Настройки → Плагины → Настройки плагинов».
   2. `conversation.session.header.utilities`: Быстрый переключатель языка `RU ⇄ EN` в один клик в шапке активной сессии.
   3. `conversation.chat.assistant-actions`: Кнопка «Перевести на русский» в тулбаре реплик ассистента.
   4. Инспектор перевода (<kbd>Alt+I</kbd>): интерактивное исследование UI-элементов, подсветка источников (`Core`, `Plugin`, `DOM`, `Untranslated`), редактирование оверрайдов и копирование баг-репортов.
@@ -59,16 +59,37 @@
 
 ## Components And States
 - **SettingsCard**:
-  - Состояния: `loading` (скелетон), `unavailable` (сервер недоступен), `ready` (форма настроек).
-  - Секции: выбор языка, умная типографика, системный промпт, движок перевода, инспектор перевода, метрики покрытия.
+  - Монтирование в слоты DSH v0.2.0-rc.1+ / v0.2.0-rc.2+:
+    - `plugins.item` (#388): `id = 'dsh-russian-lang'`, монтируется через `whileServed(['dsh-russian-lang'])`.
+    - `plugins.row.config` (#387): `key = '@goodandready/dsh-russian-lang#dsh-russian-lang'`, предоставляет встраиваемый вид строки настроек плагина.
+    - Устаревший слот `settings.plugin.item` (#389) упразднён в DSH v0.2.0-rc.1 и удалён.
+  - Состояния: `loading` (скелетон), `unavailable` (сервер недоступен), `ready` (форма настроек), `readonly` (`snap.writable === false`).
+  - Полный контракт конфигурации (10 ключей):
+    1. `enabled`: `boolean`, default `true` — включение русской локализации.
+    2. `overrides`: `Record<string, string>`, default `{}` — пользовательские оверрайды текстов (поддерживаются scoped-ключи вида `ns.key` с приоритетом над bare-ключами).
+    3. `typography`: `object`, default `{}` — интеллектуальная экранная типографика (строго opt-in):
+       - `enabled`: `boolean`, default `false` — замена кавычек на «ёлочки», длинные тире, неразрывные пробелы.
+       - `yo`: `boolean`, default `false` — безопасное восстановление буквы «ё».
+       - `liveInput`: `boolean`, default `false` — живая типографика при вводе в текстовых полях.
+    4. `agentPrompt`: `boolean`, default `false` — добавление системной инструкции агенту отвечать по-русски.
+    5. `agentPromptPreset`: `string`, default `'technical_expert'` — пресет системного промпта.
+    6. `slashAliases`: `boolean`, default `true` — русские алиасы слэш-команд (/помощь, /очистить и др.).
+    7. `layoutConversion`: `boolean`, default `true` — автоопределение неверной раскладки и подсказка <kbd>Alt+L</kbd>.
+    8. `quickSwitch`: `boolean`, default `true` — быстрый переключатель RU/EN в строке состояния (<kbd>Alt+Shift+L</kbd>).
+    9. `translateEngine`: `'local' | 'cloud'`, default `'local'` — движок перевода реплик ассистента.
+    10. `localApiUrl`: `string`, default `'http://localhost:5000'` — URL локального инстанса LibreTranslate.
+  - Защита от записи (Readonly Guard):
+    - При `snap.writable === false` все интерактивные контролы (`importJsonBtn`, чекбоксы, кнопка сохранения в инспекторе) блокируются (`disabled: true`). Попытки вызова `scope.set` блокируются guards, а отказы промиса обрабатываются без сбоев интерфейса.
+  - Жизненный цикл и утилизация (Lifecycle & Clean Disposal):
+    - При `dispose()` полностью восстанавливаются 19 расширений объекта `runtime`, отключаются все `MutationObserver` (`zhObserver`, `typoObserver`, `spellObserver`), отменяются таймеры и анимационные кадры (`cancelAnimationFrame`), отписываются подписчики `scope` и `locale`.
 - **QuickLanguageSwitcher**:
-  - Компактный чип `RU` / `EN` в шапке активной сессии. Мгновенное переключение без перезагрузки страницы.
+  - Компактный чип `RU` / `EN` в шапке активной сессии (`conversation.session.header.utilities`). Мгновенное переключение без перезагрузки страницы.
 - **InspectorModal**:
-  - Нажатие <kbd>Alt+I</kbd> включает режим исследования элементов. Клик открывает модальное окно с деталями ключа, источником и формой добавления оверрайда.
+  - Нажатие <kbd>Alt+I</kbd> включает режим исследования элементов. Клик с <kbd>Alt</kbd> открывает модальное окно с деталями ключа, источником и формой добавления оверрайда. При `writable === false` кнопки «Применить» и «Сбросить» деактивированы.
 
 ## Three Delivery Channels (Три канала поставки)
-1. **Приватный DEV-репозиторий (Gitea / MiniPC)**:
-   - Полный исходный код, сборочные скрипты (`build.py`), тесты (`test/`), инструменты (`tools/`), внутренние инструкции (`AGENTS.md`, `docs/design/DESIGN.md`, `docs/index.md`).
+1. **Приватный DEV-репозиторий (Gitea / MiniAI: 192.168.1.111)**:
+   - Полный исходный код, сборочные скрипты (`build.py`), тесты (`test/`), инструменты (`tools/`), внутренние инструкции (`AGENTS.md`, `docs/design/DESIGN.md`, `index.md`).
 2. **Публичное зеркало GitHub (`GooDAnDReaDY/dsh-russian-lang`)**:
    - Дистрибутивный релизный срез: исходные тексты переводов, документация `README.md`, скомпилированный бандл, манифест пакета.
    - Исключаются внутренние инструменты, шаблоны сборки и служебные файлы (синхронизируется через `scripts/publish-github.sh`).
@@ -88,7 +109,7 @@
   - Не превышать лимит размера файлов пакета (256 KiB) и размер `lib/client.js` (< 160 KiB).
 
 ## Locked Design Decisions
-- **2026-09-07** — Настройки размещаются карточкой в `settings.plugin.item`, а не отдельным боковым разделом (сохранение навигации DSH).
+- **2026-09-07** — Настройки размещаются карточкой в слоте настроек (изначально `settings.plugin.item`, с 2026-09-28 мигрировано на нативные слоты DSH v0.2.0-rc.1+ `plugins.item` и `plugins.row.config` по #387-#389).
 - **2026-09-08** — Переключатель языка `RU ⇄ EN` размещается в `conversation.session.header.utilities` для мгновенного доступа в 1 клик.
 - **2026-09-15** — Словарь ядра разделяется: компактный бутстрап встраивается в `lib/client.js`, полный словарь загружается через `/api/dsh-russian-lang/dict/core`.
 - **2026-09-20** — Поддержка двухуровневого хранения настроек: managed `dsh-russian-lang` (DSH v0.2.0-rc.2+) и legacy `russian-lang` (DSH <= 0.1.6).

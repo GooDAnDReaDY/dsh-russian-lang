@@ -1,124 +1,217 @@
-import { test } from 'node:test'
-import assert from 'node:assert'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientPath = path.join(__dirname, '..', 'lib', 'client.js')
-const clientCode = fs.readFileSync(clientPath, 'utf-8')
+const bundle = fs.readFileSync(clientPath, 'utf-8')
 
-test('Issue #405: isProtectedTextNode defined and called before curOverrides in ZH_WALKER', () => {
-  assert.ok(
-    clientCode.includes('const isProtectedTextNode = (node) =>'),
-    'client.js must define isProtectedTextNode'
-  )
-  const walkerPos = clientCode.indexOf('const ZH_WALKER =')
-  const protCallPos = clientCode.indexOf('if (isProtectedTextNode(node)) continue', walkerPos)
-  const overridePos = clientCode.indexOf('if (curOverrides[trimmed] !== undefined)', walkerPos)
+test('Issue #439 / #405: Actual lib/client.js isProtectedTextNode and ZH_WALKER protect code, pre, inputs and composers', () => {
+  let loadedDef = null
+  const mockWindow = {
+    __ModuleLoader__: { load(def) { loadedDef = def } }
+  }
 
-  assert.ok(walkerPos > 0, 'ZH_WALKER must exist')
-  assert.ok(protCallPos > 0, 'isProtectedTextNode call must exist in ZH_WALKER')
-  assert.ok(overridePos > 0, 'curOverrides check must exist in ZH_WALKER')
-  assert.ok(
-    protCallPos < overridePos,
-    'isProtectedTextNode MUST be checked before applying curOverrides'
-  )
-})
-
-test('Issue #405: Protected regions (code, pre, kbd, inputs, composer, streaming) block overrides', () => {
-  // Simulate DOM-like environment to verify protection logic
-  class MockElement {
-    constructor(tagName, attributes = {}, parent = null) {
-      this.tagName = tagName.toUpperCase()
-      this.attributes = attributes
-      this.parentElement = parent
+  class MockNode {
+    constructor(type, val = '') {
+      this.nodeType = type
+      this.nodeValue = val
+      this.parentElement = null
+      this.childNodes = []
       this.children = []
+      this.attributes = {}
+      this.style = {}
+      this.dataset = {}
+      this.className = ''
+      this.tagName = ''
+    }
+    appendChild(child) {
+      child.parentElement = this
+      this.childNodes.push(child)
+      if (child.nodeType === 1) this.children.push(child)
+      return child
     }
     closest(selector) {
       const selectors = selector.split(',').map(s => s.trim())
-      let curr = this
-      while (curr) {
+      let cur = this
+      while (cur) {
         for (const sel of selectors) {
           if (sel.startsWith('[') && sel.endsWith(']')) {
-            const attrMatch = sel.slice(1, -1).split('=')
-            const attrName = attrMatch[0]
-            const attrVal = attrMatch[1] ? attrMatch[1].replace(/['"]/g, '') : null
-            if (attrVal !== null) {
-              if (curr.attributes[attrName] === attrVal) return curr
+            const inner = sel.slice(1, -1)
+            const eqIdx = inner.indexOf('=')
+            if (eqIdx >= 0) {
+              const attrName = inner.slice(0, eqIdx).trim()
+              const attrVal = inner.slice(eqIdx + 1).trim().replace(/['"]/g, '')
+              if (cur.attributes[attrName] === attrVal) return cur
             } else {
-              if (curr.attributes[attrName] !== undefined) return curr
+              if (cur.attributes[inner] !== undefined) return cur
             }
           } else if (sel.startsWith('.')) {
             const cls = sel.slice(1)
-            if ((curr.attributes['class'] || '').split(/\s+/).includes(cls)) return curr
+            if ((cur.className || '').split(/\s+/).includes(cls)) return cur
           } else {
-            if (curr.tagName === sel.toUpperCase()) return curr
+            if (cur.tagName === sel.toUpperCase()) return cur
           }
         }
-        curr = curr.parentElement
+        cur = cur.parentElement
       }
       return null
     }
   }
 
-  class MockTextNode {
-    constructor(text, parent) {
-      this.nodeValue = text
-      this.parentElement = parent
+  function createElement(tag, attrs = {}) {
+    const el = new MockNode(1)
+    el.tagName = tag.toUpperCase()
+    el.attributes = { ...attrs }
+    el.style = {}
+    el.dataset = {}
+    if (attrs.class) el.className = attrs.class
+    return el
+  }
+
+  function createTextNode(text) {
+    return new MockNode(3, text)
+  }
+
+  const bodyEl = createElement('body')
+  const headEl = createElement('head')
+
+  const mockDoc = {
+    head: headEl,
+    body: bodyEl,
+    documentElement: { getAttribute: () => 'ru-RU', lang: 'ru' },
+    createElement,
+    createTextNode,
+    getElementById: () => null,
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    addEventListener() {},
+    removeEventListener() {},
+    createTreeWalker(root) {
+      const allTextNodes = []
+      function walk(node) {
+        if (!node) return
+        if (node.nodeType === 3) allTextNodes.push(node)
+        for (const c of node.childNodes) walk(c)
+      }
+      walk(root)
+      let idx = 0
+      return {
+        nextNode() {
+          if (idx < allTextNodes.length) return allTextNodes[idx++]
+          return null
+        }
+      }
     }
   }
 
-  // Extract isProtectedTextNode logic from bundle or run equivalent
-  const isProtected = (node) => {
-    const p = node.parentElement
-    if (!p) return true
-    if (p.closest('code, pre, script, style, textarea, input, select, kbd, samp, [contenteditable="true"], [data-composer-input], [role="textbox"]')) return true
-    if (p.closest('.katex, [data-latex], math')) return true
-    if (p.closest('[data-chat-flow-status="running"], [data-turn-running], [data-turn-tail], [data-streaming="true"], .dsw-turn-running, [class*="streaming"], [class*="Streaming"]')) return true
-    return false
+  global.NodeFilter = { SHOW_TEXT: 4 }
+
+  new Function('window', 'document', bundle)(mockWindow, mockDoc)
+  const def = mockWindow.__DEF__ || loadedDef
+  assert.ok(def && typeof def.factory === 'function')
+
+  const mod = def.factory(() => ({}))
+
+  const runtime = {
+    translate: (ns, key) => key,
+    getLocale: () => ({ active: 'ru', locales: [{ id: 'ru', label: 'Russian' }] }),
+    lookup: () => undefined,
+    register: () => () => {},
+    subscribe: () => () => {},
+    addLanguage: () => () => {},
+    setLocale: () => {},
+    host: { getSnapshot: () => ({ value: {} }), subscribe: () => () => {}, set: () => Promise.resolve(), unset: () => Promise.resolve() }
   }
 
-  const overrides = { 'Cancel': 'ПОДМЕНА' }
-
-  const applyOverrides = (node) => {
-    const val = node.nodeValue
-    if (!val) return
-    const trimmed = val.trim()
-    if (!trimmed) return
-    if (isProtected(node)) return
-    if (overrides[trimmed] !== undefined) {
-      node.nodeValue = val.replace(trimmed, overrides[trimmed])
-    }
+  const scope = {
+    getSnapshot: () => ({
+      status: 'ready',
+      writable: true,
+      value: { overrides: { 'Cancel': 'ПОДМЕНА' } }
+    }),
+    subscribe: () => () => {},
+    set: async () => true
   }
 
-  // 1. Inside <code> -> must remain 'Cancel'
-  const codeEl = new MockElement('code')
-  const nodeInCode = new MockTextNode('Cancel', codeEl)
-  applyOverrides(nodeInCode)
-  assert.equal(nodeInCode.nodeValue, 'Cancel', 'Code element text must remain unchanged')
+  const ctx = {
+    locale: runtime,
+    configForms: { get: () => scope },
+    slots: { inject: (n, f) => f(), register: () => {} },
+    effect: (cb) => cb(),
+    emit: () => {}
+  }
 
-  // 2. Inside <pre> -> must remain 'Cancel'
-  const preEl = new MockElement('pre')
-  const nodeInPre = new MockTextNode('Cancel', preEl)
-  applyOverrides(nodeInPre)
-  assert.equal(nodeInPre.nodeValue, 'Cancel', 'Pre element text must remain unchanged')
+  mod.apply(ctx)
 
-  // 3. Inside composer [contenteditable="true"] -> must remain 'Cancel'
-  const compEl = new MockElement('div', { contenteditable: 'true' })
-  const nodeInComp = new MockTextNode('Cancel', compEl)
-  applyOverrides(nodeInComp)
-  assert.equal(nodeInComp.nodeValue, 'Cancel', 'Contenteditable composer text must remain unchanged')
+  // Verify actual isProtectedTextNode and ZH_WALKER are exported from the bundle
+  const isProtectedTextNode = mod.isProtectedTextNode
+  const ZH_WALKER = mod.ZH_WALKER
+  assert.equal(typeof isProtectedTextNode, 'function', 'mod.isProtectedTextNode must be a function')
+  assert.equal(typeof ZH_WALKER, 'function', 'mod.ZH_WALKER must be a function')
 
-  // 4. Inside streaming turn -> must remain 'Cancel'
-  const streamEl = new MockElement('div', { 'data-chat-flow-status': 'running' })
-  const nodeInStream = new MockTextNode('Cancel', streamEl)
-  applyOverrides(nodeInStream)
-  assert.equal(nodeInStream.nodeValue, 'Cancel', 'Streaming turn text must remain unchanged')
+  // Setup DOM elements inside body
+  const codeEl = createElement('code')
+  const nodeInCode = createTextNode('Cancel')
+  codeEl.appendChild(nodeInCode)
+  bodyEl.appendChild(codeEl)
 
-  // 5. In regular UI <div> -> must be replaced with 'ПОДМЕНА'
-  const divEl = new MockElement('div')
-  const nodeInDiv = new MockTextNode('Cancel', divEl)
-  applyOverrides(nodeInDiv)
-  assert.equal(nodeInDiv.nodeValue, 'ПОДМЕНА', 'Regular UI text must be replaced by overrides')
+  const preEl = createElement('pre')
+  const nodeInPre = createTextNode('Cancel')
+  preEl.appendChild(nodeInPre)
+  bodyEl.appendChild(preEl)
+
+  const compEl = createElement('div', { contenteditable: 'true' })
+  const nodeInComp = createTextNode('Cancel')
+  compEl.appendChild(nodeInComp)
+  bodyEl.appendChild(compEl)
+
+  const composerAttrEl = createElement('div', { 'data-composer-input': 'true' })
+  const nodeInComposerAttr = createTextNode('Cancel')
+  composerAttrEl.appendChild(nodeInComposerAttr)
+  bodyEl.appendChild(composerAttrEl)
+
+  const streamEl = createElement('div', { 'data-chat-flow-status': 'running' })
+  const nodeInStream = createTextNode('Cancel')
+  streamEl.appendChild(nodeInStream)
+  bodyEl.appendChild(streamEl)
+
+  const inputEl = createElement('input')
+  const nodeInInput = createTextNode('Cancel')
+  inputEl.appendChild(nodeInInput)
+  bodyEl.appendChild(inputEl)
+
+  const textareaEl = createElement('textarea')
+  const nodeInTextarea = createTextNode('Cancel')
+  textareaEl.appendChild(nodeInTextarea)
+  bodyEl.appendChild(textareaEl)
+
+  const regularDiv = createElement('div')
+  const nodeInDiv = createTextNode('Cancel')
+  regularDiv.appendChild(nodeInDiv)
+  bodyEl.appendChild(regularDiv)
+
+  // 1. Direct unit verification of actual isProtectedTextNode from bundle
+  assert.equal(isProtectedTextNode(nodeInCode), true, 'node in <code> must be protected')
+  assert.equal(isProtectedTextNode(nodeInPre), true, 'node in <pre> must be protected')
+  assert.equal(isProtectedTextNode(nodeInComp), true, 'node in [contenteditable=true] must be protected')
+  assert.equal(isProtectedTextNode(nodeInComposerAttr), true, 'node in [data-composer-input] must be protected')
+  assert.equal(isProtectedTextNode(nodeInStream), true, 'node in [data-chat-flow-status=running] must be protected')
+  assert.equal(isProtectedTextNode(nodeInInput), true, 'node in <input> must be protected')
+  assert.equal(isProtectedTextNode(nodeInTextarea), true, 'node in <textarea> must be protected')
+  assert.equal(isProtectedTextNode(nodeInDiv), false, 'node in regular <div> must NOT be protected')
+
+  // 2. Execution of actual ZH_WALKER from bundle on document.body
+  ZH_WALKER(bodyEl)
+
+  assert.equal(nodeInCode.nodeValue, 'Cancel', 'Code text must remain unchanged')
+  assert.equal(nodeInPre.nodeValue, 'Cancel', 'Pre text must remain unchanged')
+  assert.equal(nodeInComp.nodeValue, 'Cancel', 'Composer text must remain unchanged')
+  assert.equal(nodeInComposerAttr.nodeValue, 'Cancel', 'data-composer-input text must remain unchanged')
+  assert.equal(nodeInStream.nodeValue, 'Cancel', 'Streaming text must remain unchanged')
+  assert.equal(nodeInInput.nodeValue, 'Cancel', 'Input text must remain unchanged')
+  assert.equal(nodeInTextarea.nodeValue, 'Cancel', 'Textarea text must remain unchanged')
+  assert.equal(nodeInDiv.nodeValue, 'ПОДМЕНА', 'Regular div text must be replaced with override')
 })

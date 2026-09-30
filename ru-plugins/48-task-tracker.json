@@ -35,7 +35,7 @@
     "tasks.descPlaceholder": "Подробное описание задачи…",
     "tasks.description": "Описание",
     "tasks.empty": "Задачи не найдены",
-    "tasks.emptyInFolder": "В папке нет задач ",
+    "tasks.emptyInFolder": "В папке «%s» нет задач",
     "tasks.folder": "Папка",
     "tasks.folderBtn": "Папка",
     "tasks.folders": "Папки",

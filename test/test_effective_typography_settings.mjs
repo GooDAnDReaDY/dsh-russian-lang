@@ -6,52 +6,132 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const clientPath = path.join(__dirname, '..', 'lib', 'client.js')
-const clientCode = fs.readFileSync(clientPath, 'utf-8')
+const bundle = fs.readFileSync(clientPath, 'utf-8')
 
-test('Issue #416: client.js defines unified resolveTypography with opt-in defaults', () => {
-  assert.ok(
-    clientCode.includes('const resolveTypography = (val) =>'),
-    'client.js must define resolveTypography'
-  )
-  assert.ok(
-    clientCode.includes('enabled: t.enabled === true'),
-    'resolveTypography must treat enabled as opt-in (enabled === true)'
-  )
-  assert.ok(
-    clientCode.includes('liveInput: t.liveInput === true'),
-    'resolveTypography must treat liveInput as opt-in (liveInput === true)'
-  )
-  assert.ok(
-    clientCode.includes('checkbox(effectiveTypo.liveInput && ruActive'),
-    'liveInput checkbox must use effectiveTypo.liveInput'
-  )
-})
+test('Issue #439 / #416: Actual resolveTypography function and SettingsCard use consistent opt-in defaults', () => {
+  let loadedDef = null
+  const mockWindow = {
+    __ModuleLoader__: { load(def) { loadedDef = def } }
+  }
 
-test('Issue #416: Empty and partial settings resolve to consistent disabled state in UI and runtime', () => {
-  const resolveTypography = (val) => {
-    const t = (val && val.typography) || {}
-    return {
-      enabled: t.enabled === true,
-      liveInput: t.liveInput === true,
-      yo: t.yo === true
+  const mockDoc = {
+    head: { appendChild() {} },
+    body: { childNodes: [] },
+    documentElement: { getAttribute: () => 'ru-RU', lang: 'ru' },
+    createElement: () => ({ style: {}, dataset: {}, appendChild() {} }),
+    getElementById: () => null,
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    addEventListener() {},
+    removeEventListener() {}
+  }
+
+  new Function('window', 'document', bundle)(mockWindow, mockDoc)
+  const def = mockWindow.__DEF__ || loadedDef
+  assert.ok(def && typeof def.factory === 'function')
+
+  let hookState = []
+  let hookIdx = 0
+  const mockReact = {
+    useState(init) {
+      const idx = hookIdx++
+      if (hookState[idx] === undefined) {
+        hookState[idx] = typeof init === 'function' ? init() : init
+      }
+      const setState = (next) => {
+        hookState[idx] = typeof next === 'function' ? next(hookState[idx]) : next
+      }
+      return [hookState[idx], setState]
+    },
+    useEffect(fn) { fn() },
+    useRef(init) { return { current: init } },
+    useCallback(fn) { return fn },
+    createElement(type, props, ...children) {
+      return { type, props: { ...props, children: children.flat() } }
     }
   }
 
-  // 1. Empty config {} -> all false
-  const empty = resolveTypography({})
-  assert.equal(empty.enabled, false)
-  assert.equal(empty.liveInput, false)
-  assert.equal(empty.yo, false)
+  const mod = def.factory((modName) => {
+    if (modName === 'react') return mockReact
+    return {}
+  })
 
-  // 2. Partial config { typography: { enabled: true } } -> only enabled is true
-  const partial = resolveTypography({ typography: { enabled: true } })
-  assert.equal(partial.enabled, true)
-  assert.equal(partial.liveInput, false)
-  assert.equal(partial.yo, false)
+  // 1. Direct unit verification of actual resolveTypography from the bundle
+  const resolveTypography = mod.resolveTypography
+  assert.equal(typeof resolveTypography, 'function', 'mod.resolveTypography must be a function exported by the bundle')
 
-  // 3. Explicit { typography: { liveInput: true } }
-  const live = resolveTypography({ typography: { liveInput: true } })
-  assert.equal(live.enabled, false)
-  assert.equal(live.liveInput, true)
-  assert.equal(live.yo, false)
+  // Empty config -> all false (strictly opt-in)
+  assert.deepEqual(resolveTypography({}), {
+    enabled: false,
+    liveInput: false,
+    yo: false
+  }, 'Empty config must resolve to all false')
+
+  // null or undefined -> all false
+  assert.deepEqual(resolveTypography(null), {
+    enabled: false,
+    liveInput: false,
+    yo: false
+  })
+  assert.deepEqual(resolveTypography(undefined), {
+    enabled: false,
+    liveInput: false,
+    yo: false
+  })
+
+  // Partial configs
+  assert.deepEqual(resolveTypography({ typography: { enabled: true } }), {
+    enabled: true,
+    liveInput: false,
+    yo: false
+  })
+
+  assert.deepEqual(resolveTypography({ typography: { liveInput: true } }), {
+    enabled: false,
+    liveInput: true,
+    yo: false
+  })
+
+  assert.deepEqual(resolveTypography({ typography: { yo: true } }), {
+    enabled: false,
+    liveInput: false,
+    yo: true
+  })
+
+  // Full config
+  assert.deepEqual(resolveTypography({ typography: { enabled: true, liveInput: true, yo: true } }), {
+    enabled: true,
+    liveInput: true,
+    yo: true
+  })
+
+  // 2. Component verification: SettingsCard rendered with partial config
+  const SettingsCard = mod.SettingsCard
+  assert.equal(typeof SettingsCard, 'function', 'SettingsCard must be exported by the bundle')
+
+  // Render with typography: { liveInput: true } (enabled is false)
+  hookIdx = 0
+  hookState = []
+  const scopeLive = {
+    getSnapshot: () => ({
+      status: 'ready',
+      writable: true,
+      value: { typography: { liveInput: true } }
+    }),
+    subscribe: () => () => {},
+    set: async () => true
+  }
+
+  const vdom = SettingsCard({
+    view: 'page',
+    inject: () => ({
+      scope: scopeLive,
+      runtime: {
+        getLocale: () => ({ active: 'ru' }),
+        subscribe: () => () => {}
+      }
+    })
+  })
+
+  assert.ok(vdom, 'SettingsCard must render JSX tree')
 })

@@ -234,9 +234,7 @@ check(all(isinstance(r, dict) and 'status' in r for r in recs),
 check(all(r.get('status') in ('draft', 'reviewed') for r in recs),
       'mt-registry: status принимает только draft или reviewed')
 
-if FAILS:
-    print('ПРОВАЛЕНО: %d' % len(FAILS))
-    sys.exit(1)
+# (Early FAILS gate moved to final end of file)
 
 # ---------- export_i18n / import_i18n ----------
 import export_i18n as exp
@@ -534,3 +532,71 @@ with tempfile.TemporaryDirectory() as tmpgit:
     # 5. Calling again when clean returns "без изменений"
     res_nochange = uc.git_commit_local(repo_path=tmpgit, push=False)
     check(res_nochange == 'без изменений', 'upstream_check: повторный запуск без изменений возвращает "без изменений"')
+
+
+# ---------- Issue #418: Printf specifier mismatch rejection (%s != %d) ----------
+printf_en = {'ns_fmt': {'msg': 'Value %s'}}
+printf_bad_ru = {'ns_fmt': {'msg': 'Число %d'}}
+po_printf_bad = exp.export_po(printf_en, printf_bad_ru)
+po_printf_failed = False
+try:
+    imp.parse_po(po_printf_bad, validate=True)
+except ValueError:
+    po_printf_failed = True
+check(po_printf_failed, 'import_i18n: parse_po выбрасывает ValueError при замене %s на %d')
+
+# ---------- Issue #431: Multiline PO continuation lines ----------
+po_multiline = '''
+msgctxt "ns_ml"
+#: ns_ml.key
+msgid ""
+"Hello "
+"{name}"
+msgstr ""
+"Привет "
+"{name}"
+'''
+ml_parsed = imp.parse_po(po_multiline)
+check(ml_parsed.get('ns_ml', {}).get('key') == 'Привет {name}', 'import_i18n: parse_po поддерживает многострочные msgid и msgstr')
+
+# ---------- Issue #431: Full metadata roundtrip (status, model, at, comment, context, en) ----------
+full_meta = {
+    'ns_meta_full': {
+        'btn_key': {
+            'status': 'reviewed',
+            'model': 'deepseek-chat',
+            'at': '2026-09-30T12:00:00',
+            'comment': 'Contextual note for translators',
+            'context': 'modal.button',
+            'en': 'Submit form'
+        }
+    }
+}
+meta_en = {'ns_meta_full': {'btn_key': 'Submit form'}}
+meta_ru = {'ns_meta_full': {'btn_key': 'Отправить форму'}}
+
+for fmt, exp_fn, parse_fn in [('PO', exp.export_po, imp.parse_po), ('XLIFF', exp.export_xliff, imp.parse_xliff), ('CSV', exp.export_csv, imp.parse_csv)]:
+    out = exp_fn(meta_en, meta_ru, full_meta)
+    _, m = parse_fn(out, return_meta=True)
+    rec = m.get('ns_meta_full', {}).get('btn_key', {})
+    for field in ('status', 'model', 'at', 'comment', 'context', 'en'):
+        check(rec.get(field) == full_meta['ns_meta_full']['btn_key'][field], f'export/import {fmt}: сохраняет метаданные поля {field}')
+
+# ---------- Issue #407: upstream_check dirty tree guard & GIT_BIN ----------
+with tempfile.TemporaryDirectory() as tmpgit:
+    subprocess.run([uc.GIT_BIN, 'init'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run([uc.GIT_BIN, 'config', 'user.name', 'Tester'], cwd=tmpgit, capture_output=True, check=True)
+    subprocess.run([uc.GIT_BIN, 'config', 'user.email', 'test@example.com'], cwd=tmpgit, capture_output=True, check=True)
+    with open(os.path.join(tmpgit, 'foreign.js'), 'w') as f:
+        f.write('console.log("foreign")')
+    dirty_paths = uc.get_dirty_paths(repo_path=tmpgit)
+    check('foreign.js' in dirty_paths, 'upstream_check: get_dirty_paths находит посторонние изменения')
+    check(uc.GIT_BIN in ('git-antigravity', 'git-codex', 'git'), 'upstream_check: использует GIT_BIN')
+
+# ---------- Issue #438: Final exit gate for all tests ----------
+if FAILS:
+    print('ПРОВАЛЕНО: %d' % len(FAILS))
+    sys.exit(1)
+else:
+    print('ВСЕ ТЕСТЫ ПРОЙДЕНЫ')
+    sys.exit(0)

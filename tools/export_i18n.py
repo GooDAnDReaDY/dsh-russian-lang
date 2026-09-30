@@ -62,18 +62,27 @@ def export_po(en_dict, ru_dict, meta_dict=None):
             status = meta.get('status')
             model = meta.get('model')
             at = meta.get('at')
+            comment = meta.get('comment')
+            context = meta.get('context')
+            if comment:
+                lines.append('# comment: %s' % comment)
+            if context:
+                lines.append('# context: %s' % context)
             if status:
                 lines.append('# dsh-status: %s' % status)
             if model:
                 lines.append('# dsh-model: %s' % model)
             if at:
                 lines.append('# dsh-at: %s' % at)
+            if not en_text:
+                lines.append('# dsh-no-en: 1')
             lines.append('msgctxt %s' % json.dumps(ns, ensure_ascii=False))
             lines.append('#: %s.%s' % (ns, key))
             lines.append('msgid %s' % json.dumps(en_text or key, ensure_ascii=False))
             lines.append('msgstr %s' % json.dumps(ru_text, ensure_ascii=False))
             lines.append('')
     return '\n'.join(lines)
+
 
 
 def export_xliff(en_dict, ru_dict, meta_dict=None):
@@ -95,17 +104,25 @@ def export_xliff(en_dict, ru_dict, meta_dict=None):
             status = meta.get('status')
             model = meta.get('model')
             at = meta.get('at')
+            comment = meta.get('comment')
+            context = meta.get('context')
 
             lines.append('      <trans-unit id="%s">' % unit_id)
             lines.append('        <context-group name="namespace">')
             lines.append('          <context context-type="namespace">%s</context>' % saxutils.escape(ns))
             lines.append('        </context-group>')
+            if comment:
+                lines.append('        <note from="dsh-comment">%s</note>' % saxutils.escape(comment))
+            if context:
+                lines.append('        <note from="dsh-context">%s</note>' % saxutils.escape(context))
             if status:
                 lines.append('        <note from="dsh-status">%s</note>' % saxutils.escape(status))
             if model:
                 lines.append('        <note from="dsh-model">%s</note>' % saxutils.escape(model))
             if at:
                 lines.append('        <note from="dsh-at">%s</note>' % saxutils.escape(at))
+            if not en_text:
+                lines.append('        <note from="dsh-no-en">1</note>')
             lines.append('        <source>%s</source>' % src)
             lines.append('        <target>%s</target>' % tgt)
             lines.append('      </trans-unit>')
@@ -115,12 +132,13 @@ def export_xliff(en_dict, ru_dict, meta_dict=None):
     return '\n'.join(lines)
 
 
+
 def export_csv(en_dict, ru_dict, meta_dict=None):
     if meta_dict is None:
         meta_dict = {}
     out = io.StringIO()
     writer = csv.writer(out)
-    writer.writerow(['namespace', 'key', 'en', 'ru', 'status', 'model', 'at'])
+    writer.writerow(['namespace', 'key', 'en', 'ru', 'status', 'model', 'at', 'comment', 'context'])
     for ns in sorted(ru_dict.keys()):
         for key, ru_text in sorted(ru_dict[ns].items()):
             en_text = en_dict.get(ns, {}).get(key, '')
@@ -128,8 +146,12 @@ def export_csv(en_dict, ru_dict, meta_dict=None):
             status = meta.get('status', '')
             model = meta.get('model', '')
             at = meta.get('at', '')
-            writer.writerow([ns, key, en_text, ru_text, status, model, at])
+            comment = meta.get('comment', '')
+            context = meta.get('context', '')
+            writer.writerow([ns, key, en_text, ru_text, status, model, at, comment, context])
     return out.getvalue()
+
+
 
 
 def main():

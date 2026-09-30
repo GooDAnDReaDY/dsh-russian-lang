@@ -40,6 +40,7 @@ GITEA_BASE = os.environ.get(
 ISSUE_PREFIX = 'chore(upstream):'
 SNAPSHOT = os.path.join(REPO, 'upstream', 'core-en.json')
 REPORT = os.path.join(REPO, 'upstream', 'report.md')
+GIT_BIN = os.environ.get('GIT_BIN') or ('git-antigravity' if shutil.which('git-antigravity') else ('git-codex' if shutil.which('git-codex') else 'git'))
 
 
 def npm_latest():
@@ -168,7 +169,7 @@ def alert(version, text, has_drift):
 
 def get_dirty_paths(repo_path=REPO):
     """Возвращает список изменённых или staged путей вне upstream/."""
-    r = subprocess.run(['git', 'status', '--porcelain'], cwd=repo_path,
+    r = subprocess.run([GIT_BIN, 'status', '--porcelain'], cwd=repo_path,
                        capture_output=True, text=True)
     if r.returncode != 0:
         return ['[git-error: %s]' % r.stderr.strip()]
@@ -194,19 +195,19 @@ def git_commit_local(repo_path=REPO, push=True):
     if foreign:
         return 'отменено: обнаружены сторонние изменения в рабочей копии (dirty tree): %s' % ', '.join(foreign[:5])
 
-    r_up = subprocess.run(['git', 'status', '--porcelain', '--', 'upstream'], cwd=repo_path,
+    r_up = subprocess.run([GIT_BIN, 'status', '--porcelain', '--', 'upstream'], cwd=repo_path,
                           capture_output=True, text=True)
     if r_up.returncode != 0:
         return 'git status failed: %s' % r_up.stderr.strip()[:160]
     if not r_up.stdout.strip():
         return 'без изменений'
 
-    add_res = subprocess.run(['git', 'add', '--', 'upstream'], cwd=repo_path,
+    add_res = subprocess.run([GIT_BIN, 'add', '--', 'upstream'], cwd=repo_path,
                              capture_output=True, text=True)
     if add_res.returncode != 0:
         return 'git add failed: %s' % add_res.stderr.strip()[:160]
 
-    cached = subprocess.run(['git', 'diff', '--cached', '--name-only'], cwd=repo_path,
+    cached = subprocess.run([GIT_BIN, 'diff', '--cached', '--name-only'], cwd=repo_path,
                             capture_output=True, text=True)
     if cached.returncode != 0:
         return 'git diff --cached failed: %s' % cached.stderr.strip()[:160]
@@ -215,7 +216,7 @@ def git_commit_local(repo_path=REPO, push=True):
     if non_upstream_staged:
         return 'отменено: в staging обнаружены посторонние файлы: %s' % ', '.join(non_upstream_staged[:5])
 
-    c = subprocess.run(['git', 'commit', '-m', 'chore(upstream): refresh snapshot + report', '--', 'upstream'],
+    c = subprocess.run([GIT_BIN, 'commit', '-m', 'chore(upstream): refresh snapshot + report', '--', 'upstream'],
                        cwd=repo_path, capture_output=True, text=True)
     if c.returncode != 0:
         return 'commit failed: %s' % c.stderr.strip()[:200]
@@ -223,7 +224,7 @@ def git_commit_local(repo_path=REPO, push=True):
     if not push:
         return 'закоммичено локально (push отключен)'
 
-    p = subprocess.run(['git', 'push', 'origin', 'HEAD:upstream/snapshot'],
+    p = subprocess.run([GIT_BIN, 'push', 'origin', 'HEAD:upstream/snapshot'],
                        cwd=repo_path, capture_output=True, text=True)
     if p.returncode != 0:
         return 'закоммичено локально, push в upstream/snapshot не удался: %s' % p.stderr.strip()[:160]
@@ -247,12 +248,15 @@ def main():
     has_drift = bool((added or removed or untranslated) and not first_run)
     text = report_md(version, added, removed, untranslated)
     if not args.dry_run:
+        foreign = get_dirty_paths()
+        if foreign:
+            print('отменено: обнаружены сторонние изменения в рабочей копии (dirty tree) до записи: %s' % ', '.join(foreign[:5]))
+            return
         with open(REPORT, 'w', encoding='utf-8') as f:
             f.write(text)
         if first_run:
             print('первый запуск: снапшот принят за базу, алерт не нужен')
         json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-    if not args.dry_run:
         print('снапшот:', git_commit_local())
     else:
         print('снапшот: dry-run (пропущен коммит)')

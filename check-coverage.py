@@ -19,11 +19,11 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
-PLACEHOLDER = re.compile(r'\{(\w+)\}')
+PLACEHOLDER = re.compile(r'\{[a-zA-Z0-9_]+\}|%(?:[0-9]+\$)?[+-]?\d*(?:\.\d+)?[hlLzjt]*[sdfiuoxXcp]')
 
 
 def placeholders(text):
-    """Set of {name} placeholders in a template string."""
+    """Set of placeholders in a template string (both {name} and %s/%d format specifiers)."""
     return set(PLACEHOLDER.findall(text or ''))
 
 
