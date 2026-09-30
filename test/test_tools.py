@@ -111,15 +111,16 @@ check(all(w for w in got), 'freq_refresh: нет пустых')
 
 # ---------- upstream_check (diff) ----------
 uc = load('upstream_check', os.path.join(TOOLS, 'upstream_check.py'))
-prev = {'ns': {'a': '1', 'b': '2', 'gone': '3'}}
+prev = {'ns': {'a': '1', 'b': '2', 'gone': '3'}, 'vanished_ns': {'k1': 'v1', 'k2': 'v2'}}
 curr = {'ns': {'a': '1', 'b2': '2x', 'c': '3'}}
 added, removed, untranslated = uc.diff(prev, curr, {'ns': {'a': 'раз'}})
 check(added.get('ns') == ['b2', 'c'], 'diff: новые ключи')
 check(removed.get('ns') == ['b', 'gone'], 'diff: удалённые ключи')
+check(removed.get('vanished_ns') == ['k1', 'k2'], 'diff: полностью удалённый namespace попадает в removed (#425)')
 check(untranslated.get('ns') == ['b2', 'c'], 'diff: непереведённые')
 
 rep = uc.report_md('9.9.9', added, removed, untranslated)
-check('Новых ключей: **2**' in rep and 'удалённых: **2**' in rep, 'report_md: счётчики')
+check('Новых ключей: **2**' in rep and 'удалённых: **4**' in rep, 'report_md: счётчики')
 
 # ---------- term_check ----------
 tc = load('term_check', os.path.join(TOOLS, 'term_check.py'))
