@@ -111,15 +111,16 @@ check(all(w for w in got), 'freq_refresh: нет пустых')
 
 # ---------- upstream_check (diff) ----------
 uc = load('upstream_check', os.path.join(TOOLS, 'upstream_check.py'))
-prev = {'ns': {'a': '1', 'b': '2', 'gone': '3'}}
+prev = {'ns': {'a': '1', 'b': '2', 'gone': '3'}, 'vanished_ns': {'k1': 'v1', 'k2': 'v2'}}
 curr = {'ns': {'a': '1', 'b2': '2x', 'c': '3'}}
 added, removed, untranslated = uc.diff(prev, curr, {'ns': {'a': 'раз'}})
 check(added.get('ns') == ['b2', 'c'], 'diff: новые ключи')
 check(removed.get('ns') == ['b', 'gone'], 'diff: удалённые ключи')
+check(removed.get('vanished_ns') == ['k1', 'k2'], 'diff: полностью удалённый namespace попадает в removed (#425)')
 check(untranslated.get('ns') == ['b2', 'c'], 'diff: непереведённые')
 
 rep = uc.report_md('9.9.9', added, removed, untranslated)
-check('Новых ключей: **2**' in rep and 'удалённых: **2**' in rep, 'report_md: счётчики')
+check('Новых ключей: **2**' in rep and 'удалённых: **4**' in rep, 'report_md: счётчики')
 
 # ---------- term_check ----------
 tc = load('term_check', os.path.join(TOOLS, 'term_check.py'))
@@ -309,6 +310,164 @@ with tempfile.TemporaryDirectory() as tmpdir:
     with open(out_existing, 'r', encoding='utf-8') as f:
         loaded = json.load(f)
     check(loaded.get('ns1', {}).get('greeting') == 'Привет, {name}', 'import_i18n: запись без --dry-run сохраняет валидный JSON')
+
+
+# Issue #418: import_i18n placeholder validation
+bad_ru = {'ns1': {'greeting': 'Привет, {wrong}', 'farewell': 'До свидания'}}
+bad_po = exp.export_po(sample_en, bad_ru)
+po_val_failed = False
+try:
+    imp.parse_po(bad_po, validate=True)
+except ValueError as e:
+    po_val_failed = True
+check(po_val_failed, 'import_i18n: parse_po выбрасывает ValueError при несовпадении плейсхолдеров')
+
+bad_xlf = exp.export_xliff(sample_en, bad_ru)
+xlf_val_failed = False
+try:
+    imp.parse_xliff(bad_xlf, validate=True)
+except ValueError as e:
+    xlf_val_failed = True
+check(xlf_val_failed, 'import_i18n: parse_xliff выбрасывает ValueError при несовпадении плейсхолдеров')
+
+bad_csv = exp.export_csv(sample_en, bad_ru)
+csv_val_failed = False
+try:
+    imp.parse_csv(bad_csv, validate=True)
+except ValueError as e:
+    csv_val_failed = True
+check(csv_val_failed, 'import_i18n: parse_csv выбрасывает ValueError при несовпадении плейсхолдеров')
+
+with tempfile.TemporaryDirectory() as tmpdir:
+    bad_po_file = os.path.join(tmpdir, 'bad.po')
+    out_target = os.path.join(tmpdir, 'out_fail.json')
+    with open(bad_po_file, 'w', encoding='utf-8') as f:
+        f.write(bad_po)
+
+    res_fail = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'po',
+        '--input', bad_po_file,
+        '--out-json', out_target
+    ], capture_output=True, text=True)
+    check(res_fail.returncode != 0, 'import_i18n CLI: ненулевой код возврата при битых плейсхолдерах')
+    check(not os.path.exists(out_target), 'import_i18n CLI: целевой файл не создаётся при ошибке валидации')
+    check('Placeholder mismatch in ns1.greeting' in res_fail.stderr, 'import_i18n CLI: имя ключа и ns выведены в stderr')
+
+
+# Issue #419: Dotted namespaces round-trip in PO and XLIFF
+dotted_en = {'settings.models.advanced': {'api.timeout': 'Timeout (s)', 'key.name': 'Key name'}}
+dotted_ru = {'settings.models.advanced': {'api.timeout': 'Таймаут (с)', 'key.name': 'Имя ключа'}}
+
+po_dotted = exp.export_po(dotted_en, dotted_ru)
+po_dotted_parsed = imp.parse_po(po_dotted)
+check('settings.models.advanced' in po_dotted_parsed, 'export/import PO: сохраняет вложенный namespace с точками')
+check(po_dotted_parsed.get('settings.models.advanced', {}).get('api.timeout') == 'Таймаут (с)', 'export/import PO: сохраняет ключ с точками во вложенном namespace')
+
+xlf_dotted = exp.export_xliff(dotted_en, dotted_ru)
+xlf_dotted_parsed = imp.parse_xliff(xlf_dotted)
+check('settings.models.advanced' in xlf_dotted_parsed, 'export/import XLIFF: сохраняет вложенный namespace с точками')
+check(xlf_dotted_parsed.get('settings.models.advanced', {}).get('api.timeout') == 'Таймаут (с)', 'export/import XLIFF: сохраняет ключ с точками во вложенном namespace')
+
+
+# Issue #420: Multiline values in CSV import
+multiline_en = {'ns_multi': {'key_nl': 'First line\nSecond line with {param}'}}
+multiline_ru = {'ns_multi': {'key_nl': 'Первая строка\nВторая строка с {param}'}}
+csv_multi = exp.export_csv(multiline_en, multiline_ru)
+csv_multi_parsed = imp.parse_csv(csv_multi)
+check(csv_multi_parsed.get('ns_multi', {}).get('key_nl') == 'Первая строка\nВторая строка с {param}', 'export/import CSV: сохраняет многострочные значения с переносом строк')
+
+
+# Issue #424: build.py --check orphan file detection
+locales_plugins_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib', 'locales', 'plugins')
+orphan_dummy = os.path.join(locales_plugins_dir, '999-orphan-dummy-test.json')
+try:
+    with open(orphan_dummy, 'w', encoding='utf-8') as f:
+        f.write('{"orphan": {}}')
+
+    res_orphan = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'build.py'),
+        '--check'
+    ], capture_output=True, text=True)
+    check(res_orphan.returncode != 0, 'build.py --check: завершается с ошибкой при наличии устаревших артефактов')
+    check('устаревшие артефакты в lib/locales/plugins/' in res_orphan.stderr, 'build.py --check: выводит предупреждение об устаревших артефактах в stderr')
+    check('999-orphan-dummy-test.json' in res_orphan.stderr, 'build.py --check: указывает имя файла сироты')
+finally:
+    if os.path.exists(orphan_dummy):
+        os.remove(orphan_dummy)
+
+
+# Issue #426: systemd install.sh replaces __REPO__ with actual repo path
+with tempfile.TemporaryDirectory() as tmpsystemd:
+    res_inst = subprocess.run(
+        ['bash', os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'systemd', 'install.sh')],
+        env=dict(os.environ, SYSTEMD_USER_DIR=tmpsystemd),
+        capture_output=True,
+        text=True
+    )
+    check(res_inst.returncode == 0, 'tools/systemd/install.sh: завершается успешно')
+    installed_service = os.path.join(tmpsystemd, 'dsh-upstream-check.service')
+    check(os.path.exists(installed_service), 'tools/systemd/install.sh: устанавливает service файл')
+    svc_content = open(installed_service, 'r', encoding='utf-8').read()
+    check('__REPO__' not in svc_content, 'tools/systemd/install.sh: заменяет плейсхолдер __REPO__')
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+    check(f'WorkingDirectory={repo_root}' in svc_content, 'tools/systemd/install.sh: содержит абсолютный путь к репозиторию')
+
+
+# Issue #431: Translation metadata export and import
+sample_meta = {
+    'ns_meta': {
+        'action_key': {
+            'status': 'reviewed',
+            'model': 'deepseek/deepseek-chat',
+            'at': '2026-09-30T12:00:00'
+        }
+    }
+}
+sample_en_meta = {'ns_meta': {'action_key': 'Save file'}}
+sample_ru_meta = {'ns_meta': {'action_key': 'Сохранить файл'}}
+
+# PO roundtrip with meta
+po_meta_out = exp.export_po(sample_en_meta, sample_ru_meta, sample_meta)
+check('# dsh-status: reviewed' in po_meta_out, 'export_po: экспортирует статус проверки в комментарии')
+po_trans, po_m = imp.parse_po(po_meta_out, return_meta=True)
+check(po_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_po: восстанавливает статус проверки')
+check(po_m.get('ns_meta', {}).get('action_key', {}).get('model') == 'deepseek/deepseek-chat', 'import_po: восстанавливает модель')
+
+# XLIFF roundtrip with meta
+xlf_meta_out = exp.export_xliff(sample_en_meta, sample_ru_meta, sample_meta)
+check('<note from="dsh-status">reviewed</note>' in xlf_meta_out, 'export_xliff: экспортирует статус проверки в note')
+xlf_trans, xlf_m = imp.parse_xliff(xlf_meta_out, return_meta=True)
+check(xlf_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_xliff: восстанавливает статус проверки')
+
+# CSV roundtrip with meta
+csv_meta_out = exp.export_csv(sample_en_meta, sample_ru_meta, sample_meta)
+check('reviewed' in csv_meta_out, 'export_csv: экспортирует статус проверки в колонку')
+csv_trans, csv_m = imp.parse_csv(csv_meta_out, return_meta=True)
+check(csv_m.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_csv: восстанавливает статус проверки')
+
+# CLI registry update test
+with tempfile.TemporaryDirectory() as tmpdir:
+    po_f = os.path.join(tmpdir, 'meta.po')
+    out_j = os.path.join(tmpdir, 'out.json')
+    reg_j = os.path.join(tmpdir, 'reg.json')
+    with open(po_f, 'w', encoding='utf-8') as f:
+        f.write(po_meta_out)
+
+    res_cli = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'tools', 'import_i18n.py'),
+        '--format', 'po',
+        '--input', po_f,
+        '--out-json', out_j,
+        '--registry', reg_j
+    ], capture_output=True, text=True)
+    check(res_cli.returncode == 0, 'import_i18n CLI: успешно импортирует PO с метаданными')
+    check(os.path.exists(reg_j), 'import_i18n CLI: создаёт/обновляет файл реестра')
+    reg_loaded = json.load(open(reg_j, encoding='utf-8'))
+    check(reg_loaded.get('ns_meta', {}).get('action_key', {}).get('status') == 'reviewed', 'import_i18n CLI: реестр содержит статус reviewed')
 
 
 # ---------- upstream_watch ----------

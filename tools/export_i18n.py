@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Экспорт словарей dsh-russian-lang в форматы PO, XLIFF 1.2 и CSV.
+"""Экспорт словарей dsh-russian-lang в форматы PO, XLIFF 1.2 и CSV с поддержкой метаданных.
 
 Использование:
   python3 tools/export_i18n.py --format po --out translations.po
@@ -35,7 +35,19 @@ def load_all_dicts():
     return en, ru
 
 
-def export_po(en_dict, ru_dict):
+def load_mt_registry():
+    p = os.path.join(REPO, 'mt-registry.json')
+    if os.path.exists(p):
+        try:
+            return json.load(open(p, encoding='utf-8'))
+        except Exception:
+            return {}
+    return {}
+
+
+def export_po(en_dict, ru_dict, meta_dict=None):
+    if meta_dict is None:
+        meta_dict = {}
     lines = [
         'msgid ""',
         'msgstr ""',
@@ -46,6 +58,17 @@ def export_po(en_dict, ru_dict):
     for ns in sorted(ru_dict.keys()):
         for key, ru_text in sorted(ru_dict[ns].items()):
             en_text = en_dict.get(ns, {}).get(key, '')
+            meta = meta_dict.get(ns, {}).get(key, {})
+            status = meta.get('status')
+            model = meta.get('model')
+            at = meta.get('at')
+            if status:
+                lines.append('# dsh-status: %s' % status)
+            if model:
+                lines.append('# dsh-model: %s' % model)
+            if at:
+                lines.append('# dsh-at: %s' % at)
+            lines.append('msgctxt %s' % json.dumps(ns, ensure_ascii=False))
             lines.append('#: %s.%s' % (ns, key))
             lines.append('msgid %s' % json.dumps(en_text or key, ensure_ascii=False))
             lines.append('msgstr %s' % json.dumps(ru_text, ensure_ascii=False))
@@ -53,7 +76,9 @@ def export_po(en_dict, ru_dict):
     return '\n'.join(lines)
 
 
-def export_xliff(en_dict, ru_dict):
+def export_xliff(en_dict, ru_dict, meta_dict=None):
+    if meta_dict is None:
+        meta_dict = {}
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">',
@@ -66,7 +91,21 @@ def export_xliff(en_dict, ru_dict):
             unit_id = saxutils.escape('%s.%s' % (ns, key))
             src = saxutils.escape(en_text or key)
             tgt = saxutils.escape(ru_text)
+            meta = meta_dict.get(ns, {}).get(key, {})
+            status = meta.get('status')
+            model = meta.get('model')
+            at = meta.get('at')
+
             lines.append('      <trans-unit id="%s">' % unit_id)
+            lines.append('        <context-group name="namespace">')
+            lines.append('          <context context-type="namespace">%s</context>' % saxutils.escape(ns))
+            lines.append('        </context-group>')
+            if status:
+                lines.append('        <note from="dsh-status">%s</note>' % saxutils.escape(status))
+            if model:
+                lines.append('        <note from="dsh-model">%s</note>' % saxutils.escape(model))
+            if at:
+                lines.append('        <note from="dsh-at">%s</note>' % saxutils.escape(at))
             lines.append('        <source>%s</source>' % src)
             lines.append('        <target>%s</target>' % tgt)
             lines.append('      </trans-unit>')
@@ -76,14 +115,20 @@ def export_xliff(en_dict, ru_dict):
     return '\n'.join(lines)
 
 
-def export_csv(en_dict, ru_dict):
+def export_csv(en_dict, ru_dict, meta_dict=None):
+    if meta_dict is None:
+        meta_dict = {}
     out = io.StringIO()
     writer = csv.writer(out)
-    writer.writerow(['namespace', 'key', 'en', 'ru'])
+    writer.writerow(['namespace', 'key', 'en', 'ru', 'status', 'model', 'at'])
     for ns in sorted(ru_dict.keys()):
         for key, ru_text in sorted(ru_dict[ns].items()):
             en_text = en_dict.get(ns, {}).get(key, '')
-            writer.writerow([ns, key, en_text, ru_text])
+            meta = meta_dict.get(ns, {}).get(key, {})
+            status = meta.get('status', '')
+            model = meta.get('model', '')
+            at = meta.get('at', '')
+            writer.writerow([ns, key, en_text, ru_text, status, model, at])
     return out.getvalue()
 
 
@@ -94,12 +139,13 @@ def main():
     args = ap.parse_args()
 
     en, ru = load_all_dicts()
+    meta = load_mt_registry()
     if args.format == 'po':
-        data = export_po(en, ru)
+        data = export_po(en, ru, meta)
     elif args.format == 'xliff':
-        data = export_xliff(en, ru)
+        data = export_xliff(en, ru, meta)
     elif args.format == 'csv':
-        data = export_csv(en, ru)
+        data = export_csv(en, ru, meta)
 
     with open(args.out, 'w', encoding='utf-8') as f:
         f.write(data)

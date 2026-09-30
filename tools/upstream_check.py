@@ -88,14 +88,12 @@ def diff(prev, curr, ru):
         missing = [k for k in entries if k not in ru.get(ns, {})]
         if missing:
             untranslated[ns] = sorted(missing)
-    stale = {}
+
+    # Issue #425: Detect completely removed namespaces (in prev, missing in curr)
     for ns, entries in sorted(prev.items()):
-        c_ns = curr.get(ns, {})
-        gone = [k for k in entries if k not in c_ns]
-        if gone and not any(k in c_ns for k in entries):
-            stale[ns] = sorted(gone)
-    for ns, keys in removed.items():
-        stale.pop(ns, None)
+        if ns not in curr:
+            removed[ns] = sorted(entries.keys())
+
     return added, removed, untranslated
 
 

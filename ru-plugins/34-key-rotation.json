@@ -256,7 +256,10 @@
     "removeModel": "Удалить этот пул модели",
     "tokenLimitHint": "Максимум токенов для этого ключа на модель за период квоты. Пусто = без ограничений.",
     "tokenLimitLabel": "Лимит токенов",
-    "tokenLimitPlaceholder": "без ограничений"
+    "tokenLimitPlaceholder": "без ограничений",
+    "tpmTitle": "токенов/мин: использовано {u}, осталось {r}",
+    "rpmLimitLabel": "Лимит частоты (RPM)",
+    "tpmLimitLabel": "Лимит частоты (TPM)"
   },
   "keyRotation": {
     "updateCheck": "Проверить обновления",
