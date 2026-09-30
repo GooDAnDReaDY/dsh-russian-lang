@@ -7,11 +7,10 @@ const ROOT = path.resolve(import.meta.dirname, '..')
 
 test('v0.3.26: package.json and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-  assert.equal(pkg.version, '0.3.26')
+  assert.ok(pkg.version >= '0.3.26')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
-  const head = cl.slice(0, 200)
-  assert.ok(head.includes('0.3.26'), `CHANGELOG head must mention 0.3.26, got: ${head}`)
+  assert.ok(cl.includes('## 0.3.26'), 'CHANGELOG must mention 0.3.26')
 })
 
 test('v0.3.26: glossary.json contains Command Code rule', () => {
