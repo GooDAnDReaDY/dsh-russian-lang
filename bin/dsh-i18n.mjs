@@ -6,6 +6,10 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function getPkgVersion() {
   try {
     const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
@@ -55,7 +59,7 @@ function extractKeys(targetDir, defaultNs = 'common') {
         walk(fullPath)
       } else if (entry.isFile() && extensions.has(path.extname(entry.name))) {
         const code = fs.readFileSync(fullPath, 'utf8')
-        const tMatches = code.matchAll(/\bt\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*\)/g)
+        const tMatches = code.matchAll(/\bt\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*[,)]/g)
         for (const m of tMatches) {
           result[defaultNs][m[1]] = result[defaultNs][m[1]] || ''
         }
@@ -88,6 +92,11 @@ function validateDict(filePath, glossaryPath) {
     return false
   }
 
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    console.error(`Ошибка структуры JSON в ${filePath}: корневой элемент должен быть объектом`)
+    return false
+  }
+
   let errors = []
   let warnings = []
   let totalKeys = 0
@@ -103,7 +112,7 @@ function validateDict(filePath, glossaryPath) {
   function checkString(ns, key, val) {
     totalKeys++
     if (typeof val !== 'string') {
-      errors.push(`[${ns}:${key}] Значение должно быть строкой, получено: ${typeof val}`)
+      errors.push(`[${ns}:${key}] Значение должно быть строкой, получено: ${val === null ? 'null' : Array.isArray(val) ? 'массив' : typeof val}`)
       return
     }
 
@@ -117,13 +126,12 @@ function validateDict(filePath, glossaryPath) {
     }
 
     if (glossary) {
-      const lower = val.toLowerCase()
       for (const [term, info] of Object.entries(glossary)) {
         if (Array.isArray(info.forbidden)) {
           for (const forbidden of info.forbidden) {
-            const fLow = forbidden.toLowerCase()
-            const re = new RegExp(`\\b${fLow}\\b`, 'i')
-            if (re.test(lower)) {
+            const esc = escapeRegExp(forbidden)
+            const re = new RegExp(`(?<=[^\\p{L}\\p{N}]|^)${esc}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
+            if (re.test(val)) {
               warnings.push(`[${ns}:${key}] Запрещённый термин по глоссарию "${forbidden}" (рекомендуется: "${info.canonical}")`)
             }
           }
@@ -134,10 +142,12 @@ function validateDict(filePath, glossaryPath) {
 
   for (const ns of Object.keys(data)) {
     const section = data[ns]
-    if (typeof section === 'object' && section !== null) {
-      for (const [k, v] of Object.entries(section)) {
-        checkString(ns, k, v)
-      }
+    if (!section || typeof section !== 'object' || Array.isArray(section)) {
+      errors.push(`[${ns}] Пространство имён должно быть объектом, получено: ${section === null ? 'null' : Array.isArray(section) ? 'массив' : typeof section}`)
+      continue
+    }
+    for (const [k, v] of Object.entries(section)) {
+      checkString(ns, k, v)
     }
   }
 
