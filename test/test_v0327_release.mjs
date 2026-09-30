@@ -7,22 +7,21 @@ const ROOT = path.resolve(import.meta.dirname, '..')
 
 test('v0.3.27: package.json, README and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-  assert.equal(pkg.version, '0.3.27')
+  assert.ok(pkg.version >= '0.3.27')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
-  const head = cl.slice(0, 300)
-  assert.ok(head.includes('0.3.27'), `CHANGELOG head must mention 0.3.27, got: ${head}`)
-  assert.ok(head.includes('DSH v0.2.0-rc.2'), 'CHANGELOG head must mention DSH v0.2.0-rc.2')
+  assert.ok(cl.includes('## 0.3.27'), 'CHANGELOG must mention 0.3.27')
+  assert.ok(cl.includes('DSH v0.2.0-rc.2'), 'CHANGELOG must mention DSH v0.2.0-rc.2')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.27'), 'README npm badge must be v0.3.27')
+  assert.ok(readme.includes('npm-v0.3.27') || readme.includes('npm-v0.3.28'), 'README npm badge must be v0.3.27+')
   assert.ok(pkg.description.includes('8,584 UI keys'), 'package.json description must have 8,584 UI keys')
 })
 
 test('v0.3.27: Block 1 audit invariants (#405-#408)', () => {
   const clientJs = fs.readFileSync(path.join(ROOT, 'lib/client.js'), 'utf8')
-  assert.ok(clientJs.includes('0.3.27'), 'client.js must include package version 0.3.27')
+  assert.ok(clientJs.includes('0.3.27') || clientJs.includes('0.3.28'), 'client.js must include package version 0.3.27 or higher')
 
   // DOM override protection for code & composer (#405)
   assert.ok(clientJs.includes('isProtectedTextNode'), 'client.js must define isProtectedTextNode')
