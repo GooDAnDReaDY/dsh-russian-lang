@@ -129,3 +129,25 @@ test('dsh-i18n CLI: validate находит запрещённые кирилл�
     fs.rmSync(tmpFile, { force: true })
   }
 })
+
+test('dsh-i18n CLI: extract извлекает ключи с параметрами (#423)', () => {
+  const tmpSrc = path.join(rootDir, 'test', '_tmp_src_params')
+  fs.mkdirSync(tmpSrc, { recursive: true })
+  const sampleCode = `
+    function render() {
+      const a = t('header.title', { user: 'Alice' })
+      const b = t('items.count', 42)
+      const c = t('simple.key')
+    }
+  `
+  fs.writeFileSync(path.join(tmpSrc, 'index.js'), sampleCode, 'utf8')
+  try {
+    const out = execFileSync(process.execPath, [binPath, 'extract', tmpSrc, '-n', 'param-ns'], { encoding: 'utf8' })
+    const parsed = JSON.parse(out)
+    assert.ok('header.title' in parsed['param-ns'])
+    assert.ok('items.count' in parsed['param-ns'])
+    assert.ok('simple.key' in parsed['param-ns'])
+  } finally {
+    fs.rmSync(tmpSrc, { recursive: true, force: true })
+  }
+})

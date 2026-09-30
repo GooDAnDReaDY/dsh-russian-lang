@@ -59,7 +59,7 @@ function extractKeys(targetDir, defaultNs = 'common') {
         walk(fullPath)
       } else if (entry.isFile() && extensions.has(path.extname(entry.name))) {
         const code = fs.readFileSync(fullPath, 'utf8')
-        const tMatches = code.matchAll(/\bt\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*\)/g)
+        const tMatches = code.matchAll(/\bt\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*[,)]/g)
         for (const m of tMatches) {
           result[defaultNs][m[1]] = result[defaultNs][m[1]] || ''
         }
