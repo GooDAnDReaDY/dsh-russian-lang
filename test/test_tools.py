@@ -378,6 +378,26 @@ csv_multi_parsed = imp.parse_csv(csv_multi)
 check(csv_multi_parsed.get('ns_multi', {}).get('key_nl') == 'Первая строка\nВторая строка с {param}', 'export/import CSV: сохраняет многострочные значения с переносом строк')
 
 
+# Issue #424: build.py --check orphan file detection
+locales_plugins_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'lib', 'locales', 'plugins')
+orphan_dummy = os.path.join(locales_plugins_dir, '999-orphan-dummy-test.json')
+try:
+    with open(orphan_dummy, 'w', encoding='utf-8') as f:
+        f.write('{"orphan": {}}')
+
+    res_orphan = subprocess.run([
+        sys.executable,
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'build.py'),
+        '--check'
+    ], capture_output=True, text=True)
+    check(res_orphan.returncode != 0, 'build.py --check: завершается с ошибкой при наличии устаревших артефактов')
+    check('устаревшие артефакты в lib/locales/plugins/' in res_orphan.stderr, 'build.py --check: выводит предупреждение об устаревших артефактах в stderr')
+    check('999-orphan-dummy-test.json' in res_orphan.stderr, 'build.py --check: указывает имя файла сироты')
+finally:
+    if os.path.exists(orphan_dummy):
+        os.remove(orphan_dummy)
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 

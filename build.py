@@ -142,6 +142,14 @@ print('Bootstrap namespace-ов: %d, ключей: %d -> lib/client.js' % (len(b
 locales_dir = os.path.join(HERE, 'lib', 'locales', 'plugins')
 os.makedirs(locales_dir, exist_ok=True)
 plugin_sources = sorted(glob.glob(os.path.join(HERE, 'ru-plugins', '*.json')))
+expected_plugin_bases = set(os.path.basename(p) for p in plugin_sources)
+
+if not CHECK_MODE:
+    for existing in glob.glob(os.path.join(locales_dir, '*.json')):
+        if os.path.basename(existing) not in expected_plugin_bases:
+            os.remove(existing)
+            print(f"Удалён устаревший артефакт: {existing}")
+
 for path in plugin_sources:
     part = json.load(open(path, encoding='utf-8'))
     filtered = {}
@@ -433,10 +441,22 @@ print('Проверка лимита размера DSH Store: все файлы
 
 
 if CHECK_MODE:
-    if diff_files:
-        print(f"FAIL: {len(diff_files)} файлов не синхронизированы со словарями ru/ и кодом build.py:", file=sys.stderr)
-        for df in diff_files:
-            print(f"  - {df}", file=sys.stderr)
+    orphan_files = []
+    if os.path.exists(locales_dir):
+        for existing in sorted(glob.glob(os.path.join(locales_dir, '*.json'))):
+            b = os.path.basename(existing)
+            if b not in expected_plugin_bases:
+                orphan_files.append(existing)
+
+    if diff_files or orphan_files:
+        if diff_files:
+            print(f"FAIL: {len(diff_files)} файлов не синхронизированы со словарями ru/ и кодом build.py:", file=sys.stderr)
+            for df in diff_files:
+                print(f"  - {df}", file=sys.stderr)
+        if orphan_files:
+            print(f"FAIL: обнаружены устаревшие артефакты в lib/locales/plugins/ (отсутствует исходник в ru-plugins/):", file=sys.stderr)
+            for of in orphan_files:
+                print(f"  - {of}", file=sys.stderr)
         print("Запустите `python3 build.py` для обновления сборки.", file=sys.stderr)
         sys.exit(1)
     else:
