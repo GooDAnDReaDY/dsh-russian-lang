@@ -46,6 +46,7 @@ def export_po(en_dict, ru_dict):
     for ns in sorted(ru_dict.keys()):
         for key, ru_text in sorted(ru_dict[ns].items()):
             en_text = en_dict.get(ns, {}).get(key, '')
+            lines.append('msgctxt %s' % json.dumps(ns, ensure_ascii=False))
             lines.append('#: %s.%s' % (ns, key))
             lines.append('msgid %s' % json.dumps(en_text or key, ensure_ascii=False))
             lines.append('msgstr %s' % json.dumps(ru_text, ensure_ascii=False))
@@ -67,6 +68,9 @@ def export_xliff(en_dict, ru_dict):
             src = saxutils.escape(en_text or key)
             tgt = saxutils.escape(ru_text)
             lines.append('      <trans-unit id="%s">' % unit_id)
+            lines.append('        <context-group name="namespace">')
+            lines.append('          <context context-type="namespace">%s</context>' % saxutils.escape(ns))
+            lines.append('        </context-group>')
             lines.append('        <source>%s</source>' % src)
             lines.append('        <target>%s</target>' % tgt)
             lines.append('      </trans-unit>')

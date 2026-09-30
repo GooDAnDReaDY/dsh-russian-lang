@@ -355,6 +355,21 @@ with tempfile.TemporaryDirectory() as tmpdir:
     check('Placeholder mismatch in ns1.greeting' in res_fail.stderr, 'import_i18n CLI: имя ключа и ns выведены в stderr')
 
 
+# Issue #419: Dotted namespaces round-trip in PO and XLIFF
+dotted_en = {'settings.models.advanced': {'api.timeout': 'Timeout (s)', 'key.name': 'Key name'}}
+dotted_ru = {'settings.models.advanced': {'api.timeout': 'Таймаут (с)', 'key.name': 'Имя ключа'}}
+
+po_dotted = exp.export_po(dotted_en, dotted_ru)
+po_dotted_parsed = imp.parse_po(po_dotted)
+check('settings.models.advanced' in po_dotted_parsed, 'export/import PO: сохраняет вложенный namespace с точками')
+check(po_dotted_parsed.get('settings.models.advanced', {}).get('api.timeout') == 'Таймаут (с)', 'export/import PO: сохраняет ключ с точками во вложенном namespace')
+
+xlf_dotted = exp.export_xliff(dotted_en, dotted_ru)
+xlf_dotted_parsed = imp.parse_xliff(xlf_dotted)
+check('settings.models.advanced' in xlf_dotted_parsed, 'export/import XLIFF: сохраняет вложенный namespace с точками')
+check(xlf_dotted_parsed.get('settings.models.advanced', {}).get('api.timeout') == 'Таймаут (с)', 'export/import XLIFF: сохраняет ключ с точками во вложенном namespace')
+
+
 # ---------- upstream_watch ----------
 import upstream_watch as uw
 
