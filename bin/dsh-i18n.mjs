@@ -6,6 +6,10 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 function getPkgVersion() {
   try {
     const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
@@ -122,13 +126,12 @@ function validateDict(filePath, glossaryPath) {
     }
 
     if (glossary) {
-      const lower = val.toLowerCase()
       for (const [term, info] of Object.entries(glossary)) {
         if (Array.isArray(info.forbidden)) {
           for (const forbidden of info.forbidden) {
-            const fLow = forbidden.toLowerCase()
-            const re = new RegExp(`\\b${fLow}\\b`, 'i')
-            if (re.test(lower)) {
+            const esc = escapeRegExp(forbidden)
+            const re = new RegExp(`(?<=[^\\p{L}\\p{N}]|^)${esc}(?=[^\\p{L}\\p{N}]|$)`, 'iu')
+            if (re.test(val)) {
               warnings.push(`[${ns}:${key}] Запрещённый термин по глоссарию "${forbidden}" (рекомендуется: "${info.canonical}")`)
             }
           }

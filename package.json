@@ -13,6 +13,7 @@
   "files": [
     "lib",
     "bin",
+    "glossary.json",
     "cordis.patch.yml",
     "README.md",
     "LICENSE"

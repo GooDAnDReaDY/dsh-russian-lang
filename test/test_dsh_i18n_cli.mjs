@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import path from 'node:path'
-import { execFileSync } from 'node:child_process'
+import { execFileSync, spawnSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -106,6 +106,25 @@ test('dsh-i18n CLI: validate отклоняет некорректную стр�
     assert.throws(() => {
       execFileSync(process.execPath, [binPath, 'validate', tmpFile], { encoding: 'utf8', stdio: 'pipe' })
     })
+  } finally {
+    fs.rmSync(tmpFile, { force: true })
+  }
+})
+
+test('dsh-i18n CLI: validate находит запрещённые кириллические термины из глоссария (#422)', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'))
+  assert.ok(pkg.files.includes('glossary.json'), 'glossary.json должен быть включён в package.json files')
+
+  const tmpFile = path.join(rootDir, 'test', '_tmp_cyrillic_term.json')
+  fs.writeFileSync(tmpFile, JSON.stringify({
+    demo: {
+      agent: 'Этот подагент выполняет задачу'
+    }
+  }), 'utf8')
+  try {
+    const res = spawnSync(process.execPath, [binPath, 'validate', tmpFile], { encoding: 'utf8' })
+    assert.equal(res.status, 0)
+    assert.ok((res.stdout + res.stderr).includes('Запрещённый термин по глоссарию "Подагент"'))
   } finally {
     fs.rmSync(tmpFile, { force: true })
   }
