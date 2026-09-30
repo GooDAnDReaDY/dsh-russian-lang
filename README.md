@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.27-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.28-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -52,9 +52,9 @@ graph LR
         DSH[Web UI Интерфейс] --> Loader[Загрузчик локализации dsh-russian-lang]
     end
 
-    subgraph TranslationLayer [Слой перевода и адаптации — 8576 ключей / 100% вычитано]
-        Loader --> CoreDict[58 Пространств имён ядра DSH / 2442 ключа]
-        Loader --> PluginDict[64 Плагина экосистемы DSH / 6134 ключа]
+    subgraph TranslationLayer [Слой перевода и адаптации — 8 584 ключа / 100% вычитано]
+        Loader --> CoreDict[58 Пространств имён ядра DSH / 2 442 ключа]
+        Loader --> PluginDict[43 Пространства имён плагинов DSH / 6 142 ключа]
         Loader --> PluralEngine[Движок грамматических Plural-форм: 1/2/5]
     end
 
@@ -178,12 +178,19 @@ dsh plugin --profile web add @goodandready/dsh-russian-lang
 ```yaml
 # Актуальный формат (DSH v0.2.0-rc.2+ / v0.1.7+):
 dsh-russian-lang:
-  enabled: true          # Русский язык интерфейса
-  typography:
-    enabled: true        # Ёлочки, длинные тире, неразрывные пробелы
-    yo: false            # Восстанавливать «ё» (по умолчанию выключено)
-  agentPrompt: false     # Просить агента отвечать по-русски
-  overrides: {}          # Свои значения для любых ключей перевода
+  enabled: true                    # Русский язык интерфейса (по умолчанию: true)
+  overrides: {}                    # Пользовательские оверрайды ключей (по умолчанию: {})
+  typography:                      # Интеллектуальная типографика (по умолчанию: все opt-in false)
+    enabled: false                 # Ёлочки, длинные тире, неразрывные пробелы
+    yo: false                      # Восстановление безопасной буквы «ё»
+    liveInput: false               # Живая типографика при вводе в текстовых полях
+  agentPrompt: false               # Системная инструкция агенту отвечать по-русски (по умолчанию: false)
+  agentPromptPreset: technical_expert # Пресет системного промпта (по умолчанию: technical_expert)
+  slashAliases: true               # Русские алиасы слэш-команд (/помощь, /очистить) (по умолчанию: true)
+  layoutConversion: true           # Детектор неверной раскладки и подсказка Alt+L (по умолчанию: true)
+  quickSwitch: true                # Быстрый переключатель RU/EN в статусной строке (по умолчанию: true)
+  translateEngine: local           # Движок перевода реплик: local (LibreTranslate) или cloud (Google) (по умолчанию: local)
+  localApiUrl: http://localhost:5000 # URL локального инстанса LibreTranslate (по умолчанию: http://localhost:5000)
 
 # Легаси-формат (DSH <= 0.1.6, поддерживается автоматически как fallback):
 # russian-lang:
@@ -193,16 +200,15 @@ dsh-russian-lang:
 
 Удобнее всего настраивать параметры визуально в интерфейсе: **Настройки → Плагины → Русская локализация**.
 
-Исправление раскладки (<kbd>Alt+L</kbd>) и браузерный спелчек включаются вместе с
-русским языком и отдельных ключей не имеют.
+Исправление раскладки (<kbd>Alt+L</kbd>) и русские алиасы слэш-команд включены по умолчанию (`true`) и могут быть индивидуально отключены в настройках (`layoutConversion: false`, `slashAliases: false`). Браузерный спелчек (`lang="ru-RU"`) активируется автоматически при выборе русской локали.
 
 ---
 
 ## 🛠 Разработка и зеркало репозитория
 
-Публичный репозиторий на GitHub является дистрибутивным зеркалом релизов `@goodandready/dsh-russian-lang`. Основная разработка, сборочный пайплайн и полный тестовый контур ведутся в закрытом репозитории проекта.
+Публичный репозиторий на GitHub является дистрибутивным зеркалом релизов `@goodandready/dsh-russian-lang`. Основная разработка, сборочный пайплайн и полный тестовый контур ведутся в основном Gitea-репозитории проекта.
 
-Pull Requests и Issues на GitHub приветствуются и обрабатываются в обычном порядке! Для внесения правок в логику клиента используйте `lib/client.template.js`. Запуск `npm test` в клоне репозитория проверяет синтаксис бандла через `node --check`.
+Pull Requests и Issues на GitHub приветствуются и обрабатываются в обычном порядке! Для внесения правок в логику клиента используйте `lib/client.template.js`. Запуск `npm test` в репозитории выполняет полную проверку (270+ модульных тестов Node.js, тесты сборщика, линтеры переводов и глоссария).
 
 ---
 

@@ -45,6 +45,115 @@ dsh-i18n (v${getPkgVersion()}) — Инструмент локализации �
 `)
 }
 
+function extractFromCode(code, result, defaultNs = 'common') {
+  let i = 0
+  const len = code.length
+
+  function skipWhitespace(idx) {
+    while (idx < len && /\s/.test(code[idx])) idx++
+    return idx
+  }
+
+  function readString(idx) {
+    const quote = code[idx]
+    if (quote !== "'" && quote !== '"' && quote !== '`') return null
+    let s = ''
+    idx++
+    while (idx < len) {
+      const ch = code[idx]
+      if (ch === '\\') {
+        if (idx + 1 < len) {
+          s += code[idx + 1]
+          idx += 2
+          continue
+        }
+      }
+      if (ch === quote) {
+        return { val: s, next: idx + 1 }
+      }
+      s += ch
+      idx++
+    }
+    return null
+  }
+
+  while (i < len) {
+    const ch = code[i]
+
+    // Single-line comment
+    if (ch === '/' && code[i + 1] === '/') {
+      i += 2
+      while (i < len && code[i] !== '\n') i++
+      continue
+    }
+
+    // Multi-line comment
+    if (ch === '/' && code[i + 1] === '*') {
+      i += 2
+      while (i < len && !(code[i] === '*' && code[i + 1] === '/')) i++
+      i += 2
+      continue
+    }
+
+    // String literals in normal code
+    if (ch === "'" || ch === '"' || ch === '`') {
+      const strRes = readString(i)
+      if (strRes) {
+        i = strRes.next
+        continue
+      }
+    }
+
+    // Check for word boundary identifier
+    const prevChar = i > 0 ? code[i - 1] : ' '
+    const isWordStart = !/[a-zA-Z0-9_$.]/.test(prevChar)
+
+    if (isWordStart) {
+      if (code.startsWith('translate', i) && !/[a-zA-Z0-9_$]/.test(code[i + 9] || '')) {
+        let j = skipWhitespace(i + 9)
+        if (code[j] === '(') {
+          j = skipWhitespace(j + 1)
+          const nsStr = readString(j)
+          if (nsStr) {
+            j = skipWhitespace(nsStr.next)
+            if (code[j] === ',') {
+              j = skipWhitespace(j + 1)
+              const keyStr = readString(j)
+              if (keyStr) {
+                j = skipWhitespace(keyStr.next)
+                if (code[j] === ',' || code[j] === ')') {
+                  const ns = nsStr.val
+                  const key = keyStr.val
+                  if (!result[ns]) result[ns] = {}
+                  result[ns][key] = result[ns][key] || ''
+                  i = j
+                  continue
+                }
+              }
+            }
+          }
+        }
+      } else if (code.startsWith('t', i) && !/[a-zA-Z0-9_$]/.test(code[i + 1] || '')) {
+        let j = skipWhitespace(i + 1)
+        if (code[j] === '(') {
+          j = skipWhitespace(j + 1)
+          const keyStr = readString(j)
+          if (keyStr) {
+            j = skipWhitespace(keyStr.next)
+            if (code[j] === ',' || code[j] === ')') {
+              result[defaultNs][keyStr.val] = result[defaultNs][keyStr.val] || ''
+              i = j
+              continue
+            }
+          }
+        }
+      }
+    }
+
+    i++
+  }
+}
+
 function extractKeys(targetDir, defaultNs = 'common') {
   const result = { [defaultNs]: {} }
   const extensions = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx'])
@@ -59,17 +168,7 @@ function extractKeys(targetDir, defaultNs = 'common') {
         walk(fullPath)
       } else if (entry.isFile() && extensions.has(path.extname(entry.name))) {
         const code = fs.readFileSync(fullPath, 'utf8')
-        const tMatches = code.matchAll(/\bt\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*[,)]/g)
-        for (const m of tMatches) {
-          result[defaultNs][m[1]] = result[defaultNs][m[1]] || ''
-        }
-        const transMatches = code.matchAll(/\btranslate\(\s*['"`]([a-zA-Z0-9_.-]+)['"`]\s*,\s*['"`]([a-zA-Z0-9_.-]+)['"`]/g)
-        for (const m of transMatches) {
-          const ns = m[1]
-          const key = m[2]
-          if (!result[ns]) result[ns] = {}
-          result[ns][key] = result[ns][key] || ''
-        }
+        extractFromCode(code, result, defaultNs)
       }
     }
   }
@@ -102,11 +201,26 @@ function validateDict(filePath, glossaryPath) {
   let totalKeys = 0
 
   let glossary = null
-  const gPath = glossaryPath || path.join(ROOT, 'glossary.json')
-  if (fs.existsSync(gPath)) {
+  if (glossaryPath) {
+    if (!fs.existsSync(glossaryPath)) {
+      console.error(`Ошибка: Файл глоссария не найден: ${glossaryPath}`)
+      return false
+    }
     try {
-      glossary = JSON.parse(fs.readFileSync(gPath, 'utf8')).terms || {}
-    } catch (_) {}
+      const parsed = JSON.parse(fs.readFileSync(glossaryPath, 'utf8'))
+      glossary = parsed.terms || parsed
+    } catch (err) {
+      console.error(`Ошибка чтения глоссария ${glossaryPath}: ${err.message}`)
+      return false
+    }
+  } else {
+    const defaultGPath = path.join(ROOT, 'glossary.json')
+    if (fs.existsSync(defaultGPath)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(defaultGPath, 'utf8'))
+        glossary = parsed.terms || parsed
+      } catch (_) {}
+    }
   }
 
   function checkString(ns, key, val) {
@@ -224,7 +338,8 @@ if (command === 'extract') {
   if (out) {
     fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true })
     fs.writeFileSync(path.resolve(out), jsonStr + '\n', 'utf8')
-    console.log(`✓ Извлечено ключей: ${Object.keys(extracted[ns] || {}).length} -> ${out}`)
+    const totalCount = Object.values(extracted).reduce((sum, nObj) => sum + Object.keys(nObj || {}).length, 0)
+    console.log(`✓ Извлечено ключей: ${totalCount} -> ${out}`)
   } else {
     console.log(jsonStr)
   }
