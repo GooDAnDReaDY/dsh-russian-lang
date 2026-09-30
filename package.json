@@ -12,6 +12,7 @@
   },
   "files": [
     "lib",
+    "!lib/client.template.js",
     "bin",
     "glossary.json",
     "cordis.patch.yml",
