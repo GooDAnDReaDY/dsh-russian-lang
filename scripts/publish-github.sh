@@ -20,7 +20,8 @@
 #   2. refuses to publish when a forbidden path or a required product file is missing;
 #   3. creates ONE commit on top of the mirror branch carrying the tree and pushes it
 #      as a normal fast-forward — never a force;
-#   4. prints the Gitea SHA -> mirror SHA correspondence for the release notes.
+#   4. if <gitea-ref> is a tag, pushes the sanitized tag to the mirror;
+#   5. prints the Gitea SHA -> mirror SHA correspondence for the release notes.
 #
 # Rewriting mirror history is a destructive operation on a published channel and is
 # deliberately not implemented. Removing a file from *past* mirror history requires
@@ -50,10 +51,20 @@ EXTRA_ALLOW=(
 FORBIDDEN=(
   "AGENTS.md"
   "index.md"
-  "deploy.sh"
+  "openwiki"
+  "supported-inventory.json"
+  "docs/design"
+  "docs/index.md"
+  "docs/plans"
+  "docs/superpowers"
   ".gitea"
+  ".github"
   ".worktrees"
   ".planning"
+  "tools"
+  "test"
+  "scripts"
+  "deploy.sh"
   "__pycache__"
   ".ruff_cache"
   ".venv"
@@ -87,7 +98,7 @@ cd "$REPO_DIR"
 ALLOW=("${EXTRA_ALLOW[@]}")
 while IFS= read -r entry; do
   [ -n "$entry" ] && ALLOW+=("${entry%/}" )
-done < <(git show "${gitea_ref:-origin/main}:package.json" | node -e '
+done < <(git show "${gitea_ref:-HEAD}:package.json" | node -e '
   let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{
     try{const p=JSON.parse(s);for(const f of (p.files||[])) if(!f.startsWith("!")) console.log(f.replace(/\/\*\*$/,""));}catch(e){}
   });')
@@ -123,7 +134,7 @@ echo "mirror     : $MIRROR_REMOTE/$MIRROR_BRANCH"
 echo
 
 if [ "$mode" = "check" ]; then
-  ref="${gitea_ref:-origin/main}"
+  ref="${gitea_ref:-HEAD}"
   echo "WILL BE PUBLISHED (sanitized tree of $ref):"
   list_tree "$ref" | sed 's/^/  /'
   echo
@@ -153,7 +164,7 @@ if list_tree "$gitea_ref" | while IFS= read -r path; do
   exit 3
 fi
 
-for required in package.json README.md; do
+for required in package.json README.md LICENSE lib/client.js lib/index.js; do
   if ! grep -qx "$required" "$sanitized_list"; then
     echo "refusing to publish: required product file missing: $required" >&2
     exit 4
@@ -189,7 +200,30 @@ new_tree="$(GIT_INDEX_FILE="$tmp_index" git write-tree)"
 new_commit="$(git commit-tree "$new_tree" -p "$mirror_sha" -m "chore(publish): sanitized tree from ${source_sha:0:8}")"
 echo "new mirror commit: $new_commit"
 
+# Post-commit verification: ensure no forbidden file exists in the commit
+echo "verifying mirror tree ($new_commit)..."
+forbidden_found=0
+while IFS= read -r fpath; do
+  if is_forbidden "$fpath"; then
+    echo "ERROR: forbidden file found in mirror tree: $fpath" >&2
+    forbidden_found=1
+  fi
+done < <(git ls-tree -r --name-only "$new_commit")
+
+if [ "$forbidden_found" -ne 0 ]; then
+  echo "refusing to push: mirror tree contains forbidden files!" >&2
+  exit 5
+fi
+
+# Push branch to mirror
 git push "$MIRROR_REMOTE" "$new_commit:refs/heads/$MIRROR_BRANCH"
+
+# If gitea_ref is a tag (starts with 'v' or exists as tag ref), push tag to mirror
+if [[ "$gitea_ref" =~ ^v[0-9] ]] || git rev-parse "refs/tags/$gitea_ref" >/dev/null 2>&1; then
+  tag_name="${gitea_ref#refs/tags/}"
+  echo "pushing sanitized tag to mirror: $tag_name"
+  git push "$MIRROR_REMOTE" "$new_commit:refs/tags/$tag_name"
+fi
 
 echo
 echo "correspondence to record in the release notes:"

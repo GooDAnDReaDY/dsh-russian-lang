@@ -48,6 +48,8 @@ jobs:
 
       - name: Coverage gate
         run: python3 check-coverage.py
+      - name: Data integrity & inventory check
+        run: python3 tools/check_data_integrity.py
 
       - name: Проверка размера npm-пакета (< 256 KiB Store limit)
         run: python3 tools/check_pack_size.py
