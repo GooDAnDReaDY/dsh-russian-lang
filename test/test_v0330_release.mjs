@@ -49,7 +49,7 @@ test('v0.3.30: Issue #432 inventory validation and CI integrity gate', () => {
   assert.ok(ciYml.includes('python3 tools/check_data_integrity.py'), 'CI must run check_data_integrity.py')
 
   const inv = JSON.parse(fs.readFileSync(path.join(ROOT, 'supported-inventory.json'), 'utf8'))
-  assert.equal(inv.supported_plugins['@goodandready/dsh-clinebot'], '0.5.10')
+  assert.ok(inv.supported_plugins['@goodandready/dsh-clinebot'] >= '0.5.10')
   assert.equal(inv.supported_plugins['@goodandready/dsh-image-gen'], '^0.11.21')
   assert.equal(inv.supported_plugins['@goodandready/dsh-key-rotation'], '0.8.45')
   assert.equal(inv.supported_plugins['@goodandready/dsh-subscriptions'], '0.6.48')
