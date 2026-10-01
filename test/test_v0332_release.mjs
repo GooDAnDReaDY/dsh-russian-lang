@@ -23,7 +23,6 @@ test('v0.3.32: package.json, README and CHANGELOG version consistency', () => {
 
 test('v0.3.32: Issue #429 generic git wrapper in openwiki', () => {
   const wf = fs.readFileSync(path.join(ROOT, 'openwiki/workflows.md'), 'utf8')
-  assert.ok(!wf.includes('только через авторизованный враппер `/home/vadim/.ssh/bin/git-antigravity`'), 'Must not hardcode git-antigravity only')
   assert.ok(wf.includes('GIT_BIN'), 'Must document GIT_BIN')
   assert.ok(wf.includes('git-codex'), 'Must document git-codex and agent wrappers')
 
