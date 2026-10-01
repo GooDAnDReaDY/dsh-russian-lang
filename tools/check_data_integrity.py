@@ -174,7 +174,8 @@ def check_supported_inventory(inv_data=None, base_dir=HERE, web_pkg_path=None):
                 with open(web_pkg_path, "r", encoding="utf-8") as f:
                     web_pkg = json.load(f)
                 deps = web_pkg.get("dependencies", {})
-                for pkg_name, installed_ver in deps.items():
+                drift_errors = []
+                for pkg_name, installed_ver in sorted(deps.items()):
                     if pkg_name == "@goodandready/dsh-russian-lang":
                         continue
                     if pkg_name in plugins:
@@ -183,14 +184,18 @@ def check_supported_inventory(inv_data=None, base_dir=HERE, web_pkg_path=None):
                         clean_supp_m = re.search(r"(\d+\.\d+\.\d+)", supp_ver)
                         if clean_inst_m and clean_supp_m:
                             if clean_inst_m.group(1) != clean_supp_m.group(1):
-                                print(f"FAIL: Дрейф версии {pkg_name}: inventory={supp_ver}, installed={installed_ver}!", file=sys.stderr)
-                                return False
+                                drift_errors.append(f"Дрейф версии {pkg_name}: inventory={supp_ver}, installed={installed_ver}!")
                         else:
                             clean_inst = str(installed_ver).lstrip("^~")
                             clean_supp = supp_ver.lstrip("^~")
                             if clean_inst != clean_supp:
-                                print(f"FAIL: Дрейф версии {pkg_name}: inventory={supp_ver}, installed={installed_ver}!", file=sys.stderr)
-                                return False
+                                drift_errors.append(f"Дрейф версии {pkg_name}: inventory={supp_ver}, installed={installed_ver}!")
+                    else:
+                        drift_errors.append(f"Плагин {pkg_name} установлен в профиле ({installed_ver}), но отсутствует в supported-inventory.json!")
+                if drift_errors:
+                    for err in drift_errors:
+                        print(f"FAIL: {err}", file=sys.stderr)
+                    return False
             except Exception as e:
                 print(f"WARN: Ошибка при чтении профиля web: {e}", file=sys.stderr)
         else:

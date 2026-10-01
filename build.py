@@ -274,7 +274,7 @@ card_ru = {
     'cardSub': 'Язык интерфейса, типографика, раскладка',
     'badgeRu': '🟢 RU активен',
     'badgeEn': '⚪ EN активен',
-    'badgeCoverage': '🟢 100% (8 584 ключа)',
+    'badgeCoverage': '🟢 100% (8 595 ключей)',
     'badgeSmartUx': '⚡ Smart UX активен',
     'badgeSmartUxOff': 'Smart UX выключен',
     'secLanguage': '🌐 Язык интерфейса',

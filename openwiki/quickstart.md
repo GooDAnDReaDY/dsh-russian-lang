@@ -27,7 +27,7 @@ dsh plugin --profile web add @goodandready/dsh-russian-lang
 После завершения установки перезапустите веб-службу DSH:
 
 ```bash
-systemctl --user restart dsh-web.service
+sudo systemctl restart dsh-web.service
 ```
 
 ## Горячие клавиши и управление

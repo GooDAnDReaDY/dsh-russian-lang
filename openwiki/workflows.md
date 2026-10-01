@@ -9,7 +9,7 @@ tags: [workflows, git, release, gitea, github]
 ## Разработка на MiniAI
 
 - Вся разработка ведётся исключительно на сервере MiniAI (`192.168.1.111`) под учётной записью `vadim`.
-- Git-операции выполняются только через авторизованный враппер `/home/vadim/.ssh/bin/git-antigravity`.
+- Git-операции в среде разработки выполняются через авторизованный враппер соответствующего агента (например, `/home/vadim/.ssh/bin/git-codex`, `git-opencode`, `git-antigravity` и т.д.) либо через переменную окружения `GIT_BIN`, обеспечивающую корректную аутентификацию в Gitea. Для человека-разработчика допустим штатный `git` с настроенным SSH-ключом доступа.
 - Базовый репозиторий: `goodandready/dsh-russian-lang` в Gitea.
 - Корневой DEV-каталог `/mnt/external/Project/DEV/dhsplugins/dsh-russian-lang` находится на ветке `main` и синхронизируется только fast-forward.
 - Разработка ведётся в изолированных Git worktrees: `.worktrees/<branch>`.

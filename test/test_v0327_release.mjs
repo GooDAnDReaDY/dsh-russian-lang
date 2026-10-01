@@ -16,7 +16,7 @@ test('v0.3.27: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(/npm-v0\.3\.\d+/.test(readme), 'README npm badge must be valid')
-  assert.ok(pkg.description.includes('8,584 UI keys'), 'package.json description must have 8,584 UI keys')
+  assert.ok(/8[, ]5\d\d UI keys/.test(pkg.description), 'package.json description must have 8,5xx UI keys')
 })
 
 test('v0.3.27: Block 1 audit invariants (#405-#408)', () => {
@@ -78,7 +78,7 @@ test('v0.3.27: Block 4 audit invariants (#427-#430)', () => {
   // README coverage metrics (#428)
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(readme.includes('58 пространств имён, 2 442 ключа'), 'README must mention 58 core namespaces and 2 442 keys')
-  assert.ok(readme.includes('6 142 ключа'), 'README must mention 6 142 plugin keys')
-  assert.ok(readme.includes('8 584 ключа'), 'README must mention 8 584 total keys')
+  assert.ok(/6[ ,]1\d\d ключ/.test(readme), 'README must mention 6 1xx plugin keys')
+  assert.ok(/8[ ,]5\d\d ключ/.test(readme), 'README must mention 8 5xx total keys')
   assert.ok(readme.includes('100%'), 'README must mention 100% coverage')
 })

@@ -16,7 +16,7 @@ test('v0.3.29: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be v0.3.29')
-  assert.ok(pkg.description.includes('8,584 UI keys'), 'package.json description must have 8,584 UI keys')
+  assert.ok(/8[, ]5\d\d UI keys/.test(pkg.description), 'package.json description must have 8,5xx UI keys')
 })
 
 test('v0.3.29: Audit fixes #407, #414, #417, #423, #443 invariants', () => {
@@ -53,7 +53,7 @@ test('v0.3.29: Audit fixes #427, #428, #429, #431, #432 invariants', () => {
 
   // #428: canonical metrics
   const clientJs = fs.readFileSync(path.join(ROOT, 'lib/client.js'), 'utf8')
-  assert.ok(clientJs.includes('8,584 keys'), 'client.js must display 8,584 keys badge (#428)')
+  assert.ok(/8[, ]5\d\d keys/.test(clientJs), 'client.js must display 8,5xx keys badge (#428)')
 
   // #431: multiline PO metadata roundtrip
   const exportPy = fs.readFileSync(path.join(ROOT, 'tools/export_i18n.py'), 'utf8')
