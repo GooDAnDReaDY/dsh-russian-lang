@@ -147,9 +147,17 @@ def parse_po(text, validate=True, return_meta=False):
             elif s.startswith('# dsh-at:'):
                 current_meta['at'] = s.split(':', 1)[1].strip()
             elif s.startswith('# dsh-comment:') or s.startswith('# comment:'):
-                current_meta['comment'] = s.split(':', 1)[1].strip()
+                val = s.split(':', 1)[1].strip()
+                if 'comment' in current_meta:
+                    current_meta['comment'] += '\n' + val
+                else:
+                    current_meta['comment'] = val
             elif s.startswith('# dsh-context:') or s.startswith('# context:'):
-                current_meta['context'] = s.split(':', 1)[1].strip()
+                val = s.split(':', 1)[1].strip()
+                if 'context' in current_meta:
+                    current_meta['context'] += '\n' + val
+                else:
+                    current_meta['context'] = val
             elif s.startswith('# dsh-en:'):
                 current_meta['en'] = s.split(':', 1)[1].strip()
             elif s.startswith('# dsh-no-en:'):

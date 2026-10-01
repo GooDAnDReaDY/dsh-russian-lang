@@ -9,7 +9,7 @@ if [ ! -f "$SOURCE_SERVICE" ]; then
   SOURCE_SERVICE="$REPO/tools/systemd/dsh-upstream-check.service"
 fi
 
-sed "s|__REPO__|$REPO|g" "$SOURCE_SERVICE" > "$TARGET_DIR/dsh-upstream-check.service"
+sed "s|__REPO__|$REPO|g; s|__HOME__|$HOME|g" "$SOURCE_SERVICE" > "$TARGET_DIR/dsh-upstream-check.service"
 cp -f "$REPO/tools/systemd/dsh-upstream-check.timer" "$TARGET_DIR/"
 
 EXPORT_RUNTIME="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"

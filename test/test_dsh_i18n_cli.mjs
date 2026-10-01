@@ -151,3 +151,34 @@ test('dsh-i18n CLI: extract извлекает ключи с параметра�
     fs.rmSync(tmpSrc, { recursive: true, force: true })
   }
 })
+
+test('dsh-i18n CLI: extract игнорирует nonliteral, regex, комментарии и извлекает member translate и nested template (#423)', () => {
+  const tmpSrc = path.join(rootDir, 'test', '_tmp_src_advanced')
+  fs.mkdirSync(tmpSrc, { recursive: true })
+  const sampleCode = `
+    // t('comment.fake', {})
+    /* t('multiline.fake') */
+    "t('string.fake')"
+    't(\'string2.fake\')'
+    t(\`dynamic.\${id}\`)
+    /t('regex.fake')/
+    runtime.translate('settings.models','title.main',{n:2})
+    \${t('nested.real')}
+    t(\`literal.key\`,{n:2})
+    t('normal.key', { count: 5 })
+  `
+  fs.writeFileSync(path.join(tmpSrc, 'index.js'), sampleCode, 'utf8')
+  try {
+    const out = execFileSync(process.execPath, [binPath, 'extract', tmpSrc, '-n', 'common'], { encoding: 'utf8' })
+    const parsed = JSON.parse(out)
+    assert.deepEqual(Object.keys(parsed['common']).sort(), ['literal.key', 'nested.real', 'normal.key'].sort())
+    assert.ok(parsed['settings.models'] && 'title.main' in parsed['settings.models'])
+    assert.ok(!('comment.fake' in parsed['common']))
+    assert.ok(!('multiline.fake' in parsed['common']))
+    assert.ok(!('string.fake' in parsed['common']))
+    assert.ok(!('regex.fake' in parsed['common']))
+    assert.ok(!('dynamic.${id}' in parsed['common']))
+  } finally {
+    fs.rmSync(tmpSrc, { recursive: true, force: true })
+  }
+})

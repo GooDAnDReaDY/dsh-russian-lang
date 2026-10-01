@@ -65,9 +65,11 @@ def export_po(en_dict, ru_dict, meta_dict=None):
             comment = meta.get('comment')
             context = meta.get('context')
             if comment:
-                lines.append('# comment: %s' % comment)
+                for c_line in comment.splitlines():
+                    lines.append('# comment: %s' % c_line)
             if context:
-                lines.append('# context: %s' % context)
+                for c_line in context.splitlines():
+                    lines.append('# context: %s' % c_line)
             if status:
                 lines.append('# dsh-status: %s' % status)
             if model:

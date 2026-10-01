@@ -40,20 +40,45 @@ GITEA_BASE = os.environ.get(
 ISSUE_PREFIX = 'chore(upstream):'
 SNAPSHOT = os.path.join(REPO, 'upstream', 'core-en.json')
 REPORT = os.path.join(REPO, 'upstream', 'report.md')
-GIT_BIN = os.environ.get('GIT_BIN') or ('git-antigravity' if shutil.which('git-antigravity') else ('git-codex' if shutil.which('git-codex') else 'git'))
+def _resolve_git_bin():
+    env = os.environ.get('GIT_BIN')
+    if env and os.path.basename(env) != 'git':
+        return env
+
+    for name in ('git-codex', 'git-antigravity'):
+        which_path = shutil.which(name)
+        if which_path and os.path.basename(which_path) != 'git':
+            return which_path
+        user_bin = os.path.expanduser(os.path.join('~', '.ssh', 'bin', name))
+        if os.path.isfile(user_bin) and os.access(user_bin, os.X_OK):
+            return user_bin
+
+    if os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true':
+        return shutil.which('git') or 'git'
+
+    raise RuntimeError(
+        "Git wrapper required (git-codex or git-antigravity), plain bare 'git' is strictly forbidden by DEV workflow"
+    )
+
+GIT_BIN = _resolve_git_bin()
 
 
 def npm_latest():
     tmp = tempfile.mkdtemp(prefix='dsh-upstream-', dir=os.path.expanduser('~'))
     try:
+        env = dict(os.environ)
+        for k in list(env.keys()):
+            if 'proxy' in k.lower() and '8118' in env[k]:
+                del env[k]
+
         subprocess.run(
             ['npm', 'install', '@deepseek-ai/dsh@latest', '--prefix', tmp,
-             '--no-audit', '--no-fund', '--loglevel=error'],
-            check=True, timeout=900,
+             '--ignore-scripts', '--no-audit', '--no-fund', '--prefer-offline', '--loglevel=error'],
+            check=True, timeout=600, env=env,
         )
         version = subprocess.run(
             ['node', '-p', "require('%s/node_modules/@deepseek-ai/dsh/package.json').version" % tmp],
-            check=True, capture_output=True, text=True, timeout=30,
+            check=True, capture_output=True, text=True, timeout=30, env=env,
         ).stdout.strip()
         paths = glob.glob(os.path.join(tmp, 'node_modules', '@deepseek-ai', '*', 'lib', 'client.js'))
         return version, harvest(paths)
