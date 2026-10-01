@@ -89,13 +89,14 @@
 
 ## Three Delivery Channels (Три канала поставки)
 1. **Приватный DEV-репозиторий (Gitea / MiniAI: 192.168.1.111)**:
-   - Полный исходный код, сборочные скрипты (`build.py`), тесты (`test/`), инструменты (`tools/`), внутренние инструкции (`AGENTS.md`, `docs/design/DESIGN.md`, `index.md`).
+   - Полный рабочий исходный код, сборочные скрипты (`build.py`), тесты (`test/`), инструменты (`tools/`), инвентарь (`supported-inventory.json`), внутренняя база знаний (`openwiki/**`), внутренние руководства (`AGENTS.md`, `docs/design/DESIGN.md`, `index.md`, `docs/index.md`).
 2. **Публичное зеркало GitHub (`GooDAnDReaDY/dsh-russian-lang`)**:
-   - Дистрибутивный релизный срез: исходные тексты переводов, документация `README.md`, скомпилированный бандл, манифест пакета.
-   - Исключаются внутренние инструменты, шаблоны сборки и служебные файлы (синхронизируется через `scripts/publish-github.sh`).
+   - Обезличенный дистрибутивный продуктовый срез: публичный `README.md`, `LICENSE`, `CHANGELOG.md`, скомпилированный `lib/client.js`, серверный `lib/index.js`, `glossary.json`, `cordis.patch.yml`, `package.json`.
+   - Синхронизация выполняется строго через `scripts/publish-github.sh --push <tag>` с проверкой отсутствия запрещённых файлов.
+   - Безусловно исключаются: `AGENTS.md`, `index.md`, `openwiki/**`, `docs/**` (кроме `docs/media`), `supported-inventory.json`, `.gitea/**`, `.worktrees/**`, сборочные скрипты и тесты.
 3. **Публичный пакет npm (`@goodandready/dsh-russian-lang`)**:
-   - Только продуктовые артефакты: `lib/`, `bin/`, `glossary.json`, `cordis.patch.yml`, `README.md`, `LICENSE` (заданы в `package.json:files`).
-   - Исключаются тестовые файлы, `lib/client.template.js`, скрипты сборки и внутренняя документация.
+   - Только продуктовые runtime-артефакты, определённые в `package.json:files`: `lib/`, `!lib/client.template.js`, `bin/`, `glossary.json`, `cordis.patch.yml`, `README.md`, `LICENSE`.
+   - Размер архива строго < 256 KiB (контролируется `check_pack_size.py`). Исключаются любые тесты, исходный шаблон `lib/client.template.js`, внутренняя документация и скрипты.
 
 ## Do / Don't
 - **Do**:

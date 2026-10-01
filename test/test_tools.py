@@ -593,6 +593,35 @@ with tempfile.TemporaryDirectory() as tmpgit:
     check('foreign.js' in dirty_paths, 'upstream_check: get_dirty_paths находит посторонние изменения')
     check(os.path.basename(uc.GIT_BIN) in ('git-antigravity', 'git-codex', 'git'), 'upstream_check: использует GIT_BIN')
 
+# ---------- Issue #432: Inventory validation (semver range, fake versions, drift) ----------
+try:
+    import check_data_integrity as cdi
+except ImportError:
+    sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'tools'))
+    import check_data_integrity as cdi
+
+inv_file = os.path.join(os.path.dirname(HERE), 'supported-inventory.json')
+with open(inv_file, 'r', encoding='utf-8') as f:
+    base_inv = json.load(f)
+
+# 1. Real inventory must pass
+check(cdi.check_supported_inventory(base_inv), 'check_data_integrity: валидный supported-inventory.json успешно проходит проверку')
+
+# 2. Out-of-range semver (e.g. 0.98.7) must fail
+fake_core_inv = json.loads(json.dumps(base_inv))
+fake_core_inv['core']['supported_version'] = '0.98.7'
+check(not cdi.check_supported_inventory(fake_core_inv), 'check_data_integrity: отвергает версию ядра 0.98.7 вне compatible_range')
+
+# 3. Fake 9999 version must fail
+fake_9999_inv = json.loads(json.dumps(base_inv))
+fake_9999_inv['core']['supported_version'] = '0.2.0-9999'
+check(not cdi.check_supported_inventory(fake_9999_inv), 'check_data_integrity: отвергает фиктивную версию ядра с 9999')
+
+# 4. satisfies_range unit checks
+check(cdi.satisfies_range('0.2.0-rc.2', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.2.0-rc.2 удовлетворяет >=0.2.0-rc.1 <0.3.0')
+check(not cdi.satisfies_range('0.98.7', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.98.7 не удовлетворяет >=0.2.0-rc.1 <0.3.0')
+check(not cdi.satisfies_range('0.1.1-rc.2', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.1.1-rc.2 не удовлетворяет >=0.2.0-rc.1 <0.3.0')
+
 # ---------- Issue #438: Final exit gate for all tests ----------
 if FAILS:
     print('ПРОВАЛЕНО: %d' % len(FAILS))
