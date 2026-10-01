@@ -6,7 +6,7 @@
     "supported_version": "0.2.0-rc.2",
     "compatible_range": ">=0.2.0-rc.1 <0.3.0",
     "namespaces_count": 58,
-    "keys_count": 2474
+    "keys_count": 2442
   },
   "metrics": {
     "total_keys": 8584,
@@ -26,10 +26,10 @@
     "@goodandready-private/dsh-task-tracker": "^0.2.8",
     "@goodandready/dsh-agent-loop-guard": "file:/mnt/external/Project/DEV/dhsplugins/dsh-agent-loop-guard/goodandready-dsh-agent-loop-guard-0.2.18.tgz",
     "@goodandready/dsh-approval-gate": "0.1.9",
-    "@goodandready/dsh-clinebot": "0.5.8",
+    "@goodandready/dsh-clinebot": "0.5.9",
     "@goodandready/dsh-context-lens": "0.1.28",
     "@goodandready/dsh-cost-meter": "0.8.10",
-    "@goodandready/dsh-cron": "file:/mnt/external/Project/DEV/dhsplugins/dsh-cron/goodandready-dsh-cron-0.2.31.tgz",
+    "@goodandready/dsh-cron": "0.2.32",
     "@goodandready/dsh-dsml-artifact-guard": "0.2.8",
     "@goodandready/dsh-gitea": "0.7.20",
     "@goodandready/dsh-github-ops": "0.2.9",
@@ -39,7 +39,7 @@
     "@goodandready/dsh-issue-reporter": "0.1.8",
     "@goodandready/dsh-kanban": "0.2.19",
     "@goodandready/dsh-key-limits": "^0.2.11",
-    "@goodandready/dsh-key-rotation": "0.8.40",
+    "@goodandready/dsh-key-rotation": "0.8.43",
     "@goodandready/dsh-lanmode": "0.8.15",
     "@goodandready/dsh-live-canvas": "0.2.22",
     "@goodandready/dsh-messenger-gateway": "0.4.9",

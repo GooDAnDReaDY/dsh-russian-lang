@@ -54,9 +54,10 @@ function extractFromCode(code, result, defaultNs = 'common') {
     return idx
   }
 
-  function readString(idx) {
-    const quote = code[idx]
-    if (quote !== "'" && quote !== '"' && quote !== '`') return null
+  // Parse static string literal: '...', "...", or static `...` (without ${...})
+  function readStaticString(idx) {
+    const q = code[idx]
+    if (q !== "'" && q !== '"' && q !== '`') return null
     let s = ''
     idx++
     while (idx < len) {
@@ -68,7 +69,11 @@ function extractFromCode(code, result, defaultNs = 'common') {
           continue
         }
       }
-      if (ch === quote) {
+      if (q === '`' && ch === '$' && code[idx + 1] === '{') {
+        // Dynamic template string: non-literal, do not extract
+        return null
+      }
+      if (ch === q) {
         return { val: s, next: idx + 1 }
       }
       s += ch
@@ -77,48 +82,165 @@ function extractFromCode(code, result, defaultNs = 'common') {
     return null
   }
 
+  let lastToken = ''
+  let hadNewline = true
+  const stack = []
+
   while (i < len) {
     const ch = code[i]
+
+    if (ch === '\n') {
+      hadNewline = true
+      i++
+      continue
+    }
+
+    // Inside template literal (outside ${...})
+    if (stack.length > 0 && stack[stack.length - 1].type === 'TEMPLATE') {
+      if (ch === '\\') {
+        i += 2
+        continue
+      }
+      if (ch === '$' && code[i + 1] === '{') {
+        i += 2
+        stack.push({ type: 'EXPR', braceDepth: 1 })
+        lastToken = '${'
+        hadNewline = false
+        continue
+      }
+      if (ch === '`') {
+        i++
+        stack.pop()
+        lastToken = '`'
+        hadNewline = false
+        continue
+      }
+      i++
+      continue
+    }
 
     // Single-line comment
     if (ch === '/' && code[i + 1] === '/') {
       i += 2
       while (i < len && code[i] !== '\n') i++
+      hadNewline = true
       continue
     }
 
     // Multi-line comment
     if (ch === '/' && code[i + 1] === '*') {
       i += 2
-      while (i < len && !(code[i] === '*' && code[i + 1] === '/')) i++
+      while (i < len && !(code[i] === '*' && code[i + 1] === '/')) {
+        if (code[i] === '\n') hadNewline = true
+        i++
+      }
       i += 2
       continue
     }
 
-    // String literals in normal code
-    if (ch === "'" || ch === '"' || ch === '`') {
-      const strRes = readString(i)
-      if (strRes) {
-        i = strRes.next
-        continue
+    // Regular expression literal
+    if (ch === '/') {
+      const isRegex = !lastToken || hadNewline ||
+        /^[(=:,;!&|?{}[\]~^%*+/<>-]$/.test(lastToken) ||
+        /^(return|throw|case|yield|await|typeof|void|delete)$/.test(lastToken)
+      if (isRegex) {
+        let j = i + 1
+        let inClass = false
+        while (j < len) {
+          if (code[j] === '\\') {
+            j += 2
+            continue
+          }
+          if (code[j] === '[') inClass = true
+          else if (code[j] === ']') inClass = false
+          else if (code[j] === '/' && !inClass) {
+            j++
+            while (j < len && /[a-z]/i.test(code[j])) j++
+            i = j
+            lastToken = 'regex'
+            hadNewline = false
+            break
+          } else if (code[j] === '\n') {
+            break
+          }
+          j++
+        }
+        if (lastToken === 'regex') continue
       }
     }
 
-    // Check for word boundary identifier
-    const prevChar = i > 0 ? code[i - 1] : ' '
-    const isWordStart = !/[a-zA-Z0-9_$.]/.test(prevChar)
+    // Quoted strings '...' or "..."
+    if (ch === "'" || ch === '"') {
+      const q = ch
+      let j = i + 1
+      while (j < len) {
+        if (code[j] === '\\') {
+          j += 2
+          continue
+        }
+        if (code[j] === q) {
+          j++
+          break
+        }
+        j++
+      }
+      i = j
+      lastToken = 'string'
+      hadNewline = false
+      continue
+    }
 
-    if (isWordStart) {
+    // Start of template literal `...`
+    if (ch === '`') {
+      i++
+      stack.push({ type: 'TEMPLATE' })
+      lastToken = '`'
+      hadNewline = false
+      continue
+    }
+
+    // Curly braces inside ${...}
+    if (ch === '{') {
+      if (stack.length > 0 && stack[stack.length - 1].type === 'EXPR') {
+        stack[stack.length - 1].braceDepth++
+      }
+      lastToken = '{'
+      hadNewline = false
+      i++
+      continue
+    }
+    if (ch === '}') {
+      if (stack.length > 0 && stack[stack.length - 1].type === 'EXPR') {
+        stack[stack.length - 1].braceDepth--
+        if (stack[stack.length - 1].braceDepth === 0) {
+          stack.pop() // Return to TEMPLATE
+          lastToken = '}'
+          hadNewline = false
+          i++
+          continue
+        }
+      }
+      lastToken = '}'
+      hadNewline = false
+      i++
+      continue
+    }
+
+    // Identifier or method call
+    const prevChar = i > 0 ? code[i - 1] : ' '
+    const isIdentStart = !/[a-zA-Z0-9_$]/.test(prevChar)
+
+    if (isIdentStart) {
       if (code.startsWith('translate', i) && !/[a-zA-Z0-9_$]/.test(code[i + 9] || '')) {
         let j = skipWhitespace(i + 9)
         if (code[j] === '(') {
           j = skipWhitespace(j + 1)
-          const nsStr = readString(j)
+          const nsStr = readStaticString(j)
           if (nsStr) {
             j = skipWhitespace(nsStr.next)
             if (code[j] === ',') {
               j = skipWhitespace(j + 1)
-              const keyStr = readString(j)
+              const keyStr = readStaticString(j)
               if (keyStr) {
                 j = skipWhitespace(keyStr.next)
                 if (code[j] === ',' || code[j] === ')') {
@@ -126,7 +248,9 @@ function extractFromCode(code, result, defaultNs = 'common') {
                   const key = keyStr.val
                   if (!result[ns]) result[ns] = {}
                   result[ns][key] = result[ns][key] || ''
-                  i = j
+                  i = keyStr.next
+                  lastToken = ')'
+                  hadNewline = false
                   continue
                 }
               }
@@ -137,16 +261,32 @@ function extractFromCode(code, result, defaultNs = 'common') {
         let j = skipWhitespace(i + 1)
         if (code[j] === '(') {
           j = skipWhitespace(j + 1)
-          const keyStr = readString(j)
+          const keyStr = readStaticString(j)
           if (keyStr) {
             j = skipWhitespace(keyStr.next)
             if (code[j] === ',' || code[j] === ')') {
               result[defaultNs][keyStr.val] = result[defaultNs][keyStr.val] || ''
-              i = j
+              i = keyStr.next
+              lastToken = ')'
+              hadNewline = false
               continue
             }
           }
         }
+      }
+    }
+
+    if (!/\s/.test(ch)) {
+      if (/[a-zA-Z0-9_$]/.test(ch)) {
+        let j = i
+        while (j < len && /[a-zA-Z0-9_$]/.test(code[j])) j++
+        lastToken = code.slice(i, j)
+        hadNewline = false
+        i = j
+        continue
+      } else {
+        lastToken = ch
+        hadNewline = false
       }
     }
 

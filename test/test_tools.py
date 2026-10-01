@@ -566,8 +566,8 @@ full_meta = {
             'status': 'reviewed',
             'model': 'deepseek-chat',
             'at': '2026-09-30T12:00:00',
-            'comment': 'Contextual note for translators',
-            'context': 'modal.button',
+            'comment': 'First line\nSecond line',
+            'context': 'Button\nOn dialog',
             'en': 'Submit form'
         }
     }
@@ -591,7 +591,7 @@ with tempfile.TemporaryDirectory() as tmpgit:
         f.write('console.log("foreign")')
     dirty_paths = uc.get_dirty_paths(repo_path=tmpgit)
     check('foreign.js' in dirty_paths, 'upstream_check: get_dirty_paths находит посторонние изменения')
-    check(uc.GIT_BIN in ('git-antigravity', 'git-codex', 'git'), 'upstream_check: использует GIT_BIN')
+    check(os.path.basename(uc.GIT_BIN) in ('git-antigravity', 'git-codex', 'git'), 'upstream_check: использует GIT_BIN')
 
 # ---------- Issue #438: Final exit gate for all tests ----------
 if FAILS:

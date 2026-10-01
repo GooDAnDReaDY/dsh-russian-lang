@@ -53,7 +53,7 @@
   4. Машинный перевод черновой (`mt-registry.json: draft`)
   5. Оригинальный английский текст из апстрима (`core-en.json`, `plugins-en.json`)
 - **Защита DOM (Protected DOM)**:
-  - Пропуск узлов с атрибутом `data-no-translate`
+  - Пропуск узлов с атрибутом `data-no-translate`, `data-no-translation` или CSS-классом `.no-translate`
   - Пропуск тегов `<pre>`, `<code>`, `<textarea>`, `<input>` (за исключением плейсхолдеров, если задан перевод)
   - DOM-замена китайских узлов (`zh_ru` карта) только при активной русской локали и для элементов сторонних плагинов, не поддерживающих i18n-ядро.
 
@@ -76,7 +76,7 @@
     6. `slashAliases`: `boolean`, default `true` — русские алиасы слэш-команд (/помощь, /очистить и др.).
     7. `layoutConversion`: `boolean`, default `true` — автоопределение неверной раскладки и подсказка <kbd>Alt+L</kbd>.
     8. `quickSwitch`: `boolean`, default `true` — быстрый переключатель RU/EN в строке состояния (<kbd>Alt+Shift+L</kbd>).
-    9. `translateEngine`: `'local' | 'cloud'`, default `'local'` — движок перевода реплик ассистента.
+    9. `translateEngine`: `'off' | 'local' | 'google'`, default `'off'` — движок перевода реплик ассистента.
     10. `localApiUrl`: `string`, default `'http://localhost:5000'` — URL локального инстанса LibreTranslate.
   - Защита от записи (Readonly Guard):
     - При `snap.writable === false` все интерактивные контролы (`importJsonBtn`, чекбоксы, кнопка сохранения в инспекторе) блокируются (`disabled: true`). Попытки вызова `scope.set` блокируются guards, а отказы промиса обрабатываются без сбоев интерфейса.

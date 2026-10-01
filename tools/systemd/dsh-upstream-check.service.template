@@ -5,7 +5,7 @@ After=network-online.target
 [Service]
 Type=oneshot
 WorkingDirectory=__REPO__
+Environment="PATH=__HOME__/.ssh/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="GIT_BIN=__HOME__/.ssh/bin/git-codex"
 ExecStart=/usr/bin/python3 tools/upstream_check.py
 TimeoutStartSec=1800
-# Прокси-окружение машины добавьте строками Environment= ниже,
-# чтобы npm ходил в сеть так же, как из интерактивной сессии.
