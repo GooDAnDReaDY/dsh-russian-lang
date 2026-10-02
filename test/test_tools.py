@@ -621,6 +621,10 @@ check(not cdi.check_supported_inventory(fake_9999_inv), 'check_data_integrity: �
 check(cdi.satisfies_range('0.2.0-rc.2', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.2.0-rc.2 удовлетворяет >=0.2.0-rc.1 <0.3.0')
 check(not cdi.satisfies_range('0.98.7', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.98.7 не удовлетворяет >=0.2.0-rc.1 <0.3.0')
 check(not cdi.satisfies_range('0.1.1-rc.2', '>=0.2.0-rc.1 <0.3.0'), 'check_data_integrity: 0.1.1-rc.2 не удовлетворяет >=0.2.0-rc.1 <0.3.0')
+check(cdi.parse_semver('0.02.0') is None, 'check_data_integrity: SemVer leading zero rejected')
+check(cdi.parse_semver('01.0.0') is None, 'check_data_integrity: SemVer major leading zero rejected')
+check(cdi.parse_semver('0.2.0-rc.01') is None, 'check_data_integrity: prerelease leading zero rejected')
+check(cdi.satisfies_range('0.2.0-rc.10', '>=0.2.0-rc.2 <0.3.0'), 'check_data_integrity: rc.10 >= rc.2 numeric prerelease')
 
 # ---------- Issue #438: Final exit gate for all tests ----------
 if FAILS:

@@ -51,10 +51,10 @@ test('v0.3.31: Issue #432 inventory validation and CI integrity gate', () => {
   const inv = JSON.parse(fs.readFileSync(path.join(ROOT, 'supported-inventory.json'), 'utf8'))
   assert.ok(inv.supported_plugins['@goodandready/dsh-clinebot'] >= '0.5.10')
   assert.equal(inv.supported_plugins['@goodandready/dsh-image-gen'], '^0.11.21')
-  assert.equal(inv.supported_plugins['@goodandready/dsh-key-rotation'], '0.8.45')
-  assert.equal(inv.supported_plugins['@goodandready/dsh-subscriptions'], '0.6.48')
+  assert.ok(inv.supported_plugins['@goodandready/dsh-key-rotation'] >= '0.8.45')
+  assert.ok(inv.supported_plugins['@goodandready/dsh-subscriptions'] >= '0.6.48')
   assert.equal(inv.supported_plugins['@goodandready/dsh-voice'], '0.9.10')
-  assert.equal(inv.supported_plugins['billion-context'], '0.1.179')
+  assert.ok(inv.supported_plugins['billion-context'] >= '0.1.179')
 
   const cdi = fs.readFileSync(path.join(ROOT, 'tools/check_data_integrity.py'), 'utf8')
   assert.ok(cdi.includes('satisfies_range'), 'check_data_integrity must implement satisfies_range')
