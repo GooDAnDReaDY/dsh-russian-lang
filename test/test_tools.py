@@ -626,6 +626,33 @@ check(cdi.parse_semver('01.0.0') is None, 'check_data_integrity: SemVer major le
 check(cdi.parse_semver('0.2.0-rc.01') is None, 'check_data_integrity: prerelease leading zero rejected')
 check(cdi.satisfies_range('0.2.0-rc.10', '>=0.2.0-rc.2 <0.3.0'), 'check_data_integrity: rc.10 >= rc.2 numeric prerelease')
 
+# 5. Issue #432: GitHub specifier ref validation and node_modules check
+with tempfile.TemporaryDirectory() as tmpweb:
+    pkg_json_path = os.path.join(tmpweb, 'package.json')
+    with open(pkg_json_path, 'w') as f:
+        json.dump({
+            "dependencies": {
+                "dsh-effort-slider": "github:2768651338/dsh-effort-slider#AUDIT_UNSUPPORTED_REF"
+            }
+        }, f)
+    nm_dir = os.path.join(tmpweb, 'node_modules', 'dsh-effort-slider')
+    os.makedirs(nm_dir, exist_ok=True)
+    with open(os.path.join(nm_dir, 'package.json'), 'w') as f:
+        json.dump({"name": "dsh-effort-slider", "version": "0.4.0"}, f)
+    check(not cdi.check_supported_inventory(base_inv, web_pkg_path=pkg_json_path),
+          'check_data_integrity: отвергает подмену commit-ish ref у github-зависимости (#AUDIT_UNSUPPORTED_REF)')
+
+with tempfile.TemporaryDirectory() as tmpweb2:
+    pkg_json_path2 = os.path.join(tmpweb2, 'package.json')
+    with open(pkg_json_path2, 'w') as f:
+        json.dump({
+            "dependencies": {
+                "dsh-effort-slider": "github:2768651338/dsh-effort-slider#main"
+            }
+        }, f)
+    check(not cdi.check_supported_inventory(base_inv, web_pkg_path=pkg_json_path2),
+          'check_data_integrity: отвергает отсутствие node_modules у github-зависимости')
+
 # ---------- Issue #438: Final exit gate for all tests ----------
 if FAILS:
     print('ПРОВАЛЕНО: %d' % len(FAILS))
