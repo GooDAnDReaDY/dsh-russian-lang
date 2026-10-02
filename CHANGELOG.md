@@ -1,3 +1,18 @@
+## 0.3.33 — 2026-10-02 [DSH v0.2.0-rc.2]
+
+### Устранение замечаний аудита (#432)
+- **Строгий SemVer 2.0.0 (§2, §9, §11)**:
+  - Запрет ведущих нулей в MAJOR, MINOR, PATCH (0.02.0 -> None).
+  - Запрет ведущих нулей в числовых идентификаторах prerelease (rc.01 -> None).
+  - Числовое сравнение идентификаторов prerelease: 0.2.0-rc.10 >= 0.2.0-rc.2.
+- **Проверка resolved-версий из node_modules**:
+  - tools/check_data_integrity.py теперь считывает фактически установленные package.json в node_modules профиля web, обнаруживая дрейф даже при совпадающих caret/tilde спецификаторах в dependencies.
+- **Строгий EN identity gate**:
+  - Полная проверка идентичности ключей ядра между upstream/core-en.json и lib/locales/core.json с предотвращением подмены ключей (например, AUDIT_UNSUPPORTED_KEY).
+  - Проверка идентичности ключей плагинов между plugins-en.json и lib/locales/plugins/.
+- **Синхронизация каталога**:
+  - supported-inventory.json синхронизирован с установленными версиями: @goodandready/dsh-key-rotation (0.8.46), @goodandready/dsh-subscriptions (0.6.49), billion-context (0.1.180).
+
 ## 0.3.32 — 2026-10-02 [DSH v0.2.0-rc.2]
 
 ### Исправление замечаний аудита (#429, #432, #446)
@@ -1174,6 +1189,22 @@ Hotfix-релиз: восстановление работоспособност
 - fix(client): guard settings.plugin.item slot (hotfix #85) already in 0.1.18+main, keep in release
 
 # Changelog
+
+## 0.3.33
+
+- **Strict SemVer 2.0.0 compliance (#432)**:
+  - Disallowed leading zeroes in major, minor, patch per SemVer 2.0.0 §2 (`parse_semver("0.02.0")` returns `None`).
+  - Disallowed leading zeroes in numeric prerelease identifiers per SemVer 2.0.0 §9 (`parse_semver("0.2.0-rc.01")` returns `None`).
+  - Implemented numeric comparison for prerelease identifiers per SemVer 2.0.0 §11.4 (`0.2.0-rc.10 >= 0.2.0-rc.2`).
+- **Resolved installed version validation in node_modules (#432)**:
+  - `tools/check_data_integrity.py` now resolves effective versions directly from `node_modules/<pkg>/package.json` in addition to declared `dependencies`.
+  - Accurately detects version drift when packages are installed with caret/tilde or file specifiers.
+- **Strict EN identity gate (#432)**:
+  - Validates complete key identity between `upstream/core-en.json` and Russian locales (`lib/locales/core.json`).
+  - Rejects foreign/unsupported keys substituted into upstream catalog even with matching counts.
+  - Validates plugin keys identity between `plugins-en.json` and `lib/locales/plugins/`.
+- **Inventory synchronization (#432)**:
+  - Synchronized `supported-inventory.json` with live profile: `@goodandready/dsh-key-rotation` (0.8.46), `@goodandready/dsh-subscriptions` (0.6.49), `billion-context` (0.1.180).
 
 ## 0.1.18 (2026-08-29) — hotfix
 
