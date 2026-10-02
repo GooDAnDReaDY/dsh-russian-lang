@@ -1,3 +1,24 @@
+## 0.3.34 — 2026-10-02 [DSH v0.2.0-rc.2]
+
+### 🛡️ Устранение обхода валидации GitHub-источников (#432)
+- **Строгая проверка commit-ish (#ref)**: в `tools/check_data_integrity.py` прекращено отбрасывание fragment (`split('#')[0]`). Зависимости со спецификатором `github:` теперь сверяются целиком с рефом (`github:owner/repo#ref`).
+- **Проверка фактического наличия в `node_modules`**: для всех `github:` зависимостей валидируется физическое присутствие пакета в `node_modules/<pkg>/package.json`.
+
+### 🌐 Русская локализация dsh-clinebot v0.5.9 (#441)
+- Добавлен 21 новый ключ перевода для интерфейса `dsh-clinebot` в `ru-plugins/40-clinebot.json`:
+  - Квоты: `quota.window_monthly`, `quota.countdown`, `quota.warning_low`, `quota.exhausted_5h`, `quota.warning_5h`, `quota.warning_weekly`, `quota.warning_monthly`, `quota.resetting`.
+  - Модели и мышление: `models.reasoning_tag`, `models.effort_low`, `models.effort_medium`, `models.effort_high`, `models.effort_max`, `models.caps_vision`, `models.caps_general`, `models.caps_coding`.
+  - Диагностика и UI: `diag.smoke_result`, `diag.empty`, `ui.error_title`, `ui.retry`, `update.check_failed`, `update.retry`.
+
+### 🔄 Синхронизация реестра экосистемы (supported-inventory.json)
+- Обновлены версии плагинов в соответствии с актуальным окружением:
+  - `@goodandready/dsh-clinebot`: `0.5.12`
+  - `@goodandready/dsh-image-gen`: `^0.11.23`
+  - `@goodandready/dsh-key-rotation`: `0.8.47`
+  - `@goodandready/dsh-subscriptions`: `0.6.50`
+  - `@goodandready/dsh-voice`: `0.9.14`
+  - `@wenaixi/dsh-superpower`: `7.1.1`
+
 ## 0.3.33 — 2026-10-02 [DSH v0.2.0-rc.2]
 
 ### Устранение замечаний аудита (#432)

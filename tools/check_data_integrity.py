@@ -284,13 +284,17 @@ def check_supported_inventory(inv_data=None, base_dir=HERE, web_pkg_path=None):
                     if pkg_name in plugins:
                         supp_ver = str(plugins[pkg_name])
 
-                        # Если inventory указывает github: спецификатор
-                        if supp_ver.startswith("github:"):
-                            clean_supp = supp_ver.split("#")[0]
-                            clean_decl = str(declared_ver).split("#")[0]
-                            if clean_supp != clean_decl:
+                        # Если inventory указывает github: спецификатор или declared является github:
+                        if supp_ver.startswith("github:") or str(declared_ver).startswith("github:"):
+                            # Строго проверяем спецификатор целиком с commit-ish (#ref) без отбрасывания fragment (#432)
+                            if supp_ver != str(declared_ver):
                                 drift_errors.append(
                                     f"Дрейф спецификатора {pkg_name}: inventory={supp_ver}, declared={declared_ver}!"
+                                )
+                            # Проверяем фактическое наличие установленного пакета в node_modules
+                            if resolved_ver is None:
+                                drift_errors.append(
+                                    f"Пакет {pkg_name} ({declared_ver}) не установлен в node_modules!"
                                 )
                             continue
 
