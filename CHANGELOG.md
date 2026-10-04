@@ -1,3 +1,45 @@
+## 0.3.35 — 2026-10-04 [DSH v0.2.1-alpha.1]
+
+### 🚀 Поддержка ядра DeepSeek Harness v0.2.1-alpha.1 (70 новых ключей)
+- **Новый namespace `session-inspector` (52 ключа)**:
+  - Создан словарь `ru/13-session-inspector.json` для встроенного бокового инспектора сессий.
+  - Поддержка интерактивного пикера элементов чата (`picker.pick`, `picker.instructions`, `picker.cancel`, `picker.noMatch`).
+  - Фильтрация и поиск по типам логов (`filter.title`, `filter.input`, `filter.candidates`, `filter.context`).
+  - Просмотр структуры иерархии хода/шага/узла/группы (`object.turn`, `object.step`, `object.node`, `object.group`).
+  - Навигация и таблица журнала с автоскроллом (`table.latest`, `table.older`, `table.raw`).
+- **Расширение `pluginManager` (8 ключей)**:
+  - Выбор способа установки плагинов, поддержка встроенных/внешних источников.
+  - Предупреждение о политике цепочки поставок pnpm `minimumReleaseAge` с сохранением параметров `{installed}`, `{version}`, `{exact}`.
+- **Режим Создателя `settings.agentPreset` (6 ключей)**:
+  - Локализация меню Creator mode для автономной разработки плагинов агентом.
+- **Рабочая область `workspace` (2 ключа)**:
+  - Сообщения инициализации черновиков (`draft.workspaceRequired`, `draft.initializationFailed`).
+- **Напоминания `schedule.manager` (1 ключ + 1 обновление)**:
+  - Уведомление о сессиях субагентов (`timing.subagentSession`).
+  - Уточнение EN-формулировки `detail.records` ("Записи").
+- **Настройки аккаунта `settings.account` (1 ключ)**:
+  - Сообщение `noResponse` о сетевых сбоях.
+- **Уточнение `conversation`**:
+  - `tool.preparing.content` синхронизирован с оригиналом `"{kilobytes} КБ"`.
+
+### 🧩 Локализация обновлений экосистемы плагинов (32 новых ключа)
+- **Новый namespace `dsh-superpower` (18 ключей)**:
+  - Создан словарь `ru-plugins/86-superpower.json` для `@wenaixi/dsh-superpower` v7.3.0.
+  - Управление индивидуальной видимостью и переключателями 15 навыков комплекта для модели и пользователя.
+- **`settings.pluginConsole` (7 ключей)**:
+  - Функции фиксации плагинов в манифесте/lock-файле в один клик (`actionPersistLabel`, `installedNotPersisted`, `diagNotPersisted`).
+  - Счётчики и пагинация маркетплейса плагинов (`marketCount`, `marketTruncated`).
+- **`dsh-context` (4 ключа)**:
+  - Локализация графика динамики и кривой активной длительности шагов (`settings.durationCurve`, `trend.durationTip`).
+- **`dsh-image-gen` (3 ключа)**:
+  - Поддержка пользовательских графов воркфлоу ComfyUI (`f.comfyWorkflowJson`, `f.comfyWorkflowJsonHint`).
+  - Обновление модели по умолчанию на `gemini-3.1-flash-image`.
+
+### 🔄 Синхронизация инвентаря и баннер
+- В `supported-inventory.json` синхронизированы 18 пакетов с дрейфом версий в боевом профиле.
+- Обновлён промо-баннер `docs/media/banner.jpg` (DSH v0.2.1-ALPHA.1, 8 697 ключей UI, 2 512 ядра, 6 185 плагинов).
+- 100.0% эффективное покрытие (8,697/8,697 ключей, 103 пространства имён).
+
 ## 0.3.34 — 2026-10-02 [DSH v0.2.0-rc.2]
 
 ### 🛡️ Устранение обхода валидации GitHub-источников (#432)

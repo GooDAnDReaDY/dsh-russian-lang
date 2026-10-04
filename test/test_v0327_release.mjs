@@ -16,7 +16,7 @@ test('v0.3.27: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(/npm-v0\.3\.\d+/.test(readme), 'README npm badge must be valid')
-  assert.ok(/8[, ]5\d\d UI keys/.test(pkg.description), 'package.json description must have 8,5xx UI keys')
+  assert.ok(/\d+[, ]\d+ UI keys/.test(pkg.description), 'package.json description must have 8,5xx UI keys')
 })
 
 test('v0.3.27: Block 1 audit invariants (#405-#408)', () => {

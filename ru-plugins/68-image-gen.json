@@ -66,7 +66,7 @@
     "p.seedreamBaseURL": "https://api.bytedanceapi.com/v1",
     "f.geminiModel": "Gemini Model ID",
     "f.geminiModelHint": "Google Gemini image generation model identifier.",
-    "p.geminiModel": "gemini-2.0-flash-exp-image-generation",
+    "p.geminiModel": "gemini-3.1-flash-image",
     "f.geminiKeyEnv": "Gemini Key Reference",
     "f.geminiKeyEnvHint": "Credential reference holding Google Gemini API key.",
     "p.geminiKeyEnv": "GEMINI_API_KEY",
@@ -277,6 +277,9 @@
     "f.toolsetProcessing": "Набор постобработки",
     "f.toolsetProcessingHint": "Инструменты обработки изображений: remove_background, upscale, vectorize, convert, grid, smart_crop, asset_pack, replace_image_text.",
     "f.toolsetProfile": "Профиль инструментов",
-    "f.toolsetProfileHint": "Выберите набор инструментов в контексте: минимальный (до 3 основных инструментов, экономит ~8k токенов промпта), полный (30 инструментов) или пользовательский."
+    "f.toolsetProfileHint": "Выберите набор инструментов в контексте: минимальный (до 3 основных инструментов, экономит ~8k токенов промпта), полный (30 инструментов) или пользовательский.",
+    "f.comfyWorkflowJson": "JSON воркфлоу ComfyUI",
+    "f.comfyWorkflowJsonHint": "Пользовательский граф API-воркфлоу ComfyUI (JSON) с плейсхолдерами {{prompt}}.",
+    "p.comfyWorkflowJson": "{\"3\": {\"class_type\": \"KSampler\", ...}}"
   }
 }
