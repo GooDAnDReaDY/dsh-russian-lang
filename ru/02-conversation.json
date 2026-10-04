@@ -460,7 +460,7 @@
     "tool.title.waitAgent": "Ожидать участников команды",
     "tool.title.workflow": "Запустить рабочий процесс",
     "row.preparing": "Подготовка вызова инструмента",
-    "tool.preparing.content": "Подготовка содержимого ({kilobytes} КБ)",
+    "tool.preparing.content": "{kilobytes} КБ",
     "shortcut.newline": "Новая строка",
     "shortcut.complementary": "Использовать вспомогательное действие: Очередь / Направить",
     "shortcut.slash": "Открыть меню команд",

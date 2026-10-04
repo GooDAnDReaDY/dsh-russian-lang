@@ -241,7 +241,9 @@
     "viewOptions.hideArchived": "Скрыть архивированные",
     "empty.noneArchived": "Архивированных сессий пока нет",
     "empty.viewOthers": "Просмотреть другие сессии",
-    "session.untitled": "Новый чат"
+    "session.untitled": "Новый чат",
+    "draft.initializationFailed": "Не удалось заполнить черновик. Повторите попытку чуть позже.",
+    "draft.workspaceRequired": "Сначала выберите рабочую область."
   },
   "settings.theme": {
     "fontSize.decrease": "Уменьшить размер шрифта",

@@ -25,7 +25,7 @@
     "detail.nextRun": "Следующий запуск",
     "detail.tabs": "Вкладки сведений о задаче",
     "detail.rule": "Правила",
-    "detail.records": "Записи о доставке",
+    "detail.records": "Записи",
     "delivery.empty": "Нет записей о доставке",
     "delivery.loading": "Загрузка записей о доставке…",
     "delivery.error": "Не удалось загрузить записи о доставке.",
@@ -132,6 +132,7 @@
     "card.open": "Открыть",
     "card.openLabel": "Открыть сведения о задаче: {title}",
     "card.deleted": "Удалена",
-    "tool.invoked": "Вызван: {name}"
+    "tool.invoked": "Вызван: {name}",
+    "timing.subagentSession": "Эта сессия принадлежит субагенту, который не получает доставленные напоминания."
   }
 }
