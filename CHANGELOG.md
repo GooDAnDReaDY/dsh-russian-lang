@@ -1,3 +1,39 @@
+## 0.3.37 — 2026-10-06 [DSH v0.2.1-alpha.1]
+
+### 🌐 Синхронизация со срезом ядра и защита целостности (#466, #468, #469, #470, #471)
+- **Изоляция авточека апстрима от деградации версий (#466, #468)**:
+  - В `tools/upstream_check.py` устранена принудительная установка тега `@latest` (0.2.0-rc.2), приводившая к срезанию 70 ключей ядра DSH 0.2.1-alpha.1 (`session-inspector`, `pluginManager`, `settings.agentPreset`, `workspace` и др.).
+  - Добавлена функция `get_target_dsh_spec()`, считывающая `core.supported_version` из `supported-inventory.json`.
+  - Запрещено коммитирование напрямую в ветку `main` из локального cron-сервиса (`dsh-upstream-check.service`).
+- **Единый источник правды эталонных срезов (#469)**:
+  - Каноническим источником среза ядра утверждён `upstream/core-en.json` (59 пространств имён, 2 512 ключей).
+  - В `build.py` и `tools/check_data_integrity.py` внедрена автоматическая синхронизация и валидация идентичности корневого `core-en.json` и `upstream/core-en.json`.
+- **Корректный расчёт дрейфа и защита от пустых коммитов (#470)**:
+  - В `tools/upstream_check.py` коммиты создаются только при действительном наличии дрейфа (`has_drift or first_run`).
+  - Устранены ложные отчёты «Дрейфа нет» при фиксации изменений снапшотов.
+- **Синхронизация метрик и описания пакета (#471)**:
+  - `package.json.description` и `supported-inventory.json` обновлены до актуальных метрик: 8 708 ключей UI (103 пространства имён: Ядро 2 512 + Плагины 6 196).
+
+### 🔔 Локализация плагинов экосистемы (#467, #452)
+- **Web Push локализация для `dsh-plugin-notify v0.4.0` (#467)**:
+  - В `ru-plugins/69-plugin-notify.json` и `plugins-en.json` добавлены 11 новых строк секции Web Push (`webpush.section`, `field.enableWebPush`, `field.webPushOnlyWhenAway`, `btn.webpushEnable`, `btn.testPush`, `webpush.state.*`).
+- **Синхронизация инвентаря экосистемы**:
+  - Обновлены версии 13 плагинов в `supported-inventory.json` в соответствии с фактическим окружением: `@goodandready/dsh-clinebot` (0.5.17), `@goodandready/dsh-context-lens` (0.1.29), `@goodandready/dsh-cron` (0.2.48), `@goodandready/dsh-image-gen` (^0.11.37), `@goodandready/dsh-key-limits` (^0.2.22), `@goodandready/dsh-key-rotation` (0.8.50), `@goodandready/dsh-lanmode` (^0.8.38), `@goodandready/dsh-live-canvas` (0.2.23), `@goodandready/dsh-moa` (0.2.48), `@goodandready/dsh-plugin-notify` (0.4.0), `@goodandready/dsh-subscriptions` (0.6.57), `@goodandready/dsh-tts` (0.4.29), `@goodandready/dsh-voice` (0.9.29), `billion-context` (0.1.185).
+
+### 🎨 Токены дизайн-системы и рантайм (#472, #473)
+- **Канонические CSS-токены темы (#473)**:
+  - В `lib/client.template.js` устаревшие алиасы `--dsw-alias-shadow-l2`, `--dsw-alias-shadow-l3`, `--dsw-alias-bg-mask`, `--dsw-alias-label-inverse`, `--dsw-alias-state-brand-primary`, `--dsw-alias-state-warning-primary` заменены на канонические токены DSH `--dsw-elevation-2`, `--dsw-elevation-3`, `--dsw-bg-mask`, `--dsw-label-primary-inverted`, `--dsw-brand-primary`, `--dsw-state-warn-primary` с безопасным каскадным фолбэком.
+- **Информативное логирование регистрации словарей (#472)**:
+  - Во все блоки `ctx.locale.register` в `lib/client.template.js` добавлено логирование `console.warn` с указанием конкретного пространства имён и текста ошибки вместо пустого подавления исключений.
+
+### 🛠️ Инструментарий и сборка (#474, #475)
+- **Резолв констант в сканере `self-ru` (#474)**:
+  - В `tools/self_ru_scan.py` добавлена поддержка обнаружения регистраций через переменные и модульные константы (`LOCALE_NS`, `MESSAGES`), проверенная на кейсе `dsh-approval-gate`.
+  - Из `build.py` удалён устаревший список `SELF_RU_FALLBACK`.
+  - В `build.py` добавлено предупреждение об устаревании `self-ru.json` относительно профиля DSH.
+- **Фильтрация легаси-пространств ядра (#475)**:
+  - В `build.py` внедрён строгий список `LEGACY_COMPAT_NAMESPACES` (`sidebarTextpreview`, `settings.archivedSessions`) с явным логированием сохранения 31 ключа вне эталонного снапшота ядра. Неизвестные пространства вне среза автоматически отфильтровываются с предупреждением.
+
 ## 0.3.36 — 2026-10-05
 
 ### 🛡️ Безопасность и архитектура API
