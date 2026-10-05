@@ -63,7 +63,21 @@ def _resolve_git_bin():
 GIT_BIN = _resolve_git_bin()
 
 
+def get_target_dsh_spec():
+    inv_path = os.path.join(REPO, 'supported-inventory.json')
+    if os.path.isfile(inv_path):
+        try:
+            inv = json.load(open(inv_path, encoding='utf-8'))
+            target_ver = inv.get('core', {}).get('supported_version')
+            if target_ver:
+                return f'@deepseek-ai/dsh@{target_ver}'
+        except Exception:
+            pass
+    return '@deepseek-ai/dsh@latest'
+
+
 def npm_latest():
+    spec = get_target_dsh_spec()
     tmp = tempfile.mkdtemp(prefix='dsh-upstream-', dir=os.path.expanduser('~'))
     try:
         env = dict(os.environ)
@@ -71,11 +85,18 @@ def npm_latest():
             if 'proxy' in k.lower() and '8118' in env[k]:
                 del env[k]
 
-        subprocess.run(
-            ['npm', 'install', '@deepseek-ai/dsh@latest', '--prefix', tmp,
+        res = subprocess.run(
+            ['npm', 'install', spec, '--prefix', tmp,
              '--ignore-scripts', '--no-audit', '--no-fund', '--prefer-offline', '--loglevel=error'],
-            check=True, timeout=600, env=env,
+            capture_output=True, text=True, timeout=600, env=env,
         )
+        if res.returncode != 0:
+            # Fall back to latest only if target version install failed
+            subprocess.run(
+                ['npm', 'install', '@deepseek-ai/dsh@latest', '--prefix', tmp,
+                 '--ignore-scripts', '--no-audit', '--no-fund', '--prefer-offline', '--loglevel=error'],
+                check=True, timeout=600, env=env,
+            )
         version = subprocess.run(
             ['node', '-p', "require('%s/node_modules/@deepseek-ai/dsh/package.json').version" % tmp],
             check=True, capture_output=True, text=True, timeout=30, env=env,
@@ -220,6 +241,12 @@ def git_commit_local(repo_path=REPO, push=True):
     if foreign:
         return 'отменено: обнаружены сторонние изменения в рабочей копии (dirty tree): %s' % ', '.join(foreign[:5])
 
+    if repo_path == REPO and push:
+        branch_res = subprocess.run([GIT_BIN, 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=repo_path,
+                                    capture_output=True, text=True)
+        if branch_res.stdout.strip() == 'main' and os.environ.get('CI') != 'true':
+            return 'пропущено: прямое коммитирование в main запрещено политикой DEV (#468)'
+
     r_up = subprocess.run([GIT_BIN, 'status', '--porcelain', '--', 'upstream'], cwd=repo_path,
                           capture_output=True, text=True)
     if r_up.returncode != 0:
@@ -281,8 +308,14 @@ def main():
             f.write(text)
         if first_run:
             print('первый запуск: снапшот принят за базу, алерт не нужен')
-        json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
-        print('снапшот:', git_commit_local())
+        if has_drift or first_run:
+            json.dump(curr, open(SNAPSHOT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
+            # Синхронизация корневой копии core-en.json (#469)
+            root_core = os.path.join(REPO, 'core-en.json')
+            shutil.copyfile(SNAPSHOT, root_core)
+            print('снапшот:', git_commit_local())
+        else:
+            print('дрейфа нет: снапшот не изменён (#470)')
     else:
         print('снапшот: dry-run (пропущен коммит)')
 

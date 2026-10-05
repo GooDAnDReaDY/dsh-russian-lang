@@ -178,6 +178,12 @@ def check_supported_inventory(inv_data=None, base_dir=HERE, web_pkg_path=None):
         # 2. Метрики ключей и проверка идентичности (EN identity gate)
         plugins_en_path = os.path.join(base_dir, "plugins-en.json")
         core_en_path = os.path.join(base_dir, "upstream", "core-en.json")
+        root_core_path = os.path.join(base_dir, "core-en.json")
+        if os.path.isfile(root_core_path) and os.path.isfile(core_en_path):
+            with open(root_core_path, "rb") as f1, open(core_en_path, "rb") as f2:
+                if f1.read() != f2.read():
+                    print("FAIL: core-en.json и upstream/core-en.json расходятся (#469)!", file=sys.stderr)
+                    return False
         core_ru_path = os.path.join(base_dir, "lib", "locales", "core.json")
         plugins_ru_dir = os.path.join(base_dir, "lib", "locales", "plugins")
 

@@ -38,7 +38,18 @@
     "settings.save": "Сохранить",
     "settings.saving": "Сохранение…",
     "settings.saved": "Настройки сохранены",
-    "settings.saveFailed": "Ошибка сохранения: "
+    "settings.saveFailed": "Ошибка сохранения: ",
+    "webpush.section": "Web Push (доставка уведомлений даже при закрытых вкладках dsh)",
+    "field.enableWebPush": "Включить канал Web Push",
+    "field.webPushOnlyWhenAway": "Отправлять push только когда нет активных вкладок браузера",
+    "btn.webpushEnable": "Включить push на этом устройстве",
+    "btn.testPush": "Проверить push",
+    "webpush.state.unsupported": "Web Push не поддерживается в текущем контексте — откройте dsh через HTTPS или localhost",
+    "webpush.state.denied": "Разрешение на уведомления заблокировано в настройках браузера",
+    "webpush.state.disabled": "Канал Web Push выключен — включите флаг выше и сохраните настройки",
+    "webpush.state.notSubscribed": "Это устройство ещё не подписано на push",
+    "webpush.state.subscribed": "Устройство успешно подписано и готово принимать push",
+    "webpush.state.error": "Ошибка настройки push: "
   },
   "@goodandready-private/dsh-plugin-notify": {
     "title": "Уведомления",
@@ -79,7 +90,18 @@
     "settings.save": "Сохранить",
     "settings.saving": "Сохранение…",
     "settings.saved": "Настройки сохранены",
-    "settings.saveFailed": "Ошибка сохранения: "
+    "settings.saveFailed": "Ошибка сохранения: ",
+    "webpush.section": "Web Push (доставка уведомлений даже при закрытых вкладках dsh)",
+    "field.enableWebPush": "Включить канал Web Push",
+    "field.webPushOnlyWhenAway": "Отправлять push только когда нет активных вкладок браузера",
+    "btn.webpushEnable": "Включить push на этом устройстве",
+    "btn.testPush": "Проверить push",
+    "webpush.state.unsupported": "Web Push не поддерживается в текущем контексте — откройте dsh через HTTPS или localhost",
+    "webpush.state.denied": "Разрешение на уведомления заблокировано в настройках браузера",
+    "webpush.state.disabled": "Канал Web Push выключен — включите флаг выше и сохраните настройки",
+    "webpush.state.notSubscribed": "Это устройство ещё не подписано на push",
+    "webpush.state.subscribed": "Устройство успешно подписано и готово принимать push",
+    "webpush.state.error": "Ошибка настройки push: "
   },
   "dsh-plugin-notify": {
     "title": "Уведомления",
@@ -120,6 +142,17 @@
     "settings.save": "Сохранить",
     "settings.saving": "Сохранение…",
     "settings.saved": "Настройки сохранены",
-    "settings.saveFailed": "Ошибка сохранения: "
+    "settings.saveFailed": "Ошибка сохранения: ",
+    "webpush.section": "Web Push (доставка уведомлений даже при закрытых вкладках dsh)",
+    "field.enableWebPush": "Включить канал Web Push",
+    "field.webPushOnlyWhenAway": "Отправлять push только когда нет активных вкладок браузера",
+    "btn.webpushEnable": "Включить push на этом устройстве",
+    "btn.testPush": "Проверить push",
+    "webpush.state.unsupported": "Web Push не поддерживается в текущем контексте — откройте dsh через HTTPS или localhost",
+    "webpush.state.denied": "Разрешение на уведомления заблокировано в настройках браузера",
+    "webpush.state.disabled": "Канал Web Push выключен — включите флаг выше и сохраните настройки",
+    "webpush.state.notSubscribed": "Это устройство ещё не подписано на push",
+    "webpush.state.subscribed": "Устройство успешно подписано и готово принимать push",
+    "webpush.state.error": "Ошибка настройки push: "
   }
 }

@@ -7,6 +7,7 @@
 import glob
 import json
 import os
+import shutil
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -40,19 +41,20 @@ def write_or_check(file_path, content):
 # Регистрация ru повторно падает в загрузчике ("already has locale ru"), поэтому
 # их не перекрываем вовсе. Список генерируется tools/self_ru_scan.py
 # (<профиль>/node_modules) в self-ru.json и коммитится.
-SELF_RU_FALLBACK = {
-    'dsh-spendmeter', 'task-board', 'settings.commandcode', 'pin',
-    'dsh-context', 'context-doctor', 'settings.ollama-cloud', 'plugin-store',
-    'usageStats', 'usageDashboard', 'dsh-messenger-gateway',
-    'dsh-gitea', 'dsh-key-rotation', 'dsh-vision-bridge',
-}
 self_ru_path = os.path.join(HERE, 'self-ru.json')
 if os.path.exists(self_ru_path):
     SELF_RU = set(json.load(open(self_ru_path, encoding='utf-8')))
+    # Проверка свежести self-ru.json относительно профиля web (#474)
+    web_profile_pkg = os.path.expanduser('~/.dsh/profiles/web/package.json')
+    if os.path.exists(web_profile_pkg):
+        try:
+            if os.path.getmtime(self_ru_path) < os.path.getmtime(web_profile_pkg):
+                print('[build.py] ЗАМЕЧАНИЕ: self-ru.json старше профиля web (рекомендуется tools/self_ru_scan.py) (#474)')
+        except Exception:
+            pass
 else:
-    print('ПРЕДУПРЕЖДЕНИЕ: self-ru.json нет, используется резервный список '
-          '(обновите: python3 tools/self_ru_scan.py <профиль>/node_modules --out self-ru.json)')
-    SELF_RU = SELF_RU_FALLBACK
+    print('ПРЕДУПРЕЖДЕНИЕ: self-ru.json отсутствует, список self-ru пуст (#474)')
+    SELF_RU = set()
 core_dict = {}
 for path in sorted(glob.glob(os.path.join(HERE, 'ru', '*.json'))):
     part = json.load(open(path, encoding='utf-8'))
@@ -72,16 +74,28 @@ for ns, entries in mt.items():
 
 # #358: Фильтрация мёртвых ключей перед записью в lib/locales/core.json.
 # В бандл/раздачу попадают только ключи, присутствующие в актуальном срезе апстрима (core-en.json).
-upstream_core_path = os.path.join(HERE, 'core-en.json')
+# #358, #469: Канонический источник среза апстрима — upstream/core-en.json.
+# #475: Пространства имён вне среза сохраняются только из разрешённого легаси-списка.
+LEGACY_COMPAT_NAMESPACES = {'sidebarTextpreview', 'settings.archivedSessions'}
+
+upstream_core_path = os.path.join(HERE, 'upstream', 'core-en.json')
 if not os.path.exists(upstream_core_path):
-    upstream_core_path = os.path.join(HERE, 'upstream', 'core-en.json')
+    upstream_core_path = os.path.join(HERE, 'core-en.json')
 if os.path.exists(upstream_core_path):
     up_core = json.load(open(upstream_core_path, encoding='utf-8'))
+    # Синхронизируем корневой core-en.json с upstream/core-en.json (#469)
+    root_core = os.path.join(HERE, 'core-en.json')
+    if os.path.abspath(upstream_core_path) != os.path.abspath(root_core):
+        shutil.copyfile(upstream_core_path, root_core)
+
     filtered_core = {}
     for ns, entries in core_dict.items():
         if ns not in up_core:
-            # Сохраняем пространства имён для обратной совместимости (sidebarTextpreview и др.)
-            filtered_core[ns] = entries
+            if ns in LEGACY_COMPAT_NAMESPACES:
+                print(f"[build.py] Сохранено легаси-пространство вне снапшота (#475): {ns} ({len(entries)} ключей)")
+                filtered_core[ns] = entries
+            else:
+                print(f"[build.py] ПРЕДУПРЕЖДЕНИЕ: отфильтровано неизвестное пространство вне снапшота: {ns} ({len(entries)} ключей)")
             continue
         up_ns = up_core[ns]
         f_entries = {}

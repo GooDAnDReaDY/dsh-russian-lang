@@ -95,6 +95,17 @@ check(srs.self_ru_ns(src_none) == set(), 'self_ru_scan: {en} без ru не ло
 # register(ns,{en,ru}) shorthand с ru — ловится
 check(srs.self_ru_ns(src_shorthand) == {'other2'}, 'self_ru_scan: {en,ru} shorthand ловится')
 
+# Issue #474: Регистрация через переменную LOCALE_NS + объект MESSAGES
+src_const_var = """
+export const LOCALE_NS = "dsh-approval-gate";
+export const MESSAGES = Object.freeze({
+  en: { blockedPrefix: "Blocked" },
+  ru: { blockedPrefix: "Заблокировано" }
+});
+locale.register(LOCALE_NS, MESSAGES);
+"""
+check(srs.self_ru_ns(src_const_var) == {'dsh-approval-gate'}, 'self_ru_scan: константа LOCALE_NS + MESSAGES (#474)')
+
 # ---------- merge_freq ----------
 mf = load('merge_freq', os.path.join(TOOLS, 'merge_freq.py'))
 words = mf.ru_words()
