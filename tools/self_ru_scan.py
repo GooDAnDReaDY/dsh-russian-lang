@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Сканер self-ru namespace'ов: какие плагины уже локализуют себя на русский.
+"""Сканер self-ru namespace'ов: какие плагины уже локализуют себя на русский (#474).
 
 Обходит node_modules профиля, в каждом DSH-плагине ищет регистрации локалей
-(`register(NS, {en, ru})`, `register("ns", "ru", ...)`) и печатает/пишет
-список namespace'ов, которые плагин держит сам. build.py исключает их:
-повторная регистрация ru валит загрузчик чужого плагина
-(«already has locale ru», см. 0.1.7/0.1.8).
+(`register(NS, {en, ru})`, `register("ns", "ru", ...)`, `locale.register(LOCALE_NS, MESSAGES)`)
+и печатает/пишет список namespace'ов, которые плагин держит сам. build.py исключает их:
+повторная регистрация ru валит загрузчик чужого плагина («already has locale ru»).
 
 Использование:
     python3 tools/self_ru_scan.py <node_modules профиля> [--out self-ru.json]
 """
 import argparse
+import glob
 import json
 import os
 import re
 
-# register(NS, { ... }) / register('ns', { ... }) / register(ns, 'ru', ...)
-REG_OBJ = re.compile(r'register\(\s*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][\w$]*))\s*,\s*\{')
-REG_RU = re.compile(r'register\(\s*(?:"([^"]+)"|\'([^\']+)\'|([A-Za-z_$][\w$]*))\s*,\s*["\']ru["\']\s*,')
+REG_OBJ = re.compile(r"""register\(\s*(?:\"([^\"]+)\"|'([^']+)'|([A-Za-z_$][\w$]*))\s*,\s*\{""")
+REG_RU = re.compile(r"""register\(\s*(?:\"([^\"]+)\"|'([^']+)'|([A-Za-z_$][\w$]*))\s*,\s*['\"]ru['\"]\s*,""")
+REG_VAR_PAIR = re.compile(r'register\(\s*([A-Za-z_$][\w$]*)\s*,\s*([A-Za-z_$][\w$]*)\s*\)')
 
 
 def _object_body(src, open_brace):
@@ -32,7 +32,7 @@ def _object_body(src, open_brace):
                 esc = True
             elif c == quote:
                 in_str = False
-        elif c in '"\'`':
+        elif c in '"\'\`':
             in_str, quote = True, c
         elif c == '{':
             depth += 1
@@ -49,21 +49,36 @@ def _has_ru(obj):
     return re.search(r'\bru\s*(?::|\s*[,}])', obj) is not None
 
 
+def _resolve_const(name, src):
+    """Ищет строковое значение константы в коде плагина (#474)."""
+    m = re.search(r'(?:const|let|var|export\s+const)\s+' + re.escape(name) + r'\s*=\s*["\']([^"\']+)["\']', src)
+    if m:
+        return m.group(1)
+    m = re.search(r'\b' + re.escape(name) + r'\s*=\s*["\']([^"\']+)["\']', src)
+    if m:
+        return m.group(1)
+    return None
+
+
 def self_ru_ns(src):
-    """Namespace'ы, которые этот client.js регистрирует как ru."""
+    """Namespace'ы, которые исходный код регистрирует как ru."""
     nss = set()
-    # register(ns, "ru", ...) — безусловно
+
+    # 1. register(ns, "ru", ...) — безусловно
     for m in REG_RU.finditer(src):
         ns = m.group(1) or m.group(2)
         if ns:
             nss.add(ns)
             continue
-        a = re.search(r'%s\s*=\s*["\']([^"\']+)["\']' % re.escape(m.group(3)), src)
-        if a:
-            nss.add(a.group(1))
-    # register(NS, { ... }) — только если в объекте есть ru
+        const_ns = _resolve_const(m.group(3), src)
+        if const_ns:
+            nss.add(const_ns)
+
+    # 2. register(NS, { ... }) — только если в объекте есть ru
     for m in REG_OBJ.finditer(src):
-        brace = src.index('{', m.end() - 1)
+        brace = src.find('{', m.end() - 1)
+        if brace == -1:
+            continue
         body = _object_body(src, brace)
         if not body or not _has_ru(body):
             continue
@@ -71,26 +86,63 @@ def self_ru_ns(src):
         if ns:
             nss.add(ns)
             continue
-        a = re.search(r'%s\s*=\s*["\']([^"\']+)["\']' % re.escape(m.group(3)), src)
-        if a:
-            nss.add(a.group(1))
+        const_ns = _resolve_const(m.group(3), src)
+        if const_ns:
+            nss.add(const_ns)
+
+    # 3. register(LOCALE_NS, MESSAGES) где MESSAGES содержит ru (#474)
+    for m in REG_VAR_PAIR.finditer(src):
+        ns_id, msg_id = m.group(1), m.group(2)
+        m_assign = re.search(r'(?:const|let|var|export\s+const)\s+' + re.escape(msg_id) + r'\s*=', src)
+        if not m_assign:
+            m_assign = re.search(r'\b' + re.escape(msg_id) + r'\s*=', src)
+        if m_assign:
+            brace = src.find('{', m_assign.end())
+            if brace != -1:
+                body = _object_body(src, brace)
+                if body and _has_ru(body):
+                    const_ns = _resolve_const(ns_id, src)
+                    if const_ns:
+                        nss.add(const_ns)
+
     return nss
+
+
+def self_ru_ns_from_plugin(pkg_dir):
+    """Находит namespace'ы, которые плагин регистрирует на русский язык."""
+    js_files = glob.glob(os.path.join(pkg_dir, 'lib', '*.js')) + glob.glob(os.path.join(pkg_dir, '*.js'))
+    if not js_files:
+        return set()
+
+    sources = []
+    for f in js_files:
+        try:
+            sources.append(open(f, encoding='utf-8', errors='ignore').read())
+        except Exception:
+            pass
+
+    combined_src = '\n'.join(sources)
+    return self_ru_ns(combined_src)
 
 
 def scan(profile):
     found = set()
+    if not os.path.isdir(profile):
+        return found
     for entry in sorted(os.listdir(profile)):
+        if entry.startswith('.'):
+            continue
         full = os.path.join(profile, entry)
         if not os.path.isdir(full):
             continue
         dirs = [full]
         if entry.startswith('@'):
-            dirs = [os.path.join(full, s) for s in os.listdir(full)
+            dirs = [os.path.join(full, s) for s in sorted(os.listdir(full))
                     if os.path.isdir(os.path.join(full, s))]
         for p in dirs:
-            cjs = os.path.join(p, 'lib', 'client.js')
-            if os.path.exists(cjs):
-                found |= self_ru_ns(open(cjs, encoding='utf-8', errors='ignore').read())
+            if os.path.basename(p) == 'dsh-russian-lang':
+                continue
+            found |= self_ru_ns_from_plugin(p)
     return found
 
 
@@ -102,7 +154,7 @@ def main():
     nss = scan(args.profile)
     if args.out:
         json.dump(sorted(nss), open(args.out, 'w', encoding='utf-8'),
-                  ensure_ascii=False, indent=1)
+                  ensure_ascii=False, indent=2)
         print('%d self-ru namespace -> %s' % (len(nss), args.out))
     else:
         for ns in sorted(nss):
