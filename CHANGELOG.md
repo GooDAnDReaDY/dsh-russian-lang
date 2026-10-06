@@ -1,3 +1,23 @@
+## 0.3.38 — 2026-10-06 [DSH v0.2.1-alpha.1]
+
+### 🖥️ Поддержка DSH Desktop и Electron в One-Click апдейтере (#477, GitHub #10)
+- **Устранение ложной блокировки обновления на DSH Desktop (#477, GitHub #10)**:
+  - В `lib/plugin-updater.js` переработана функция `isTrustedUpdateRequest`:
+    - Добавлена поддержка заголовка `Sec-Fetch-Site: none`, `same-site` и `undefined`, характерных для Electron-приложений и нативных десктопных обёрток (`@deepseek-ai/dsh-desktop`).
+    - Поддержаны десктопные контексты с отсутствующим заголовком `Origin` (`origin === undefined`) и локальными/песочными контекстами (`Origin: null`).
+    - Добавлена поддержка десктопных протоколов `file:`, `vscode-file:`, `dsh:` и `app:`.
+    - Реализовано сопоставление портов между локальными loopback-адресами (`localhost` ⇄ `127.0.0.1` ⇄ `[::1]`).
+    - Сохранена строгая защита от удалённых атак: проверка `socket.remoteAddress` на loopback (`127.0.0.0/8`, `::1`, `::ffff:127.x.x.x`), проверка заголовка `Host` на loopback (защита от DNS rebinding) и блокировка внешних `cross-site` веб-источников.
+- **Синхронизация шлюза переводчика в десктопном окружении (#477)**:
+  - В `lib/translator.js` функция `isTrustedTranslatorRequest` синхронизирована с новой моделью доверия: поддержка Electron/десктопных контекстов (`origin === undefined`, `null`, `file://`), loopback, а также сохранение доступа по LAN и Tailscale.
+- **Поддержка Electron CLI carrier при установке обновлений (#477)**:
+  - В `findDshCliEntry` добавлено распознавание манифестов десктопного хоста (`@deepseek-ai/dsh-desktop`, `@deepseek-ai/dsh-desktop-host`).
+  - В `installExact` добавлена переменная окружения `ELECTRON_RUN_AS_NODE: '1'`, гарантирующая выполнение pnpm/npm CLI-команд в фоновом Node.js-режиме без попытки запуска графического окна Electron.
+- **Синхронизация инвентаря экосистемы плагинов**:
+  - Обновлены версии 13 плагинов в `supported-inventory.json` в соответствии с окружением: `@goodandready/dsh-clinebot` (0.5.18), `@goodandready/dsh-cron` (0.2.49), `@goodandready/dsh-image-gen` (^0.11.38), `@goodandready/dsh-key-limits` (^0.2.23), `@goodandready/dsh-key-rotation` (0.8.51), `@goodandready/dsh-lanmode` (^0.8.39), `@goodandready/dsh-live-canvas` (0.2.24), `@goodandready/dsh-moa` (0.2.49), `@goodandready/dsh-model-sync` (0.5.5), `@goodandready/dsh-subscriptions` (0.6.58), `@goodandready/dsh-tts` (0.4.30), `@goodandready/dsh-voice` (0.9.30), `billion-context` (0.1.186).
+- **Модульные тесты**:
+  - Добавлен тест `test/test_v0338_desktop_updater.mjs`, покрывающий все сценарии заголовков Electron Desktop, loopback IPv4/IPv6, защиту от DNS rebinding и атак межсайтового запроса.
+
 ## 0.3.37 — 2026-10-06 [DSH v0.2.1-alpha.1]
 
 ### 🌐 Синхронизация со срезом ядра и защита целостности (#466, #468, #469, #470, #471)
