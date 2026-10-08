@@ -1,3 +1,29 @@
+## 0.3.39 — 2026-10-08 [DSH v0.2.1-alpha.1]
+
+### 🌍 Локализация 679 новых ключей экосистемы DSH и расширение Wave 5 (#480, #479)
+- **Полная интеграция 666 новых ключей из 14 пространств имён плагинов DSH (#480)**:
+  - `config-manager-recovery` (+234 ключа): точки восстановления и контрольные точки (`checkpoint.capture`, `checkpoint.rewind`, `checkpoint.samePoint`), управление незавершёнными копиями профилей (`recovery.incomplete.*`), снятие безопасного режима (`recovery.safeMode.*`), проверка работоспособности сессий (`sessions.desc`, `sessions.layout.*`, `sessions.repair.*`).
+  - `config-manager` (+229 ключей): офлайн-команды CLI (`about.cli.help`, `about.cli.reinstall`, `about.cli.restore`), проверка и установка обновлений плагинов, поддержка импорта из внешних агентов (`foreign.source.*`: Antigravity, Claude Code, Cursor, Hermes, Codex, Copilot, Kimi и др.), библиотека артефактов и снимков (`library.*`), палитра команд (`palette.*`).
+  - `config-manager-sync` (+101 ключ): настройка каналов удалённой синхронизации (S3-совместимые хранилища AWS/MinIO/OSS/COS/Kodo, GitHub Gist), валидация ключей и токенов, выбор приватных репозиториев (`repoPicker.*`), подтверждение отключения каналов (`channel.clear*`).
+  - `dsh-image-gen` (+27 ключей): мультипровайдерная студия ИИ-изображений (`card.draftPreview`, `card.dirty`, `card.save`), экспорт стилей графики тем (`themePair.*`).
+  - `dsh-context` (+15 ключей): расширенный поиск по тексту (`rich.find*`), общая расчётная стоимость и расход токенов команды (`ov.card.teamCost`, `ov.card.teamUsage`), детализация субагентов и событий контекста (`stats.*`).
+  - `settings.commandcode` (+13 ключей): подтверждение и валидация операций с ключами аккаунтов (`writeCleanupPending`, `writeConfigSaved`, `writeKeyConfirmed`, `writeConflict`), строгое соблюдение правила канонического названия бренда Command Code без машинного перевода.
+  - `dsh-vision-bridge` (+12 ключей): тест производительности (`bench_btn`), модальный просмотр (`lightbox_*`), переключение режимов зрения (`mode_hybrid_title`, `mode_llm_title`, `mode_tools_title`), конвертация страниц PDF (`pdf_*`).
+  - `dsh-github-ops` (+11 ключей): интеграция статусов CI (`scmCiRunSuccess`, `scmCiRunFailed`), живые обновления (`scmEventsConnected`), визуализация графа коммитов Git (`scmGraph*`), построчное индексирование изменений (`scmStageHunk`, `scmUnstageHunk`).
+  - `dsh-market` (+11 ключей): группировка прав доступа и возможностей плагинов (`capGroupFiles`, `capGroupHost`, `capGroupKeys`, `capGroupNetwork`), предупреждения о безопасном перезапуске через прокси (`restartHintViaProxy`).
+  - `dsh-superpower` (+5 ключей): сборка панели, включение и отключение навыков в каталоге модели и автодополнении CLI (`invocable`, `invocableHint`), переключение языка описаний навыков (`langNote`, `langTitle`).
+  - `dsh-skill-explorer` (+3 ключа): обработка навыков без локального файла SKILL.md (`list.noFile*`).
+  - `config-manager-market` (+2 ключа): подсказка описания и обработка отсутствующих в каталоге элементов (`list.installMissing`).
+  - `settings.pluginConsole` (+2 ключа): подсказка и ссылка на оценку плагина на GitHub (`starHint*`).
+  - `dsh-kanban` (+1 ключ): сообщение об истечении времени ожидания запроса (`error.timeout`).
+- **Локализация управления карантином и уведомлений в `dsh-subscriptions v0.6.59/v0.6.60` (#479)**:
+  - В `ru-plugins/65-subscriptions.json` добавлены 13 ключей: скачивание зашифрованного хранилища (`backupDownload`), ручная отправка аккаунта в карантин на 1 час (`quarantinePark`, `quarantineParkTitle`), внеочередной запуск прогревочного зонда (`probeWarmupNow`, `probeWarmupTitle`), досрочный вывод из карантина (`releaseQuarantine`, `releaseQuarantineTitle`), таймер сброса квот (`resetsIn`), всплывающие тост-уведомления (`toastQuarantined`, `toastReleased`, `toastQuotaWarning`) и переключатель уведомлений в WebUI (`enableToasts`, `field.enableToasts`).
+- **Синхронизация дрейфа версий инвентаря экосистемы**:
+  - В `supported-inventory.json` обновлены 33 пакета до актуальных версий рабочего профиля Web: `@goodandready/dsh-approval-gate` (0.1.12), `@goodandready/dsh-clinebot` (0.5.19), `@goodandready/dsh-dsml-artifact-guard` (0.2.10), `@goodandready/dsh-gitea` (0.7.26), `@goodandready/dsh-github-ops` (0.6.0), `@goodandready/dsh-issue-reporter` (0.1.13), `@goodandready/dsh-kanban` (0.2.23), `@goodandready/dsh-key-limits` (^0.2.24), `@goodandready/dsh-key-rotation` (0.8.52), `@goodandready/dsh-lanmode` (^0.8.40), `@goodandready/dsh-live-canvas` (0.2.27), `@goodandready/dsh-messenger-gateway` (0.4.13), `@goodandready/dsh-moa` (0.2.50), `@goodandready/dsh-model-sync` (0.5.8), `@goodandready/dsh-server-monitor` (0.1.17), `@goodandready/dsh-session-control` (0.2.9), `@goodandready/dsh-smart-restart` (0.1.8), `@goodandready/dsh-subscriptions` (0.6.60), `@goodandready/dsh-time-machine` (0.1.27), `@goodandready/dsh-tts` (0.4.31), `@goodandready/dsh-vision-bridge` (0.6.18), `@linxin666/dsh-client-ui-skill-explorer` (^0.4.5), `@mars-sea/dsh-commandcode-provider` (0.12.8), `@michengai/dsh-skills-manager` (^1.1.13), `@noob-stupid/dsh-plugin-console` (^0.5.43), `@wenaixi/dsh-superpower` (7.5.8), `billion-context` (0.1.188), `dsh-better-input` (^0.2.5), `dsh-config-manager` (^0.1.71), `dsh-context` (^0.65.0), `dsh-hooks` (0.14.1), `dsh-opencode-palette` (^2.0.25), `dshmarket` (^1.66.11).
+- **Метрики качества и покрытие**:
+  - Общий объём словарей достиг **9 359 UI ключей** (103 пространства имён: Ядро 2 512 + Плагины 6 847).
+  - Покрытие 100.0%, 0 непереведённых ключей, 0 черновиков MT, 0 ошибок плейсхолдеров, 0 запрещённых терминов глоссария, 0 файлов пакета > 256 KiB.
+
 ## 0.3.38 — 2026-10-06 [DSH v0.2.1-alpha.1]
 
 ### 🖥️ Поддержка DSH Desktop и Electron в One-Click апдейтере (#477, GitHub #10)
