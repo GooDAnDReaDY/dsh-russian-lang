@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.37-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.39-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -14,7 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.2.1--alpha.1%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.1.7-rc.2+">
   <img src="https://img.shields.io/badge/Покрытие-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="Покрытие 100%">
-  <img src="https://img.shields.io/badge/Ключей_UI-8708-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="8708 ключей">
+  <img src="https://img.shields.io/badge/Ключей_UI-9359-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="9359 ключей">
   <img src="https://img.shields.io/badge/Ручная_вычитка-100%25-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="100% ручная вычитка">
 </p>
 

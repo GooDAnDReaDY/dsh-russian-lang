@@ -99,6 +99,17 @@
     "statusScopes": "Области доступа (Scopes)",
     "statusSource": "Источник",
     "statusTitle": "Доступ",
-    "scmWorktrees": "Рабочие деревья"
+    "scmWorktrees": "Рабочие деревья",
+    "scmCiRunFailed": "Сборка CI завершилась с ошибкой",
+    "scmCiRunSuccess": "Сборка CI успешно завершена",
+    "scmEventsConnected": "Прямые обновления активны",
+    "scmGraphEmpty": "История коммитов недоступна.",
+    "scmGraphRefresh": "Обновить граф",
+    "scmGraphTitle": "Граф Git",
+    "scmHunk": "Фрагмент",
+    "scmPrUpdated": "PR обновлён",
+    "scmStageHunk": "Индексировать фрагмент",
+    "scmStashView": "Различия",
+    "scmUnstageHunk": "Убрать фрагмент из индекса"
   }
 }

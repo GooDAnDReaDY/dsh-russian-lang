@@ -204,6 +204,8 @@
     "review.filter.highRisk": "Высокий риск",
     "review.filter.unselected": "Не выбрано",
     "review.filter.willChange": "Будет изменено",
-    "review.filterAria": "Фильтрация по содержимому"
+    "review.filterAria": "Фильтрация по содержимому",
+    "common.infoHint": "Показать описание",
+    "list.installMissing": "Этот элемент больше не найден в каталоге (возможно, он был удалён). Вместо него показан список."
   }
 }

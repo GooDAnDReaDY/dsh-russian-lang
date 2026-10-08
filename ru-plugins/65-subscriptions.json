@@ -220,6 +220,19 @@
     "healthQuarantine": "Карантин",
     "cacheAnalyze": "Анализ кэша сессии",
     "cacheHitRate": "Коэффициент попадания в кэш",
-    "tokensSaved": "Сэкономлено токенов"
+    "tokensSaved": "Сэкономлено токенов",
+    "backupDownload": "Скачать .enc",
+    "quarantinePark": "В карантин",
+    "quarantineParkTitle": "Поместить аккаунт в карантин на 1 час",
+    "probeWarmupNow": "Проверить сейчас",
+    "probeWarmupTitle": "Запустить немедленную прогревочную проверку",
+    "releaseQuarantine": "Снять карантин",
+    "releaseQuarantineTitle": "Немедленно вывести аккаунт из карантина",
+    "resetsIn": "Сброс через",
+    "toastQuarantined": "Аккаунт помещен в карантин",
+    "toastReleased": "Аккаунт активен и готов к работе",
+    "toastQuotaWarning": "Предупреждение о лимите квоты",
+    "enableToasts": "Всплывающие уведомления",
+    "field.enableToasts": "Показывать всплывающие уведомления при событиях карантина и расходе квот"
   }
 }

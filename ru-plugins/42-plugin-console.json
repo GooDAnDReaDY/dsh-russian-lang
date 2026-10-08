@@ -558,7 +558,9 @@
     "marketCount": "Найдено: {total} / показано: {shown}",
     "marketCountKnown": "Показано: {shown}",
     "marketTruncated": "Результаты усечены — можно продолжить загрузку",
-    "marketTruncatedEnd": "Результаты усечены — больше нет доступных"
+    "marketTruncatedEnd": "Результаты усечены — больше нет доступных",
+    "starHint": "Нравится плагин? Поставьте звезду на GitHub",
+    "starHintTitle": "Открыть проект на GitHub в новой вкладке"
   },
   "@noob-stupid/dsh-plugin-console": {
     "active": "Подключён",

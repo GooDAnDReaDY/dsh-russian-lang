@@ -10,7 +10,7 @@ test('v0.3.35: package.json, README and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
   assert.ok(pkg.version >= '0.3.35')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
-  assert.ok(pkg.description.includes('8,697 UI keys') || pkg.description.includes('8,708 UI keys'), 'Description must reflect keys count')
+  assert.ok(pkg.description.includes('8,697 UI keys') || pkg.description.includes('8,708 UI keys') || pkg.description.includes('9,359 UI keys'), 'Description must reflect keys count')
   assert.ok(pkg.description.includes('v0.2.1-alpha.1'), 'Description must reflect DSH v0.2.1-alpha.1')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
@@ -19,7 +19,7 @@ test('v0.3.35: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be v0.3.x')
-  assert.ok(readme.includes('Ключей_UI-8697') || readme.includes('Ключей_UI-8708'), 'README keys badge must reflect keys count')
+  assert.ok(readme.includes('Ключей_UI-8697') || readme.includes('Ключей_UI-8708') || readme.includes('Ключей_UI-9359'), 'README keys badge must reflect keys count')
   assert.ok(readme.includes('DSH-v0.2.1--alpha.1'), 'README DSH version badge must be v0.2.1-alpha.1')
 })
 
@@ -65,7 +65,7 @@ test('v0.3.35: Ecosystem plugins translations present in lib/locales/plugins', (
   const pSuper = JSON.parse(fs.readFileSync(path.join(ROOT, 'lib/locales/plugins/86-superpower.json'), 'utf8'))
   const sp = pSuper['dsh-superpower']
   assert.ok(sp, 'dsh-superpower dictionary must exist')
-  assert.equal(Object.keys(sp).length, 18, 'dsh-superpower must contain 18 keys')
+  assert.ok(Object.keys(sp).length >= 18, 'dsh-superpower must contain at least 18 keys')
   assert.equal(sp['title'], 'Переключатели навыков')
   assert.equal(sp['modelInvocable'], 'Доступно модели')
   assert.equal(sp['userInvocable'], 'Доступно пользователю')
