@@ -230,6 +230,18 @@
     "updater_update_now": "Обновить до v{version}",
     "updater_up_to_date": "Установлена актуальная версия",
     "updater_failed": "Не удалось проверить обновления",
-    "updater_success": "Обновление выполнено успешно. Перезапустите DSH."
+    "updater_success": "Обновление выполнено успешно. Перезапустите DSH.",
+    "bench_btn": "Тест скорости",
+    "lightbox_close": "Закрыть",
+    "lightbox_preview": "Предпросмотр",
+    "mode_click_to_switch": " — нажмите для переключения",
+    "mode_hybrid_title": "Зрение: Гибридный режим (автоописание + инструменты)",
+    "mode_llm_title": "Зрение: LLM (только автоописание)",
+    "mode_tools_title": "Зрение: Инструменты (только вызовы инструментов)",
+    "pdf_button": "📄 +PDF",
+    "pdf_converting": "📄 Конвертация страниц PDF…",
+    "pdf_error": "❌ Ошибка PDF: {error}",
+    "pdf_loaded": "✅ Загружено страниц PDF: {count}",
+    "pdf_upload_title": "Загрузить и конвертировать документ PDF"
   }
 }

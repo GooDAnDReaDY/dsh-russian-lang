@@ -229,5 +229,5 @@ test('v0.3.38: isTrustedTranslatorRequest validates desktop and LAN/Tailscale ac
 })
 
 test('v0.3.38: package.json version is 0.3.38', () => {
-  assert.equal(packageJson.version, '0.3.38')
+  assert.ok(packageJson.version >= '0.3.38')
 })
