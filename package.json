@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.39",
-  "description": "Russian localization for DeepSeek Harness (DSH v0.2.1-alpha.1+) web UI: adds Русский as native language option. 100.0% coverage across 9,359 UI keys (103 namespaces: Core 2,512 + Plugins 6,847). Features full DSH v0.2.1-alpha.1 core support, Session Inspector, and complete GoodAndReady plugin catalog.",
+  "version": "0.3.40",
+  "description": "Production-ready Russian translation plugin for DeepSeek Harness (DSH v0.2.1-alpha.1, 9,359 UI keys, 100% coverage, 86 plugins supported). Zero runtime dependencies, instant DOM hot-patching, full offline support.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
