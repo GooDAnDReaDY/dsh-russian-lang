@@ -373,6 +373,12 @@ card_ru = {
     'overridesCopied': 'Оверрайды скопированы в буфер обмена как JSON!',
     'overridesImportPrompt': 'Вставьте JSON с оверрайдами:',
     'overridesImportError': 'Ошибка разбора JSON: ',
+    'secPluginStatus': '📊 Состояние локализации плагинов',
+    'secPluginStatusDesc': 'Фактические версии установленных плагинов и процент покрытия проверенной базы.',
+    'registerMissingIssue': 'Зарегистрировать issue на перевод',
+    'showMissingKeys': 'Показать отсутствующие ключи',
+    'hideMissingKeys': 'Скрыть отсутствующие ключи',
+    'searchPluginPlaceholder': 'Поиск плагина…',
 }
 card_json = json.dumps(card_ru, ensure_ascii=False, separators=(',', ':'))
 

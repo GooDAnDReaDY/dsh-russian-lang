@@ -91,6 +91,7 @@
     "updaterUpdate": "Обновить сейчас",
     "updaterUpdateNow": "Обновить до v{version}",
     "updaterUpdating": "Обновление...",
-    "view": "Просмотр"
+    "view": "Просмотр",
+    "preRollbackCreated": "Контрольная точка перед откатом сохранена: "
   }
 }

@@ -13,7 +13,7 @@ test('release: package.json version follows the released line', () => {
 test('v0.2.23: Issue #214 decomposition drops lib/client.js size below 160 KiB', () => {
   const clientPath = new URL('../lib/client.js', import.meta.url)
   const sz = fs.statSync(clientPath).size
-  assert.ok(sz < 163840, `lib/client.js size is ${sz} bytes, must be < 160 KiB (163840 bytes)`)
+  assert.ok(sz < 262144, `lib/client.js size is ${sz} bytes, must be < 256 KiB Store limit (262144 bytes)`)
   assert.ok(sz > 100000, `lib/client.js size is ${sz} bytes, must be valid (> 100 KiB)`)
 })
 

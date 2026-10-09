@@ -82,6 +82,19 @@
     "autoCheckpointLabel": "Создавать Git-чекпоинт при завершении этапа",
     "rollbackBtn": "Откатить к чекпоинту",
     "rollbackConfirm": "Откатить рабочую копию к этому чекпоинту?",
-    "rollbackSuccess": "Успешный откат к чекпоинту"
+    "rollbackSuccess": "Успешный откат к чекпоинту",
+    "interveneTitle": "Пауза и вмешательство",
+    "interveneDesc": "Выполнение цели приостановлено. Направьте поведение агента явной директивой перед продолжением.",
+    "interveneDirectivePlaceholder": "Введите инструкции-указания для агента...",
+    "interveneApply": "Применить директиву и продолжить",
+    "interveneApplied": "Директива применена",
+    "liveActivityTitle": "Лента текущих действий",
+    "preplanTitle": "Умный предварительный план готов",
+    "preplanApprove": "Утвердить и начать план",
+    "mergeBranch": "Влить ветку",
+    "discardBranch": "Отклонить ветку",
+    "retrospectiveTitle": "Ретроспектива цели",
+    "templatesTitle": "Шаблоны целей",
+    "waitingPrereq": "ожидание зависимостей"
   }
 }
