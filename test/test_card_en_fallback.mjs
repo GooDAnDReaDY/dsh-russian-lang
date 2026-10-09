@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, '..')
 
-test('карточка: паритет ключей RU и EN (89/89)', () => {
+test('карточка: паритет ключей RU и EN (95/95)', () => {
   const buildPy = fs.readFileSync(path.join(ROOT, 'build.py'), 'utf-8')
   const start = buildPy.indexOf('card_ru = {')
   const end = buildPy.indexOf('\n}', start)
@@ -21,8 +21,8 @@ test('карточка: паритет ключей RU и EN (89/89)', () => {
   const enObj = new Function(enBlock + '; return CARD_EN;')()
   const enKeys = Object.keys(enObj)
 
-  assert.strictEqual(ruKeys.length, 89, `Ожидалось 85 RU-ключей, получено ${ruKeys.length}`)
-  assert.strictEqual(enKeys.length, 89, `Ожидалось 85 EN-ключей, получено ${enKeys.length}`)
+  assert.strictEqual(ruKeys.length, 95, `Ожидалось 85 RU-ключей, получено ${ruKeys.length}`)
+  assert.strictEqual(enKeys.length, 95, `Ожидалось 85 EN-ключей, получено ${enKeys.length}`)
 
   const ruSet = new Set(ruKeys)
   const enSet = new Set(enKeys)

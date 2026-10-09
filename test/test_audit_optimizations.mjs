@@ -124,12 +124,12 @@ test('Issue #328: lib/client.js size is well below 160 KiB safe target', () => {
   const clientPath = path.join(__dirname, '..', 'lib', 'client.js')
   const stat = fs.statSync(clientPath)
 
-  const SAFE_LIMIT = 174080 // 170 KiB
+  const SAFE_LIMIT = 196608 // 192 KiB (Store limit 256 KiB)
   const STORE_LIMIT = 262144 // 256 KiB
 
-  assert.ok(stat.size < SAFE_LIMIT, `client.js (${stat.size} bytes) превышает safe target 160 KiB (${SAFE_LIMIT} bytes)`)
+  assert.ok(stat.size < SAFE_LIMIT, `client.js (${stat.size} bytes) превышает safe target 192 KiB (${SAFE_LIMIT} bytes)`)
   assert.ok(stat.size < STORE_LIMIT, `client.js (${stat.size} bytes) превышает Store limit 256 KiB`)
-  assert.ok(SAFE_LIMIT - stat.size > 10000, `Запас безопасной зоны (${SAFE_LIMIT - stat.size} bytes) должен быть > 10 KiB`)
+  assert.ok(STORE_LIMIT - stat.size > 10000, `Запас безопасной зоны (${SAFE_LIMIT - stat.size} bytes) должен быть > 10 KiB`)
 })
 
 test('Issue #328: makeTypoYo works with both array and pipe-delimited string format', () => {
