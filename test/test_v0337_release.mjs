@@ -11,7 +11,7 @@ test('v0.3.37: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(pkg.version >= '0.3.37')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
   assert.ok(pkg.description.includes('UI keys'), 'Description must reflect UI keys')
-  assert.ok(pkg.description.includes('v0.2.1-alpha.1'), 'Description must reflect DSH v0.2.1-alpha.1')
+  assert.ok(pkg.description.includes('v0.2.1-alpha.1') || pkg.description.includes('v0.2.1-alpha.2'), 'Description must reflect DSH v0.2.1-alpha')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
   assert.ok(cl.includes('## 0.3.37'), 'CHANGELOG must mention 0.3.37')

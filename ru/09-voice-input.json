@@ -99,6 +99,14 @@
     "setupPrompt.trigger": "Настроить голосовой ввод",
     "setupPrompt.details": "Открыть настройки плагина голосового ввода",
     "setupPrompt.unavailableTitle": "Распознавание речи не готово",
-    "setupPrompt.unavailableBody": "Откройте сведения о плагине голосового ввода, чтобы проверить статус распознавания речи, ход подготовки или ошибки."
+    "setupPrompt.unavailableBody": "Откройте сведения о плагине голосового ввода, чтобы проверить статус распознавания речи, ход подготовки или ошибки.",
+    "deviceMissing": "Микрофон недоступен. Выберите другое устройство ввода.",
+    "deviceUnavailable": "Недоступно",
+    "inputDevice": "Устройство ввода",
+    "inputLevel": "Уровень входного сигнала микрофона",
+    "systemMicrophone": "Системный по умолчанию",
+    "systemMicrophoneNamed": "Системный по умолчанию ({name})",
+    "unnamedMicrophone": "Микрофон {number}",
+    "unnamedSelectedMicrophone": "Микрофон"
   }
 }

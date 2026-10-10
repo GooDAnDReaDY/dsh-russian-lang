@@ -482,7 +482,9 @@
     "ask.pending": "продолжено; ответ по-прежнему доступен",
     "ask.pendingDetail": "На эти ожидающие вопросы всё ещё можно ответить из строки ввода.",
     "ask.reopen": "Ответить",
-    "ask.review": "Посмотреть ответы"
+    "ask.review": "Посмотреть ответы",
+    "row.commandArguments": "Аргументы команды",
+    "terminal.commandLine": "Командная строка {n}"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -693,7 +695,11 @@
     "chat.deepDivingFor": "Глубокий анализ: {duration}...",
     "duration.hourUnit": "ч ",
     "duration.minuteUnit": "м ",
-    "duration.secondUnit": "с"
+    "duration.secondUnit": "с",
+    "settings.collapse.completion": "По завершении",
+    "settings.collapse.description": "Выберите, когда автоматически сворачивать подробности выполнения",
+    "settings.collapse.nextInput": "При следующем сообщении",
+    "settings.collapse.title": "Когда сворачивать детали работы"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
@@ -1152,7 +1158,8 @@
     "layout.toolsAddedCount": "Добавлено: {count}",
     "layout.toolsChanged": "Добавлено: {added}, удалено: {removed}",
     "layout.toolsRemoved": "Удалено: {names}",
-    "layout.toolsRemovedCount": "Удалено: {count}"
+    "layout.toolsRemovedCount": "Удалено: {count}",
+    "details.lastAttemptError": "Ошибка последней попытки"
   },
   "slash.menu": {
     "crumbs.aria": "Навигация по папкам",
