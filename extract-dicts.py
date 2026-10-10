@@ -180,6 +180,6 @@ if __name__ == '__main__':
     plugin_paths = []
     if len(sys.argv) > 2:
         prof = sys.argv[2].rstrip('/\\')
-        for g in ('*/lib/client.js', '@*/*/lib/client.js', '*/client/client.js'):
+        for g in ('*/lib/client*.js', '@*/*/lib/client*.js', '*/client/client.js', '*/dist/agent/dsh-native-client.js', '*/dist/client.js'):
             plugin_paths += glob.glob(os.path.join(prof, g))
     dump(harvest(plugin_paths), 'plugins-en.json')

@@ -115,7 +115,9 @@
     "activity.completed": "завершено",
     "mode.unknown": "неизвестный режим",
     "readonly.unknown.body": "Прочитайте дочернюю сессию, чтобы определить, можно ли её продолжить.",
-    "open.sidebar.aria": "Открыть «{label}» на боковой панели"
+    "open.sidebar.aria": "Открыть «{label}» на боковой панели",
+    "catalog.migrationRequired": "Требуется миграция",
+    "mode.external": "Внешняя задача"
   },
   "settings.pluginInventory": {
     "active": "Подключён",
@@ -385,7 +387,7 @@
     "installPathTemplateHint": "Замените на фактический путь к каталогу плагина на диске.",
     "refreshError": "Не удалось обновить список. Повторите попытку.",
     "installProblemShipped": "Этот плагин поставляется вместе с DSH; обновление DSH обновит и его",
-    "installUpgradeNotice": "Установленные плагины пока не обновляются автоматически. Чтобы обновить плагин, удалите его и установите новую версию. В будущих релизах процесс обновления станет ещё удобнее.",
+    "installUpgradeNotice": "Официальные плагины по запросу предлагают кнопку «Обновить», когда их версия отличается от DSH. Для обновления остальных плагинов удалите и установите их заново.",
     "reasonIncompatibleInstall": "Установите версию плагина, совместимую с этой версией DSH.",
     "reasonIncompatibleInstalled": "Удалите его и установите версию, совместимую с этой версией DSH.",
     "sentenceSeparator": " ",
@@ -396,7 +398,16 @@
     "sourceBuiltIn": "Встроенный",
     "sourceSpec": "Источник кода",
     "sourceTitle": "Источник",
-    "sourceVersion": "Текущая версия"
+    "sourceVersion": "Текущая версия",
+    "sourceNotInstalled": "Не установлен",
+    "sourceTargetSpec": "Источник для этого DSH",
+    "sourceTargetVersion": "Версия для этого DSH",
+    "statusMissingFiles": "Пакет недоступен",
+    "statusNotInstalled": "Не установлен",
+    "statusUpdateAvailable": "Доступно обновление",
+    "terminalCommandLine": "Командная строка {n}",
+    "update": "Обновить",
+    "updateLabel": "Обновить {name}"
   },
   "settings.subagent": {
     "allowOverride": "Разрешить перезапись настроек сессии",

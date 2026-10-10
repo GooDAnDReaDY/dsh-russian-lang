@@ -79,7 +79,27 @@
     "fontSize.description": "Влияет только на содержимое диалога",
     "fontSize.increase": "Увеличить размер шрифта",
     "fontSize.title": "Размер шрифта",
-    "fontSize.unit": "пкс"
+    "fontSize.unit": "пкс",
+    "fontFamily.code.description": "Используется для блоков кода, строчного кода и вывода инструментов. Разделяйте шрифты запятыми; оставьте пустым для значения по умолчанию",
+    "fontFamily.code.title": "Шрифт кода",
+    "fontFamily.placeholder": "По умолчанию",
+    "fontFamily.terminal.description": "Используется для терминала в боковой панели. Разделяйте шрифты запятыми; оставьте пустым для значения по умолчанию",
+    "fontFamily.terminal.title": "Шрифт терминала",
+    "fontFamily.text.description": "Используется для интерфейса и текста диалога. Разделяйте шрифты запятыми; оставьте пустым для значения по умолчанию",
+    "fontFamily.text.title": "Шрифт текста",
+    "fontSize.code.decrease": "Уменьшить шрифт кода",
+    "fontSize.code.description": "Используется для блоков кода, строчного кода и вывода инструментов",
+    "fontSize.code.increase": "Увеличить шрифт кода",
+    "fontSize.code.title": "Размер шрифта кода",
+    "fontSize.more": "Дополнительные настройки шрифтов",
+    "fontSize.terminal.decrease": "Уменьшить шрифт терминала",
+    "fontSize.terminal.description": "Используется для терминала в боковой панели",
+    "fontSize.terminal.increase": "Увеличить шрифт терминала",
+    "fontSize.terminal.title": "Размер шрифта терминала",
+    "fontSize.text.decrease": "Уменьшить шрифт текста",
+    "fontSize.text.description": "Влияет только на содержимое диалога",
+    "fontSize.text.increase": "Увеличить шрифт текста",
+    "fontSize.text.title": "Размер шрифта"
   },
   "settings.locale": {
     "language.title": "Язык"

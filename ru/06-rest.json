@@ -65,7 +65,8 @@
     "terminal.noExitCode": "нет кода завершения",
     "terminal.noOutput": "(нет вывода)",
     "terminal.running": "выполняется",
-    "terminal.signal": "сигнал {signal}"
+    "terminal.signal": "сигнал {signal}",
+    "terminal.commandLine": "Командная строка {n}"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
