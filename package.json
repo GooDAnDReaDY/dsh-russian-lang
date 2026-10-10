@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.41",
-  "description": "Production-ready Russian translation plugin for DeepSeek Harness (DSH v0.2.1-alpha.1, 9,380 UI keys, 100% coverage, 86 plugins supported). Zero runtime dependencies, instant DOM hot-patching, full offline support.",
+  "version": "0.3.42",
+  "description": "Production-ready Russian translation plugin for DeepSeek Harness (DSH v0.2.1-alpha.2, 9,554 UI keys, 100% coverage, 87 plugins supported). Zero runtime dependencies, instant DOM hot-patching, full offline support.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
