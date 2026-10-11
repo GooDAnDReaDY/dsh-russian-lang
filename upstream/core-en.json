@@ -1909,9 +1909,6 @@
   "fontSize.code.description": "Used for code blocks, inline code, and tool output",
   "fontSize.code.increase": "Increase code font size",
   "fontSize.code.title": "Code font size",
-  "fontSize.decrease": "Decrease font size",
-  "fontSize.description": "Only affects conversation content",
-  "fontSize.increase": "Increase font size",
   "fontSize.more": "More font settings",
   "fontSize.terminal.decrease": "Decrease terminal font size",
   "fontSize.terminal.description": "Used for the sidebar terminal",
@@ -1921,7 +1918,6 @@
   "fontSize.text.description": "Only affects conversation content",
   "fontSize.text.increase": "Increase font size",
   "fontSize.text.title": "Font size",
-  "fontSize.title": "Font size",
   "fontSize.unit": "px"
  },
  "settings.webSearch": {
@@ -2304,7 +2300,6 @@
   "details.result": "Result",
   "details.retry": "Retry",
   "details.retryDelay": "Retry delay",
-  "details.scheduled": "Scheduled",
   "details.source": "Source",
   "details.status": "Status",
   "details.subtoolCalls": "Subtool calls",

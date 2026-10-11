@@ -45,13 +45,13 @@ test('v0.3.37: notify Web Push keys are present and translated (#467)', () => {
   assert.ok(dict['webpush.state.subscribed'], 'webpush.state.subscribed must be present')
 })
 
-test('v0.3.37: client.template.js contains registration logging (#472) and modern theme tokens (#473)', () => {
+test('v0.3.37: client.template.js contains registration logging (#472) and canonical theme tokens (#473, #490)', () => {
   const tmpl = fs.readFileSync(path.join(ROOT, 'lib', 'client.template.js'), 'utf8')
   assert.ok(tmpl.includes('[dsh-russian-lang] Failed to register core locale'), 'Must log core locale registration failure')
-  assert.ok(tmpl.includes('--dsw-elevation-2'), 'Must use canonical --dsw-elevation-2')
-  assert.ok(tmpl.includes('--dsw-elevation-3'), 'Must use canonical --dsw-elevation-3')
-  assert.ok(tmpl.includes('--dsw-brand-primary'), 'Must use canonical --dsw-brand-primary')
-  assert.ok(tmpl.includes('--dsw-state-warn-primary'), 'Must use canonical --dsw-state-warn-primary')
+  assert.ok(tmpl.includes('--dsw-elevation-soft'), 'Must use canonical --dsw-elevation-soft')
+  assert.ok(tmpl.includes('--dsw-shadow-lv3'), 'Must use canonical --dsw-shadow-lv3')
+  assert.ok(tmpl.includes('--dsw-alias-brand-primary'), 'Must use canonical --dsw-alias-brand-primary')
+  assert.ok(tmpl.includes('--dsw-alias-state-warn-primary'), 'Must use canonical --dsw-alias-state-warn-primary')
 })
 
 test('v0.3.37: check_data_integrity passes on clean repository (#468)', () => {

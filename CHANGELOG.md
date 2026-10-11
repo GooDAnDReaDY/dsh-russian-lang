@@ -1445,6 +1445,14 @@ Hotfix-релиз: восстановление работоспособност
 
 # Changelog
 
+## 0.3.43 (2026-10-11)
+
+### Исправления и улучшения (Issues #489, #490)
+- **#489**: Синхронизация дрейфа словарей ядра DSH v0.2.1-alpha.2 — удалены 5 устаревших ключей (4 ключа `settings.theme` устаревшего общего размера шрифта `fontSize.decrease/description/increase/title` и 1 ключ `trajectory` `details.scheduled`). Итоговый счетчик UI-ключей: 9,549 при 100.0% покрытии.
+- **#490**: Замена несуществующих (ghost) CSS-токенов темы на канонические токены ядра (`--dsw-alias-brand-primary`, `--dsw-alias-state-warn-primary`, `--dsw-shadow-lv3`, `--dsw-elevation-soft`, `--dsw-alias-bg-mask-1`, `--dsw-alias-label-primary-inverted`).
+- Добавлен сторож-тест `test/test_canonical_tokens.mjs` для проверки валидности всех используемых `--dsw-*` токенов против канона ядра.
+- Синхронизированы версии установленных плагинов окружения web в `supported-inventory.json`.
+
 ## 0.3.33
 
 - **Strict SemVer 2.0.0 compliance (#432)**:
