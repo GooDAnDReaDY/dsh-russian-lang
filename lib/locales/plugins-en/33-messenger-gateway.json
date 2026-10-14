@@ -1,0 +1,1 @@
+{"dsh-messenger-gateway":{"apiRoot":"Custom Telegram Bot API Base URL","apiRootHint":"Custom API root for reverse proxies or local Bot API servers. Default: https://api.telegram.org","proxyUrl":"Proxy URL (HTTP, HTTPS, SOCKS5)","proxyUrlHint":"Optional proxy for Telegram API requests (e.g. socks5://127.0.0.1:1080 or http://127.0.0.1:8080)."}}

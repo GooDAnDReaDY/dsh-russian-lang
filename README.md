@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.42-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.3.45-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-20%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -14,7 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.2.1--alpha.2%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.1.7-rc.2+">
   <img src="https://img.shields.io/badge/Покрытие-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="Покрытие 100%">
-  <img src="https://img.shields.io/badge/Ключей_UI-9554-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="9359 ключей">
+  <img src="https://img.shields.io/badge/Ключей_UI-9850-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="9359 ключей">
   <img src="https://img.shields.io/badge/Ручная_вычитка-100%25-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="100% ручная вычитка">
 </p>
 
@@ -234,3 +234,9 @@ MIT © [GooDAnDReaDY](https://github.com/GooDAnDReaDY)
 | `off` (по умолчанию) | никуда | ✅ полная | не нужен |
 | `google` | Google (googleapis.com) | ⚠️ текст отправляется третьей стороне | нужен |
 | `libretranslate` | localhost:5000 (Docker) | ✅ локально | нужен только для загрузки образа |
+
+
+> [!NOTE]
+> **Ограничение системного меню Electron:**
+> Пункты системного меню десктопной оболочки Electron (Application, Edit, File, Quit, Undo/Redo/Cut/Copy/Paste и др.) принадлежат главному процессу Electron (`app.asar`) на уровне операционной системы и не подлежат переводу веб-плагинами DSH.
+
