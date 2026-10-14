@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.44",
-  "description": "Полная русская локализация DeepSeek Harness (DSH v0.2.1-alpha.2, 9846 UI keys, 88 plugins)",
+  "version": "0.3.45",
+  "description": "Полная русская локализация DeepSeek Harness (DSH v0.2.1-alpha.2+): 9,850 UI keys, 88 plugins, smart typography, auto layout fix.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -17,7 +17,8 @@
     "glossary.json",
     "cordis.patch.yml",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "supported-inventory.json"
   ],
   "dsh": {
     "bundle": {

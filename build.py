@@ -180,6 +180,32 @@ for path in plugin_sources:
     plugin_content = json.dumps(filtered, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
     write_or_check(out_file, plugin_content)
 
+# Поставка каталога англоязычных строк плагинов в lib/locales/plugins-en/*.json (Issue GH-11, #498).
+# Каталог plugins-en.json разбивается на файлы по плагинам/пространствам, чтобы каждый
+# файл оставался строго < 256 KiB и проходил проверку лимитов DSH Store.
+plugins_en_path = os.path.join(HERE, 'plugins-en.json')
+if os.path.exists(plugins_en_path):
+    all_en = json.load(open(plugins_en_path, encoding='utf-8'))
+    en_dir = os.path.join(HERE, 'lib', 'locales', 'plugins-en')
+    os.makedirs(en_dir, exist_ok=True)
+    if not CHECK_MODE:
+        for existing in glob.glob(os.path.join(en_dir, '*.json')):
+            if os.path.basename(existing) not in expected_plugin_bases:
+                os.remove(existing)
+                print(f"Удалён устаревший артефакт en: {existing}")
+    for path in plugin_sources:
+        part = json.load(open(path, encoding='utf-8'))
+        en_filtered = {}
+        for ns in part.keys():
+            if ns in all_en:
+                en_filtered[ns] = all_en[ns]
+        if en_filtered:
+            base = os.path.basename(path)
+            out_file = os.path.join(en_dir, base)
+            en_content = json.dumps(en_filtered, ensure_ascii=False, separators=(',', ':'), sort_keys=True)
+            write_or_check(out_file, en_content)
+    print('Сгенерирован каталог lib/locales/plugins-en/*.json')
+
 # Карта zh->ru для DOM-перевода панелей, игнорирующих locale-ядро (например
 # dsh-skill-hub выбирает свой словарь по documentElement.lang и умеет только
 # en/zh). Собирается из zh-референсов сторонних плагинов и наших ru-словарей:
