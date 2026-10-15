@@ -3,18 +3,18 @@
   "generated_at": "2026-10-15T18:07:32Z",
   "core": {
     "target": "DeepSeek Harness",
-    "supported_version": "0.2.1-alpha.2",
+    "supported_version": "0.2.1-alpha.3",
     "compatible_range": ">=0.2.0-rc.1 <0.3.0",
-    "namespaces_count": 60,
-    "keys_count": 2588
+    "namespaces_count": 61,
+    "keys_count": 2619
   },
   "metrics": {
-    "core_namespaces": 60,
-    "core_keys": 2588,
+    "core_namespaces": 61,
+    "core_keys": 2619,
     "plugin_namespaces": 49,
-    "plugin_keys": 7780,
-    "total_namespaces": 109,
-    "total_keys": 10368,
+    "plugin_keys": 7781,
+    "total_namespaces": 110,
+    "total_keys": 10400,
     "coverage_percent": 100,
     "reviewed_percent": 100,
     "draft_count": 0,

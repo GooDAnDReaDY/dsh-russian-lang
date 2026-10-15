@@ -1478,6 +1478,32 @@ Hotfix-релиз: восстановление работоспособност
 
 # Changelog
 
+## [0.3.47] - 2026-10-15
+
+### Добавлено
+- **Поддержка DSH v0.2.1-alpha.3**:
+  - Полный перевод всех 39 новых ключей ядра по 7 пространствам имён (итого 61 namespace, 2 619 ключей ядра):
+    - `chat` (2 ключа): `message.failure.interrupted`, `message.taskStopped`
+    - `conversation` (2 ключа): `row.imageSize`, `row.imageSizeDownscaled`
+    - `pluginManager` (12 ключей): расширенные настройки встроенных плагинов, предпросмотр возможностей, расширенная диагностика причин перезапуска (`reasonAlreadyInstalled`, `restartReasonHostModule`, `restartReasonModuleComparison`, `restartReasonNoHmr`, `restartReasonPackageMoved`, `restartReasonUnmanagedPlugin`)
+    - `reference` (4 ключа): диалог ошибки открытия файла в IDE/редакторе (`fileOpen.close`, `fileOpen.failed`, `fileOpen.retry`, `fileOpen.title`)
+    - `secretMask` (2 ключа, новый namespace): управление маскированием конфиденциальных данных (`secret.hide`, `secret.reveal`)
+    - `settings.models` (14 ключей): интеграция системных переменных окружения, fallback-статусы и подсказки к API-ключам
+    - `workspace` (3 ключа): копирование идентификатора рабочей сессии (`menu.sessionId`, тосты успеха и ошибки)
+- **Плагины экосистемы**:
+  - `dsh-key-rotation`: добавлен перевод новой стратегии маршрутизации `routingStrategySticky` («Закрепление ключа (Sticky, сохраняет кэш промпта)»). Итого в экосистеме 49 пространств имён, 7 781 ключ.
+  - Общий объём переведённых ключей UI достиг **10 400** со **100.0%** покрытием и 100% ручной вычиткой.
+
+### Исправлено
+- Скорректированы плейсхолдеры в `pluginManager.restartNotice` и `installDoneRestart` с поддержкой `{reason}` для новой схемы информирования пользователя.
+- Восстановлен точный плейсхолдер `{0}` в фильтре несовместимых плагинов `dsh-market.hostFilterActive`.
+
+### Документация и медиа
+- Обновлены бейджи и метрики в `README.md` (10 400 ключей UI, DSH v0.2.1-alpha.3+).
+- Сгенерирован обновлённый заглавный баннер `docs/media/banner.jpg` (2 619 ядро, 7 781 плагины, плашка DSH v0.2.1-ALPHA.3 · 10 400 КЛЮЧЕЙ, бейдж «УМНЫЙ PLURAL»).
+
+---
+
 ## 0.3.44 (2026-10-13)
 
 ### Новые возможности и исправления (Issues #493, #494)

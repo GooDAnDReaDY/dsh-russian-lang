@@ -484,7 +484,9 @@
     "ask.reopen": "Ответить",
     "ask.review": "Посмотреть ответы",
     "row.commandArguments": "Аргументы команды",
-    "terminal.commandLine": "Командная строка {n}"
+    "terminal.commandLine": "Командная строка {n}",
+    "row.imageSize": "{width}x{height} пкс, {bytes} байт",
+    "row.imageSizeDownscaled": "{width}x{height} пкс (уменьшено с {originalWidth}x{originalHeight} пкс), {bytes} байт"
   },
   "chat": {
     "chat.deepDiving": "Глубокий анализ…",
@@ -699,7 +701,9 @@
     "settings.collapse.completion": "По завершении",
     "settings.collapse.description": "Выберите, когда автоматически сворачивать подробности выполнения",
     "settings.collapse.nextInput": "При следующем сообщении",
-    "settings.collapse.title": "Когда сворачивать детали работы"
+    "settings.collapse.title": "Когда сворачивать детали работы",
+    "message.failure.interrupted": "Процесс DSH завершился до окончания этого шага (был принудительно остановлен, аварийно завершился или превысил тайм-аут при выключении), поэтому шаг был закрыт при перезапуске DSH. Результаты незавершённых вызовов инструментов неизвестны.",
+    "message.taskStopped": "Задача остановлена"
   },
   "trajectory": {
     "block.label": "Блок #{index} {type}",
