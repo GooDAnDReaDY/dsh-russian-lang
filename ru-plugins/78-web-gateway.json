@@ -85,7 +85,16 @@
     "compactExtractDesc": "Удалять уведомления о cookies, навигационный мусор и избыточное форматирование для экономии токенов.",
     "dailyCapBrave": "Дневной лимит: Brave",
     "dailyCapDuckduckgo": "Дневной лимит: DuckDuckGo",
-    "health_circuit_breaker": "Состояние предохранителя (Circuit Breaker)"
+    "health_circuit_breaker": "Состояние предохранителя (Circuit Breaker)",
+    "egressProxyUrl": "URL исходящего HTTP/HTTPS-прокси",
+    "egressProxyUrlDesc": "Необязательный URL прокси (напр. http://127.0.0.1:8888) для SearXNG, DuckDuckGo, Crawl4AI и Readability.",
+    "health_est_total": "Ориент. общая стоимость",
+    "health_reset_telemetry": "Сбросить телеметрию",
+    "health_telemetry": "Задержка и расчётная стоимость",
+    "parallelMaxConcurrency": "Макс. параллельность запросов",
+    "parallelMaxConcurrencyDesc": "Максимальное число одновременных провайдеров в режимах гонки (race) или агрегации (1–6).",
+    "searchStrategy": "Стратегия выполнения поиска",
+    "searchStrategyDesc": "fallback (последовательно) | race (по первому ответу) | aggregate (слияние и дедупликация)."
   },
   "@goodandready/dsh-web-gateway": {
     "title": "Веб-шлюз (Web Gateway)",

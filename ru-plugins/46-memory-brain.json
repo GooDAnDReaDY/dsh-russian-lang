@@ -100,6 +100,7 @@
     "memory.chip.copy": "Копировать",
     "memory.chip.copied": "Скопировано",
     "memory.chip.close": "Закрыть",
-    "field.showMemoryIndicator": "Показывать индикатор памяти в ответах"
+    "field.showMemoryIndicator": "Показывать индикатор памяти в ответах",
+    "field.checkpointTimeoutMs": "Тайм-аут контрольной точки (мс)"
   }
 }
