@@ -4838,7 +4838,8 @@
     "simulatorRunning": "Simulating...",
     "simulatorSelectModel": "Model (optional)",
     "simulatorSelectProvider": "Provider",
-    "simulatorTitle": "Interactive Routing Simulator"
+    "simulatorTitle": "Interactive Routing Simulator",
+    "routingStrategySticky": "Sticky (preserves prompt cache)"
   },
   "dsh-market": {
     "actWhy": "Why is it not active?",

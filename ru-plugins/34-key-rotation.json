@@ -272,7 +272,8 @@
     "simulatorRunning": "Симуляция…",
     "simulatorSelectModel": "Модель (необязательно)",
     "simulatorSelectProvider": "Провайдер",
-    "simulatorTitle": "Интерактивный симулятор маршрутизации"
+    "simulatorTitle": "Интерактивный симулятор маршрутизации",
+    "routingStrategySticky": "Закрепление ключа (Sticky, сохраняет кэш промпта)"
   },
   "keyRotation": {
     "updateCheck": "Проверить обновления",

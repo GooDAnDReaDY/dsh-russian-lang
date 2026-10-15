@@ -23,7 +23,7 @@ test('v0.3.45: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(readme.includes('npm-v'), 'README npm badge must be present')
-  assert.ok(readme.includes('10368') || readme.includes('9850'), 'README keys badge must be present')
+  assert.ok(readme.includes('10400') || readme.includes('10368') || readme.includes('9850'), 'README keys badge must be present')
   assert.ok(readme.includes('Ограничение системного меню Electron'), 'README must mention Electron limitation')
 })
 
