@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.45",
-  "description": "Полная русская локализация DeepSeek Harness (DSH v0.2.1-alpha.2+): 9,850 UI keys, 88 plugins, smart typography, auto layout fix.",
+  "version": "0.3.46",
+  "description": "Полная русская локализация DeepSeek Harness (DSH v0.2.1-alpha.2+): 10,368 UI keys, 88 plugins, smart typography, auto layout fix.",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
