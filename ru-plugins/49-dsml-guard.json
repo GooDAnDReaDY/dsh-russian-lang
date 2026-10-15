@@ -66,5 +66,8 @@
     "providersPlaceholder": "все провайдеры (через запятую, например commandcode, deepseek-official)",
     "legacyDetected": "Обнаружены устаревшие поля providerId / modelId: действуют как дополнительное правило.",
     "legacyClear": "Очистить устаревшие поля"
+  },
+  "@goodandready/dsh-agent-loop-guard": {
+    "updateViaPluginsPage": "Обновить на странице плагинов"
   }
 }

@@ -307,6 +307,13 @@
     "themePair.dark": "Тёмная",
     "themePair.light": "Светлая",
     "themePair.title": "Графика для пары тем",
-    "title": "AI Image Studio"
+    "title": "AI Image Studio",
+    "f.activeProjectProfile": "Активный профиль проекта",
+    "f.activeProjectProfileHint": "Выберите сохранённый визуальный профиль (палитру, стиль, формат) для согласованного применения при генерации (#435).",
+    "f.comfyTemplate": "Шаблон рабочего процесса ComfyUI",
+    "f.comfyTemplateHint": "Проверенный шаблон пайплайна (напр., SDXL txt2img, img2img, перенос лиц InstantID, апскейлер RealESRGAN).",
+    "vault.exportDesign": "🎨 OpenDesign",
+    "vault.exportDesignCopied": "Фрагмент Figma/Penpot и Data-URL скопированы в буфер обмена!",
+    "vault.exportDesignFailed": "Не удалось экспортировать фрагмент дизайна"
   }
 }

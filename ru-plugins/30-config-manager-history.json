@@ -53,6 +53,7 @@
     "history.result.skipped": "Skipped",
     "history.kind.backup-manual": "Ручной бэкап",
     "history.kind.profile-create": "Создан профиль",
-    "history.kind.profile-select": "Задан профиль для следующего запуска"
+    "history.kind.profile-select": "Задан профиль для следующего запуска",
+    "common.infoHint": "Показать описание"
   }
 }

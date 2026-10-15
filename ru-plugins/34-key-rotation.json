@@ -259,7 +259,20 @@
     "tokenLimitPlaceholder": "без ограничений",
     "tpmTitle": "токенов/мин: использовано {u}, осталось {r}",
     "rpmLimitLabel": "Лимит частоты (RPM)",
-    "tpmLimitLabel": "Лимит частоты (TPM)"
+    "tpmLimitLabel": "Лимит частоты (TPM)",
+    "simulatorDesc": "Тестирование стратегий маршрутизации и визуализация трассировки переключения ключей без отправки реальных запросов.",
+    "simulatorEvent": "Результат симуляции",
+    "simulatorEventRateLimit": "Ключ 1: превышен лимит запросов (429)",
+    "simulatorEventServer500": "Ключ 1: внутренняя ошибка сервера (500)",
+    "simulatorEventSuccess": "Все ключи работают успешно",
+    "simulatorMaxAttempts": "Максимум попыток",
+    "simulatorNoResults": "Запустите симуляцию, чтобы увидеть трассировку выполнения.",
+    "simulatorResults": "Трассировка симуляции",
+    "simulatorRun": "Запустить симуляцию",
+    "simulatorRunning": "Симуляция…",
+    "simulatorSelectModel": "Модель (необязательно)",
+    "simulatorSelectProvider": "Провайдер",
+    "simulatorTitle": "Интерактивный симулятор маршрутизации"
   },
   "keyRotation": {
     "updateCheck": "Проверить обновления",
