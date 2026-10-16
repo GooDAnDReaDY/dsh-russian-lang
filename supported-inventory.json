@@ -11,10 +11,10 @@
   "metrics": {
     "core_namespaces": 61,
     "core_keys": 2619,
-    "plugin_namespaces": 49,
-    "plugin_keys": 7781,
-    "total_namespaces": 110,
-    "total_keys": 10400,
+    "plugin_namespaces": 50,
+    "plugin_keys": 7813,
+    "total_namespaces": 111,
+    "total_keys": 10432,
     "coverage_percent": 100,
     "reviewed_percent": 100,
     "draft_count": 0,
@@ -109,5 +109,14 @@
     "dsh-spendmeter"
   ],
   "core_keys": 2588,
-  "total_keys": 9850
+  "total_keys": 9850,
+  "headless_plugins": [
+    "@goodandready-private/dsh-scrapling-fast",
+    "dsh-find-plugin",
+    "dsh-ponytail-skills",
+    "dsh-web",
+    "github-explore",
+    "humanizer-ru-dsh",
+    "upstream-radar"
+  ]
 }
