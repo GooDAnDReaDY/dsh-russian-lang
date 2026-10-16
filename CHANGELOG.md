@@ -1,3 +1,23 @@
+## [0.3.48] - 2026-10-16
+
+### Исправлено
+- **Устранение дрейфа сопоставления плагинов и i18n-пространств имён (Refs: #504, GH-12..19)**:
+  - Реализованы таблицы канонических алиасов PACKAGE_ALIASES и фильтрации серверных плагинов HEADLESS_PLUGINS (lib/pure.js, lib/locales.js).
+  - Устранена ошибка ложного детектирования 0% покрытия в «Панели состояния локализации» для плагинов с составными именами пакетов (@feng0531/dsh-code-review, @linxin666/dsh-client-ui-skill-explorer, @liustack/modsearch, @log.li/dsh-automode, @mars-sea/dsh-commandcode-provider, @michengai/dsh-agency-agents, @michengai/dsh-skills-manager, @opencode2dsh/dsh-plugin, @vlln/dsh-navbar).
+  - Заблокировано ошибочное создание пустых issues с 0 недостающих ключей: генератор ссылок makeIssueUrl и интерфейс карточки плагинов выводят кнопку запроса перевода только при реальном наличии недостающих ключей (missingKeys > 0).
+  - Серверные плагины Cordis без UI (@goodandready-private/dsh-scrapling-fast, dsh-web, upstream-radar, dsh-find-plugin, dsh-ponytail-skills, humanizer-ru-dsh, github-explore) помечены статусом headless («Серверный плагин (без UI)») со 100% готовностью и без кнопок отправки ложных запросов.
+  - Исправлена кодировка UTF-8 для действий закрепления и открепления плагина @vlln/dsh-navbar (pin.action.pin -> «Закрепить», pin.action.unpin -> «Открепить»).
+
+### Добавлено
+- **Полная русская локализация @liustack/modsearch (Refs: #504, GH-14)**:
+  - Добавлен словарь ru-plugins/89-modsearch.json (31 ключ, 100% покрытие настроек поискового движка, API-ключей, ротации, цепочек failover и тарифов).
+  - В карту мгновенной DOM-замены DOM_EN_TEXT интегрирован полный перевод всех 31 элементов интерфейса ModSearch для поддержки автономных CJS-модулей, не обращающихся к runtime-локали DSH.
+- **Метрики и инвентарь**:
+  - Общий объём переведённых ключей UI достиг 10 432 (2 619 ядра DSH + 7 813 плагинов экосистемы) по 111 пространствам имён при 100.0% эффективном покрытии всех 83 плагинов (76 UI + 7 серверных).
+  - В supported-inventory.json добавлен раздел headless_plugins с фиксацией 7 серверных модулей.
+  - Обновлён заглавный баннер docs/media/banner.jpg (10 432 КЛЮЧЕЙ, ядро 2 619, плагины 7 813).
+
+
 ## 0.3.46
 
 - **Локализация карточки настроек memoryMeter (Refs: #492, #500)**:
