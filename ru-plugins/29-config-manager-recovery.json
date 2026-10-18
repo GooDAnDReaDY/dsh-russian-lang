@@ -599,6 +599,17 @@
     "sessions.severityShort.blocksStartup": "Блокирует запуск",
     "sessions.severityShort.invisible": "Невидима",
     "sessions.severityShort.nextRequestFails": "Следующий запрос упадёт",
-    "sessions.severityShort.unloadable": "Не загружается"
+    "sessions.severityShort.unloadable": "Не загружается",
+    "rollback.preview.select.foreign": "Изменено другим диалогом",
+    "rollback.preview.select.toggle": "«{path}»: отметить для восстановления при этом откате",
+    "rollback.result.foreignSkipped": "Файлов изменено другим диалогом после этой точки: {n}; при этом откате они оставлены без изменений",
+    "rollback.result.merged": "Файлов объединено: {n} (изменение из этого диалога отменено, правка из другого диалога сохранена)",
+    "rollback.result.conflict": "Файлов изменено с обеих сторон в одном месте: {n} (оставлены как есть — требуется ваше решение)",
+    "rollback.result.unavailable": "Файлов невозможно безопасно откатить: {n} (нет общего предка / бинарный файл / слишком большой diff; оставлены как есть)",
+    "rollback.result.concurrent": "Файлов изменено повторно во время выполнения отката: {n} (оставлены как есть)",
+    "rollback.result.selectionSkipped": "Файлов пропущено по вашему выбору: {n}",
+    "rollback.preview.file.skipped": "Оставлено без изменений (конфликт с другим диалогом либо невозможно безопасно объединить)",
+    "rollback.diff.merged": "Ниже показан результат объединения: изменение из этого диалога отменено, правка из другого диалога сохранена",
+    "rollback.diff.skipped": "Этот откат не затронет файл (конфликт с другим диалогом либо невозможно безопасно объединить)"
   }
 }

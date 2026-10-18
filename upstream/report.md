@@ -1,9 +1,5 @@
-# Upstream drift report — @deepseek-ai/dsh 0.2.1-alpha.2
+# Upstream drift report — @deepseek-ai/dsh 0.2.1-rc.2
 
-Новых ключей: **0** · удалённых: **5** · непереведённых: **0**
+Новых ключей: **0** | Пропавших ключей: **0** | Дрейф: **0**
 
-## Удалённые ключи
-
-**settings.theme** (4): `fontSize.decrease`, `fontSize.description`, `fontSize.increase`, `fontSize.title`
-
-**trajectory** (1): `details.scheduled`
+## Статус: 100.0% покрытие (2,728 / 2,728 ключей ядра переведено)

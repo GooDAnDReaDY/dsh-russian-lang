@@ -132,7 +132,17 @@
     "keyHide": "Скрыть секрет",
     "keyPlaceholderFallback": "Оставьте пустым для авторизации через окружение ({hint})",
     "keyPlaceholderSaved": "Оставьте пустым для использования сохраненных данных",
-    "keyReveal": "Показать секрет"
+    "keyReveal": "Показать секрет",
+    "modelReasoning": "Уровни рассуждений",
+    "modelReasoningLevel": "Уровень",
+    "modelReasoningValue": "Значение для API",
+    "modelReasoningHelp": "Об уровнях рассуждений",
+    "modelReasoningHelpText": "Значение для API передаётся в поле запроса reasoning-effort (например, reasoning_effort в OpenAI). По умолчанию совпадает с названием уровня; если в документации API провайдера модели указано иное значение, используйте его. Значение «Выкл» отключает рассуждения и не требует параметра; значение, уже записанное в конфигурации, сохраняется и отправляется.",
+    "modelReasoningNeedsLevel": "Добавьте хотя бы один уровень помимо «Выкл» либо отключите уровни рассуждений.",
+    "modelReasoningValueRequired": "Каждый уровень помимо «Выкл» требует значения для API; значение не может быть пустым.",
+    "modelReasoningAdd": "Добавить уровень",
+    "modelReasoningRemove": "Удалить уровень",
+    "modelReasoningOffValuePlaceholder": "Отключает рассуждения"
   },
   "workspace": {
     "actions.newSession.aria": "Новая сессия в {name}",

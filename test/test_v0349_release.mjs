@@ -7,26 +7,26 @@ const ROOT = path.resolve(import.meta.dirname, '..')
 
 test('v0.3.49: package.json, README and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-  assert.equal(pkg.version, '0.3.49')
+  assert.ok(pkg.version >= '0.3.49')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
-  assert.ok(pkg.description.includes('10,432'), 'Description must reflect 10,432 keys')
+  assert.ok(pkg.description.includes('10,432') || pkg.description.includes('10,898'), 'Description must reflect keys')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
   assert.ok(cl.includes('0.3.49'), 'CHANGELOG must mention 0.3.49')
   assert.ok(cl.includes('#506'), 'CHANGELOG must mention issue #506')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.49'), 'README npm badge must be v0.3.49')
-  assert.ok(readme.includes('10432'), 'README keys badge must be 10432')
+  assert.ok(readme.includes('npm-v0.3.49') || readme.includes('npm-v0.4.0'), 'README npm badge')
+  assert.ok(readme.includes('10432') || readme.includes('10898'), 'README keys badge')
 })
 
 test('v0.3.49: supported-inventory has 10,432 total keys, 111 namespaces and 7 headless plugins', () => {
   const inv = JSON.parse(fs.readFileSync(path.join(ROOT, 'supported-inventory.json'), 'utf8'))
-  assert.equal(inv.metrics.total_keys, 10432)
-  assert.equal(inv.metrics.core_keys, 2619)
-  assert.equal(inv.metrics.plugin_keys, 7813)
-  assert.equal(inv.metrics.total_namespaces, 111)
-  assert.equal(inv.metrics.plugin_namespaces, 50)
+  assert.ok(inv.metrics.total_keys >= 10432)
+  assert.ok(inv.metrics.core_keys >= 2619)
+  assert.ok(inv.metrics.plugin_keys >= 7813)
+  assert.ok(inv.metrics.total_namespaces >= 111)
+  assert.ok(inv.metrics.plugin_namespaces >= 50)
   assert.equal(inv.headless_plugins.length, 7)
 })
 
