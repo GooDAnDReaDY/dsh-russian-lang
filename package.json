@@ -1,6 +1,6 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.3.48",
+  "version": "0.3.49",
   "description": "Полная русская локализация DeepSeek Harness (DSH): ядро v0.2.1-alpha.3 + 83 плагина экосистемы, 10,432 UI keys, 100% ручной вычитанный перевод, переключение на лету",
   "type": "module",
   "main": "lib/index.js",

@@ -7,7 +7,7 @@ const ROOT = path.resolve(import.meta.dirname, '..')
 
 test('v0.3.48: package.json, README and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
-  assert.equal(pkg.version, '0.3.48')
+  assert.ok(pkg.version >= '0.3.48')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
   assert.ok(pkg.description.includes('10,432'), 'Description must reflect 10,432 keys')
   assert.ok(pkg.files.includes('supported-inventory.json'), 'files must include supported-inventory.json')
@@ -17,7 +17,7 @@ test('v0.3.48: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('#504'), 'CHANGELOG must mention issue #504')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.48'), 'README npm badge must be v0.3.48')
+  assert.ok(readme.includes('npm-v0.3.48') || readme.includes('npm-v0.3.49'), 'README npm badge must be v0.3.48 or v0.3.49')
   assert.ok(readme.includes('10432'), 'README keys badge must be 10432')
 })
 
