@@ -68,7 +68,14 @@
     "developerTools.error": "Не удалось сохранить. Пожалуйста, повторите попытку.",
     "developerTools.title": "Инструменты разработчика",
     "general.currentVersion": "Текущая версия: {version}",
-    "shortcut.open": "Открыть настройки"
+    "shortcut.open": "Открыть настройки",
+    "hostRelease.title": "Версия службы изменилась",
+    "hostRelease.description": "Версия службы изменилась. Динамические обновления страницы приостановлены; перезагрузите страницу для загрузки новой версии.",
+    "hostRelease.service": "Служба",
+    "hostRelease.page": "Страница",
+    "hostRelease.unknown": "Неизвестно",
+    "hostRelease.reload": "Перезагрузить для обновления",
+    "hostRelease.later": "Не сейчас"
   },
   "settings.theme": {
     "appearance.dark": "Тёмная",

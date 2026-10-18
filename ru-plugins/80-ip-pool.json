@@ -98,6 +98,9 @@
     "subscriptionRefreshMs": "Интервал обновления (мс)",
     "subscriptionRefreshMsHint": "По умолчанию 1 800 000 (30 мин). Подписки опрашиваются плавно, без одновременных всплесков.",
     "subscriptionRefreshNow": "Обновить сейчас",
-    "title": "Пул IP (opencode2dsh)"
+    "title": "Пул IP (opencode2dsh)",
+    "subscriptionUserAgent": "User-Agent подписки (subscription.userAgent)",
+    "subscriptionUserAgentHint": "User-Agent при запросе подписок. Серверы подписок часто проверяют его по белому списку (неизвестный возвращает ошибку или 502), а некоторые выбирают формат отдачи: формат Clash отдаёт YAML, формат v2ray отдаёт base64-ссылки. Пусто = встроенный по умолчанию.",
+    "readOnly": "Конфигурация доступна только для чтения; сохранение изменений невозможно."
   }
 }
