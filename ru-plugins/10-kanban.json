@@ -515,6 +515,19 @@
     "tm.snapshotFailed": "Не удалось создать чекпоинт: ",
     "tm.rollbackSuccess": "Воркдерево успешно откачено к стартовому слепку!",
     "tm.rollbackFailed": "Ошибка отката: ",
-    "tm.notice": "Для создания слепков и отката необходим установленный плагин @goodandready/dsh-time-machine."
+    "tm.notice": "Для создания слепков и отката необходим установленный плагин @goodandready/dsh-time-machine.",
+    "spec.title": "Техническая спецификация и план",
+    "spec.generate": "Сгенерировать план",
+    "spec.generating": "Генерация плана…",
+    "spec.generated": "План успешно сгенерирован!",
+    "spec.failed": "Ошибка генерации плана: ",
+    "spec.edit": "Редактировать спецификацию",
+    "spec.save": "Сохранить спецификацию",
+    "spec.saved": "Спецификация сохранена!",
+    "pr.title": "Pull Request и Release Notes",
+    "pr.generate": "Сгенерировать PR",
+    "pr.copy": "Скопировать Markdown",
+    "pr.copied": "Скопировано в буфер обмена!",
+    "pr.failed": "Ошибка генерации PR: "
   }
 }
