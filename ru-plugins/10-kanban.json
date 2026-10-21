@@ -528,6 +528,18 @@
     "pr.generate": "Сгенерировать PR",
     "pr.copy": "Скопировать Markdown",
     "pr.copied": "Скопировано в буфер обмена!",
-    "pr.failed": "Ошибка генерации PR: "
+    "pr.failed": "Ошибка генерации PR: ",
+    "field.notificationsEnabled": "Десктопные уведомления",
+    "hint.notificationsEnabled": "Показывать системные push-уведомления о ключевых событиях доски (готовность к ревью, ошибка проверки, зависание).",
+    "field.audioAlertsEnabled": "Звуковые сигналы",
+    "hint.audioAlertsEnabled": "Воспроизводить синтезированные звуковые сигналы Web Audio при событиях задач.",
+    "dup.title": "Дубликаты задач",
+    "dup.found": "Найдены похожие задачи:",
+    "dup.check": "Проверить дубликаты",
+    "dup.checking": "Проверка…",
+    "notify.reviewTitle": "Задача готова к ревью",
+    "notify.stalledTitle": "Задача зависла",
+    "notify.failedTitle": "Ошибка проверки задачи",
+    "notify.permission": "Включить уведомления"
   }
 }
