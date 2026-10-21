@@ -16,7 +16,7 @@ test('v0.3.33: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('## 0.3.33'), 'CHANGELOG must mention 0.3.33')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be v0.3.x')
+  assert.ok(readme.includes('npm-v0.3.') || readme.includes('npm-v0.4.'), 'README npm badge')
 })
 
 test('v0.3.33: SemVer 2.0.0 leading zeroes and numeric prerelease (§2, §9, §11)', () => {

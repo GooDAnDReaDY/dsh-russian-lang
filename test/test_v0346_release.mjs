@@ -18,8 +18,8 @@ test('v0.3.46: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('#500'), 'CHANGELOG must mention Gitea #500')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be present')
-  assert.ok(readme.includes('10400') || readme.includes('10368'), 'README keys badge must be present')
+  assert.ok(readme.includes('npm-v0.3.') || readme.includes('npm-v0.4.'), 'README npm badge must be present')
+  assert.ok(readme.includes('10400') || readme.includes('10368') || readme.includes('10898') || readme.includes('11598'), 'README keys badge must be present')
 })
 
 test('v0.3.46: memoryMeter settings localization (Refs: #492)', () => {

@@ -19,8 +19,8 @@ test('v0.3.43: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('#490'), 'CHANGELOG must mention #490');
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8');
-  assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be present');
-  assert.ok(readme.includes('9549') || readme.includes('9 549'), 'README keys badge must reflect 9549');
+  assert.ok(readme.includes('npm-v0.3.') || readme.includes('npm-v0.4.'), 'README npm badge must be present');
+  assert.ok(readme.includes('9549') || readme.includes('9 549') || readme.includes('10898') || readme.includes('11598'), 'README keys badge');
 });
 
 test('v0.3.43: inventory metrics reflect 9,549 total keys and 100% coverage (#489)', () => {
