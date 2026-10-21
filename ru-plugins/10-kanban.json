@@ -496,6 +496,25 @@
     "panel.startWorkflow": "⚡ Workflow",
     "panel.startWorkflowHint": "Запустить мультиагентный рабочий процесс через движок ядра",
     "action.cancelWorkflow": "Отменить Workflow",
-    "error.timeout": "Время ожидания запроса истекло. Пожалуйста, попробуйте снова."
+    "error.timeout": "Время ожидания запроса истекло. Пожалуйста, попробуйте снова.",
+    "card.blocked": "Заблокирована",
+    "panel.blockedTitle": "Задача заблокирована зависимостями",
+    "panel.blockedDesc": "Эта задача заблокирована незавершёнными задачами. Все блокирующие задачи должны быть перемещены в «Выполнено» перед началом.",
+    "panel.blockedBy": "Блокируется задачами",
+    "settings.timeMachineNotice": "Создание автоматических слепков (чекпоинтов) и откат задач работают только при установленном и активном плагине @goodandready/dsh-time-machine в профиле DSH.",
+    "field.timeMachineEnabled": "Слепки Time Machine",
+    "hint.timeMachineEnabled": "Включить интеграцию с @goodandready/dsh-time-machine для чекпоинтов и быстрого отката.",
+    "field.timeMachineAutoSnapshot": "Автослепок при старте",
+    "hint.timeMachineAutoSnapshot": "Автоматически создавать стартовый слепок (inception) при переходе задачи в «В работе».",
+    "group.timeMachine": "Слепки Time Machine",
+    "tm.title": "Слепки Time Machine",
+    "tm.createCheckpoint": "Создать чекпоинт",
+    "tm.rollbackInception": "Откатить к старту",
+    "tm.confirmRollback": "Откатить воркдерево задачи к стартовому слепку (inception)? Все незакоммиченные изменения будут сброшены.",
+    "tm.snapshotCreated": "Чекпоинт успешно создан!",
+    "tm.snapshotFailed": "Не удалось создать чекпоинт: ",
+    "tm.rollbackSuccess": "Воркдерево успешно откачено к стартовому слепку!",
+    "tm.rollbackFailed": "Ошибка отката: ",
+    "tm.notice": "Для создания слепков и отката необходим установленный плагин @goodandready/dsh-time-machine."
   }
 }
