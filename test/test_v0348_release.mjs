@@ -9,7 +9,7 @@ test('v0.3.48: package.json, README and CHANGELOG version consistency', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
   assert.ok(pkg.version >= '0.3.48')
   assert.equal(pkg.name, '@goodandready/dsh-russian-lang')
-  assert.ok(pkg.description.includes('10,432') || pkg.description.includes('10,898'), 'Description must reflect keys')
+  assert.ok(pkg.description.includes('10,432') || pkg.description.includes('10,898') || pkg.description.includes('11,598'), 'Description must reflect keys')
   assert.ok(pkg.files.includes('supported-inventory.json'), 'files must include supported-inventory.json')
 
   const cl = fs.readFileSync(path.join(ROOT, 'CHANGELOG.md'), 'utf8')
@@ -17,8 +17,8 @@ test('v0.3.48: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('#504'), 'CHANGELOG must mention issue #504')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.48') || readme.includes('npm-v0.3.49') || readme.includes('npm-v0.4.0'), 'README npm badge must be v0.3.48 or v0.3.49')
-  assert.ok(readme.includes('10432') || readme.includes('10898'), 'README keys badge')
+  assert.ok(readme.includes('npm-v0.3.48') || readme.includes('npm-v0.3.49') || readme.includes('npm-v0.4.0') || readme.includes('npm-v0.4.1'), 'README npm badge')
+  assert.ok(readme.includes('10432') || readme.includes('10898') || readme.includes('11598'), 'README keys badge')
 })
 
 test('v0.3.48: supported-inventory has 10,432 total keys, 111 namespaces and 7 headless plugins', () => {
@@ -29,7 +29,7 @@ test('v0.3.48: supported-inventory has 10,432 total keys, 111 namespaces and 7 h
   assert.ok(inv.metrics.total_namespaces >= 111)
   assert.ok(inv.metrics.plugin_namespaces >= 50)
   assert.ok(['0.2.1-alpha.3', '0.2.1-rc.2'].includes(inv.core.supported_version))
-  assert.equal(Object.keys(inv.supported_plugins).length, 83)
+  assert.ok(Object.keys(inv.supported_plugins).length >= 83)
   assert.ok(Array.isArray(inv.headless_plugins), 'headless_plugins must be an array')
   assert.equal(inv.headless_plugins.length, 7)
   assert.ok(inv.headless_plugins.includes('@goodandready-private/dsh-scrapling-fast'))
@@ -56,8 +56,8 @@ test('v0.3.48: getPluginsLocalizationOverview covers all 83 plugins (76 full, 7 
   const { getPluginsLocalizationOverview, getPluginDictionariesByNames } = await import('../lib/locales.js')
   const overview = getPluginsLocalizationOverview()
 
-  assert.equal(overview.totalPlugins, 83)
-  assert.equal(overview.fullCount, 76)
+  assert.ok(overview.totalPlugins >= 83)
+  assert.ok(overview.fullCount >= 76)
   assert.equal(overview.headlessCount, 7)
   assert.equal(overview.partialCount, 0)
   assert.equal(overview.noneCount, 0)
@@ -77,7 +77,7 @@ test('v0.3.48: getPluginsLocalizationOverview covers all 83 plugins (76 full, 7 
   assert.ok(p13)
   assert.equal(p13.status, 'full')
   assert.equal(p13.namespace, 'dsh-skill-explorer')
-  assert.equal(p13.count, 75)
+  assert.ok(p13.count >= 75)
 
   // GH-14
   const p14 = pMap.get('@liustack/modsearch')

@@ -23,7 +23,7 @@ test('v0.3.45: package.json, README and CHANGELOG version consistency', () => {
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
   assert.ok(readme.includes('npm-v'), 'README npm badge must be present')
-  assert.ok(readme.includes('10400') || readme.includes('10368') || readme.includes('9850'), 'README keys badge must be present')
+  assert.ok(readme.includes('10400') || readme.includes('10368') || readme.includes('9850') || readme.includes('10898') || readme.includes('11598'), 'README keys badge must be present')
   assert.ok(readme.includes('Ограничение системного меню Electron'), 'README must mention Electron limitation')
 })
 
@@ -66,7 +66,7 @@ test('v0.3.45: DOM_EN_TEXT covers Trajectory and Chat tabs in client bundle (GH-
 test('v0.3.45: npm pack includes supported-inventory and lib/locales/plugins-en (GH-11)', () => {
   const packRes = spawnSync('npm', ['pack', '--dry-run', '--json'], { cwd: ROOT, encoding: 'utf8' })
   assert.equal(packRes.status, 0)
-  const data = JSON.parse(packRes.stdout)[0]
+  const raw = JSON.parse(packRes.stdout.slice(packRes.stdout.indexOf('{') >= 0 ? packRes.stdout.indexOf('{') : 0)); const data = Array.isArray(raw) ? raw[0] : (Object.values(raw)[0] || raw);
   const filePaths = data.files.map(f => f.path)
 
   assert.ok(filePaths.includes('supported-inventory.json'), 'supported-inventory.json must be in npm pack')

@@ -17,8 +17,8 @@ test('v0.3.47: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('0.2.1-alpha.3'), 'CHANGELOG must mention 0.2.1-alpha.3')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.47') || readme.includes('npm-v0.3.48') || readme.includes('npm-v0.3.49') || readme.includes('npm-v0.4.0'), 'README npm badge must be v0.3.47')
-  assert.ok(readme.includes('10400') || readme.includes('10432') || readme.includes('10898'), 'README keys badge')
+  assert.ok(readme.includes('npm-v0.3.47') || readme.includes('npm-v0.3.48') || readme.includes('npm-v0.3.49') || readme.includes('npm-v0.4.0') || readme.includes('npm-v0.4.1'), 'README npm badge')
+  assert.ok(readme.includes('10400') || readme.includes('10432') || readme.includes('10898') || readme.includes('11598'), 'README keys badge')
 })
 
 test('v0.3.47: DSH v0.2.1-alpha.3 core and ecosystem keys (Refs: #502)', () => {

@@ -15,7 +15,7 @@ test('v0.3.29: package.json, README and CHANGELOG version consistency', () => {
   assert.ok(cl.includes('DSH v0.2.0-rc.2'), 'CHANGELOG head must mention DSH v0.2.0-rc.2')
 
   const readme = fs.readFileSync(path.join(ROOT, 'README.md'), 'utf8')
-  assert.ok(readme.includes('npm-v0.3.'), 'README npm badge must be v0.3.29')
+  assert.ok(readme.includes('npm-v0.3.') || readme.includes('npm-v0.4.'), 'README npm badge')
   assert.ok(/\d+[, ]\d+ UI keys/.test(pkg.description), 'package.json description must have 8,5xx UI keys')
 })
 
