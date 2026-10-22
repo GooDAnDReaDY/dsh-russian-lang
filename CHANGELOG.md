@@ -1,3 +1,14 @@
+## [0.4.2] - 2026-10-22
+
+### Добавлено
+- **Полная локализация панели подписок 0.7.16 (+192 ключа)**:
+  - `@goodandready/dsh-subscriptions`: вкладки Overview/Accounts/Routing/Models/Vault/Notifications/Advanced, группы Display & quota, Sources, Provider packs, Vault snapshots, Notifications, очередь запросов, аналитика, диагностика, вебхуки и снимки хранилища.
+  - Устранены английские подписи в русском UI после редизайна настроек 0.7.14–0.7.15.
+
+### Исправлено
+- Словарь подписок синхронизирован с 426 ключами плагина; новые ключи добавлены в `ru-plugins/65-subscriptions.json` и собранный `lib/locales/plugins/65-subscriptions.json`.
+- `supported-inventory.json`: актуализированы версии установленных плагинов, чтобы `npm run check` проходил без дрейфа.
+
 ## [0.4.1] - 2026-10-21
 
 ### Добавлено
