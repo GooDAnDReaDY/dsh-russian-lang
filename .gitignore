@@ -13,6 +13,8 @@ __pycache__/
 # Базовый срез для tools/mt_autofill.py: производное локальное состояние,
 # байт-в-байт дубль plugins-en.json. Первый запуск создаёт его сам (#136).
 upstream/plugins-snapshot.json
+upstream/report.local.md
+upstream/*.local.*
   
 docs/plans/ 
  
