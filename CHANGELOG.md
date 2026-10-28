@@ -1,3 +1,27 @@
+## [0.4.7] - 2026-10-28
+
+### Добавлено
+- **Поддержка ядра DeepSeek Harness v0.2.1-rc.4 (+8 ключей, Refs: #530)**:
+  - Добавлено новое пространство имён ядра `entryCustomization` (`ru/16-entry-customization.json`): настройка и создание плагинов с пунктами в левой и правой боковой панели, представления диалогов (`create`, `createPrompt.sidebar`, `createPrompt.conversation`, `createPrompt.rightbar`, `install`).
+  - Добавлены новые системные ключи ядра: `conversation.session.moreViews` («Другие представления диалога»), `sidebar.panels.more` («Ещё»), `sidebarRight.tab.guide.more` («Ещё инструменты»).
+  - Ядро в `supported-inventory.json` обновлено до `v0.2.1-rc.4` (2736 ключей, 64 пространства имён).
+- **Масштабное обновление экосистемы плагинов (+274 ключа, Refs: #530)**:
+  - `dsh-config-manager` (v0.1.86):
+    - `config-manager-sync` (+90 ключей): трехстороннее слияние конфигураций (`merge.*`), политики автоприменения (`autosync.*`), тесты подключения WebDAV/облака (`probe.*`), принятие удалённой истории (`workdir.*`).
+    - `config-manager-recovery` (+11 ключей): инциденты восстановления, снимки отката (`rollback.*`), статистика сессий.
+    - `config-manager`, `config-manager-history`, `config-manager-market` (+5 ключей).
+  - `@noob-stupid/dsh-plugin-console` (v0.5.94, +74 ключа): массовая проверка обновлений плагинов (`checkAllUpdates*`), пользовательские заметки, метки и группы (`annotations*`, `badge*`, `group*`).
+  - `dshmarket` (v1.73.1, +19 ключей): миграция переименованных npm-пакетов (`rename*`), задержка обновлений свежих релизов (`updateHeldTarget`), библиотека общих модулей (`stateLibrary`).
+  - `dsh-better-sidebar` (v0.28.2, +11 ключей): автосворачивание веток и участников команды (`settingsTasksAutoFold*`, `settingsJobsAutoCollapse*`), линейный список истории (`graphLinearFallback`).
+  - `billion-context` (v0.1.208, +9 ключей): статус удалённого loopback-прокси (`remote_blocked`), автозамена устаревшего прокси (`stale`), вкладки контекста и версий.
+  - `dsh-ego-browser` (v0.9.5, +6 ключей): постоянный процесс резидентного исполнителя (`residentExecutor*`).
+  - `@opencode2dsh/dsh-plugin` (v0.3.14, +3 ключа): статус и диагностика сбоев проверок пула (`exitProbeFailure`, `stateProbeFailed`).
+  - `@goodandready/dsh-plugin-notify` (v0.4.7, +1 ключ): делегированные ходы субагентов.
+- **Синхронизация инвентаря и поддержка экосистемы**:
+  - `supported-inventory.json`: 11,880 ключей UI, 118 пространств имён, 85 поддерживаемых плагинов экосистемы, 100% ручная вычитка и отсутствие машинно-переводных артефактов.
+  - Обновлены версии 44 установленных плагинов профиля до актуальных релизов.
+  - Исправлены расхождения плейсхолдеров в 10 устаревших формулировках (`commitPlaceholder`, `tasksFoldIdleGroup`, `about.update.available`, `transferFailed`, `transferSuccess`, `hostFilterActive`, `syncflow.bulkHint`, `profiles.launch.managed`).
+
 ## [0.4.6] - 2026-10-26
 
 ### Добавлено
