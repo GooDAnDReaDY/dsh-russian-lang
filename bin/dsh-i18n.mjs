@@ -36,6 +36,7 @@ dsh-i18n (v${getPkgVersion()}) — Инструмент локализации �
   -n, --namespace <имя>        Пространство имён по умолчанию (для extract)
   -g, --glossary <путь>        Пользовательский файл глоссария (для validate)
   -h, --help                   Справка по командам
+  -f, --force                  Перезаписать существующий файл при scaffold
   -v, --version                Версия утилиты
 
 Примеры:
@@ -420,7 +421,7 @@ function validateDict(filePath, glossaryPath) {
   return true
 }
 
-function scaffoldPlugin(pluginName, outDir = '.') {
+function scaffoldPlugin(pluginName, outDir = '.', force = false) {
   const cleanName = pluginName.replace(/^@goodandready\//, '').replace(/^dsh-/, '')
   const ns = cleanName
   const template = {
@@ -437,6 +438,11 @@ function scaffoldPlugin(pluginName, outDir = '.') {
   const dir = path.resolve(outDir)
   fs.mkdirSync(dir, { recursive: true })
   const targetFile = path.join(dir, `${cleanName}.json`)
+
+  if (fs.existsSync(targetFile) && !force) {
+    console.error(`❌ Ошибка: Файл "${targetFile}" уже существует. Используйте флаг --force (-f) для перезаписи.`)
+    process.exit(1)
+  }
 
   fs.writeFileSync(targetFile, JSON.stringify(template, null, 2) + '\n', 'utf8')
   console.log(`✓ Шаблон локализации создан: ${targetFile}`)
@@ -502,10 +508,12 @@ if (command === 'extract') {
     process.exit(1)
   }
   let out = '.'
+  let force = false
   for (let i = 2; i < args.length; i++) {
     if ((args[i] === '-o' || args[i] === '--out') && args[i + 1]) out = args[++i]
+    else if (args[i] === '-f' || args[i] === '--force') force = true
   }
-  scaffoldPlugin(name, out)
+  scaffoldPlugin(name, out, force)
 } else {
   console.error(`Неизвестная команда: "${command}". Запустите "dsh-i18n --help" для справки.`)
   process.exit(1)

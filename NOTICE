@@ -1,0 +1,14 @@
+dsh-russian-lang
+================
+
+Copyright (c) 2026 Vadim (@goodandready) and contributors.
+https://goodandready.app/
+
+This project provides comprehensive native Russian localization, typography,
+and input utilities for DeepSeek Harness (DSH).
+
+Licensed under the MIT License. See LICENSE file in the project root.
+
+Ecosystem references & attributions:
+- DeepSeek Harness — https://github.com/deepseek-ai/deepseek-harness
+- Cordis Framework — https://cordis.moe
