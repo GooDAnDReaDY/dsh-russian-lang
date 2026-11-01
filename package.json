@@ -1,6 +1,6 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.4.17",
+  "version": "0.4.18",
   "description": "Полная русская локализация DeepSeek Harness (DSH): ядро v0.2.1-rc.4 + 85 плагинов экосистемы, 11,880 UI keys, 100% покрытие экосистемы, естественный русский язык",
   "type": "module",
   "main": "lib/index.js",
@@ -9,6 +9,7 @@
       "types": "./lib/index.d.ts",
       "import": "./lib/index.js"
     },
+    "./client": "./lib/client.js",
     "./pure": {
       "types": "./lib/pure.d.ts",
       "import": "./lib/pure.js"
@@ -25,7 +26,9 @@
     "./ui": {
       "types": "./lib/ui/index.d.ts",
       "import": "./lib/ui/index.js"
-    }
+    },
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
   },
   "files": [
     "lib",
