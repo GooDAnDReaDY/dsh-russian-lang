@@ -1,3 +1,22 @@
+## [0.4.19] - 2026-11-02
+
+### Исправления (Hotfix)
+- **Устранение `Uncaught TypeError: Illegal invocation` в `DomMutationMultiplexer` (Fixes: #569, Refs: GH-33)**:
+  - Функции планировщика `requestAnimationFrame` и `cancelAnimationFrame` в конструкторе `DomMutationMultiplexer` (`lib/core/dom-multiplexer.js` и скомпилированном `lib/client.js`) обёрнуты в стрелочные замыкания `(cb) => requestAnimationFrame(cb)` и `(id) => cancelAnimationFrame(id)`.
+  - Устранена потеря контекста `window` при вызове нативных браузерных таймеров через методы экземпляра `this._schedule` / `this._cancel` в Chromium/Electron.
+  - Восстановлена работа очереди `_flush` при динамических мутациях DOM-дерева WebUI, гарантируя своевременный перевод асинхронно монтируемых компонентов интерфейса.
+  - Добавлен регрессионный юнит-тест со строгой проверкой контекста вызова в `test/dom-multiplexer.test.mjs` и `test/test_v0419_release.mjs`.
+- **Полная локализация справочника пресетов агента `settings.agentPreset` для DSH 0.2.1-rc.5 (Fixes: #570, Refs: GH-34, GH-35)**:
+  - Добавлены 19 ключей руководства пресетов (`PresetGuideKey`) в `ru/04-preset-cordis.json` и синхронизированы в `upstream/core-en.json` / `core-en.json`:
+    - `guideStandardIntro` (GH-34): вводный текст выбора стандартного режима;
+    - `guideStandardExplanation` (GH-35): разделы «Как это работает» и «Когда его выбрать»;
+    - `guideStandardUsage`: примеры задач («Исправление бага», «Систематизация заметок проекта»);
+    - `guidePtcIntro`, `guidePtcExplanation`, `guidePtcUsage`: руководство по режиму программного вызова инструментов (PTC);
+    - `guideMinimalIntro`, `guideMinimalExplanation`, `guideMinimalUsage`: руководство по минимальному режиму;
+    - `guideCordisIntro`, `guideCordisExplanation`, `guideCordisUsage`: руководство по режиму «Конструктор» (создание плагинов Cordis и пресетов);
+    - Вспомогательные элементы интерфейса: `modeExplanation`, `howToUse`, `guideSections`, `guideExampleTask`, `guideCopy`, `guideCopied`, `guideFootnotes`.
+  - В манифесте `package.json` зафиксирована явная совместимость с версией DSH `"0.2.1-rc.5": "compatible"` в блоке `dsh.compatibility.dshReleases`.
+
 ## [0.4.18] - 2026-11-01
 
 ### Исправления (Hotfix)
