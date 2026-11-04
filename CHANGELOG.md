@@ -1,3 +1,13 @@
+## [0.4.20] - 2026-11-04
+
+### Исправления (Hotfix)
+- **Устранение нарушения инварианта ECMAScript Proxy на замороженном снапшоте локали в `getSnapshot` (Fixes: #573, Refs: GH-36)**:
+  - В хуке `runtime.getSnapshot` (`lib/client.template.js` и скомпилированном `lib/client.js`) целью `new Proxy` теперь выступает не замороженный исходный объект, а поверхностная копия `Object.assign({}, snap)`.
+  - Устранено падение подписчика локали в Chromium/V8 с фатальным `TypeError: 'get' on proxy: property 'active' is a read-only and non-configurable data property on the proxy target but the proxy did not return its actual value (expected 'ru' but got 'en')`, возникавшее из-за того, что DSH (`@deepseek-ai/dsh-client-locale`) замораживает объект снапшота через `Object.freeze`.
+  - Восстановлена бесшовная инициализация плагина `@michengai/dsh-agency-agents` при активной русской локализации: плагин больше не зависает в фазе `loading` со статусом `web boot: 1 entry did not activate`.
+  - Сохранена ссылочная стабильность снапшота для `useSyncExternalStore` при неизменном `snap === lastSnap`.
+  - Добавлен регрессионный юнит-тест `test/test_v0420_release.mjs` с проверкой соблюдения инвариантов Proxy на замороженном объекте снапшота.
+
 ## [0.4.19] - 2026-11-02
 
 ### Исправления (Hotfix)
