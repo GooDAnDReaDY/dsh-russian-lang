@@ -14,8 +14,8 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.2.2--rc.1%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.2.2-rc.1+">
   <img src="https://img.shields.io/badge/覆盖率-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="100% 覆盖率">
-  <img src="https://img.shields.io/badge/UI词条-13270-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="13270 词条">
-  <img src="https://img.shields.io/badge/生态插件-86+-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="86+ 插件">
+  <img src="https://img.shields.io/badge/UI词条-15546-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="15546 词条">
+  <img src="https://img.shields.io/badge/生态插件-89+-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="89+ 插件">
 </p>
 
 <!-- 作者所有项目展示页面链接 -->
@@ -37,7 +37,7 @@
 
 **`dsh-russian-lang`** 是针对 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (DSH) 官方 Web 界面的全面俄语本地化扩展插件。
 
-该插件不仅无缝翻译了 DSH 核心以及 86+ 生态系统插件（共 13,270+ 词条），还集成了原生键盘布局热键转换（<kbd>Alt+L</kbd>）、屏幕智能排版（俄语引号 «»、长破折号 —、不换行空格）、会话一键导出 Markdown 以及多风格俄语系统提示词（System Prompt）。
+该插件不仅无缝翻译了 DSH 核心以及 89+ 生态系统插件（共 15,546+ 词条），还集成了原生键盘布局热键转换（<kbd>Alt+L</kbd>）、屏幕智能排版（俄语引号 «»、长破折号 —、不换行空格）、会话一键导出 Markdown 以及多风格俄语系统提示词（System Prompt）。
 
 ---
 
