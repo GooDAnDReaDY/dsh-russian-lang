@@ -41,6 +41,12 @@
 
 ---
 
+## 环境要求 (Requirements)
+
+- **DeepSeek Harness (DSH)**: `0.2.0-rc.2 || >=0.2.1-rc.2 <0.2.2-0 || >=0.2.2-0 <0.2.3-0`
+- **Node.js**: `>= 22.0.0`
+- **支持浏览器**: Chromium 110+, Firefox 115+, Safari 16+
+
 ## 🚀 安装与启用 (Installation)
 
 在 DSH 的 Web 运行环境中安装插件：
