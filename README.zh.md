@@ -14,7 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.2.2--rc.1%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.2.2-rc.1+">
   <img src="https://img.shields.io/badge/覆盖率-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="100% 覆盖率">
-  <img src="https://img.shields.io/badge/UI词条-15546-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="15546 词条">
+  <img src="https://img.shields.io/badge/UI词条-15673-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="15673 词条">
   <img src="https://img.shields.io/badge/生态插件-89+-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="89+ 插件">
 </p>
 
