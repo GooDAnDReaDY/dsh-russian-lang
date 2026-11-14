@@ -1,7 +1,7 @@
 {
   "name": "@goodandready/dsh-russian-lang",
-  "version": "0.4.26",
-  "description": "Полная русская локализация DeepSeek Harness (DSH): ядро v0.2.2-rc.1 + 85 плагинов экосистемы, 13,055 UI keys, 100% покрытие экосистемы, естественный русский язык",
+  "version": "0.4.28",
+  "description": "Полная русская локализация DeepSeek Harness (DSH): ядро v0.2.2-rc.3 + 89 плагинов экосистемы, 13,055 -> 18,024 UI keys, 100% покрытие, естественный русский язык",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -41,7 +41,6 @@
     "README.md",
     "README.ru.md",
     "README.zh.md",
-    "DESIGN.md",
     "NOTICE",
     "LICENSE",
     "supported-inventory.json"
@@ -65,7 +64,9 @@
         "0.2.1-rc.3": "compatible",
         "0.2.1-rc.4": "compatible",
         "0.2.1-rc.5": "compatible",
-        "0.2.2-rc.1": "compatible"
+        "0.2.2-rc.1": "compatible",
+        "0.2.2-rc.2": "compatible",
+        "0.2.2-rc.3": "compatible"
       },
       "dsh": "0.2.0-rc.2 || >=0.2.1-rc.2 <0.2.2-0 || >=0.2.2-0 <0.2.3-0"
     }
