@@ -1,3 +1,23 @@
+## [0.4.29] - 2026-11-15
+
+### Локализация @feng0531/dsh-code-review и синхронизация экосистемы (Fixes: #622; GH-40)
+- **Полная локализация плагина проверки кода `@feng0531/dsh-code-review` (Fixes: #622, GH-40)**:
+  - Устранены все оставшиеся англоязычные строки в пространстве имён `settings.autoReview` (71 ключ):
+    - Статусы и индикаторы: «Проверка отключена» (`behaviorDisabled`), «В проверке отказано» (`denied`), «Включено» (`enabled`), «Выполняется проверка…» (`reviewing`), «Строгие типы» (`strongKinds`), «Снимок заблокирован» (`badgeCompatibility`).
+    - Удалены повторяющиеся и устаревшие словарные ключи.
+  - Добавлено пространство имён `dsh-code-review` (`meta.title`, `meta.description`) в русские и английские канонические словари, обеспечивающее 100% верификацию карточки плагина в DSH UI.
+- **Синхронизация обновлений плагинов экосистемы DSH (Fix: #622)**:
+  - `@goodandready/dsh-config-manager-sync`: добавлены 27 новых ключей (`addChannel.*`, `autosync.pendingMerge`, `channel.clearBusy`, `history.*`, `mode.*`, `syncflow.pushForce`, `toast.pushSkipped`).
+  - `@goodandready/dsh-config-manager-recovery`: добавлены 2 ключа (`recovery.refresh`, `recovery.rescue.short`).
+  - `dsh-test-pilot`: добавлены 4 ключа управления сетевыми запросами и индикатором шапки (`allowNetworkFetch`, `allowNetworkFetchHelp`, `showHeaderIndicator`, `showHeaderIndicatorHelp`).
+  - `@michengai/dsh-skills-manager`: добавлен ключ отмены каталога (`error.catalog.cancelled`).
+- **Актуализация инвентаря и watchdog ядра**:
+  - `supported-inventory.json`: зафиксирована версия ядра `0.2.2-rc.3` для корректной работы монитора дрейфа upstream.
+- **Обновление баннера проекта**:
+  - Актуализирован `docs/media/banner.jpg`: отражены 18 501 ключ интерфейса, поддержка DSH v0.2.2-rc.3 и 89+ плагинов.
+- **Итоговое покрытие интерфейса**:
+  - Достигнуто **100.0% эффективное покрытие** UI (**18 501 ключ** переведён, 0 непереведённых, 0 расхождений плейсхолдеров).
+
 ## [0.4.28] - 2026-11-15
 
 ### Полная синхронизация ядра DSH 0.2.2-rc.3 и плагинов экосистемы, 100% покрытие UI (Fixes: #617, #618, #619)
