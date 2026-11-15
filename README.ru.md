@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.4.29-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.4.30-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-22%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -193,7 +193,8 @@ dsh-russian-lang:
   agentPrompt: false               # Системная инструкция агенту отвечать по-русски (по умолчанию: false)
   agentPromptPreset: technical_expert # Пресет системного промпта (по умолчанию: technical_expert)
   slashAliases: true               # Русские алиасы слэш-команд (/помощь, /очистить) (по умолчанию: true)
-  layoutConversion: true           # Детектор неверной раскладки и подсказка Alt+L (по умолчанию: true)
+  layoutConversion: true           # Исправление раскладки Alt+L (по умолчанию: true)
+  layoutBadge: false               # Значок RU/EN и всплывающие подсказки (по умолчанию: false, opt-in)
   quickSwitch: true                # Быстрый переключатель RU/EN в статусной строке (по умолчанию: true)
   translateEngine: off             # Движок перевода реплик: off, local (LibreTranslate) или google (Google) (по умолчанию: off)
   localApiUrl: http://localhost:5000 # URL локального инстанса LibreTranslate (по умолчанию: http://localhost:5000)
