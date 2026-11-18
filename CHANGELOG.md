@@ -1,3 +1,18 @@
+## [0.4.31] - 2026-11-18
+
+### Локализация плагина @nagi-ovo/dsh-visualize и метаданных экосистемы (Fixes: #646; GH-46)
+- **Полная локализация плагина интерактивной визуализации `@nagi-ovo/dsh-visualize` (Fixes: #646, GH-46)**:
+  - Добавлено каноническое пространство имён `@nagi-ovo/dsh-visualize` (47 ключей) и синхронизированы пространства `dsh-visualize` и `visualize`.
+  - Переведены все параметры настройки стилей карточек (`styleHeading`, `styleIntro`, `style.whale`, `style.editorial`, `style.paper`, `style.sketch`, `style.terminal` и их описания).
+  - Переведены элементы управления файлами стилей рабочей области (`filesHeading`, `filesIntro`, `globalFile`, `workspaceFile`, `bytes`, `tooLarge`, `placeholder`).
+  - Добавлены 37 пар в `zh-ru.json` и `zh-refs/76-visualize.zh.json` для перевода динамических китайских строк в компонентах предпросмотра, карточках диалога (`在新窗口打开` -> «Открыть в новом окне», `正在载入图片…` -> «Загрузка изображений…») и настройках.
+- **Синхронизация метаданных DSH Market для экосистемы плагинов**:
+  - Добавлены метаданные `meta.title`, `meta.description`, `meta.detail` для 12 установленных плагинов:
+    `@michengai/dsh-skills-manager`, `@wenaixi/dsh-superpower`, `dsh-context`, `@goodandready/dsh-voice`, `dsh-better-sidebar`, `@linxin666/dsh-client-ui-skill-explorer`, `clearai-dsh`, `@xfqz86/dsh-usage-stats`, `dsh-config-manager`, `@mars-sea/dsh-commandcode-provider`, `@ebony-vinyl/dsh-our-free-model`, `@morehao/dsh-github-trending`.
+- **Поддержка инвентаря**:
+  - Добавлены в `supported-inventory.json` плагины `@goodandready/dsh-task-tracker` (0.2.14) и `@txc2768651338/dsh-effort-slider` (0.5.2), актуализирована версия `@nagi-ovo/dsh-visualize` (0.1.9).
+  - Общий объём словарей: **18 725 ключей** (100.0% покрытие runtime UI).
+
 ## [0.4.30] - 2026-11-16
 
 ### Изоляция индикатора раскладки, устранение перекрытия контента и opt-in бейджа (Fixes: #624; GH-45)

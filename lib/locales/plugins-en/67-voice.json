@@ -1,0 +1,1 @@
+{"@goodandready/dsh-voice":{"meta.description":"Voice input for DeepSeek Harness: dictation chunked by pauses and voice messages, each with its own provider fallback chain (Deepgram, Groq, HuggingFace, local whisper.cpp, plus any OpenAI-compatible API of your own).","meta.title":"Voice input (dsh-voice)"},"dsh-voice":{}}
