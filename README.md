@@ -5,7 +5,7 @@
 <h3>Полная русская локализация, умная типографика и исправление раскладки клавиатуры для DeepSeek Harness</h3>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.4.31-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@goodandready/dsh-russian-lang"><img src="https://img.shields.io/badge/npm-v0.4.32-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="npm version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10b981.svg?style=for-the-badge&color=10b981&labelColor=064e3b" alt="license"></a>
   <a href="https://github.com/topics/dsh-plugin"><img src="https://img.shields.io/badge/DSH-Plugin-8b5cf6.svg?style=for-the-badge&labelColor=2e1065" alt="DSH Plugin"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node-22%2B-f59e0b.svg?style=for-the-badge&labelColor=451a03" alt="Node version"></a>
@@ -14,7 +14,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/DSH-v0.2.2--rc.3%2B-blue.svg?style=for-the-badge&labelColor=1e1b4b" alt="DSH v0.2.2-rc.1+">
   <img src="https://img.shields.io/badge/Покрытие-100%25-10b981.svg?style=for-the-badge&labelColor=064e3b" alt="Покрытие 100%">
-  <img src="https://img.shields.io/badge/Ключей_UI-18501-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="15673 ключей">
+  <img src="https://img.shields.io/badge/Ключей_UI-19100-6366f1.svg?style=for-the-badge&labelColor=1e1b4b" alt="19100 ключей">
   <img src="https://img.shields.io/badge/Ручная_вычитка-100%25-0ea5e9.svg?style=for-the-badge&labelColor=082f49" alt="100% ручная вычитка">
 </p>
 
@@ -58,9 +58,9 @@ graph LR
         DSH[Web UI Интерфейс] --> Loader[Загрузчик локализации dsh-russian-lang]
     end
 
-    subgraph TranslationLayer [Слой перевода и адаптации — 10 432 ключей / 100% вычитано]
+    subgraph TranslationLayer [Слой перевода и адаптации — 19 100 ключ / 100% вычитано]
         Loader --> CoreDict[58 Пространств имён ядра DSH / 2 442 ключа]
-        Loader --> PluginDict[43 Пространства имён плагинов DSH / 7 781 ключа]
+        Loader --> PluginDict[90 пространств имён плагинов DSH / 14 752 ключа]
         Loader --> PluralEngine[Движок грамматических Plural-форм: 1/2/5]
     end
 
@@ -100,9 +100,9 @@ graph LR
 * **Планировщик и инвентарь (`schedule.catalog`, `settings.pluginInventory`, `settings.plugins`)**: фоновые задания, периодичность, фильтры и каталог установленных плагинов.
 * **Права доступа и безопасность (`permission.access`, `plan`, `skill`)**: пресеты прав (полный доступ, только чтение, запись в рабочую область), выполнение планов и навыки.
 
-> **О качестве перевода.** Все **10 432 ключей интерфейса (2 619 ядра + 7 813 плагинов) переведены на 100% и вычитаны вручную**. Черновой машинный перевод полностью замещён проверенными формулировками (`draft = 0`). Перевод регулярно валидируется автоматическими линтерами целостности плейсхолдеров, проверкой соблюдения глоссария (`glossary.json`) и детекторами переполнения верстки. Нашли неточность — кнопка «Сообщить о проблеме перевода» в карточке настроек создаёт готовый issue.
+> **О качестве перевода.** Все **19 100 ключ интерфейса (4 348 ядра + 14 752 плагинов) переведены на 100% и вычитаны вручную**. Черновой машинный перевод полностью замещён проверенными формулировками (`draft = 0`). Перевод регулярно валидируется автоматическими линтерами целостности плейсхолдеров, проверкой соблюдения глоссария (`glossary.json`) и детекторами переполнения верстки. Нашли неточность — кнопка «Сообщить о проблеме перевода» в карточке настроек создаёт готовый issue.
 
-### 2. 🧩 Встроенный перевод 65+ плагинов экосистемы DSH (7 781 ключа)
+### 2. 🧩 Встроенный перевод 91 плагин экосистемы DSH (14 752 ключа)
 Локализация автоматически распространяется на все ключевые плагины экосистемы DeepSeek Harness:
 * **`dsh-session-control`** — расширенное управление сессиями: закрепление диалогов, архив по периодам, просмотр расшифровок и фильтрация шума;
 * **`dsh-kanban` и `task-board`** — канбан-доски задач, карточки, чек-листы, дедлайны, критерии готовности (DoD) и шлюз приёмки (Acceptance Gate);
@@ -156,7 +156,7 @@ graph LR
 ### 7. ⚡ Оптимизации производительности и архитектурная безопасность
 * **Пакетная обработка MutationObserver**: оптимизированный наблюдатель мутаций интерфейса с адаптивным debounce (16 мс) предотвращает лавинообразные перерисовки и перерасчёт макета (reflow) при интенсивном рендеринге списков и стриминге LLM-токенов.
 * **Защита HTTP-маршрутов словарей (405 Method Not Allowed)**: серверные эндпоинты `/api/dsh-russian-lang/dict/core`, `/api/dsh-russian-lang/dict/plugins`, `/api/dsh-russian-lang/dict/all` строго защищены и принимают только безопасные методы GET/HEAD.
-* **Клиентский бандл с запасом**: оптимизированная архитектура и компактный бутстрап обеспечивают размер клиентского скрипта 153.7 KiB (запас более 10 KiB до предельного лимита).
+* **Клиентский бандл с запасом**: оптимизированная архитектура и компактный бутстрап обеспечивают размер клиентского скрипта ~197 KiB (запас более 55 KiB до лимита DSH Store 256 KiB).
 
 ### 8. 🔤 Нативная интеграция в ядро
 Плагин нативно регистрирует пункт **«Русский»** в меню **Настройки → Общие → Язык**, переключает атрибут `<html lang="ru-RU">` и активирует встроенный браузерный словарь проверки орфографии (`spellcheck`).
