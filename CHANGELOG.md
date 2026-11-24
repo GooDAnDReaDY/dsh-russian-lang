@@ -1,3 +1,19 @@
+## [0.4.35] - 2026-11-24
+
+### Исправление холодного старта `complementOnly`, отключения `MutationObserver`, локализации карточки и однопроходного `ZH_WALKER` (Fixes #49, GH-49)
+- **Режим дополнения (`complementOnly`) на холодном старте и без F5 (GH-49)**:
+  - Флаги `complementOnly` и `domScanner` зеркалируются в `localStorage` (`dsh_ru_complement_only`, `dsh_ru_dom_scanner`), чтобы на холодном старте (`F5`) режим применялся синхронно ещё до прихода снапшота настроек с хоста.
+  - Исправлена логика в `installSafeLocaleRegistration`: разведены ветки регистрации нашего плагина (`ownCall`) и нативных модулей ядра DSH — в режиме `complementOnly` нативные строки ядра больше не затираются, а плагин дополняет только недостающие ключи.
+  - Нативные словари ядра сохраняются отдельно (`nativeCoreDicts`), а подписка `syncComplementMode` мгновенно переприменяет словари при переключении галочки в настройках без перезагрузки страницы.
+- **Истинные 0% DOM CPU при `domScanner: false` (GH-49)**:
+  - `toast-humanizer` переведён на `skipStreaming: true` (не обрабатывает чанки стриминга ответа LLM) и отписывается от `domMultiplexer` при выключенном `domScanner`.
+  - `syncSpell` при `domScanner: false` отписывается от `domMultiplexer` и использует пассивный обработчик `focusin` вместо `MutationObserver(document.body, { subtree: true })`, благодаря чему корневой `MutationObserver` полностью отключается (`disconnect()`).
+- **Однопроходная оптимизация `ZH_WALKER` (GH-49)**:
+  - Удалён повторный вызов `root.querySelectorAll('[title],[placeholder],[aria-label]')`: перевод атрибутов выполняется в том же проходе `TreeWalker` (`translateElAttrs`), поэтому `[data-chat-flow]` отсекается за O(1) и для атрибутов.
+  - Вынесены за цикл проверка `root.closest(ZH_REJECT_SEL)` и чтение `window.getSelection()`, устранены повторные 4× `p.closest(...)` на каждом текстовом узле.
+- **Русские подписи новых опций в карточке настроек (GH-49)**:
+  - `build.py` теперь загружает `card_ru` напрямую из `ru/russian-lang.json`, благодаря чему ключи `complementOnly`, `complementOnlyDesc`, `domScanner`, `domScannerDesc` не отфильтровываются срезом `upstream/core-en.json` и корректно отображаются на русском в карточке настроек.
+
 ## [0.4.34] - 2026-11-24
 
 ### Оптимизация производительности DOM-обхода, O(1) пропуск чата и режимы дополнения/без сканера (Fixes #48, GH-48)
