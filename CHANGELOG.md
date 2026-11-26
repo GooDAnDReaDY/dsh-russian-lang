@@ -1,3 +1,11 @@
+## [0.4.38] - 2026-11-26
+
+### Исправление загрузки словарей по сети на LAN-адресах (HTTP 403 на GET /dict/*) (Fixes #53, GH-53)
+- **Исправлена проверка `isTrustedLocalRequest` для read-only `GET` / `HEAD` запросов в LAN (GH-53)**:
+  - По спецификации Fetch браузеры не отправляют заголовок `Origin` на same-origin `GET`-запросы, из-за чего загрузка словарей (`/api/dsh-russian-lang/dict/core`, `/dict/plugins`, `/dict/all`, `/status`) с LAN-адресов (`http://192.168.x.x:3080`) возвращала `HTTP 403`.
+  - Для `GET` / `HEAD` с доверенным `Host` и не-`cross-site` теперь выполняется проверка `Referer` (при наличии его `host` обязан совпадать с `Host`), без обязательного `Origin`.
+  - Для мутирующих `POST`-запросов (`/translate`, `/update`) строгое требование `Origin` из `#639` полностью сохранено.
+
 ## [0.4.37] - 2026-11-25
 
 ### Исправление регрессии типографики `typoWalk`, оптимизация `TranslateTurnAction` / инспектора, понятные UX-подписи и перевод `dsh-plugin-notify-sounds` (Fixes #51, #52, GH-51, GH-52)
