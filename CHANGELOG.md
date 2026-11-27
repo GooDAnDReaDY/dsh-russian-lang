@@ -1,3 +1,17 @@
+## [0.4.39] - 2026-11-27
+
+### Полная поддержка DSH `0.2.3-alpha.2`, перевод обновлений 11 плагинов, баланс шардов ядра и обновление баннера
+- **Полная локализация ядра DeepSeek Harness `0.2.3-alpha.2` (+288 ключей, 20 пространств имён)**:
+  - Переведены 5 новых пространств имён (`ru/24-alpha2-new.json`, +51 ключ): `remoteConnection` (30 — удалённое подключение и вход по QR-коду), `sessionPanel` (7 — панель сессии и рабочей папки), `inspectorPanel` (5 — инспектор Node.js), `connectorAccount` (5 — аккаунты коннекторов) и `claude-code-mods` (4 — панель модов Claude Code).
+  - Дополнены 15 существующих пространств имён: `forgePanel` (+168 — ревью кода, линзы фильтров, диалоги веток worktree, цитирование в чат), `workspace` (+12), `conversation` (+8), `job` (+7), `agent-team` (+6), `pluginMarket` (+6), `chat` (+5), `actionCards` (+5), `subagent` (+5), `cuaPermissions` (+4), `pluginManager` (+4), `documentMarkdown` (+2), `reference` (+2), `voice-input` (+2), `liveshare` (+1).
+  - Обновлён снапшот `upstream/core-en.json` и расширена матрица совместимости в `package.json` и `supported-inventory.json` (`0.2.3-alpha.2`, диапазон `dsh` и `peerDependencies` до `<0.3.0`).
+- **Перевод обновлений плагинов экосистемы (+478 ключей в 11 пространствах имён, итого 20 056 ключей UI)**:
+  - `dsh-market` (+210 — ИИ-поиск, персональные рекомендации, офлайн-пакеты, восстановление при запуске, каталоги организаций), `settings.subagentDirector` (+166 — библиотека карточек персонажей, импорт/экспорт, миграция ролей), `dsh-context` (+56 — шкала контекста, режим ДНК, события, баланс аккаунта и API), `betterSidebar` (+15 — вкладки бокового чата, описания новых плагинов `Session Sources`, `Zotero Workspace`, `PR Inbox`, `BioViewer`), `dsh-kanban` (+9), `skills-manager` (+9), `ego-browser` (+4), `settings.pluginConsole` (+4), `@goodandready/dsh-dsml-artifact-guard` (+3), `dsh-cost-meter` (+1), `dsh-model-sync` (+1).
+  - Синхронизированы версии 30+ обновлённых плагинов в `supported-inventory.json` (91 поддерживаемых плагинов) и `plugins-en.json`.
+- **Балансировка шардов ядра и обновление баннера**:
+  - В `build.py` перенесены пространства `settings*` и `pluginManager` в `CORE_BASE_NAMESPACES`, благодаря чему оба шарда (`lib/locales/core-base.json` и `lib/locales/core-extra.json`) уверенно укладываются в жёсткий лимит DSH Store `256 KiB` (`262 144` байта).
+  - Обновлён `docs/media/banner.jpg` под `DSH v0.2.3-ALPHA.2`, `91+` плагинов и актуальные метрики (`4 637` ключей ядра, `15 419` ключей плагинов, `20 056` всего).
+
 ## [0.4.38] - 2026-11-26
 
 ### Исправление загрузки словарей по сети на LAN-адресах (HTTP 403 на GET /dict/*) (Fixes #53, GH-53)
